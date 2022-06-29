@@ -30,6 +30,11 @@ import BillingForm from "./billingForm";
 
 function Billing() {
   let [editing, setEditing] = useState(false);
+
+  const save = () => {
+
+  };
+  
   return (
     <>
       <Header />
@@ -55,13 +60,22 @@ function Billing() {
                       </button>
                     )}
                     {editing && (
-                      <button
-                        type="button"
-                        className="btn btn-primary btn-sm"
-                        onClick={() => setEditing(false)}
-                      >
-                        Cancel
-                      </button>
+                      <>
+                        <button
+                          type="button"
+                          className="btn btn-success btn-sm"
+                          onClick={() => save()}
+                        >
+                          Save
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-primary btn-sm"
+                          onClick={() => setEditing(false)}
+                        >
+                          Cancel
+                        </button>
+                      </>
                     )}
                   </Col>
                 </Row>

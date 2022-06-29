@@ -43,6 +43,7 @@ function BillingForm() {
     price: 0,
   });
   const [items, setItems] = useState([]);
+  const [total, setTotal] = useState(0);
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
 
@@ -51,12 +52,6 @@ function BillingForm() {
       ...billing,
       [name]: value,
     });
-  };
-
-  const save = () => {
-    const itemsArray = Object.assign([], items);
-    itemsArray.push(billing);
-    setItems(itemsArray);
   };
 
   const scanItem = () => {
@@ -78,7 +73,7 @@ function BillingForm() {
           });
       };
       const config = {
-        fps: 1,
+        fps: 1000,
         qrbox: { width: 300, height: 300 },
         formatsToSupport,
       };
@@ -94,27 +89,7 @@ function BillingForm() {
         .catch((error) => {
           console.log(`Code scan error = ${error}`);
         });
-    }, 500);
-    /* 
-    function onSucess(decodedText, decodedResult, callback) {
-      console.log(`Code matched = ${decodedText}`, decodedResult);
-     
-      callback();
-    }
-    setTimeout(() => {
-      let html5QrcodeScanner = new Html5QrcodeScanner(
-        "reader",
-        { fps: 1, formatsToSupport, qrbox: { width: 250, height: 250 } },
-      false
-      );
-      html5QrcodeScanner.render(
-        (decodedText, decodedResult) =>
-          onSucess(decodedText, decodedResult, toggle),
-        (error) => {
-          console.log(`Code scan error = ${error}`);
-        }
-      );
-    }, 500); */
+    }, 300);
   };
 
   const closeBtn = (
@@ -122,6 +97,18 @@ function BillingForm() {
       &times;
     </button>
   );
+
+  const save = () => {
+    const itemsArray = Object.assign([], items);
+    itemsArray.push(billing);
+    setItems(itemsArray);
+    if (itemsArray.length > 0) {
+      const totalAmount = itemsArray
+        .map(({ price, quantity }) => +quantity * +price)
+        .reduce((acc, value) => +acc + +value, 0);
+      setTotal(totalAmount);
+    }
+  };
 
   return (
     <>
@@ -133,7 +120,7 @@ function BillingForm() {
             <th>Description</th>
             <th>Quantity</th>
             <th>Price</th>
-            <th></th>
+            <th>Total</th>
           </tr>
         </thead>
         <tbody>
@@ -144,8 +131,14 @@ function BillingForm() {
               <th>{description}</th>
               <th>{quantity}</th>
               <th>{price}</th>
+              <th>{+price * +quantity}</th>
             </tr>
           ))}
+          <tr>
+            <td colSpan={4}></td>
+            <td>Total</td>
+            <td>{total}</td>
+          </tr>
           <tr>
             <td>
               <Button onClick={() => scanItem()}>Scan</Button>
