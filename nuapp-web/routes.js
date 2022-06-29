@@ -4,14 +4,20 @@ var routes = [
     name: "Dashboard",
     icon: "ni ni-tv-2 text-primary",
     layout: "/admin",
-  },
+  }, 
   {
+    path: "/billing",
+    name: "Billing",
+    icon: "ni ni-planet text-blue",
+    layout: "/admin/billing",
+  },
+  /*  {
     path: "/icons",
     name: "Icons",
     icon: "ni ni-planet text-blue",
     layout: "/admin",
   },
-  {
+ {
     path: "/maps",
     name: "Maps",
     icon: "ni ni-pin-3 text-orange",
@@ -40,6 +46,6 @@ var routes = [
     name: "Register",
     icon: "ni ni-circle-08 text-pink",
     layout: "/auth",
-  },
+  }, */
 ];
 export default routes;

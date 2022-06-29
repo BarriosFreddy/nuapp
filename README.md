@@ -1,17 +1,16 @@
 # NuApp
 
-
 # nuapp-api
+#### Deployment
 
-## DEPLOY
-
-### Command
+_Command_
 git subtree push --prefix nuapp-api heroku master
 
 # nuapp-web
+#### Deployment
 
-## DEPLOY
-
-###
+### command
 git push origin main
 
+_vercel CLI_
+vercel
