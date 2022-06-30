@@ -14,7 +14,7 @@ import {
   ModalBody,
   ModalFooter,
 } from "reactstrap";
-import { Html5Qrcode } from "html5-qrcode";
+import Quagga from "quagga";
 
 const formatsToSupport = [
   "AZTEC",
@@ -57,38 +57,44 @@ function BillingForm() {
   const scanItem = () => {
     toggle();
     setTimeout(() => {
-      const html5QrCode = new Html5Qrcode("reader");
-      const qrCodeSuccessCallback = (decodedText, decodedResult) => {
-        console.log(`Code matched = ${decodedText}`, decodedResult);
+      Quagga.init(
+        {
+          inputStream: {
+            name: "Live",
+            type: "LiveStream",
+            constraints: {
+              width: 450,
+              height: 400,
+              facingMode: "environment",
+            },
+            target: document.querySelector("#reader"), // Or '#yourElement' (optional)
+          },
+          decoder: {
+            readers: ["ean_reader"],
+          },
+        },
+        function(err) {
+          if (err) {
+            console.log(err);
+            return;
+          }
+          console.log("Ready to start");
+          Quagga.start();
+        }
+      );
+      Quagga.onDetected(({ codeResult: { code } }) => {
+        console.log({ code });
         setBilling({
           ...billing,
-          code: decodedText,
+          code,
         });
         setModal(false);
-        html5QrCode
-          .stop()
-          .then((ignore) => {})
-          .catch((err) => {
-            console.log(`error = ${err}`);
-          });
-      };
-      const config = {
-        fps: 1000,
-        qrbox: { width: 300, height: 300 },
-        formatsToSupport,
-      };
-      html5QrCode
-        .start(
-          { facingMode: "environment" },
-          config,
-          qrCodeSuccessCallback,
-          (errorMessage) => {
-            console.log(`Code scan error = ${errorMessage}`);
-          }
-        )
-        .catch((error) => {
-          console.log(`Code scan error = ${error}`);
-        });
+        Quagga.stop();
+      });
+      Quagga.onProcessed((result) => {
+        const drawingCanvas = Quagga.canvas.dom.overlay;
+        drawingCanvas.style.display = "none";
+      });
     }, 300);
   };
 
