@@ -2,24 +2,17 @@ import React, { useState } from "react";
 
 // reactstrap components
 import {
-  Badge,
   Card,
   CardHeader,
   CardFooter,
-  DropdownMenu,
-  DropdownItem,
-  UncontrolledDropdown,
-  DropdownToggle,
-  Media,
   Pagination,
   PaginationItem,
   PaginationLink,
-  Progress,
   Table,
   Container,
   Row,
-  UncontrolledTooltip,
   Col,
+  Button,
 } from "reactstrap";
 // layout for this page
 import Admin from "layouts/Admin.js";
@@ -31,10 +24,8 @@ import BillingForm from "./billingForm";
 function Billing() {
   let [editing, setEditing] = useState(false);
 
-  const save = () => {
+  const save = () => {};
 
-  };
-  
   return (
     <>
       <Header />
@@ -51,30 +42,30 @@ function Billing() {
                   </Col>
                   <Col>
                     {!editing && (
-                      <button
-                        type="button"
-                        className="btn btn-success btn-sm"
+                      <Button
+                        color="success"
+                        size="sm"
                         onClick={() => setEditing(true)}
                       >
-                        Create
-                      </button>
+                        CREAR
+                      </Button>
                     )}
                     {editing && (
                       <>
-                        <button
-                          type="button"
-                          className="btn btn-success btn-sm"
+                        <Button
+                          color="success"
+                          size="sm"
                           onClick={() => save()}
                         >
-                          Save
-                        </button>
-                        <button
-                          type="button"
-                          className="btn btn-primary btn-sm"
+                          GUARDAR
+                        </Button>
+                        <Button
+                          color="light"
+                          size="sm"
                           onClick={() => setEditing(false)}
                         >
-                          Cancel
-                        </button>
+                          CANCELAR
+                        </Button>
                       </>
                     )}
                   </Col>
@@ -99,12 +90,9 @@ function Billing() {
                         <td>$20</td>
                         <td>3</td>
                         <td>
-                          <button
-                            className="btn btn-light btn-sm"
-                            type="button"
-                          >
-                            Show
-                          </button>
+                          <Button color="primary" size="sm">
+                            VER
+                          </Button>
                         </td>
                       </tr>
                     </tbody>

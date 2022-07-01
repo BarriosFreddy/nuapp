@@ -9,7 +9,7 @@ var routes = [
     path: "/billing",
     name: "Billing",
     icon: "ni ni-planet text-blue",
-    layout: "/admin/billing",
+    layout: "/admin",
   },
   /*  {
     path: "/icons",
