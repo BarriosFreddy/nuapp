@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 // reactstrap components
 import {
@@ -23,8 +23,28 @@ import BillingForm from "./billingForm";
 
 function Billing() {
   let [editing, setEditing] = useState(false);
+  let [saving, setSaving] = useState(false);
+  let [bills, setBills] = useState([]);
 
-  const save = () => {};
+  useEffect(async () => {
+    setBills(await getBills());
+  }, []);
+
+  const getBills = async () => {
+    const { data } = await fetch(`http://localhost:3001/bill/date/123`, {
+      method: "GET",
+      mode: "cors",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }).then((res) => res.json());
+    return data;
+  };
+
+  const cancel = async () => {
+    setEditing(false);
+    setBills(await getBills());
+  };
 
   return (
     <>
@@ -37,8 +57,8 @@ function Billing() {
             <Card className="shadow border-10">
               <CardHeader className="border-0">
                 <Row>
-                  <Col sm="1">
-                    <h3 className="mb-0">Billing</h3>
+                  <Col sm="4¡2">
+                    <h3 className="mb-0">Facturación</h3>
                   </Col>
                   <Col>
                     {!editing && (
@@ -49,24 +69,6 @@ function Billing() {
                       >
                         CREAR
                       </Button>
-                    )}
-                    {editing && (
-                      <>
-                        <Button
-                          color="success"
-                          size="sm"
-                          onClick={() => save()}
-                        >
-                          GUARDAR
-                        </Button>
-                        <Button
-                          color="light"
-                          size="sm"
-                          onClick={() => setEditing(false)}
-                        >
-                          CANCELAR
-                        </Button>
-                      </>
                     )}
                   </Col>
                 </Row>
@@ -84,17 +86,19 @@ function Billing() {
                       </tr>
                     </thead>
                     <tbody>
-                      <tr>
-                        <td>{moment().format("HH:mm a")}</td>
-                        <td>DF000000001</td>
-                        <td>$20</td>
-                        <td>3</td>
-                        <td>
-                          <Button color="primary" size="sm">
-                            VER
-                          </Button>
-                        </td>
-                      </tr>
+                      {bills.map(({ createdAt, code, items, total }) => (
+                        <tr key={code}>
+                          <td>{moment(createdAt).format("HH:mm a")}</td>
+                          <td>{code}</td>
+                          <td>${total}</td>
+                          <td>{items.length}</td>
+                          <td>
+                            <Button color="primary" size="sm">
+                              VER
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
                     </tbody>
                   </Table>
 
@@ -152,7 +156,7 @@ function Billing() {
                   </CardFooter>
                 </>
               )}
-              {editing && <BillingForm />}
+              {editing && <BillingForm cancel={cancel} />}
             </Card>
           </div>
         </Row>

@@ -1,4 +1,5 @@
 import React from "react";
+import { Provider } from "react-redux";
 import ReactDOM from "react-dom";
 import App from "next/app";
 import Head from "next/head";
@@ -9,6 +10,7 @@ import PageChange from "components/PageChange/PageChange.js";
 import "assets/plugins/nucleo/css/nucleo.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "assets/scss/nextjs-argon-dashboard.scss";
+import { store } from '../app/store';
 
 Router.events.on("routeChangeStart", (url) => {
   console.log(`Loading: ${url}`);
@@ -73,7 +75,9 @@ export default class MyApp extends App {
           <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
         </Head>
         <Layout>
+          <Provider store={store}>
           <Component {...pageProps} />
+          </Provider>
         </Layout>
       </React.Fragment>
     );
