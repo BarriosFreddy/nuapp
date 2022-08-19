@@ -4,6 +4,6 @@ export class BillDto {
   code: string;
   items: ItemDto[];
   total: number;
-  createdAt: Date;
+  createdAt: string;
   updateAt: string;
 }

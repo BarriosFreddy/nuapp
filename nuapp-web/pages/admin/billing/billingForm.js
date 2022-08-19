@@ -231,10 +231,9 @@ function BillingForm(props) {
               <Button
                 outline
                 color="success"
-                size="sm"
                 onClick={() => scanItem()}
               >
-                Escanear
+                ESCANEAR
               </Button>
             </td>
             <td>
@@ -299,10 +298,9 @@ function BillingForm(props) {
               <Button
                 outline
                 color="success"
-                size="sm"
                 onClick={() => addItem()}
               >
-                Agregar
+                AGREGAR
               </Button>
             </td>
             <td></td>

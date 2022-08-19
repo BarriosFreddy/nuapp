@@ -1,16 +1,26 @@
+import { uuid } from 'uuidv4';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Date } from 'mongoose';
 import { BillDocument } from './schemas/bill.schema';
 import { BillDto } from './dto/bill.dto';
+import { DailyBillsDocument } from './schemas/dailyBills.schema';
+import { getCurrentDateAsString } from 'src/helper/utils/DateUtils';
+import { DailyBillsDto } from './dto/DailyBills.dto';
 
 @Injectable()
 export class BillService {
-  async findByDate(date: string) {
-    return await this.billModel.find({});
-  }
+  constructor(
+    @InjectModel('bills') private billModel: Model<BillDocument>,
+    @InjectModel('dailyBills')
+    private billsPerDayModel: Model<DailyBillsDocument>,
+  ) {}
 
-  constructor(@InjectModel('bills') private billModel: Model<BillDocument>) {}
+  async findByDate(date: string) {
+    return await this.billModel.find({
+      createdAt: date,
+    });
+  }
 
   async findAll() {
     return await this.billModel.find();
@@ -21,8 +31,8 @@ export class BillService {
   }
 
   async save(billDto: BillDto) {
-    billDto.code = new Date().getTime().toString();
-    billDto.createdAt = new Date();
+    billDto.code = uuid();
+    billDto.createdAt = getCurrentDateAsString();
     return await this.billModel.create(billDto);
   }
 }
