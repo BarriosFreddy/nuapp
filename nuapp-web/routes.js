@@ -11,6 +11,12 @@ var routes = [
     icon: "ni ni-planet text-blue",
     layout: "/admin",
   },
+  {
+    path: "/billing/items",
+    name: "Productos",
+    icon: "ni ni-planet text-blue",
+    layout: "/admin",
+  },
   /*  {
     path: "/icons",
     name: "Icons",

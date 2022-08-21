@@ -4,13 +4,19 @@ import { Model } from 'mongoose';
 import { ItemDto } from './dto/item.dto';
 import { UpdateItemDto } from './dto/update-item.dto';
 import { ItemDocument } from './schemas/item.schema';
+import { uuid } from 'uuidv4';
+import { getCurrentDateAsString } from 'src/helper/utils/DateUtils';
 
 @Injectable()
 export class ItemService {
   constructor(@InjectModel('items') private itemModel: Model<ItemDocument>) {}
+  async save(itemDto: ItemDto) {
+    itemDto.createdAt = getCurrentDateAsString();
+    return await this.itemModel.create(itemDto);
+  }
 
-  async findAll() {
-    return await this.itemModel.find();
+  async findAll(page = 1) {
+    return await this.itemModel.find({}, {}, { skip: --page * 10 });
   }
 
   findOne(id: number) {
