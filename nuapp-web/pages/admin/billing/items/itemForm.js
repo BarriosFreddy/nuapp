@@ -22,8 +22,6 @@ import {
 import Quagga from "quagga";
 import ValidationFeedback from "../../../../components/validationFeedback";
 
-const ENTER_KEYCODE = 13;
-
 const itemInitialState = {
   code: "",
   description: "",

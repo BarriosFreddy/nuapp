@@ -24,7 +24,7 @@ import Admin from "layouts/Admin.js";
 // core components
 import Header from "components/Headers/Header.js";
 import moment from "moment";
-import ItemForm from "./ItemForm";
+import ItemForm from './itemForm';
 
 function Item() {
   let [editing, setEditing] = useState(false);
