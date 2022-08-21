@@ -13,10 +13,14 @@ export class DailyBillService {
     private dailyBillsModel: Model<DailyBillsDocument>,
   ) {}
 
-  async findByDate(date: string) {
-    return await this.dailyBillsModel.findOne({
-      date,
-    });
+  async findByDate(date: string, page = 1) {
+    return await this.dailyBillsModel.findOne(
+      {
+        date,
+      },
+      {},
+      { skip: --page * 10 },
+    );
   }
 
   async closeDay(dailyBills: DailyBillsDto) {

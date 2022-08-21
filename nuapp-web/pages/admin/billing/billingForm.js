@@ -14,6 +14,10 @@ import {
   ModalBody,
   ModalFooter,
   FormFeedback,
+  Container,
+  Card,
+  CardBody,
+  CardText,
 } from "reactstrap";
 import Quagga from "quagga";
 import ValidationFeedback from "../../../components/validationFeedback";
@@ -167,7 +171,7 @@ function BillingForm(props) {
   const addItem = () => {
     if (isValidForm()) {
       const itemsArray = Object.assign([], items);
-      itemsArray.push(billing);
+      itemsArray.unshift(billing);
       setItems(itemsArray);
       calculateTotal(itemsArray);
       clearFieldsForm();
@@ -203,56 +207,60 @@ function BillingForm(props) {
 
   return (
     <>
-      <Table responsive hover bordered>
-        <thead>
-          <tr>
-            <th colSpan={7}>
-              <Button color="success" size="sm" onClick={() => save()}>
-                GUARDAR
-              </Button>
-              <Button color="light" size="sm" onClick={() => cancel()}>
-                CANCELAR
-              </Button>
-            </th>
-          </tr>
-          <tr>
-            <th>#</th>
-            <th>Código</th>
-            <th>Descripción</th>
-            <th>Cantidad</th>
-            <th>Subtotal</th>
-            <th>Total</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              <Button
-                outline
-                color="success"
-                onClick={() => scanItem()}
-              >
-                ESCANEAR
-              </Button>
-            </td>
-            <td>
-              <FormGroup>
-                <Input
-                  bsSize="sm"
-                  type="text"
-                  name="code"
-                  value={billing.code}
-                  onChange={(event) => onChangeField(event)}
-                  onKeyDown={(event) => onKeyDownCodeField(event)}
-                />
-                {failedValidations.code && (
-                  <ValidationFeedback>Campo obligatorio</ValidationFeedback>
-                )}
-              </FormGroup>
-            </td>
-            <td>
-              <FormGroup>
+      <Container fluid>
+        <Row>
+          <Col>
+            <Button color="success" onClick={() => save()}>
+              GUARDAR
+            </Button>
+          </Col>
+          <Col>
+            <Button color="light" onClick={() => cancel()}>
+              CANCELAR
+            </Button>
+          </Col>
+        </Row>
+
+        <Row style={{ marginTop: "20px" }}>
+          <Col>Código</Col>
+          <Col>
+            <FormGroup>
+              <Input
+                bsSize="sm"
+                type="text"
+                name="code"
+                value={billing.code}
+                onChange={(event) => onChangeField(event)}
+                onKeyDown={(event) => onKeyDownCodeField(event)}
+              />
+              {failedValidations.code && (
+                <ValidationFeedback>Campo obligatorio</ValidationFeedback>
+              )}
+            </FormGroup>
+          </Col>
+        </Row>
+        <Row>
+          <Col>Cantidad</Col>
+          <Col>
+            <FormGroup>
+              <Input
+                bsSize="sm"
+                type="number"
+                name="quantity"
+                value={billing.quantity}
+                onChange={(event) => onChangeField(event)}
+              />
+              {failedValidations.quantity && (
+                <ValidationFeedback>Campo obligatorio</ValidationFeedback>
+              )}
+            </FormGroup>
+          </Col>
+        </Row>
+        <Row>
+          <Col>Descripción</Col>
+          <Col>
+            {billing.description}
+            {/* <FormGroup>
                 <Input
                   bsSize="sm"
                   type="text"
@@ -264,76 +272,88 @@ function BillingForm(props) {
                 {failedValidations.description && (
                   <ValidationFeedback>Campo obligatorio</ValidationFeedback>
                 )}
-              </FormGroup>
-            </td>
-            <td>
-              <FormGroup>
+              </FormGroup> */}
+          </Col>
+        </Row>
+        <Row>
+          <Col>Precio</Col>
+          <Col>
+            {billing.price}
+            {/* <FormGroup>
                 <Input
-                  bsSize="sm"
-                  type="number"
-                  name="quantity"
-                  value={billing.quantity}
-                  onChange={(event) => onChangeField(event)}
-                />
-                {failedValidations.quantity && (
-                  <ValidationFeedback>Campo obligatorio</ValidationFeedback>
-                )}
-              </FormGroup>
-            </td>
-            <td>
-              <FormGroup>
-                <Input
-                  bsSize="sm"
-                  type="number"
-                  name="price"
-                  value={billing.price}
-                  onChange={(event) => onChangeField(event)}
+                bsSize="sm"
+                type="number"
+                name="price"
+                value={billing.price}
+                onChange={(event) => onChangeField(event)}
                 />
                 {failedValidations.price && (
                   <ValidationFeedback>Campo obligatorio</ValidationFeedback>
-                )}
-              </FormGroup>
-            </td>
-            <td>
-              <Button
-                outline
-                color="success"
-                onClick={() => addItem()}
-              >
-                AGREGAR
-              </Button>
-            </td>
-            <td></td>
-          </tr>
-          {items.map(
-            ({ code, description, quantity = 0, price = 0 }, index) => (
-              <tr key={index}>
-                <th>{index + 1}</th>
-                <th>{code}</th>
-                <th>{description}</th>
-                <th>{quantity}</th>
-                <th>{price}</th>
-                <th>{+price * +quantity}</th>
-                <th>
-                  <Button
-                    outline
-                    color="light"
-                    size="sm"
-                    onClick={() => deleteItem()}
-                  >
-                    Eliminar
-                  </Button>
-                </th>
-              </tr>
-            )
-          )}
-          <tr>
-            <td colSpan={4}></td>
-            <td>Total</td>
-            <td>{total}</td>
-          </tr>
-        </tbody>
-      </Table>
+                  )}
+                </FormGroup> */}
+          </Col>
+        </Row>
+        <Row style={{ margin: "20px 0" }}>
+          <Col>
+            <Button outline color="success" onClick={() => scanItem()}>
+              ESCANEAR
+            </Button>
+          </Col>
+          <Col>
+            <Button outline color="success" onClick={() => addItem()}>
+              AGREGAR
+            </Button>
+          </Col>
+        </Row>
+        <Row style={{ marginTop: "20px" }}>
+          <Col>Total {"    " + total}</Col>
+        </Row>
+
+        {items.map(({ code, description, quantity = 0, price = 0 }, index) => (
+          <Card
+            key={code}
+            style={{
+              width: "auto",
+            }}
+          >
+            <CardBody>
+              <CardText>
+                <Row>
+                  <Col xs="8">
+                    <Row>
+                      <Col > {description}</Col>
+                    </Row>
+                    <Row>
+                      <Col>Cantidad</Col>
+                      <Col>{quantity}</Col>
+                    </Row>
+                    <Row>
+                      <Col>Valor</Col>
+                      <Col>{price}</Col>
+                    </Row>
+                    <Row>
+                      <Col>
+                        <string>Subtotal</string>
+                      </Col>
+                      <Col>{+price * +quantity}</Col>
+                    </Row>
+                    <Row></Row>
+                  </Col>
+                  <Col xs="1">
+                    <Button
+                      outline
+                      color="light"
+                      onClick={() => deleteItem()}
+                    >
+                      Eliminar
+                    </Button>
+                  </Col>
+                </Row>
+              </CardText>
+            </CardBody>
+          </Card>
+        ))}
+      </Container>
       <Modal isOpen={modal} toggle={toggle}>
         <ModalHeader toggle={toggle} close={closeBtn}>
           Escaneando

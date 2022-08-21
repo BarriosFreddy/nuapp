@@ -15,6 +15,9 @@ import {
   Button,
   Form,
   Input,
+  CardBody,
+  CardText,
+  CardTitle,
 } from "reactstrap";
 // layout for this page
 import Admin from "layouts/Admin.js";
@@ -30,17 +33,20 @@ function Billing() {
   let [bills, setBills] = useState([]);
   let [month, setMonth] = useState(moment().format("MM"));
   let [day, setDay] = useState(moment().format("DD"));
-  let dateFilter = `${moment().year()}-`;
+  let [monthDays, setMonthDays] = useState([]);
+  let [page, setPage] = useState(1);
+  let [dateFilter, setDateFilter] = useState(moment().format("YYYY-MM-DD"));
 
   useEffect(async () => {
-    const billsArray = await getBills(moment().format("YYYY-MM-DD"));
+    const billsArray = await getBills(dateFilter);
     setBills(billsArray);
     calculateTotal(billsArray);
-    await getDailyBills(moment().format("YYYY-MM-DD"));
+    // await getDailyBills(dateFilter);
+    getDaysOfTheMonth(+month);
   }, []);
 
   const getBills = async (date) => {
-    const { data } = await fetch(`http://localhost:3001/bill/date/${date}`, {
+    const { data } = await fetch(`http://localhost:3001/bill/date/${date}?page=${page}`, {
       method: "GET",
       mode: "cors",
       headers: {
@@ -49,9 +55,9 @@ function Billing() {
     }).then((res) => res.json());
     return data;
   };
-
-  const getDailyBills = async (date) => {
-    const { data } = await fetch(`http://localhost:3001/bill/daily/${date}`, {
+/* 
+  const getDailyBills = async (date, page = 1) => {
+    const { data } = await fetch(`http://localhost:3001/bill/daily/${date}?page=${page}`, {
       method: "GET",
       mode: "cors",
       headers: {
@@ -59,14 +65,14 @@ function Billing() {
       },
     }).then((res) => res.json());
     setIsThisDateClosed(!!data);
-  };
+  }; */
 
   const cancel = async () => {
-    const billsArray = await getBills(moment().format("YYYY-MM-DD"));
+    const billsArray = await getBills(dateFilter);
     setBills(billsArray);
     calculateTotal(billsArray);
     setEditing(false);
-    await getDailyBills(moment().format("YYYY-MM-DD"));
+    //await getDailyBills(dateFilter);
   };
 
   const calculateTotal = (billsArray) => {
@@ -75,10 +81,12 @@ function Billing() {
         .map(({ total }) => total)
         .reduce((acc, value) => +acc + +value, 0);
       setTotal(totalAmount);
+      return;
     }
+    setTotal(0);
   };
 
-  const closeDay = async () => {
+/*   const closeDay = async () => {
     const { data } = await fetch(`http://localhost:3001/bill/close`, {
       method: "POST",
       mode: "cors",
@@ -91,20 +99,53 @@ function Billing() {
       }),
     }).then((res) => res.json());
     !!data && setIsThisDateClosed(true);
-  };
+  }; */
 
   const onChangeFilterDate = async ({ target: { name, value } }) => {
+    let dateFilterTemp = ''
     if (name === "day") {
       setDay(value);
-      dateFilter += `${month}-${value}`;
+      dateFilterTemp = `${moment().format("YYYY")}-${month}-${value}`;
     } else if (name == "month") {
       setMonth(value);
-      dateFilter += `${value}-${day}`;
+      getDaysOfTheMonth(+value);
+      dateFilterTemp = `${moment().format("YYYY")}-${value}-${day}`
     }
-    const billsArray = await getBills(dateFilter);
+    setDateFilter(dateFilterTemp);
+    const billsArray = await getBills(dateFilterTemp);
     setBills(billsArray);
     calculateTotal(billsArray);
-    await getDailyBills(dateFilter);
+    //await getDailyBills(dateFilterTemp);
+  };
+
+  const getDaysOfTheMonth = (month) => {
+    const endMonth = moment()
+      .month(--month)
+      .endOf("month")
+      .date();
+    const days = [];
+    for (let index = 1; index <= endMonth; index++) {
+      days.push(
+        moment()
+          .month(--month)
+          .date(index)
+          .format("DD")
+      );
+    }
+    setMonthDays(days);
+  };
+
+  const nextPage = async () => {
+    const newPage = page + 1;
+    setPage(newPage);
+    await getBills(dateFilter, newPage);
+  };
+
+  const prevPage = async () => {
+    const newPage = page === 1 ? 1 : page - 1;
+    setPage(newPage);
+    await getBills(dateFilter, newPage);
+
   };
 
   return (
@@ -117,70 +158,74 @@ function Billing() {
           <div className="col">
             <Card className="shadow border-10">
               <CardHeader className="border-0">
-                <Row>
-                  <Col sm="1">
-                    <h3 className="mb-0">Facturación</h3>
-                  </Col>
-                  <Col sm="1">
-                    <Input
-                      id="exampleSelect"
-                      name="month"
-                      type="select"
-                      value={month}
-                      onChange={onChangeFilterDate}
-                    >
-                      <option value="01">Enero</option>
-                      <option value="02">Febrero</option>
-                      <option value="03">Marzo</option>
-                      <option value="04">Abril</option>
-                      <option value="05">Mayo</option>
-                      <option value="08">Agosto</option>
-                    </Input>
-                  </Col>
-                  <Col sm="1">
-                    <Input
-                      type="select"
-                      name="day"
-                      value={day}
-                      onChange={onChangeFilterDate}
-                    >
-                      <option value="01">01</option>
-                      <option value="02">02</option>
-                      <option value="03">03</option>
-                      <option value="04">04</option>
-                      <option value="15">15</option>
-                      <option value="16">16</option>
-                      <option value="17">17</option>
-                      <option value="18">18</option>
-                    </Input>
-                  </Col>
-                  <Col>
-                    {!editing && !isThisDateClosed && (
-                      <Button color="success" onClick={() => setEditing(true)}>
-                        CREAR
-                      </Button>
-                    )}
-                  </Col>
-
-                  {!editing && (
-                    <>
-                      {!isThisDateClosed && (
-                        <Col sm="1">
-                          <Button color="primary" onClick={closeDay}>
-                            CIERRE
+                <Container>
+                  <Row>
+                    {!editing && (
+                      <>
+                        <Col xs="4">
+                          <Input
+                            id="exampleSelect"
+                            name="month"
+                            type="select"
+                            value={month}
+                            onChange={onChangeFilterDate}
+                          >
+                            <option value="01">Enero</option>
+                            <option value="02">Febrero</option>
+                            <option value="03">Marzo</option>
+                            <option value="04">Abril</option>
+                            <option value="05">Mayo</option>
+                            <option value="08">Agosto</option>
+                            <option value="09">Septiembre</option>
+                            <option value="10">Octubre</option>
+                            <option value="11">Noviembre</option>
+                            <option value="12">Diciembre</option>
+                          </Input>
+                        </Col>
+                        <Col xs="4">
+                          <Input
+                            type="select"
+                            name="day"
+                            value={day}
+                            onChange={onChangeFilterDate}
+                          >
+                            {monthDays.map((day) => (
+                              <option value={day}>{day}</option>
+                            ))}
+                          </Input>
+                        </Col>
+                        {/* !isThisDateClosed && */}
+                        <Col xs="4">
+                          <Button
+                            color="success"
+                            onClick={() => setEditing(true)}
+                          >
+                            CREAR
                           </Button>
                         </Col>
-                      )}
-                      <Col sm="1">
-                        <strong>Total ${total}</strong>
-                      </Col>
-                    </>
-                  )}
-                </Row>
+                        {/*                       {!editing && (
+                        <>
+                          {!isThisDateClosed && (
+                            <Col lg="2">
+                              <Button color="primary" onClick={closeDay}>
+                                CIERRE
+                              </Button>
+                            </Col>
+                          )}
+                        
+                        </>
+                      )} */}
+                        <Col xs="8" style={{ paddingTop: "15px" }}>
+                          <strong>Total ${total}</strong>
+                        </Col>{" "}
+                      </>
+                    )}
+                  </Row>
+                </Container>
               </CardHeader>
               {!editing && (
                 <>
-                  <Table className="align-items-center table-flush" responsive>
+                  {/*    <Table className="align-items-center table-flush" responsive>
                     <thead className="thead-light">
                       <tr>
                         <th scope="col">Fecha</th>
@@ -207,7 +252,26 @@ function Billing() {
                         </tr>
                       ))}
                     </tbody>
-                  </Table>
+                  </Table>*/}
+                  {bills.map(({ createdAt, code, items, total }) => (
+                    <Card
+                      key={code}
+                      style={{
+                        width: "auto",
+                      }}
+                    >
+                      <CardBody>
+                        <CardText>
+                          <Row>
+                            <Col>Productos</Col>
+                            <Col>{items.length}</Col>
+                            <Col>Total</Col>
+                            <Col>${total}</Col>
+                          </Row>
+                        </CardText>
+                      </CardBody>
+                    </Card>
+                  ))}
 
                   <CardFooter className="py-4">
                     <nav aria-label="...">
@@ -215,44 +279,20 @@ function Billing() {
                         className="pagination justify-content-end mb-0"
                         listClassName="justify-content-end mb-0"
                       >
-                        <PaginationItem className="disabled">
+                        <PaginationItem>
                           <PaginationLink
                             href="#pablo"
-                            onClick={(e) => e.preventDefault()}
+                            onClick={(e) => prevPage()}
                             tabIndex="-1"
                           >
                             <i className="fas fa-angle-left" />
                             <span className="sr-only">Previous</span>
                           </PaginationLink>
                         </PaginationItem>
-                        <PaginationItem className="active">
-                          <PaginationLink
-                            href="#pablo"
-                            onClick={(e) => e.preventDefault()}
-                          >
-                            1
-                          </PaginationLink>
-                        </PaginationItem>
                         <PaginationItem>
                           <PaginationLink
                             href="#pablo"
-                            onClick={(e) => e.preventDefault()}
-                          >
-                            2 <span className="sr-only">(current)</span>
-                          </PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem>
-                          <PaginationLink
-                            href="#pablo"
-                            onClick={(e) => e.preventDefault()}
-                          >
-                            3
-                          </PaginationLink>
-                        </PaginationItem>
-                        <PaginationItem>
-                          <PaginationLink
-                            href="#pablo"
-                            onClick={(e) => e.preventDefault()}
+                            onClick={(e) => nextPage()}
                           >
                             <i className="fas fa-angle-right" />
                             <span className="sr-only">Next</span>

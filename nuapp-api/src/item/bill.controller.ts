@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Query } from '@nestjs/common';
 import { BillService } from './bill.service';
 import { BillDto } from './dto/bill.dto';
 import { DailyBillsDto } from './dto/DailyBills.dto';
@@ -31,8 +31,11 @@ export class BillController {
   }
 
   @Get('/daily/:date')
-  async findDailyBillsByDate(@Param('date') date: string) {
-    const billsByDate = await this.dailyBillsService.findByDate(date);
+  async findDailyBillsByDate(
+    @Param('date') date: string,
+    @Query('page') page: number,
+  ) {
+    const billsByDate = await this.dailyBillsService.findByDate(date, page);
     const result = { data: billsByDate };
     return result;
   }

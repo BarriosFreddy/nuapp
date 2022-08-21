@@ -16,10 +16,14 @@ export class BillService {
     private billsPerDayModel: Model<DailyBillsDocument>,
   ) {}
 
-  async findByDate(date: string) {
-    return await this.billModel.find({
-      createdAt: date,
-    });
+  async findByDate(date: string, page = 1) {
+    return await this.billModel.find(
+      {
+        createdAt: date,
+      },
+      {},
+      { skip: --page * 10 },
+    );
   }
 
   async findAll() {
