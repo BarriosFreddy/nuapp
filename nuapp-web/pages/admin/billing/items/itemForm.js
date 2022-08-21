@@ -21,6 +21,7 @@ import {
 } from "reactstrap";
 import Quagga from "quagga";
 import ValidationFeedback from "../../../../components/validationFeedback";
+import { env } from '../../../../env';
 
 const itemInitialState = {
   code: "",
@@ -128,7 +129,7 @@ function ItemForm(props) {
 
   const save = async () => {
     if (isValidForm()) {
-      await fetch(`http://localhost:3001/item`, {
+      await fetch(`${env.BASE_URL}/item`, {
         method: "POST",
         mode: "cors",
         headers: {

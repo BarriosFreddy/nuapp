@@ -25,6 +25,7 @@ import Admin from "layouts/Admin.js";
 import Header from "components/Headers/Header.js";
 import moment from "moment";
 import ItemForm from './itemForm';
+import { env } from '../../../../env';
 
 function Item() {
   let [editing, setEditing] = useState(false);
@@ -42,7 +43,7 @@ function Item() {
   }, []);
 
   const getItems = async (page = 1) => {
-    const { data } = await fetch(`http://localhost:3001/item?page=${page}`, {
+    const { data } = await fetch(`${env.BASE_URL}/item?page=${page}`, {
       method: "GET",
       mode: "cors",
       headers: {

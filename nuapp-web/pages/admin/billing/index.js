@@ -25,6 +25,7 @@ import Admin from "layouts/Admin.js";
 import Header from "components/Headers/Header.js";
 import moment from "moment";
 import BillingForm from "./billingForm";
+import { env } from '../../../env';
 
 function Billing() {
   let [editing, setEditing] = useState(false);
@@ -46,7 +47,7 @@ function Billing() {
   }, []);
 
   const getBills = async (date) => {
-    const { data } = await fetch(`http://localhost:3001/bill/date/${date}?page=${page}`, {
+    const { data } = await fetch(`${env.BASE_URL}/bill/date/${date}?page=${page}`, {
       method: "GET",
       mode: "cors",
       headers: {

@@ -21,6 +21,7 @@ import {
 } from "reactstrap";
 import Quagga from "quagga";
 import ValidationFeedback from "../../../components/validationFeedback";
+import { env } from '../../../env';
 
 const formatsToSupport = [
   "AZTEC",
@@ -82,7 +83,7 @@ function BillingForm(props) {
 
   const getItemByCode = async (code) => {
     const { data } = await fetch(
-      `http://localhost:3001/item/code/${code}`
+      `${env.BASE_URL}/item/code/${code}`
     ).then((res) => res.json());
     return data;
   };
@@ -189,7 +190,7 @@ function BillingForm(props) {
 
   const save = async () => {
     if (items.length > 0) {
-      await fetch(`http://localhost:3001/bill`, {
+      await fetch(`${env.BASE_URL}/bill`, {
         method: "POST",
         mode: "cors",
         headers: {
