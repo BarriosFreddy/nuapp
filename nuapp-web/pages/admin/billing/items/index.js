@@ -27,7 +27,7 @@ import moment from "moment";
 import ItemForm from './ItemForm';
 
 
-function Billing() {
+function Item() {
   let [editing, setEditing] = useState(false);
   let [total, setTotal] = useState(0);
   let [items, setItems] = useState([]);
@@ -157,6 +157,6 @@ function Billing() {
   );
 }
 
-Billing.layout = Admin;
+Item.layout = Admin;
 
-export default Billing;
+export default Item;
