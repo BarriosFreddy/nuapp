@@ -25,7 +25,7 @@ import Admin from "layouts/Admin.js";
 import Header from "components/Headers/Header.js";
 import moment from "moment";
 import ItemForm from './itemForm';
-import { env } from '../../../../env';
+import env from "../../../../env";
 
 function Item() {
   let [editing, setEditing] = useState(false);

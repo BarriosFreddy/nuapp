@@ -21,7 +21,7 @@ import {
 } from "reactstrap";
 import Quagga from "quagga";
 import ValidationFeedback from "../../../components/validationFeedback";
-import { env } from '../../../env';
+import env from "../../../env";
 
 const formatsToSupport = [
   "AZTEC",
@@ -322,7 +322,7 @@ function BillingForm(props) {
                 <Row>
                   <Col xs="8">
                     <Row>
-                      <Col > {description}</Col>
+                      <Col> {description}</Col>
                     </Row>
                     <Row>
                       <Col>Cantidad</Col>
@@ -341,11 +341,7 @@ function BillingForm(props) {
                     <Row></Row>
                   </Col>
                   <Col xs="1">
-                    <Button
-                      outline
-                      color="light"
-                      onClick={() => deleteItem()}
-                    >
+                    <Button outline color="light" onClick={() => deleteItem()}>
                       Eliminar
                     </Button>
                   </Col>

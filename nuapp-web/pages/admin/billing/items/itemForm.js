@@ -21,7 +21,7 @@ import {
 } from "reactstrap";
 import Quagga from "quagga";
 import ValidationFeedback from "../../../../components/validationFeedback";
-import { env } from '../../../../env';
+import env from "../../../../env";
 
 const itemInitialState = {
   code: "",

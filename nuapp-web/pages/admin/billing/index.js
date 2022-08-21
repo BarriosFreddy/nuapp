@@ -25,7 +25,7 @@ import Admin from "layouts/Admin.js";
 import Header from "components/Headers/Header.js";
 import moment from "moment";
 import BillingForm from "./billingForm";
-import { env } from '../../../env';
+import env from "../../../env";
 
 function Billing() {
   let [editing, setEditing] = useState(false);
@@ -47,16 +47,19 @@ function Billing() {
   }, []);
 
   const getBills = async (date) => {
-    const { data } = await fetch(`${env.BASE_URL}/bill/date/${date}?page=${page}`, {
-      method: "GET",
-      mode: "cors",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }).then((res) => res.json());
+    const { data } = await fetch(
+      `${env.BASE_URL}/bill/date/${date}?page=${page}`,
+      {
+        method: "GET",
+        mode: "cors",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    ).then((res) => res.json());
     return data;
   };
-/* 
+  /* 
   const getDailyBills = async (date, page = 1) => {
     const { data } = await fetch(`http://localhost:3001/bill/daily/${date}?page=${page}`, {
       method: "GET",
@@ -87,7 +90,7 @@ function Billing() {
     setTotal(0);
   };
 
-/*   const closeDay = async () => {
+  /*   const closeDay = async () => {
     const { data } = await fetch(`http://localhost:3001/bill/close`, {
       method: "POST",
       mode: "cors",
@@ -103,14 +106,14 @@ function Billing() {
   }; */
 
   const onChangeFilterDate = async ({ target: { name, value } }) => {
-    let dateFilterTemp = ''
+    let dateFilterTemp = "";
     if (name === "day") {
       setDay(value);
       dateFilterTemp = `${moment().format("YYYY")}-${month}-${value}`;
     } else if (name == "month") {
       setMonth(value);
       getDaysOfTheMonth(+value);
-      dateFilterTemp = `${moment().format("YYYY")}-${value}-${day}`
+      dateFilterTemp = `${moment().format("YYYY")}-${value}-${day}`;
     }
     setDateFilter(dateFilterTemp);
     const billsArray = await getBills(dateFilterTemp);
@@ -146,7 +149,6 @@ function Billing() {
     const newPage = page === 1 ? 1 : page - 1;
     setPage(newPage);
     await getBills(dateFilter, newPage);
-
   };
 
   return (
