@@ -71,14 +71,21 @@ function ItemForm(props) {
             name: "Live",
             type: "LiveStream",
             constraints: {
-              width: 450,
-              height: 400,
+              width: 320,
+              height: 380,
               facingMode: "environment",
             },
             target: document.querySelector("#reader"), // Or '#yourElement' (optional)
           },
           decoder: {
-            readers: ["ean_reader"],
+            readers: [
+              {
+                format: "ean_reader",
+                config: {
+                  supplements: ["ean_13_reader"],
+                },
+              },
+            ],
           },
         },
         function(err) {

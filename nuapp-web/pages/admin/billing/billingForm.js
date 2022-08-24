@@ -43,6 +43,7 @@ const formatsToSupport = [
 ];
 
 const ENTER_KEYCODE = 13;
+const TAB_KEYCODE = 9;
 
 const billInitialState = {
   code: "",
@@ -74,7 +75,7 @@ function BillingForm(props) {
   };
 
   const onKeyDownCodeField = async ({ keyCode }) => {
-    if (keyCode === ENTER_KEYCODE) {
+    if ([ENTER_KEYCODE, TAB_KEYCODE].includes(keyCode)) {
       const { code } = billing;
       const item = await getItemByCode(code);
       item && populateFieldsForm(item);
@@ -112,14 +113,21 @@ function BillingForm(props) {
             name: "Live",
             type: "LiveStream",
             constraints: {
-              width: 450,
-              height: 400,
+              width: 320,
+              height: 380,
               facingMode: "environment",
             },
             target: document.querySelector("#reader"), // Or '#yourElement' (optional)
           },
           decoder: {
-            readers: ["ean_reader"],
+            readers: [
+              {
+                format: "ean_reader",
+                config: {
+                  supplements: ["ean_13_reader"],
+                },
+              },
+            ],
           },
         },
         function(err) {
@@ -179,13 +187,24 @@ function BillingForm(props) {
     }
   };
 
+  const deleteItem = ({ code, index }) => {
+    const itemsArray = Object.assign([], items);
+    const itemIndex = itemsArray.findIndex((item) => item.code === code);
+    if (itemIndex !== -1 && itemIndex === index)
+      itemsArray.splice(itemIndex, 1);
+    setItems(itemsArray);
+    calculateTotal(itemsArray);
+  };
+
   const calculateTotal = (itemsArray) => {
     if (itemsArray.length > 0) {
       const totalAmount = itemsArray
         .map(({ price, quantity }) => +quantity * +price)
         .reduce((acc, value) => +acc + +value, 0);
       setTotal(totalAmount);
+      return;
     }
+    setTotal(0);
   };
 
   const save = async () => {
@@ -341,7 +360,11 @@ function BillingForm(props) {
                     <Row></Row>
                   </Col>
                   <Col xs="1">
-                    <Button outline color="light" onClick={() => deleteItem()}>
+                    <Button
+                      outline
+                      color="light"
+                      onClick={() => deleteItem({ code, index })}
+                    >
                       Eliminar
                     </Button>
                   </Col>

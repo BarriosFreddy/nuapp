@@ -155,8 +155,7 @@ function Billing() {
     <>
       <Header />
       {/* Page content */}
-      <Container className="mt--7" fluid>
-        {/* Table */}
+      <Container className="mt--6" fluid>
         <Row>
           <div className="col">
             <Card className="shadow border-10">
@@ -165,7 +164,7 @@ function Billing() {
                   <Row>
                     {!editing && (
                       <>
-                        <Col xs="4">
+                        <Col xs="6">
                           <Input
                             id="exampleSelect"
                             name="month"
@@ -185,7 +184,7 @@ function Billing() {
                             <option value="12">Diciembre</option>
                           </Input>
                         </Col>
-                        <Col xs="4">
+                        <Col xs="6">
                           <Input
                             type="select"
                             name="day"
@@ -198,7 +197,7 @@ function Billing() {
                           </Input>
                         </Col>
                         {/* !isThisDateClosed && */}
-                        <Col xs="4">
+                        <Col xs="4" style={{ paddingTop: "15px" }} >
                           <Button
                             color="success"
                             onClick={() => setEditing(true)}
@@ -218,7 +217,7 @@ function Billing() {
                         
                         </>
                       )} */}
-                        <Col xs="8" style={{ paddingTop: "15px" }}>
+                        <Col xs="4" style={{ paddingTop: "15px" }}>
                           <strong>Total ${total}</strong>
                         </Col>{" "}
                       </>
