@@ -1,11 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { ItemDto } from './dto/item.dto';
-import { UpdateItemDto } from './dto/update-item.dto';
-import { ItemDocument } from './schemas/item.schema';
-import { uuid } from 'uuidv4';
-import { getCurrentDateAsString } from 'src/helper/utils/DateUtils';
+import { ItemDto } from '../dtos/item.dto';
+import { UpdateItemDto } from '../dtos/update-item.dto';
+import { ItemDocument } from '../schemas/item.schema';
+import { getCurrentDateAsString } from '../utils/DateUtils';
 
 @Injectable()
 export class ItemService {

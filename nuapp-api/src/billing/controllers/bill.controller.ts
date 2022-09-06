@@ -1,8 +1,8 @@
 import { Controller, Get, Post, Body, Param, Query } from '@nestjs/common';
-import { BillService } from './bill.service';
-import { BillDto } from './dto/bill.dto';
-import { DailyBillsDto } from './dto/DailyBills.dto';
-import { DailyBillService } from './service/DailyBills.service';
+import { BillService } from '../services/bill.service';
+import { BillDto } from '../dtos/bill.dto';
+import { DailyBillsDto } from '../dtos/DailyBills.dto';
+import { DailyBillService } from '../services/DailyBills.service';
 
 @Controller('bill')
 export class BillController {

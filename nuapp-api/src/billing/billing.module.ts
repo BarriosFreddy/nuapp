@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
-import { ItemService } from './item.service';
-import { ItemController } from './item.controller';
-import { BillController } from './bill.controller';
+import { ItemService } from './services/item.service';
+import { BillController } from './controllers/bill.controller';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ItemSchema } from './schemas/item.schema';
-import { BillService } from './bill.service';
+import { BillService } from './services/bill.service';
 import { BillSchema } from './schemas/bill.schema';
 import { DailyBillsSchema } from './schemas/dailyBills.schema';
-import { DailyBillService } from './service/DailyBills.service';
+import { DailyBillService } from './services/DailyBills.service';
+import { ItemController } from './controllers/item.controller';
 
 @Module({
   imports: [
@@ -20,4 +20,4 @@ import { DailyBillService } from './service/DailyBills.service';
   controllers: [ItemController, BillController],
   providers: [ItemService, BillService, DailyBillService],
 })
-export class ItemModule {}
+export class BillingModule {}

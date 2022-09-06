@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { DailyBillsDto } from '../dto/DailyBills.dto';
+import { DailyBillsDto } from '../dtos/DailyBills.dto';
 import { DailyBillsDocument } from '../schemas/dailyBills.schema';
-import { getCurrentDateAsString } from 'src/helper/utils/DateUtils';
+import { getCurrentDateAsString } from 'src/billing/utils/DateUtils';
 
 @Injectable()
 export class DailyBillService {

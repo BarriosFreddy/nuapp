@@ -2,8 +2,7 @@ import { Module } from '@nestjs/common';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { BillingController } from './controller/billingController.ts/billingController';
-import { ItemModule } from './item/item.module';
+import { BillingModule } from './billing/billing.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import 'dotenv/config';
 const { DATABASE_USER, DATABASE_PASSWORD, DATABASE_NAME } = process.env;
@@ -16,9 +15,9 @@ const uri = `mongodb://${DATABASE_USER}:${DATABASE_PASSWORD}@cluster0-shard-00-0
       ttl: 60 * 30,
       limit: 1000,
     }),
-    ItemModule,
+    BillingModule,
   ],
-  controllers: [AppController, BillingController],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
