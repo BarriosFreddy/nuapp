@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "typeRoots": ["node_modules/@types"],
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
@@ -17,8 +16,6 @@
     "noImplicitAny": false,
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false,
-    "moduleResolution": "node"
-  },
-  "include": ["src/**/*", "**/*spec.ts", "e2e/setup.test.js"]
+    "noFallthroughCasesInSwitch": false
+  }
 }
