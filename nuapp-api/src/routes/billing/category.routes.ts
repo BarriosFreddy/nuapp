@@ -1,0 +1,37 @@
+import express from 'express';
+import isAuthenticated from '../../helpers/middleware/authenticate.middleware';
+import {
+  validateBody,
+  validateParameters,
+} from '../../helpers/middleware/validation.middleware';
+
+import { idSchema } from '../../helpers/validations/id.schema';
+import categoryController from '../../controllers/billing/category.controller';
+/* import {
+  RoleCreateSchema,
+  RoleUpdateSchema,
+} from '../helpers/validations/category.schema'; */
+const router = express.Router();
+
+router.post(
+  '/',
+  //validateBody(RoleCreateSchema),
+  isAuthenticated,
+  categoryController.save,
+);
+router.put(
+  '/:id',
+  validateParameters(idSchema),
+  //validateBody(RoleUpdateSchema),
+  isAuthenticated,
+  categoryController.update,
+);
+router.get(
+  '/:id',
+  validateParameters(idSchema),
+  isAuthenticated,
+  categoryController.findOne,
+);
+router.get('/', isAuthenticated, categoryController.findAll);
+
+export default router;

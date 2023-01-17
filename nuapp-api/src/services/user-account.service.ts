@@ -1,4 +1,4 @@
-import UserAccountModel, { UserAccount } from "../models/user-accounts.model";
+import UserAccountModel, { UserAccount } from "../models/user-account.model";
 import bcrypt from "bcryptjs";
 import { singleton } from "tsyringe";
 

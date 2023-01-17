@@ -1,4 +1,4 @@
-import ModuleModel, { Module } from '../models/modules.model';
+import ModuleModel, { Module } from '../models/module.model';
 import { singleton } from 'tsyringe';
 
 @singleton()

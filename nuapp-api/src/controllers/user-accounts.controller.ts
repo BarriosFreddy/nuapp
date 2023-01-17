@@ -1,4 +1,4 @@
-import { UserAccount } from "../models/user-accounts.model";
+import { UserAccount } from "../models/user-account.model";
 import { UserAccountService } from "../services/user-account.service";
 import { Request, Response } from "express";
 import { container } from "tsyringe";

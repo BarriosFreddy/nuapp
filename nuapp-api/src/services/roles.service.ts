@@ -1,4 +1,4 @@
-import RoleModel, { Role } from '../models/roles.model';
+import RoleModel, { Role } from '../models/role.model';
 import { singleton } from 'tsyringe';
 
 @singleton()

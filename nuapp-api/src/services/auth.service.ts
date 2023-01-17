@@ -1,6 +1,6 @@
 import { singleton } from "tsyringe";
 import { UserAccountLogin } from "../helpers/types/user-account-login.type";
-import { UserAccount } from "../models/user-accounts.model";
+import { UserAccount } from "../models/user-account.model";
 import { UserAccountService } from "./user-account.service";
 import bcrypt from "bcryptjs";
 import jsonwebtoken from "jsonwebtoken";
