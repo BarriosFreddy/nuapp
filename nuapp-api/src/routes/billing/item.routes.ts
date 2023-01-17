@@ -7,22 +7,23 @@ import {
 
 import { idSchema } from '../../helpers/validations/id.schema';
 import itemController from '../../controllers/billing/item.controller';
-/* import {
-  RoleCreateSchema,
-  RoleUpdateSchema,
-} from '../helpers/validations/item.schema'; */
+import {
+  ItemCreateSchema,
+  ItemUpdateSchema,
+} from '../../helpers/validations/billing/item.schema';
+
 const router = express.Router();
 
 router.post(
   '/',
-  //validateBody(RoleCreateSchema),
+  validateBody(ItemCreateSchema),
   isAuthenticated,
   itemController.save,
 );
 router.put(
   '/:id',
   validateParameters(idSchema),
-  //validateBody(RoleUpdateSchema),
+  validateBody(ItemUpdateSchema),
   isAuthenticated,
   itemController.update,
 );
