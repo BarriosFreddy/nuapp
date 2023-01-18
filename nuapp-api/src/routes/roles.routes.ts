@@ -5,12 +5,12 @@ import {
   validateParameters,
 } from '../helpers/middleware/validation.middleware';
 
-import { idSchema } from '../helpers/validations/id.schema';
+import { idSchema } from '../helpers/schemas/id.schema';
 import roleController from '../controllers/roles.controller';
 import {
   RoleCreateSchema,
   RoleUpdateSchema,
-} from '../helpers/validations/roles.schema';
+} from '../helpers/schemas/roles.schema';
 const router = express.Router();
 
 router.post(

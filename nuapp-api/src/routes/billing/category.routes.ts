@@ -5,12 +5,12 @@ import {
   validateParameters,
 } from '../../helpers/middleware/validation.middleware';
 
-import { idSchema } from '../../helpers/validations/id.schema';
+import { idSchema } from '../../helpers/schemas/id.schema';
 import categoryController from '../../controllers/billing/category.controller';
 import {
   CategoryCreateSchema,
   CategoryUpdateSchema,
-} from '../../helpers/validations/billing/category.schema';
+} from '../../helpers/schemas/billing/category.schema';
 const router = express.Router();
 
 router.post(

@@ -1,36 +1,48 @@
-import express from "express";
-import userAccountController from "../controllers/user-accounts.controller";
-import isAuthenticated from "./../helpers/middleware/authenticate.middleware";
+import express from 'express';
+import userAccountController from '../controllers/user-accounts.controller';
+import isAuthenticated from './../helpers/middleware/authenticate.middleware';
 import {
   validateBody,
   validateParameters,
-} from "../helpers/middleware/validation.middleware";
+} from '../helpers/middleware/validation.middleware';
 import {
   UserAccountCreateSchema,
   UserAccountUpdateSchema,
-} from "../helpers/validations/user-accounts.schema";
-import { idSchema } from "../helpers/validations/id.schema";
+} from '../helpers/schemas/user-accounts.schema';
+import { idSchema } from '../helpers/schemas/id.schema';
+import { roleValidation } from '../helpers/middleware/role-validation.middleware';
+import { ModulesCode } from '../helpers/enums/modules-codes';
+import { Privilege } from '../helpers/enums/privileges';
+import { generateAuthKeyPair } from '../helpers/util/index';
 const router = express.Router();
 
 router.post(
-  "/",
+  '/',
   validateBody(UserAccountCreateSchema),
   //isAuthenticated,
-  userAccountController.save
+  userAccountController.save,
 );
 router.put(
-  "/:id",
+  '/:id',
   validateParameters(idSchema),
   validateBody(UserAccountUpdateSchema),
   isAuthenticated,
-  userAccountController.update
+  roleValidation(
+    generateAuthKeyPair(ModulesCode.USER_ACCOUNT, Privilege.UPDATE),
+  ),
+  userAccountController.update,
 );
 router.get(
-  "/:id",
+  '/:id',
   validateParameters(idSchema),
   isAuthenticated,
-  userAccountController.findOne
+  userAccountController.findOne,
 );
-router.get("/", isAuthenticated, userAccountController.findAll);
+router.get(
+  '/',
+  isAuthenticated,
+  roleValidation(generateAuthKeyPair(ModulesCode.USER_ACCOUNT, Privilege.ACCESS)),
+  userAccountController.findAll,
+);
 
 export default router;
