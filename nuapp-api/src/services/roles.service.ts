@@ -3,16 +3,17 @@ import { singleton } from 'tsyringe';
 
 @singleton()
 export class RoleService {
-  async findOne(id: string) {
+  async findOne(id: string): Promise<Role | null> {
     return await RoleModel.findById(id).exec();
   }
-  async findAll() {
+  async findAll(): Promise<Role[]> {
     const roles = await RoleModel.find().exec();
     return roles;
   }
 
   async save(role: Role): Promise<Role> {
     try {
+      role.createdAt = new Date();
       return await RoleModel.create(role);
     } catch (error) {
       console.log(error);
@@ -20,10 +21,11 @@ export class RoleService {
     }
   }
 
-  async update(id: string, role: Role): Promise<any> {
+  async update(id: string, role: Role): Promise<Role | null> {
     try {
-      const { modifiedCount } = await RoleModel.updateOne({ _id: id }, role);
-      return !!modifiedCount && this.findOne(id);
+      role.updatedAt = new Date();
+      await RoleModel.updateOne({ _id: id }, role);
+      return this.findOne(id);
     } catch (error) {
       console.log(error);
       return Promise.reject(null);

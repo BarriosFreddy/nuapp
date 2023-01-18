@@ -6,20 +6,19 @@ import {
 } from '@typegoose/typegoose';
 import mongoose from 'mongoose';
 import { Item } from './item.model';
+import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 
 @modelOptions({
   options: {
     customName: 'kardex-transactions',
   },
 })
-export class KardexTransaction {
+export class KardexTransaction extends TimeStamps{
   @prop()
-  id?: mongoose.Types.ObjectId;
+  id?: string;
   _id?: mongoose.Types.ObjectId;
   @prop({ required: true })
   public code!: string;
-  @prop()
-  public createdAt?: Date;
   @prop()
   public type!: string;
   @prop({ ref: () => Item })

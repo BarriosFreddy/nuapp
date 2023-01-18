@@ -1,6 +1,6 @@
-import UserAccountModel, { UserAccount } from "../models/user-account.model";
-import bcrypt from "bcryptjs";
-import { singleton } from "tsyringe";
+import UserAccountModel, { UserAccount } from '../models/user-account.model';
+import bcrypt from 'bcryptjs';
+import { singleton } from 'tsyringe';
 
 @singleton()
 export class UserAccountService {
@@ -18,6 +18,7 @@ export class UserAccountService {
       const salt = await bcrypt.genSalt(10); // hash the password
       const hashedPassword = await bcrypt.hash(userAccount.password, salt);
       userAccount.password = hashedPassword;
+      userAccount.createdAt = new Date();
       const userAccountSaved = await UserAccountModel.create(userAccount);
       return userAccountSaved;
     } catch (error) {
@@ -29,9 +30,10 @@ export class UserAccountService {
   async update(id: string, userAccount: UserAccount): Promise<any> {
     try {
       delete userAccount.password;
+      userAccount.updatedAt = new Date();
       const { modifiedCount } = await UserAccountModel.updateOne(
         { _id: id },
-        userAccount
+        userAccount,
       );
       return !!modifiedCount;
     } catch (error) {

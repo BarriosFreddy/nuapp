@@ -1,11 +1,12 @@
 import { Ref, getModelForClass, prop } from '@typegoose/typegoose';
 import mongoose from 'mongoose';
 import { Category } from './category.model';
+import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 
-export class Item {
+export class Item extends TimeStamps implements Base {
   @prop()
-  id?: mongoose.Types.ObjectId;
-  _id?: mongoose.Types.ObjectId;
+  id!: string;
+  _id!: mongoose.Types.ObjectId;
   @prop({ required: true })
   public code!: string;
   @prop({ required: true })
@@ -18,10 +19,6 @@ export class Item {
   public units?: number;
   @prop({ ref: () => Category })
   public categoryId?: Ref<Category>;
-  @prop()
-  public createdAt?: Date;
-  @prop()
-  public updatedAt?: Date;
   @prop()
   public modifiedBy?: mongoose.Types.ObjectId;
 }

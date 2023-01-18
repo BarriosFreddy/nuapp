@@ -1,4 +1,5 @@
 import { getModelForClass, prop } from '@typegoose/typegoose';
+import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 import mongoose from 'mongoose';
 
 class ModuleAccess {
@@ -16,20 +17,16 @@ class ModuleAccess {
   public canExecute?: boolean;
 }
 
-export class Role {
+export class Role extends TimeStamps implements Base {
   @prop()
-  id?: mongoose.Types.ObjectId;
-  _id?: mongoose.Types.ObjectId;
+  id!: string;
+  _id!: mongoose.Types.ObjectId;
   @prop()
   public name?: string;
   @prop()
-  public createdAt?: Date;
-  @prop()
-  public updatedAt?: Date;
-  @prop()
   public modifiedBy?: mongoose.Types.ObjectId;
   @prop({ type: () => [ModuleAccess] })
-  public modulesAccess?: string[];
+  public modulesAccess?: ModuleAccess[];
 }
 
 const RoleModel = getModelForClass(Role);

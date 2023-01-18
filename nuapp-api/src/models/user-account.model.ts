@@ -1,4 +1,5 @@
 import { getModelForClass, prop, ModelOptions } from '@typegoose/typegoose';
+import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 import mongoose from 'mongoose';
 
 @ModelOptions({
@@ -6,10 +7,10 @@ import mongoose from 'mongoose';
     customName: 'user-accounts',
   },
 })
-export class UserAccount {
+export class UserAccount extends TimeStamps implements Base {
   @prop()
-  id?: mongoose.Types.ObjectId;
-  _id?: mongoose.Types.ObjectId;
+  id!: string;
+  _id!: mongoose.Types.ObjectId;
   @prop()
   public dniType?: string;
   @prop()
@@ -32,10 +33,6 @@ export class UserAccount {
   public password?: string;
   @prop({ type: () => [String] })
   public roles?: string[];
-  @prop()
-  public createdAt?: Date;
-  @prop()
-  public updatedAt?: Date;
   @prop()
   public modifiedBy?: mongoose.Types.ObjectId;
 }

@@ -5,7 +5,7 @@ import { singleton } from 'tsyringe';
 
 @singleton()
 export class KardexTransactionService {
-  async findOne(id: string) {
+  async findOne(id: string): Promise<KardexTransaction | null> {
     return await KardexTransactionModel.findById(id).exec();
   }
   async findAll(): Promise<KardexTransaction[]> {
@@ -13,9 +13,10 @@ export class KardexTransactionService {
       await KardexTransactionModel.find().exec();
     return bills;
   }
-  async save(category: KardexTransaction): Promise<KardexTransaction> {
+  async save(kardexTransaction: KardexTransaction): Promise<KardexTransaction> {
     try {
-      return await KardexTransactionModel.create(category);
+      kardexTransaction.createdAt = new Date();
+      return await KardexTransactionModel.create(kardexTransaction);
     } catch (error) {
       console.log(error);
       return Promise.reject(null);
@@ -24,14 +25,12 @@ export class KardexTransactionService {
 
   async update(
     id: string,
-    category: KardexTransaction,
-  ): Promise<KardexTransaction | boolean | null> {
+    kardexTransaction: KardexTransaction,
+  ): Promise<KardexTransaction | null> {
     try {
-      const { modifiedCount } = await KardexTransactionModel.updateOne(
-        { _id: id },
-        category,
-      );
-      return !!modifiedCount && this.findOne(id);
+      kardexTransaction.updatedAt = new Date();
+      await KardexTransactionModel.updateOne({ _id: id }, kardexTransaction);
+      return this.findOne(id);
     } catch (error) {
       console.log(error);
       return Promise.reject(null);

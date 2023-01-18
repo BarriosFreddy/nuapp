@@ -1,23 +1,23 @@
-import { singleton } from "tsyringe";
-import { UserAccountLogin } from "../helpers/types/user-account-login.type";
-import { UserAccount } from "../models/user-account.model";
-import { UserAccountService } from "./user-account.service";
-import bcrypt from "bcryptjs";
-import jsonwebtoken from "jsonwebtoken";
+import { singleton } from 'tsyringe';
+import { UserAccountLogin } from '../helpers/types/user-account-login.type';
+import { UserAccount } from '../models/user-account.model';
+import { UserAccountService } from './user-account.service';
+import bcrypt from 'bcryptjs';
+import jsonwebtoken from 'jsonwebtoken';
 const { SECRET_KEY } = process.env;
 
 @singleton()
 export class AuthService {
   constructor(public userAccountService: UserAccountService) {}
 
-  async authenticate(userAccountLogin: UserAccountLogin) {
+  async authenticate(userAccountLogin: UserAccountLogin): Promise<any> {
     const { email, password } = userAccountLogin;
     const userAccount: UserAccount | null =
       await this.userAccountService.findByEmail(email);
     if (!userAccount) return null;
     const isTheSame = await bcrypt.compare(
       password,
-      userAccount.password || ""
+      userAccount.password || '',
     );
     if (!isTheSame) return null;
     const data = {
@@ -31,12 +31,12 @@ export class AuthService {
   }
 
   private generateToken(data: {}): string {
-    if (!SECRET_KEY) throw new Error("Secret key has not been set");
+    if (!SECRET_KEY) throw new Error('Secret key has not been set');
     const token = jsonwebtoken.sign(
       {
         data,
       },
-      SECRET_KEY
+      SECRET_KEY,
     );
     return token;
   }

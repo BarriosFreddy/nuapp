@@ -3,29 +3,28 @@ import { singleton } from 'tsyringe';
 
 @singleton()
 export class ItemService {
-  async findOne(id: string) {
+  async findOne(id: string): Promise<Item | null> {
     return await ItemModel.findById(id).exec();
   }
   async findAll(): Promise<Item[]> {
     const items: Item[] = await ItemModel.find().exec();
     return items;
   }
-  async save(category: Item): Promise<Item> {
+  async save(item: Item): Promise<Item> {
     try {
-      return await ItemModel.create(category);
+      item.createdAt = new Date();
+      return await ItemModel.create(item);
     } catch (error) {
       console.log(error);
       return Promise.reject(null);
     }
   }
 
-  async update(id: string, category: Item): Promise<Item | boolean | null> {
+  async update(id: string, item: Item): Promise<Item | null> {
     try {
-      const { modifiedCount } = await ItemModel.updateOne(
-        { _id: id },
-        category,
-      );
-      return !!modifiedCount && this.findOne(id);
+      item.updatedAt = new Date();
+      await ItemModel.updateOne({ _id: id }, item);
+      return this.findOne(id);
     } catch (error) {
       console.log(error);
       return Promise.reject(null);

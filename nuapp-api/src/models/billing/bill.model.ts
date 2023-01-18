@@ -1,17 +1,16 @@
 import { Ref, getModelForClass, prop } from '@typegoose/typegoose';
 import mongoose from 'mongoose';
 import { Item } from './item.model';
+import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 
-export class Bill {
+export class Bill extends TimeStamps implements Base {
   @prop()
-  id?: mongoose.Types.ObjectId;
-  _id?: mongoose.Types.ObjectId;
+  id!: string;
+  _id!: mongoose.Types.ObjectId;
   @prop({ required: true })
   public code!: string;
   @prop()
   public billAmount?: number;
-  @prop()
-  public createdAt?: Date;
   @prop({ ref: () => Item })
   public items!: Ref<Item>[];
   @prop()
