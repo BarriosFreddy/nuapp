@@ -7,6 +7,7 @@ const ItemCreateSchema: Schema = joi.object({
   categoryId: joi.string().required(),
   price: joi.number().required(),
   units: joi.number().required(),
+  measurementUnit: joi.string().required(),
 });
 
 const ItemUpdateSchema: Schema = joi.object({
@@ -16,6 +17,7 @@ const ItemUpdateSchema: Schema = joi.object({
   categoryId: joi.string(),
   price: joi.number(),
   units: joi.number(),
+  measurementUnit: joi.string(),
 });
 
 export { ItemCreateSchema, ItemUpdateSchema };

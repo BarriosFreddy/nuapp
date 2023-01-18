@@ -1,8 +1,9 @@
+import { BaseService } from '../../helpers/core/base.service';
 import ItemModel, { Item } from '../../models/billing/item.model';
 import { singleton } from 'tsyringe';
 
 @singleton()
-export class ItemService {
+export class ItemService extends BaseService<Item> {
   async findOne(id: string): Promise<Item | null> {
     return await ItemModel.findById(id).exec();
   }

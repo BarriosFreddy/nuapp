@@ -1,9 +1,10 @@
 import UserAccountModel, { UserAccount } from '../models/user-account.model';
 import bcrypt from 'bcryptjs';
 import { singleton } from 'tsyringe';
+import { BaseService } from '../helpers/core/base.service';
 
 @singleton()
-export class UserAccountService {
+export class UserAccountService extends BaseService<UserAccount> {
   async findOne(id: string) {
     return await UserAccountModel.findById(id).exec();
   }

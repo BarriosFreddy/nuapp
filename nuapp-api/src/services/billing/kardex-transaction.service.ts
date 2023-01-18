@@ -1,10 +1,11 @@
+import { BaseService } from '../../helpers/core/base.service';
 import KardexTransactionModel, {
   KardexTransaction,
 } from '../../models/billing/kardex-transaction.model';
 import { singleton } from 'tsyringe';
 
 @singleton()
-export class KardexTransactionService {
+export class KardexTransactionService extends BaseService<KardexTransaction> {
   async findOne(id: string): Promise<KardexTransaction | null> {
     return await KardexTransactionModel.findById(id).exec();
   }

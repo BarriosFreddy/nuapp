@@ -1,8 +1,10 @@
+import { BaseService } from '../helpers/core/base.service';
 import RoleModel, { Role } from '../models/role.model';
 import { singleton } from 'tsyringe';
 
 @singleton()
-export class RoleService {
+export class RoleService extends BaseService<Role> {
+  
   async findOne(id: string): Promise<Role | null> {
     return await RoleModel.findById(id).exec();
   }

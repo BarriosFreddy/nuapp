@@ -3,11 +3,12 @@ import { singleton, container } from 'tsyringe';
 import { KardexTransactionService } from './kardex-transaction.service';
 import { KardexTransaction } from '../../models/billing/kardex-transaction.model';
 import { KardexTransactionType } from '../../helpers/enums/kardex-transaction-type';
+import { BaseService } from '../../helpers/core/base.service';
 
 const kardexTransactionService = container.resolve(KardexTransactionService);
 
 @singleton()
-export class BillService {
+export class BillService extends BaseService<Bill>{
   async findOne(id: string): Promise<Bill | null> {
     return await BillModel.findById(id).exec();
   }

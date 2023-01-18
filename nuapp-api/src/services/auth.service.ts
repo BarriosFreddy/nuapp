@@ -23,6 +23,7 @@ export class AuthService {
     const data = {
       _id: userAccount._id,
       email: userAccount.email,
+      roles: userAccount.roles,
     };
     const token = this.generateToken(data);
     return {

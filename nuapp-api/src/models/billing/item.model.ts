@@ -17,6 +17,8 @@ export class Item extends TimeStamps implements Base {
   public price?: number;
   @prop()
   public units?: number;
+  @prop()
+  public measurementUnit?: string;
   @prop({ ref: () => Category })
   public categoryId?: Ref<Category>;
   @prop()
