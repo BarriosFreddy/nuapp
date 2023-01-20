@@ -11,6 +11,10 @@ import {
   ItemCreateSchema,
   ItemUpdateSchema,
 } from '../../helpers/schemas/billing/item.schema';
+import { roleValidation } from '../../helpers/middleware/role-validation.middleware';
+import { generateAuthKeyPair } from '../../helpers/util';
+import { ModuleCode } from '../../helpers/enums/modules-codes';
+import { Privilege } from '../../helpers/enums/privileges';
 
 const router = express.Router();
 
@@ -18,6 +22,7 @@ router.post(
   '/',
   validateBody(ItemCreateSchema),
   isAuthenticated,
+  roleValidation(generateAuthKeyPair(ModuleCode.BILLING, Privilege.CREATE)),
   itemController.save,
 );
 router.put(
@@ -25,12 +30,14 @@ router.put(
   validateParameters(idSchema),
   validateBody(ItemUpdateSchema),
   isAuthenticated,
+  roleValidation(generateAuthKeyPair(ModuleCode.BILLING, Privilege.UPDATE)),
   itemController.update,
 );
 router.get(
   '/:id',
   validateParameters(idSchema),
   isAuthenticated,
+  roleValidation(generateAuthKeyPair(ModuleCode.BILLING, Privilege.ACCESS)),
   itemController.findOne,
 );
 router.get('/', isAuthenticated, itemController.findAll);

@@ -1,7 +1,7 @@
 import { Express, Request, Response } from 'express';
 import useraccountRouter from './user-account.routes';
 import authRouter from './auth.routes';
-import rolesRouter from './roles.routes';
+import rolesRouter from './role.routes';
 import categoryRouter from './billing/category.routes';
 import itemRouter from './billing/item.routes';
 import billRouter from './billing/bill.routes';

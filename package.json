@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:api": "cd nuapp-api && nest start --watch",
+    "start:api": "cd nuapp-api",
     "start:web": "cd nuapp-web && next start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
