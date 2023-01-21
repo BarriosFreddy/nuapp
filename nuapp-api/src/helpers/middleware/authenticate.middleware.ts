@@ -4,14 +4,13 @@ const { SECRET_KEY } = process.env;
 
 const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { authorization } = req.headers;
-    if (!authorization) {
-      res.status(400).send('authorization token is not valid');
+    const access_token = req?.cookies?.access_token;
+    if (!access_token) {
+      res.status(403).send('authorization token is not valid');
       return;
     }
     if (!SECRET_KEY) throw new Error('Secret key has not been set');
-    const [, token] = authorization.split(' ');
-    const decodedData = jsonwebtoken.verify(token, SECRET_KEY);
+    const decodedData = jsonwebtoken.verify(access_token, SECRET_KEY);
     if (typeof decodedData !== 'string') {
       const { data } = decodedData;
       res.locals.infoUser = data;
@@ -19,7 +18,7 @@ const isAuthenticated = (req: Request, res: Response, next: NextFunction) => {
     next();
   } catch (e) {
     console.error(e);
-    res.status(400).send('something went wrong');
+    res.status(403).send('something went wrong');
   }
 };
 

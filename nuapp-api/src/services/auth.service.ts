@@ -25,10 +25,8 @@ export class AuthService {
       email: userAccount.email,
       roles: userAccount.roles,
     };
-    const token = this.generateToken(data);
-    return {
-      token,
-    };
+    const access_token = this.generateToken(data);
+    return access_token;
   }
 
   private generateToken(data: {}): string {

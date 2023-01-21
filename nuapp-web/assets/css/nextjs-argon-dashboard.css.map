@@ -205,7 +205,6 @@
 		"../scss/argon-dashboard/docs/_footer.scss",
 		"../scss/react/react-differences.scss",
 		"../scss/react/bootstrap/_spinners.scss",
-		"../scss/react/plugins/_plugin-react-datetime.scss",
 		"../scss/react/_buttons.scss",
 		"../scss/react/_mixins.scss",
 		"../scss/react/_navbar-dropdown.scss",

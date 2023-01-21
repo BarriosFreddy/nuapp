@@ -1,15 +1,16 @@
-import * as dotenv from "dotenv";
+import * as dotenv from 'dotenv';
 dotenv.config();
-import "reflect-metadata";
-import express, { Express } from "express";
-import helmet from "helmet";
-import cors from "cors";
-import compression from "compression";
-import morgan from "morgan";
-import { registerRoutes } from "./src/routes/index";
-import { connectDB } from "./src/helpers/db/mongodb";
+import 'reflect-metadata';
+import express, { Express } from 'express';
+import helmet from 'helmet';
+import cors from 'cors';
+import compression from 'compression';
+import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
+import { registerRoutes } from './src/routes/index';
+import { connectDB } from './src/helpers/db/mongodb';
 
-const { PORT = 3000, DATABASE_URI = "" } = process.env;
+const { PORT = 3000, DATABASE_URI = '' } = process.env;
 
 const app: Express = express();
 
@@ -17,9 +18,15 @@ const app: Express = express();
   try {
     await connectDB(DATABASE_URI);
     app.use(helmet());
-    app.use(cors());
+    //app.use(cookieParser());
+    app.use(
+      cors({
+        credentials: true,
+        origin: 'http://localhost:3000',
+      }),
+    );
     app.use(compression());
-    app.use(morgan("common"));
+    app.use(morgan('common'));
     app.use(express.json()); // for parsing application/json
     registerRoutes(app);
 
