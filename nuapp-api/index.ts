@@ -18,7 +18,7 @@ const app: Express = express();
   try {
     await connectDB(DATABASE_URI);
     app.use(helmet());
-    //app.use(cookieParser());
+    app.use(cookieParser());
     app.use(
       cors({
         credentials: true,

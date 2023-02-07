@@ -21,8 +21,28 @@ import {
   cilUser,
 } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
+import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 
 const AppHeaderDropdown = () => {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const onClickLogout = async () => {
+    try {
+      const { status } = await axios({
+        url: `http://localhost:3001/auth/logout`,
+        method: 'GET',
+        withCredentials: true,
+      })
+      if (status === 200) {
+        dispatch({ type: 'set', isLoggedIn: false, infoUser: null })
+        navigate('/login')
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }
   return (
     <CDropdown variant="nav-item">
       <CDropdownToggle placement="bottom-end" className="py-0" caret={false}>
@@ -82,9 +102,9 @@ const AppHeaderDropdown = () => {
           </CBadge>
         </CDropdownItem>
         <CDropdownDivider />
-        <CDropdownItem href="#">
+        <CDropdownItem href="#" onClick={onClickLogout}>
           <CIcon icon={cilLockLocked} className="me-2" />
-          Lock Account
+          Logout
         </CDropdownItem>
       </CDropdownMenu>
     </CDropdown>

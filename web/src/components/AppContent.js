@@ -4,8 +4,11 @@ import { CContainer, CSpinner } from '@coreui/react'
 
 // routes config
 import routes from '../routes'
+import { useSelector } from 'react-redux'
+import RequiredAuth from './RequireAuth'
 
 const AppContent = () => {
+  const isLoggedIn = useSelector((state) => state.isLoggedIn)
   return (
     <CContainer lg>
       <Suspense fallback={<CSpinner color="primary" />}>
@@ -18,12 +21,16 @@ const AppContent = () => {
                   path={route.path}
                   exact={route.exact}
                   name={route.name}
-                  element={<route.element />}
+                  element={
+                    <RequiredAuth isLoggedIn={isLoggedIn}>
+                      <route.element />
+                    </RequiredAuth>
+                  }
                 />
               )
             )
           })}
-          <Route path="/" element={<Navigate to="dashboard" replace />} />
+          <Route render path="/" element={<Navigate to="dashboard" replace />} />
         </Routes>
       </Suspense>
     </CContainer>

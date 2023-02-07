@@ -31,6 +31,11 @@ class AuthController {
       .clearCookie('access_token')
       .send({ message: 'Logged out successfully' });
   }
+
+  async infoUser(_req: Request, res: Response) {
+    const { infoUser } = res.locals;
+    return res.status(200).send(infoUser);
+  }
 }
 
 const authController = new AuthController();

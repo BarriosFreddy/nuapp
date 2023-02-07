@@ -13,9 +13,15 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
+import { Navigate } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 const Register = () => {
-  return (
+  const isLoggedIn = useSelector((state) => state.isLoggedIn)
+
+  return isLoggedIn ? (
+    <Navigate to="/dashboard" replace />
+  ) : (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <CContainer>
         <CRow className="justify-content-center">

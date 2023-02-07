@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
 import {
   CButton,
   CCard,
@@ -17,8 +17,12 @@ import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 import { useState } from 'react'
 import axios from 'axios'
+import { useDispatch, useSelector } from 'react-redux'
 
 const Login = () => {
+  const isLoggedIn = useSelector((state) => state.isLoggedIn)
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const [userAccountLogin, setUserAccountLogin] = useState({
     email: 'admin@f.com',
     password: 'fbarrios',
@@ -33,15 +37,25 @@ const Login = () => {
   }
 
   const onClickLogin = async () => {
-    await axios({
+    const { status } = await axios({
       url: `http://localhost:3001/auth/authenticate`,
       method: 'POST',
       withCredentials: true,
       data: userAccountLogin,
     })
+    if (status === 200) {
+      dispatch({ type: 'set', isLoggedIn: true })
+      navigate('/dashboard')
+    }
   }
 
-  return (
+  const onKeyDownLogin = ({ keyCode }) => {
+    if (keyCode === 13) onClickLogin()
+  }
+
+  return isLoggedIn ? (
+    <Navigate to="/dashboard" replace />
+  ) : (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <CContainer>
         <CRow className="justify-content-center">
@@ -73,6 +87,7 @@ const Login = () => {
                         onChange={onChangeInput}
                         placeholder="Password"
                         autoComplete="current-password"
+                        onKeyDown={onKeyDownLogin}
                       />
                     </CInputGroup>
                     <CRow>
