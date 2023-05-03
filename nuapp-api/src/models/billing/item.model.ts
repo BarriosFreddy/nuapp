@@ -1,11 +1,9 @@
 import { Ref, getModelForClass, prop } from '@typegoose/typegoose';
 import mongoose from 'mongoose';
-import { Category } from './category.model';
-import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
+import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
+import { Enum } from '../enumeration.model';
 
-export class Item extends TimeStamps implements Base {
-  @prop()
-  id!: string;
+export class Item extends TimeStamps {
   _id!: mongoose.Types.ObjectId;
   @prop({ required: true })
   public code!: string;
@@ -19,8 +17,8 @@ export class Item extends TimeStamps implements Base {
   public units?: number;
   @prop()
   public measurementUnit?: string;
-  @prop({ ref: () => Category })
-  public categoryId?: Ref<Category>;
+  @prop({ ref: () => Enum })
+  public categoryId?: Ref<Enum>;
   @prop()
   public modifiedBy?: mongoose.Types.ObjectId;
 }

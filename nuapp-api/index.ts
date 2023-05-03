@@ -27,7 +27,11 @@ const app: Express = express();
     );
     app.use(compression());
     app.use(morgan('common'));
-    app.use(express.json()); // for parsing application/json
+    app.use(
+      express.json({
+        limit: '5mb',
+      }),
+    ); // for parsing application/json
     registerRoutes(app);
 
     app.listen(PORT, () => {

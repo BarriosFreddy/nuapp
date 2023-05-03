@@ -1,5 +1,5 @@
 import { getModelForClass, prop } from '@typegoose/typegoose';
-import { Base, TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
+import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 import mongoose from 'mongoose';
 
 class ModuleAccess {
@@ -17,9 +17,7 @@ class ModuleAccess {
   public canExecute!: boolean;
 }
 
-export class Module extends TimeStamps implements Base {
-  @prop()
-  id!: string;
+export class Module extends TimeStamps {
   _id!: mongoose.Types.ObjectId;
   @prop()
   public name!: string;

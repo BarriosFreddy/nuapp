@@ -29,13 +29,37 @@ let _nav = [
   },
   {
     component: CNavItem,
-    name: 'Billing',
+    name: 'Facturación',
     to: '/billing',
     icon: <CIcon icon={cilDollar} customClassName="nav-icon" />,
   },
+  {
+    component: CNavItem,
+    name: 'Items',
+    to: '/items',
+    icon: <CIcon icon={cilDollar} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'Listados',
+    to: '/listings',
+    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'Cargador de datos',
+    to: '/data-loader',
+    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+  },
+  {
+    component: CNavItem,
+    name: 'Docs',
+    href: 'https://coreui.io/react/docs/templates/installation/',
+    icon: <CIcon icon={cilDescription} customClassName="nav-icon" />,
+  },
 ]
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV === 'developmen') {
   _nav = _nav.concat([
     {
       component: CNavTitle,
@@ -304,12 +328,6 @@ if (process.env.NODE_ENV === 'development') {
           to: '/500',
         },
       ],
-    },
-    {
-      component: CNavItem,
-      name: 'Docs',
-      href: 'https://coreui.io/react/docs/templates/installation/',
-      icon: <CIcon icon={cilDescription} customClassName="nav-icon" />,
     },
   ])
 }

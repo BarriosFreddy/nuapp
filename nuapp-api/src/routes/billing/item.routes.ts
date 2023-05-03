@@ -19,6 +19,12 @@ import { Privilege } from '../../helpers/enums/privileges';
 const router = express.Router();
 
 router.post(
+  '/bulk',
+  isAuthenticated,
+  roleValidation(generateAuthKeyPair(ModuleCode.BILLING, Privilege.CREATE)),
+  itemController.saveAll,
+);
+router.post(
   '/',
   validateBody(ItemCreateSchema),
   isAuthenticated,

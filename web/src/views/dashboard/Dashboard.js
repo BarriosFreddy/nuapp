@@ -44,9 +44,6 @@ import {
   cilUserFemale,
 } from '@coreui/icons'
 
-import WidgetsBrand from '../widgets/WidgetsBrand'
-import WidgetsDropdown from '../widgets/WidgetsDropdown'
-
 const Dashboard = () => {
   const random = (min, max) => Math.floor(Math.random() * (max - min + 1) + min)
 
@@ -173,7 +170,6 @@ const Dashboard = () => {
 
   return (
     <>
-      <WidgetsDropdown />
       <CCard className="mb-4">
         <CCardBody>
           <CRow>
@@ -300,8 +296,6 @@ const Dashboard = () => {
           </CRow>
         </CCardFooter>
       </CCard>
-
-      <WidgetsBrand withCharts />
 
       <CRow>
         <CCol xs>

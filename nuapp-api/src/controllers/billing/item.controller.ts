@@ -5,9 +5,16 @@ import { Item } from '../../models/billing/item.model';
 
 const itemsService = container.resolve(ItemService);
 
+interface RequestQuery {
+  page?: number;
+  name?: string;
+  code?: string;
+}
 class ItemsController {
-  async findAll(_req: Request, res: Response) {
-    const items = await itemsService.findAll();
+  async findAll(req: Request<{}, {}, {}, RequestQuery>, res: Response) {
+    let { page = 1, name, code } = req.query;
+    page = +page;
+    const items = await itemsService.findAll({ name, code, page });
     res.status(200).send(items);
   }
 
@@ -21,6 +28,12 @@ class ItemsController {
     const item: Item = req.body;
     const savedItem = await itemsService.save(item);
     res.status(201).send(savedItem);
+  }
+
+  async saveAll(req: Request, res: Response) {
+    const items: Item[] = req.body;
+    const result = await itemsService.saveAll(items);
+    res.status(201).send(result);
   }
 
   async update(req: Request, res: Response) {

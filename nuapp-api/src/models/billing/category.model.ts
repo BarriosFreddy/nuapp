@@ -1,17 +1,12 @@
 import { getModelForClass, modelOptions, prop } from '@typegoose/typegoose';
-import { TimeStamps, Base } from '@typegoose/typegoose/lib/defaultClasses';
-import mongoose from 'mongoose';
+import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 
 @modelOptions({
   options: {
     customName: 'categories',
   },
 })
-export class Category extends TimeStamps implements Base {
-  @prop()
-  _id!: mongoose.Types.ObjectId;
-  @prop()
-  id!: string;
+export class Category extends TimeStamps {
   @prop({ required: true })
   public name!: string;
   @prop()
