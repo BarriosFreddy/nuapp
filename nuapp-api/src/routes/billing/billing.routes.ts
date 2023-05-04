@@ -6,11 +6,11 @@ import {
 } from '../../helpers/middleware/validation.middleware';
 
 import { idSchema } from '../../helpers/schemas/id.schema';
-import billController from '../../controllers/billing/bill.controller';
+import billingController from '../../controllers/billing/billing.controller';
 import {
   BillCreateSchema,
   BillUpdateSchema,
-} from '../../helpers/schemas/billing/bill.schema';
+} from '../../helpers/schemas/billing/billing.schema';
 import { roleValidation } from '../../helpers/middleware/role-validation.middleware';
 import { generateAuthKeyPair } from '../../helpers/util';
 import { ModuleCode } from '../../helpers/enums/modules-codes';
@@ -22,7 +22,7 @@ router.post(
   validateBody(BillCreateSchema),
   isAuthenticated,
   roleValidation(generateAuthKeyPair(ModuleCode.BILLING, Privilege.CREATE)),
-  billController.save,
+  billingController.save,
 );
 router.put(
   '/:id',
@@ -30,15 +30,15 @@ router.put(
   validateBody(BillUpdateSchema),
   isAuthenticated,
   roleValidation(generateAuthKeyPair(ModuleCode.BILLING, Privilege.UPDATE)),
-  billController.update,
+  billingController.update,
 );
 router.get(
   '/:id',
   validateParameters(idSchema),
   isAuthenticated,
   roleValidation(generateAuthKeyPair(ModuleCode.BILLING, Privilege.ACCESS)),
-  billController.findOne,
+  billingController.findOne,
 );
-router.get('/', isAuthenticated, billController.findAll);
+router.get('/', isAuthenticated, billingController.findAll);
 
 export default router;

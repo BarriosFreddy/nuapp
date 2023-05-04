@@ -4,7 +4,7 @@ import authRouter from './auth.routes';
 import rolesRouter from './role.routes';
 import categoryRouter from './billing/category.routes';
 import itemRouter from './billing/item.routes';
-import billRouter from './billing/bill.routes';
+import billingRouter from './billing/billing.routes';
 import enumerationRouter from './enumerations.routes';
 
 export function registerRoutes(app: Express): void {
@@ -20,6 +20,6 @@ export function registerRoutes(app: Express): void {
   app.use('/auth', authRouter);
   app.use('/categories', categoryRouter);
   app.use('/items', itemRouter);
-  app.use('/billings', billRouter);
+  app.use('/billings', billingRouter);
   app.use('/enumerations', enumerationRouter);
 }

@@ -16,18 +16,12 @@ export class ItemService extends BaseService<Item> {
     name?: string;
     code?: string;
   }): Promise<Item[]> {
-    console.log({
-      page,
-      name,
-      code,
-    });
     let filters = {};
     let conditions = [];
     name && conditions.push({ name: new RegExp(`${name}`, 'i') });
     code && conditions.push({ code: new RegExp(`${code}`, 'i') });
 
-    conditions && (filters = { ['$or']: conditions, ...filters });
-    console.log({ conditions });
+    conditions.length > 0 && (filters = { ['$or']: conditions, ...filters });
     const items: Item[] = await ItemModel.find(filters)
       .skip(10 * (page - 1))
       .limit(10)

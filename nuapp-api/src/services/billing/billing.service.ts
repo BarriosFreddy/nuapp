@@ -1,4 +1,4 @@
-import BillModel, { Bill } from '../../models/billing/bill.model';
+import BillingModel, { Billing } from '../../models/billing/billing.model';
 import { singleton, container } from 'tsyringe';
 import { KardexTransactionService } from './kardex-transaction.service';
 import { KardexTransaction } from '../../models/billing/kardex-transaction.model';
@@ -8,18 +8,18 @@ import { BaseService } from '../../helpers/core/base.service';
 const kardexTransactionService = container.resolve(KardexTransactionService);
 
 @singleton()
-export class BillService extends BaseService<Bill>{
-  async findOne(id: string): Promise<Bill | null> {
-    return await BillModel.findById(id).exec();
+export class BillingService extends BaseService<Billing> {
+  async findOne(id: string): Promise<Billing | null> {
+    return await BillingModel.findById(id).exec();
   }
-  async findAll(): Promise<Bill[]> {
-    const bills: Bill[] = await BillModel.find().exec();
+  async findAll(): Promise<Billing[]> {
+    const bills: Billing[] = await BillingModel.find().exec();
     return bills;
   }
-  async save(bill: Bill): Promise<Bill> {
+  async save(billing: Billing): Promise<Billing> {
     try {
-      bill.createdAt = new Date();
-      const saved = await BillModel.create(bill);
+      billing.createdAt = new Date();
+      const saved = await BillingModel.create(billing);
       const { items } = saved;
       for await (const item of items) {
         const kardexTransaction: KardexTransaction = {
@@ -37,10 +37,10 @@ export class BillService extends BaseService<Bill>{
     }
   }
 
-  async update(id: string, bill: Bill): Promise<Bill | null> {
+  async update(id: string, billing: Billing): Promise<Billing | null> {
     try {
-      bill.updatedAt = new Date();
-      await BillModel.updateOne({ _id: id }, bill);
+      billing.updatedAt = new Date();
+      await BillingModel.updateOne({ _id: id }, billing);
       return this.findOne(id);
     } catch (error) {
       console.log(error);
