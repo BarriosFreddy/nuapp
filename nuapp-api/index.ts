@@ -7,7 +7,7 @@ import cors from 'cors';
 import compression from 'compression';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
-import { registerRoutes } from './src/routes/index';
+import { registerRoutes } from './src/routes';
 import { connectDB } from './src/helpers/db/mongodb';
 
 const { PORT = 3000, DATABASE_URI = '' } = process.env;

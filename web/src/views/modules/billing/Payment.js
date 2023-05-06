@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { PropTypes } from 'prop-types'
 
 import { CRow, CCol, CContainer, CFormInput, CCard, CCardBody } from '@coreui/react'
-import Utils from 'src/utils'
+import { formatCurrency } from 'src/utils'
 import CONSTANTS from './../../../constants'
 
 const ENTER_KEYCODE = 13
@@ -42,7 +42,7 @@ const PaymentComp = (props) => {
             <CCol lg="4" key={amount} className="mt-2" style={{ cursor: 'pointer' }}>
               <CCard onClick={() => handleReceivedAmount(amount)}>
                 <CCardBody>
-                  <h4 className="text-center">{Utils.formatCurrency(amount)}</h4>
+                  <h4 className="text-center">{formatCurrency(amount)}</h4>
                 </CCardBody>
               </CCard>
             </CCol>
@@ -70,7 +70,7 @@ const PaymentComp = (props) => {
             <h5>CAMBIO</h5>
           </CCol>
           <CCol lg="8" className="align-self-end">
-            <span className="fs-3">{Utils.formatCurrency(changeAmount)}</span>
+            <span className="fs-3">{formatCurrency(changeAmount)}</span>
           </CCol>
         </CRow>
       </CContainer>

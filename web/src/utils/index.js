@@ -1,4 +1,6 @@
-const formatCurrency = (amount) => {
+import dayjs from 'dayjs'
+
+export const formatCurrency = (amount) => {
   return Number.isSafeInteger(amount) && amount >= 0
     ? new Intl.NumberFormat('es-CO', {
         style: 'currency',
@@ -8,7 +10,6 @@ const formatCurrency = (amount) => {
     : amount
 }
 
-const Utils = {
-  formatCurrency,
+export const formatDate = (dateAsString, format = 'DD-MM-YYYY hh:mm a') => {
+  return dayjs(dateAsString).format(format)
 }
-export default Utils

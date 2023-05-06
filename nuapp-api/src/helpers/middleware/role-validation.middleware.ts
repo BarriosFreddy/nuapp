@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import { container } from 'tsyringe';
-import { ModuleService } from '../../services/modules.service';
-import { Privilege } from '../enums/privileges';
+import { Privilege } from '../../modules/core/enums/privileges';
+import { ModuleService } from '../../modules/core/services/modules.service';
 
 const moduleService = container.resolve(ModuleService);
 

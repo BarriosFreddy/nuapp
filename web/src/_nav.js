@@ -28,16 +28,35 @@ let _nav = [
     },
   },
   {
-    component: CNavItem,
-    name: 'Facturación',
-    to: '/billing',
+    component: CNavGroup,
+    name: 'Finanzas',
     icon: <CIcon icon={cilDollar} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'Items',
-    to: '/items',
-    icon: <CIcon icon={cilDollar} customClassName="nav-icon" />,
+    items: [
+      {
+        component: CNavItem,
+        name: 'Facturación',
+        to: '/billing',
+        icon: <CIcon icon={cilDollar} customClassName="nav-icon" />,
+      },
+      {
+        component: CNavItem,
+        name: 'Historial de facturas',
+        to: '/billings',
+        icon: <CIcon icon={cilDollar} customClassName="nav-icon" />,
+      },
+      {
+        component: CNavItem,
+        name: 'Items',
+        to: '/items',
+        icon: <CIcon icon={cilDollar} customClassName="nav-icon" />,
+      },
+      {
+        component: CNavItem,
+        name: 'Categorias de items',
+        to: '/categories',
+        icon: <CIcon icon={cilDollar} customClassName="nav-icon" />,
+      },
+    ],
   },
   {
     component: CNavItem,

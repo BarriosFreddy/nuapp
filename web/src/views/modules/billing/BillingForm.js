@@ -22,7 +22,7 @@ import {
   CTableDataCell,
 } from '@coreui/react'
 import axios from 'axios'
-import Utils from 'src/utils'
+import { formatCurrency } from 'src/utils'
 
 const ENTER_KEYCODE = 13
 const TAB_KEYCODE = 9
@@ -74,6 +74,7 @@ const BillingForm = (props) => {
     searchTermInput.current.focus()
   }
 
+  // eslint-disable-next-line no-unused-vars
   const scanItem = () => {
     toggle()
     setTimeout(() => {
@@ -174,7 +175,7 @@ const BillingForm = (props) => {
                       {item.code}
                     </CTableDataCell>
                     <CTableDataCell className="text-break">
-                      {Utils.formatCurrency(item.price)}
+                      {formatCurrency(item.price)}
                     </CTableDataCell>
                   </CTableRow>
                 ))}

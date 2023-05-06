@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { CButton, CRow, CContainer, CCol, CFormInput, CForm, CFormSelect } from '@coreui/react'
-import Quagga from 'quagga'
+import { CButton, CRow, CContainer, CCol, CFormInput, CForm } from '@coreui/react'
 import axios from 'axios'
 
 const { REACT_APP_BASE_URL } = process.env
@@ -13,7 +12,6 @@ const categoryInitialState = {
 
 function CategoriesForm(props) {
   const [category, setCategory] = useState(categoryInitialState)
-  const [loading, setLoading] = useState(false)
   const [failedValidations, setFailedValidations] = useState({
     code: false,
     description: false,
@@ -23,8 +21,6 @@ function CategoriesForm(props) {
     units: false,
     measurementUnit: false,
   })
-  const [modal, setModal] = useState(false)
-  const toggle = () => setModal(!modal)
 
   useEffect(() => {
     ;(async () => {})()
@@ -36,16 +32,6 @@ function CategoriesForm(props) {
       [name]: value,
     })
     setFailedValidations({ ...failedValidations, [name]: !value })
-  }
-
-  const populateFieldsForm = ({ _id, code, description, price }) => {
-    setCategory({
-      ...category,
-      _id,
-      code,
-      description,
-      price,
-    })
   }
 
   const clearFieldsForm = () => {

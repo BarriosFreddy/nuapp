@@ -19,7 +19,7 @@ import {
   CToaster,
 } from '@coreui/react'
 import BillingForm from './BillingForm'
-import Utils from 'src/utils'
+import { formatCurrency } from 'src/utils'
 import CIcon from '@coreui/icons-react'
 import { cilTrash } from '@coreui/icons'
 import PaymentComp from './Payment'
@@ -159,7 +159,7 @@ function Billing() {
                           {code}
                         </CTableDataCell>
                         <CTableDataCell xs="12" className="text-break">
-                          {Utils.formatCurrency(price)}
+                          {formatCurrency(price)}
                         </CTableDataCell>
                         <CTableDataCell colSpan={1}>
                           <CFormInput
@@ -174,7 +174,7 @@ function Billing() {
                           />
                         </CTableDataCell>
                         <CTableDataCell xs="12" className="text-break">
-                          {Utils.formatCurrency(price * itemUnits[code])}
+                          {formatCurrency(price * itemUnits[code])}
                         </CTableDataCell>
                         <CTableDataCell>
                           <CButton size="sm" color="ligth" onClick={() => deleteItem(code)}>
@@ -232,7 +232,7 @@ function Billing() {
                 </CCol>
                 <CCol lg="6" className="fs-1">
                   <span style={{ fontWeight: 'bold' }}>POR COBRAR</span>&nbsp;
-                  {Utils.formatCurrency(total)}
+                  {formatCurrency(total)}
                 </CCol>
               </CRow>
             </CCardBody>

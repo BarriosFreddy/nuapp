@@ -10,7 +10,12 @@ import {
   CButton,
   CCardBody,
   CCol,
-  CCardImage,
+  CTable,
+  CTableHead,
+  CTableRow,
+  CTableHeaderCell,
+  CTableBody,
+  CTableDataCell,
 } from '@coreui/react'
 // layout for this page
 // core components
@@ -32,7 +37,7 @@ function Categories() {
 
   const getCategories = async (page = 1) => {
     const { data } = await axios({
-      url: `${REACT_APP_BASE_URL}/categories?page=${page}`,
+      url: `${REACT_APP_BASE_URL}/item-categories?page=${page}`,
       withCredentials: true,
       method: 'GET',
       mode: 'cors',
@@ -91,27 +96,55 @@ function Categories() {
               <CCardBody>
                 {!editing && (
                   <>
-                    {categories.map(({ _id, name, description }) => (
-                      <CCard
-                        key={_id}
-                        style={{
-                          width: 'auto',
-                        }}
-                      >
-                        <CRow className="g-0">
-                          <CCol xs={12}>
-                            <CCardBody>
-                              <CRow>
-                                <CCol>{name}</CCol>
-                              </CRow>
-                              <CRow>
-                                <CCol>{description}</CCol>
-                              </CRow>
-                            </CCardBody>
-                          </CCol>
-                        </CRow>
-                      </CCard>
-                    ))}
+                    <div className="d-lg-none">
+                      {categories.map(({ _id, name, description }) => (
+                        <CCard
+                          key={_id}
+                          style={{
+                            width: 'auto',
+                          }}
+                        >
+                          <CRow className="g-0">
+                            <CCol xs={12}>
+                              <CCardBody>
+                                <CRow>
+                                  <CCol>{name}</CCol>
+                                </CRow>
+                                <CRow>
+                                  <CCol>{description}</CCol>
+                                </CRow>
+                              </CCardBody>
+                            </CCol>
+                          </CRow>
+                        </CCard>
+                      ))}
+                    </div>
+                    <div className="d-none d-lg-block">
+                      <CTable>
+                        <CTableHead>
+                          <CTableRow>
+                            <CTableHeaderCell>Código</CTableHeaderCell>
+                            <CTableHeaderCell>Nombre</CTableHeaderCell>
+                            <CTableHeaderCell>Descripción</CTableHeaderCell>
+                          </CTableRow>
+                        </CTableHead>
+                        <CTableBody>
+                          {categories.map(({ code, name, description }) => (
+                            <CTableRow key={code}>
+                              <CTableDataCell xs="12" className="text-uppercase">
+                                {code}
+                              </CTableDataCell>
+                              <CTableDataCell className="fs-6" xs="12">
+                                {name}
+                              </CTableDataCell>
+                              <CTableDataCell xs="12" className="text-break">
+                                {description}
+                              </CTableDataCell>
+                            </CTableRow>
+                          ))}
+                        </CTableBody>
+                      </CTable>
+                    </div>
 
                     <CCardFooter className="py-4">
                       <CCol>

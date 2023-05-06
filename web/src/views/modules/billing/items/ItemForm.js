@@ -1,25 +1,16 @@
+/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import {
-  Form,
-  FormText,
-  Input,
-  Label,
   CButton,
   CRow,
-  Table,
   CModal,
   CModalHeader,
   CModalBody,
   CModalFooter,
-  FormFeedback,
   CContainer,
-  CCard,
-  CCardBody,
-  CCardText,
   CCol,
   CFormInput,
-  CCardHeader,
   CForm,
   CFormSelect,
 } from '@coreui/react'
@@ -41,7 +32,6 @@ const itemInitialState = {
 function ItemForm(props) {
   const [item, setItem] = useState(itemInitialState)
   const [categories, setCategories] = useState([])
-  const [loading, setLoading] = useState(false)
   const [failedValidations, setFailedValidations] = useState({
     code: false,
     description: false,
