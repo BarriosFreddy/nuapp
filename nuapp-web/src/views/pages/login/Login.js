@@ -18,9 +18,10 @@ import { cilLockLocked, cilUser } from '@coreui/icons'
 import { useState } from 'react'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
+import { setIsLoggedIn } from 'src/app.slice'
 
 const Login = () => {
-  const isLoggedIn = useSelector((state) => state.isLoggedIn)
+  const isLoggedIn = useSelector((state) => state.app.isLoggedIn)
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [userAccountLogin, setUserAccountLogin] = useState({
@@ -44,7 +45,7 @@ const Login = () => {
       data: userAccountLogin,
     })
     if (status === 200) {
-      dispatch({ type: 'set', isLoggedIn: true })
+      dispatch(setIsLoggedIn(true))
       navigate('/dashboard')
     }
   }

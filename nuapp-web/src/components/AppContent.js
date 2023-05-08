@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux'
 import RequiredAuth from './RequireAuth'
 
 const AppContent = () => {
-  const isLoggedIn = useSelector((state) => state.isLoggedIn)
+  const isLoggedIn = useSelector((state) => state.app.isLoggedIn)
   return (
     <Suspense fallback={<CSpinner color="primary" />}>
       <Routes>

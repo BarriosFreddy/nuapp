@@ -23,6 +23,7 @@ import CIcon from '@coreui/icons-react'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
+import { setIsLoggedIn } from 'src/app.slice'
 
 const AppHeaderDropdown = () => {
   const dispatch = useDispatch()
@@ -35,7 +36,7 @@ const AppHeaderDropdown = () => {
         withCredentials: true,
       })
       if (status === 200) {
-        dispatch({ type: 'set', isLoggedIn: false, infoUser: null })
+        dispatch(setIsLoggedIn(false))
         navigate('/login')
       }
     } catch (e) {

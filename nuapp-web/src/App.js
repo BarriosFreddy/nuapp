@@ -4,6 +4,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import './scss/style.scss'
 import axios from 'axios'
 import { CSpinner } from '@coreui/react'
+import { setInfoUser, setIsLoggedIn } from './app.slice'
 
 /* const loading = (
   <div className="pt-3 text-center">
@@ -31,7 +32,8 @@ const App = () => {
           withCredentials: true,
         })
         if (status === 403) return false
-        dispatch({ type: 'set', isLoggedIn: !!data, infoUser: data })
+        dispatch(setIsLoggedIn(!!data))
+        dispatch(setInfoUser(data))
       } catch (e) {}
     })()
   })
