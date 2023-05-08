@@ -16,14 +16,12 @@ import {
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 import { useState } from 'react'
-import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux'
-import { setIsLoggedIn } from 'src/app.slice'
+import { login } from 'src/services/auth/auth.service'
 
 const Login = () => {
   const isLoggedIn = useSelector((state) => state.app.isLoggedIn)
   const dispatch = useDispatch()
-  const navigate = useNavigate()
   const [userAccountLogin, setUserAccountLogin] = useState({
     email: 'admin@f.com',
     password: 'fbarrios',
@@ -37,22 +35,9 @@ const Login = () => {
     })
   }
 
-  const onClickLogin = async () => {
-    const { status } = await axios({
-      url: `http://localhost:3001/auth/authenticate`,
-      method: 'POST',
-      withCredentials: true,
-      data: userAccountLogin,
-    })
-    if (status === 200) {
-      dispatch(setIsLoggedIn(true))
-      navigate('/dashboard')
-    }
-  }
+  const onClickLogin = async () => dispatch(login(userAccountLogin))
 
-  const onKeyDownLogin = ({ keyCode }) => {
-    if (keyCode === 13) onClickLogin()
-  }
+  const onKeyDownLogin = ({ keyCode }) => keyCode === 13 && onClickLogin()
 
   return isLoggedIn ? (
     <Navigate to="/dashboard" replace />
