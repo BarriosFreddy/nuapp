@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { CButton, CRow, CContainer, CCol, CFormInput, CForm } from '@coreui/react'
 import axios from 'axios'
+import { useDispatch } from 'react-redux'
+import { saveItemCategory } from 'src/modules/billing/services/item-categories.service'
 
 const { REACT_APP_BASE_URL } = process.env
 
@@ -11,6 +13,8 @@ const categoryInitialState = {
 }
 
 function CategoriesForm(props) {
+  const dispatch = useDispatch()
+
   const [category, setCategory] = useState(categoryInitialState)
   const [failedValidations, setFailedValidations] = useState({
     code: false,
@@ -51,18 +55,11 @@ function CategoriesForm(props) {
 
   const save = async () => {
     if (isValidForm()) {
-      await axios({
-        url: `${REACT_APP_BASE_URL}/categories`,
-        method: 'POST',
-        mode: 'cors',
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        data: {
+      dispatch(
+        saveItemCategory({
           ...category,
-        },
-      })
+        }),
+      )
       props.cancel()
       clearFieldsForm()
     }

@@ -1,13 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-export const appSlide = createSlice({
+const initialState = {
+  sidebarShow: false,
+  isLoggedIn: false,
+  infoUser: null,
+  sidebarUnfoldable: false,
+}
+
+export const appSlice = createSlice({
   name: 'app',
-  initialState: {
-    sidebarShow: false,
-    isLoggedIn: false,
-    infoUser: null,
-    sidebarUnfoldable: false,
-  },
+  initialState,
   reducers: {
     setIsLoggedIn: (state, action) => {
       state.isLoggedIn = action.payload
@@ -24,6 +26,6 @@ export const appSlide = createSlice({
   },
 })
 
-export const { setIsLoggedIn, setSidebarShow, setInfoUser, setSidebarUnfoldable } = appSlide.actions
+export const { setIsLoggedIn, setSidebarShow, setInfoUser, setSidebarUnfoldable } = appSlice.actions
 
-export default appSlide.reducer
+export default appSlice.reducer

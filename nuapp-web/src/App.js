@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useDispatch } from 'react-redux'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import './scss/style.scss'
-import axios from 'axios'
 import { CSpinner } from '@coreui/react'
-import { setInfoUser, setIsLoggedIn } from './app.slice'
+import { getInfoUser } from './modules/core/services/auth.service'
 
 /* const loading = (
   <div className="pt-3 text-center">
@@ -23,20 +22,7 @@ const Page500 = React.lazy(() => import('./views/pages/page500/Page500'))
 
 const App = () => {
   const dispatch = useDispatch()
-  useEffect(() => {
-    ;(async () => {
-      try {
-        const { data, status } = await axios({
-          url: `http://localhost:3001/auth/info-user`,
-          method: 'GET',
-          withCredentials: true,
-        })
-        if (status === 403) return false
-        dispatch(setIsLoggedIn(!!data))
-        dispatch(setInfoUser(data))
-      } catch (e) {}
-    })()
-  })
+  dispatch(getInfoUser())
 
   const router = createBrowserRouter([
     {

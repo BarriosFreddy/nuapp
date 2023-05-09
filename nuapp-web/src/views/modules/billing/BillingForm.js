@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import Quagga from 'quagga'
 import { PropTypes } from 'prop-types'
 
@@ -21,24 +21,21 @@ import {
   CTableBody,
   CTableDataCell,
 } from '@coreui/react'
-import axios from 'axios'
 import { formatCurrency } from 'src/utils'
+import { useDispatch, useSelector } from 'react-redux'
+import { setItems } from 'src/modules/billing/reducers/items.reducer'
+import { getItems } from 'src/modules/billing/services/items.service'
 
 const ENTER_KEYCODE = 13
 const TAB_KEYCODE = 9
 
-const { REACT_APP_BASE_URL } = process.env
-
 const BillingForm = (props) => {
-  const [items, setItems] = useState([])
+  const dispatch = useDispatch()
+  const items = useSelector((state) => state.items.items)
   const [searchTerm, setSearchTerm] = useState('')
   const [modal, setModal] = useState(false)
   const toggle = () => setModal(!modal)
   const searchTermInput = useRef()
-
-  useEffect(() => {
-    ;(async () => {})()
-  }, [])
 
   const onChangeField = ({ target: { value } }) => {
     setSearchTerm(value)
@@ -50,26 +47,12 @@ const BillingForm = (props) => {
 
   const search = async () => {
     if (!!searchTerm) {
-      const itemsRetrieved = await getItemByCodeOrName(searchTerm)
-      setItems(itemsRetrieved)
+      dispatch(getItems({ code: searchTerm, name: searchTerm, page: 1 }))
     }
   }
 
-  const getItemByCodeOrName = async (searchTerm) => {
-    const { data } = await axios({
-      url: `${REACT_APP_BASE_URL}/items?code=${searchTerm}&name=${searchTerm}&page=1`,
-      withCredentials: true,
-      method: 'GET',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    return data
-  }
-
   const clear = () => {
-    setItems([])
+    dispatch(setItems([]))
     setSearchTerm('')
     searchTermInput.current.focus()
   }

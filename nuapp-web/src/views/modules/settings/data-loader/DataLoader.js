@@ -1,6 +1,5 @@
 import React, { useState, useEffect, Fragment } from 'react'
 
-// reactstrap components
 import {
   CCard,
   CCardHeader,
@@ -16,13 +15,12 @@ import {
   CTableDataCell,
   CTableBody,
 } from '@coreui/react'
-// layout for this page
-// core components
-import axios from 'axios'
+import { useDispatch } from 'react-redux'
+import { saveItemCategoriesBulk } from 'src/modules/billing/services/items.service'
 
-const { REACT_APP_BASE_URL } = process.env
 const LIMIT_5_MB = 5242880
 function DataLoader() {
+  const dispatch = useDispatch()
   let [items, setItems] = useState([])
   let [feedbackInvalid, setFeedbackInvalid] = useState(null)
 
@@ -62,16 +60,7 @@ function DataLoader() {
   }
 
   const handleLoad = async () => {
-    await axios({
-      url: `${REACT_APP_BASE_URL}/items/bulk`,
-      method: 'POST',
-      mode: 'cors',
-      withCredentials: true,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      data: items,
-    })
+    dispatch(saveItemCategoriesBulk(items))
   }
 
   return (

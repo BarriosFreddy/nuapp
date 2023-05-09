@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import {
   CCard,
   CCardFooter,
@@ -14,41 +15,29 @@ import {
   CTableHead,
   CTableHeaderCell,
 } from '@coreui/react'
-import axios from 'axios'
 import { formatCurrency, formatDate } from '../../../utils'
-
-const { REACT_APP_BASE_URL } = process.env
+import { getBillings } from 'src/modules/billing/services/billings.service'
 
 function BillingsHistorical() {
+  const dispatch = useDispatch()
+  const billings = useSelector((state) => state.billing.billings)
   let [billing, setBilling] = useState(null)
-  let [billings, setBillings] = useState([])
   let [page, setPage] = useState(1)
 
   useEffect(() => {
-    ;(async () => {
-      const billingsArray = await getBillings()
-      setBillings(billingsArray)
-    })()
+    dispatch(getBillings())
   }, [])
 
-  const getBillings = async (page = 1) => {
-    const { data } = await axios({
-      url: `${REACT_APP_BASE_URL}/billings?page=${page}`,
-      withCredentials: true,
-      method: 'GET',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    return data
+  const handlePrevPage = async () => {
+    const newPage = page === 1 ? 1 : page - 1
+    setPage(newPage)
+    dispatch(getBillings({ page: newPage }))
   }
 
-  const handleLoadMore = async () => {
+  const handleNextPage = async () => {
     const newPage = page + 1
     setPage(newPage)
-    const moreItems = await getBillings(newPage)
-    moreItems && moreItems.length > 0 && setBillings([...billings, ...moreItems])
+    dispatch(getBillings({ page: newPage }))
   }
 
   return (
@@ -124,13 +113,32 @@ function BillingsHistorical() {
                   </div>
 
                   <CCardFooter className="py-4">
-                    <CCol>
-                      <div className="d-grid col-12 mx-auto">
-                        <CButton type="button" color="secondary" onClick={handleLoadMore}>
-                          Cargar más
-                        </CButton>
-                      </div>
-                    </CCol>
+                    <CRow>
+                      <CCol>
+                        <div className="d-grid col-12 mx-auto">
+                          <CButton
+                            type="button"
+                            variant="outline"
+                            color="secondary"
+                            onClick={handlePrevPage}
+                          >
+                            ANTERIOR
+                          </CButton>
+                        </div>
+                      </CCol>
+                      <CCol>
+                        <div className="d-grid col-12 mx-auto">
+                          <CButton
+                            type="button"
+                            variant="outline"
+                            color="secondary"
+                            onClick={handleNextPage}
+                          >
+                            SIGUIENTE
+                          </CButton>
+                        </div>
+                      </CCol>
+                    </CRow>
                   </CCardFooter>
                 </>
               </CCol>

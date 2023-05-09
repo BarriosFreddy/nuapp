@@ -1,12 +1,12 @@
-import React from 'react'
+import { lazy } from 'react'
 
-const Dashboard = React.lazy(() => import('./views/dashboard/Dashboard'))
-const Billing = React.lazy(() => import('./views/modules/billing/Billing'))
-const BillingsHistorical = React.lazy(() => import('./views/modules/billing/BillingsHistorical'))
-const Items = React.lazy(() => import('./views/modules/billing/items/Items'))
-const Listings = React.lazy(() => import('./views/modules/settings/Listings'))
-const Categories = React.lazy(() => import('./views/modules/settings/categories/Categories'))
-const DataLoader = React.lazy(() => import('./views/modules/settings/data-loader/DataLoader'))
+const Dashboard = lazy(() => import('./views/dashboard/Dashboard'))
+const Billing = lazy(() => import('./views/modules/billing/Billing'))
+const BillingsHistorical = lazy(() => import('./views/modules/billing/BillingsHistorical'))
+const Items = lazy(() => import('./views/modules/billing/items/Items'))
+const Listings = lazy(() => import('./views/modules/settings/Listings'))
+const Categories = lazy(() => import('./views/modules/settings/categories/Categories'))
+const DataLoader = lazy(() => import('./views/modules/settings/data-loader/DataLoader'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },

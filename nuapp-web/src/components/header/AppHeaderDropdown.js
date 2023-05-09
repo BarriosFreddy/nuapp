@@ -20,29 +20,13 @@ import {
   cilUser,
 } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
-import axios from 'axios'
-import { useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { setIsLoggedIn } from 'src/app.slice'
+import { logout } from 'src/modules/core/services/auth.service'
 
 const AppHeaderDropdown = () => {
   const dispatch = useDispatch()
-  const navigate = useNavigate()
-  const onClickLogout = async () => {
-    try {
-      const { status } = await axios({
-        url: `http://localhost:3001/auth/logout`,
-        method: 'GET',
-        withCredentials: true,
-      })
-      if (status === 200) {
-        dispatch(setIsLoggedIn(false))
-        navigate('/login')
-      }
-    } catch (e) {
-      console.error(e)
-    }
-  }
+  const onClickLogout = () => dispatch(logout())
+
   return (
     <CDropdown variant="nav-item">
       <CDropdownToggle placement="bottom-end" className="py-0" caret={false}>

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react'
 
-// reactstrap components
 import {
   CCard,
   CCardHeader,
@@ -18,48 +17,36 @@ import {
   CTableHead,
   CTableHeaderCell,
 } from '@coreui/react'
-// layout for this page
-// core components
 import ItemForm from './ItemForm'
 import DefaultImg from './../../../../assets/images/new.ico'
-import axios from 'axios'
+import { useDispatch, useSelector } from 'react-redux'
+import { getItems } from 'src/modules/billing/services/items.service'
 
-const { REACT_APP_BASE_URL } = process.env
 function Item() {
+  const dispatch = useDispatch()
+  const items = useSelector((state) => state.items.items)
   let [editing, setEditing] = useState(false)
-  let [items, setItems] = useState([])
   let [page, setPage] = useState(1)
 
   useEffect(() => {
-    ;(async () => {
-      const itemsArray = await getItems()
-      setItems(itemsArray)
-    })()
+    dispatch(getItems())
   }, [])
 
-  const getItems = async (page = 1) => {
-    const { data } = await axios({
-      url: `${REACT_APP_BASE_URL}/items?page=${page}`,
-      withCredentials: true,
-      method: 'GET',
-      mode: 'cors',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-    return data
-  }
-
   const cancel = async () => {
-    //setItems(await getItems())
+    dispatch(getItems())
     setEditing(false)
   }
 
-  const handleLoadMore = async () => {
+  const handlePrevPage = async () => {
+    const newPage = page === 1 ? 1 : page - 1
+    setPage(newPage)
+    dispatch(getItems({ page: newPage }))
+  }
+
+  const handleNextPage = async () => {
     const newPage = page + 1
     setPage(newPage)
-    const moreItems = await getItems(newPage)
-    moreItems && moreItems.length > 0 && setItems([...items, ...moreItems])
+    dispatch(getItems({ page: newPage }))
   }
 
   return (
@@ -70,15 +57,13 @@ function Item() {
             <CCard className="shadow border-10">
               {!editing && (
                 <CCardHeader className="border-0">
-                  <CContainer>
-                    <CRow>
-                      <CCol xs="4">
-                        <CButton variant="outline" color="success" onClick={() => setEditing(true)}>
-                          CREAR
-                        </CButton>
-                      </CCol>
-                    </CRow>
-                  </CContainer>
+                  <CRow>
+                    <CCol xs="4">
+                      <CButton variant="outline" color="success" onClick={() => setEditing(true)}>
+                        NUEVO ITEM
+                      </CButton>
+                    </CCol>
+                  </CRow>
                 </CCardHeader>
               )}
               <CCardBody>
@@ -146,13 +131,32 @@ function Item() {
                     </div>
 
                     <CCardFooter className="py-4">
-                      <CCol>
-                        <div className="d-grid col-12 mx-auto">
-                          <CButton type="button" color="secondary" onClick={handleLoadMore}>
-                            Cargar más
-                          </CButton>
-                        </div>
-                      </CCol>
+                      <CRow>
+                        <CCol>
+                          <div className="d-grid col-12 mx-auto">
+                            <CButton
+                              type="button"
+                              variant="outline"
+                              color="secondary"
+                              onClick={handlePrevPage}
+                            >
+                              ANTERIOR
+                            </CButton>
+                          </div>
+                        </CCol>
+                        <CCol>
+                          <div className="d-grid col-12 mx-auto">
+                            <CButton
+                              type="button"
+                              variant="outline"
+                              color="secondary"
+                              onClick={handleNextPage}
+                            >
+                              SIGUIENTE
+                            </CButton>
+                          </div>
+                        </CCol>
+                      </CRow>
                     </CCardFooter>
                   </>
                 )}

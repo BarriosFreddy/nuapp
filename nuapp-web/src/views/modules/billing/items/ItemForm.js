@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import {
   CButton,
@@ -15,9 +16,8 @@ import {
   CFormSelect,
 } from '@coreui/react'
 import Quagga from 'quagga'
-import axios from 'axios'
-
-const { REACT_APP_BASE_URL } = process.env
+import { getItemCategories } from 'src/modules/billing/services/item-categories.service'
+import { saveItem } from '../../../../modules/billing/services/items.service'
 
 const itemInitialState = {
   name: '',
@@ -30,6 +30,8 @@ const itemInitialState = {
 }
 
 function ItemForm(props) {
+  const dispatch = useDispatch()
+  const itemCategories = useSelector((state) => state.itemCategories.itemCategories)
   const [item, setItem] = useState(itemInitialState)
   const [categories, setCategories] = useState([])
   const [failedValidations, setFailedValidations] = useState({
@@ -45,26 +47,19 @@ function ItemForm(props) {
   const toggle = () => setModal(!modal)
 
   useEffect(() => {
-    ;(async () => {
-      let { data } = await axios({
-        url: `${REACT_APP_BASE_URL}/categories`,
-        withCredentials: true,
-        method: 'GET',
-        mode: 'cors',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      if (data) {
-        data = data.map(({ name, _id }) => ({
-          label: name,
-          value: _id,
-        }))
-        console.log(data)
-        setCategories(data)
-      }
-    })()
+    dispatch(getItemCategories())
   }, [])
+
+  //TODO: list categories
+  function getCategories() {
+    if (itemCategories.length > 0) {
+      const data = itemCategories.map(({ name, _id }) => ({
+        label: name,
+        value: _id,
+      }))
+      setCategories(data)
+    }
+  }
 
   const onChangeField = ({ target: { name, value } }) => {
     setItem({
@@ -163,18 +158,11 @@ function ItemForm(props) {
 
   const save = async () => {
     if (isValidForm()) {
-      await axios({
-        url: `${REACT_APP_BASE_URL}/items`,
-        method: 'POST',
-        mode: 'cors',
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        data: {
+      dispatch(
+        saveItem({
           ...item,
-        },
-      })
+        }),
+      )
       props.cancel()
       clearFieldsForm()
     }

@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import {
   CButton,
   CCard,
@@ -23,10 +24,8 @@ import { formatCurrency } from 'src/utils'
 import CIcon from '@coreui/icons-react'
 import { cilTrash } from '@coreui/icons'
 import PaymentComp from './Payment'
-import axios from 'axios'
 import { v4 as uuidV4 } from 'uuid'
-
-const { REACT_APP_BASE_URL } = process.env
+import { saveBilling } from '../../../modules/billing/services/billings.service'
 
 const ToastMessage = (
   <CToast>
@@ -40,6 +39,8 @@ const ToastMessage = (
 )
 
 function Billing() {
+  const saveSuccess = useSelector((state) => state.billing.saveSuccess)
+  const dispatch = useDispatch()
   let [items, setItems] = useState([])
   let [receivedAmount, setReceivedAmount] = useState(0)
   let [total, setTotal] = useState(0)
@@ -47,10 +48,6 @@ function Billing() {
   let [paying, setPaying] = useState(false)
   let [toast, setToast] = useState(false)
   const toaster = useRef()
-
-  useEffect(() => {
-    ;(async () => {})()
-  }, [])
 
   const addItem = async (item) => {
     let itemUnitsAdded = {}
@@ -92,23 +89,14 @@ function Billing() {
   }
 
   const save = async () => {
-    debugger
     if (isValid()) {
-      const { status } = await axios({
-        url: `${REACT_APP_BASE_URL}/billings`,
-        method: 'POST',
-        mode: 'cors',
-        withCredentials: true,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        data: {
+      dispatch(
+        saveBilling({
           code: uuidV4(),
           billAmount: total,
           items: getItemsId(items),
-        },
-      })
-      if (status === 201) clear()
+        }),
+      )
       return
     }
     setToast(ToastMessage)
@@ -122,6 +110,8 @@ function Billing() {
     setPaying(false)
     setToast(false)
   }
+
+  if (saveSuccess) clear()
 
   const getItemsId = () => items.map(({ _id }) => _id)
 

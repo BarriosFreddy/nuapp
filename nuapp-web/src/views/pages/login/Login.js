@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import {
   CButton,
   CCard,
@@ -17,7 +17,7 @@ import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { login } from 'src/services/auth/auth.service'
+import { login } from 'src/modules/core/services/auth.service'
 
 const Login = () => {
   const isLoggedIn = useSelector((state) => state.app.isLoggedIn)

@@ -1,6 +1,5 @@
 import React from 'react'
 
-// reactstrap components
 import { CContainer, CRow, CCol, CListGroup, CListGroupItem } from '@coreui/react'
 
 function Listings() {
