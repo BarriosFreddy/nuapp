@@ -5,7 +5,10 @@ export const saveItemCategory = (billing) => async (dispatch, _, api) => {
   status === 200 ? dispatch(saveSuccess(true)) : dispatch(saveSuccess(false))
 }
 
-export const getItemCategories = (page) => async (dispatch, _, api) => {
-  const { data, status } = await api.get(`/item-categories?page=${page}`)
+export const getItemCategories = (params) => async (dispatch, _, api) => {
+  const searchParams = new URLSearchParams(params).toString()
+  const { data, status } = await api.get(
+    `/item-categories${searchParams.length > 0 ? '?' + searchParams : ''}`,
+  )
   if (status === 200) dispatch(setItemCategories(data))
 }

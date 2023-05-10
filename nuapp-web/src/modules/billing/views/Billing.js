@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   CButton,
@@ -48,6 +48,10 @@ function Billing() {
   let [paying, setPaying] = useState(false)
   let [toast, setToast] = useState(false)
   const toaster = useRef()
+
+  useEffect(() => {
+    if (saveSuccess) clear()
+  }, [saveSuccess])
 
   const addItem = async (item) => {
     let itemUnitsAdded = {}
@@ -102,7 +106,7 @@ function Billing() {
     setToast(ToastMessage)
   }
 
-  const clear = () => {
+  function clear() {
     setItems([])
     setReceivedAmount(0)
     setTotal(0)
@@ -110,8 +114,6 @@ function Billing() {
     setPaying(false)
     setToast(false)
   }
-
-  if (saveSuccess) clear()
 
   const getItemsId = () => items.map(({ _id }) => _id)
 

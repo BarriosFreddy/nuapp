@@ -17,7 +17,7 @@ import {
 } from '@coreui/react'
 import Quagga from 'quagga'
 import { getItemCategories } from 'src/modules/billing/services/item-categories.service'
-import { saveItem } from '../../../../modules/billing/services/items.service'
+import { saveItem } from '../../services/items.service'
 
 const itemInitialState = {
   name: '',
@@ -33,7 +33,6 @@ function ItemForm(props) {
   const dispatch = useDispatch()
   const itemCategories = useSelector((state) => state.itemCategories.itemCategories)
   const [item, setItem] = useState(itemInitialState)
-  const [categories, setCategories] = useState([])
   const [failedValidations, setFailedValidations] = useState({
     code: false,
     description: false,
@@ -47,19 +46,8 @@ function ItemForm(props) {
   const toggle = () => setModal(!modal)
 
   useEffect(() => {
-    dispatch(getItemCategories())
+    dispatch(getItemCategories({ parse: true }))
   }, [])
-
-  //TODO: list categories
-  function getCategories() {
-    if (itemCategories.length > 0) {
-      const data = itemCategories.map(({ name, _id }) => ({
-        label: name,
-        value: _id,
-      }))
-      setCategories(data)
-    }
-  }
 
   const onChangeField = ({ target: { name, value } }) => {
     setItem({
@@ -158,12 +146,9 @@ function ItemForm(props) {
 
   const save = async () => {
     if (isValidForm()) {
-      dispatch(
-        saveItem({
-          ...item,
-        }),
-      )
-      props.cancel()
+      props.save({
+        ...item,
+      })
       clearFieldsForm()
     }
   }
@@ -235,7 +220,7 @@ function ItemForm(props) {
                 required
                 onChange={(event) => onChangeField(event)}
                 aria-label="Default select example"
-                options={['Seleccione la categoria', ...categories]}
+                options={['Seleccione la categoria', ...itemCategories]}
               />
             </CCol>
             <CCol xs="12" lg="3">
@@ -265,17 +250,12 @@ function ItemForm(props) {
           </CRow>
           <div style={{ margin: '20px' }} />
           <CRow style={{ margin: '1000px 0' }}>
-            {/* <CCol lg="1">
-            <CButton outline color="success" onClick={() => scanItem()}>
-            ESCANEAR
-            </CButton>
-        </CCol> */}
-            <CCol xs="8" lg="1">
+            <CCol xs="8" lg="2">
               <CButton size="sm" color="success" type="button" onClick={() => save()}>
                 GUARDAR
               </CButton>
             </CCol>
-            <CCol xs="4" lg="1">
+            <CCol xs="4" lg="2">
               <CButton size="sm" color="light" onClick={() => cancel()}>
                 CANCELAR
               </CButton>
@@ -304,4 +284,5 @@ export default ItemForm
 
 ItemForm.propTypes = {
   cancel: PropTypes.func.isRequired,
+  save: PropTypes.func.isRequired,
 }

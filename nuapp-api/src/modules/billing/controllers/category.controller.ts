@@ -6,8 +6,19 @@ import { Category } from '../models/category.model';
 const categoryService = container.resolve(CategoryService);
 
 class CategorysController {
-  async findAll(_req: Request, res: Response) {
+  async findAll(req: Request, res: Response) {
+    const { parse } = req.query;
     const categories = await categoryService.findAll();
+    if (parse === 'true') {
+      let itemCategoriesParse = categories.map(({ name, _id }) => {
+        return {
+          label: name,
+          value: _id,
+        };
+      });
+      res.status(200).send(itemCategoriesParse);
+      return;
+    }
     res.status(200).send(categories);
   }
 

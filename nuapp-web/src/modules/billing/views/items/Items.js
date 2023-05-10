@@ -20,17 +20,23 @@ import {
 import ItemForm from './ItemForm'
 import DefaultImg from './../../../../assets/images/new.ico'
 import { useDispatch, useSelector } from 'react-redux'
-import { getItems } from 'src/modules/billing/services/items.service'
+import { getItems, saveItem } from 'src/modules/billing/services/items.service'
 
 function Item() {
   const dispatch = useDispatch()
   const items = useSelector((state) => state.items.items)
+  const saveSuccess = useSelector((state) => state.items.saveSuccess)
   let [editing, setEditing] = useState(false)
   let [page, setPage] = useState(1)
 
   useEffect(() => {
     dispatch(getItems())
-  }, [])
+    //if (saveSuccess)
+  }, [saveSuccess])
+
+  const save = (item) => {
+    dispatch(saveItem(item))
+  }
 
   const cancel = async () => {
     dispatch(getItems())
@@ -160,7 +166,7 @@ function Item() {
                     </CCardFooter>
                   </>
                 )}
-                {editing && <ItemForm cancel={cancel} />}
+                {editing && <ItemForm save={save} cancel={cancel} />}
               </CCardBody>
             </CCard>
           </div>

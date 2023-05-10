@@ -1,22 +1,24 @@
 import { lazy } from 'react'
 
-const Dashboard = lazy(() => import('./views/dashboard/Dashboard'))
-const Billing = lazy(() => import('./views/modules/billing/Billing'))
-const BillingsHistorical = lazy(() => import('./views/modules/billing/BillingsHistorical'))
-const Items = lazy(() => import('./views/modules/billing/items/Items'))
-const Listings = lazy(() => import('./views/modules/settings/Listings'))
-const Categories = lazy(() => import('./views/modules/settings/categories/Categories'))
-const DataLoader = lazy(() => import('./views/modules/settings/data-loader/DataLoader'))
+const Dashboard = lazy(() => import('./modules/core/views/dashboard/Dashboard'))
+
+const Billing = lazy(() => import('./modules/billing/views/Billing'))
+const BillingsHistorical = lazy(() => import('./modules/billing/views/BillingsHistorical'))
+const Items = lazy(() => import('./modules/billing/views/items/Items'))
+const ItemCategories = lazy(() => import('./modules/billing/views/categories/Categories'))
+
+const Listings = lazy(() => import('./modules/core/views/Listings'))
+const DataLoader = lazy(() => import('./modules/billing/views/data-loader/DataLoader'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/dashboard', name: 'Dashboard', element: Dashboard },
-  { path: '/billing', name: 'Billing', element: Billing },
-  { path: '/billings', name: 'BillingsHistorical', element: BillingsHistorical },
+  { path: '/billing', name: 'Facturación', element: Billing },
+  { path: '/billings', name: 'Historial de facturas', element: BillingsHistorical },
   { path: '/items', name: 'Items', element: Items },
   { path: '/listings', name: 'Listings', element: Listings },
-  { path: '/data-loader', name: 'DataLoader', element: DataLoader },
-  { path: '/categories', name: 'Categories', element: Categories },
+  { path: '/data-loader', name: 'Cargador de datos', element: DataLoader },
+  { path: '/item-categories', name: 'Categorias de items', element: ItemCategories },
 ]
 
 export default routes

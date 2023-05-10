@@ -53,8 +53,14 @@ let _nav = [
       {
         component: CNavItem,
         name: 'Categorias de items',
-        to: '/categories',
+        to: '/item-categories',
         icon: <CIcon icon={cilDollar} customClassName="nav-icon" />,
+      },
+      {
+        component: CNavItem,
+        name: 'Cargador de datos',
+        to: '/data-loader',
+        icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
       },
     ],
   },
@@ -62,12 +68,6 @@ let _nav = [
     component: CNavItem,
     name: 'Listados',
     to: '/listings',
-    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
-  },
-  {
-    component: CNavItem,
-    name: 'Cargador de datos',
-    to: '/data-loader',
     icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
   },
   {
