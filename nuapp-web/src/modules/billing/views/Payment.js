@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { PropTypes } from 'prop-types'
 
 import { CRow, CCol, CContainer, CFormInput, CCard, CCardBody } from '@coreui/react'
-import { formatCurrency } from 'src/utils'
+import { formatCurrency } from './../../../utils'
 import CONSTANTS from './../../../constants'
 
 const ENTER_KEYCODE = 13
@@ -54,6 +54,7 @@ const PaymentComp = (props) => {
           </CCol>
           <CCol lg="8">
             <CFormInput
+              data-testid="receivedAmountId"
               type="number"
               size="lg"
               name="receivedAmount"
