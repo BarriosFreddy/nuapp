@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Quagga from 'quagga'
 import { PropTypes } from 'prop-types'
 
@@ -25,9 +25,9 @@ import { formatCurrency } from 'src/utils'
 import { useDispatch, useSelector } from 'react-redux'
 import { setItems } from 'src/modules/billing/reducers/items.reducer'
 import { getItems } from 'src/modules/billing/services/items.service'
+import CONSTANTS from './../../../constants'
 
-const ENTER_KEYCODE = 13
-const TAB_KEYCODE = 9
+const { ENTER_KEYCODE, TAB_KEYCODE } = CONSTANTS
 
 const BillingForm = (props) => {
   const dispatch = useDispatch()
@@ -36,6 +36,10 @@ const BillingForm = (props) => {
   const [modal, setModal] = useState(false)
   const toggle = () => setModal(!modal)
   const searchTermInput = useRef()
+
+  useEffect(() => {
+    clear()
+  }, [])
 
   const onChangeField = ({ target: { value } }) => {
     setSearchTerm(value)
@@ -51,7 +55,7 @@ const BillingForm = (props) => {
     }
   }
 
-  const clear = () => {
+  function clear() {
     dispatch(setItems([]))
     setSearchTerm('')
     searchTermInput.current.focus()

@@ -5,8 +5,7 @@ import { CRow, CCol, CContainer, CFormInput, CCard, CCardBody } from '@coreui/re
 import { formatCurrency } from './../../../utils'
 import CONSTANTS from './../../../constants'
 
-const ENTER_KEYCODE = 13
-const TAB_KEYCODE = 9
+const { ENTER_KEYCODE, TAB_KEYCODE } = CONSTANTS
 
 const PaymentComp = (props) => {
   const [receivedAmount, setReceivedAmount] = useState(0)

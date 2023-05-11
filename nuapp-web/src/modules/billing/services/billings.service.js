@@ -1,8 +1,8 @@
-import { saveSuccess, setBillings } from '../reducers/billings.reducer'
+import { setSaveSuccess, setBillings } from '../reducers/billings.reducer'
 
 export const saveBilling = (billing) => async (dispatch, _, api) => {
   const { status } = await api.post('/billings', billing)
-  status === 201 ? dispatch(saveSuccess(true)) : dispatch(saveSuccess(false))
+  status === 201 ? dispatch(setSaveSuccess(true)) : dispatch(setSaveSuccess(false))
 }
 
 export const getBillings =

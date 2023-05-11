@@ -32,6 +32,7 @@ const itemInitialState = {
 function ItemForm(props) {
   const dispatch = useDispatch()
   const itemCategories = useSelector((state) => state.itemCategories.itemCategories)
+  const itemGlobal = useSelector((state) => state.items.item)
   const [item, setItem] = useState(itemInitialState)
   const [failedValidations, setFailedValidations] = useState({
     code: false,
@@ -46,8 +47,9 @@ function ItemForm(props) {
   const toggle = () => setModal(!modal)
 
   useEffect(() => {
+    itemGlobal && setItem(itemGlobal)
     dispatch(getItemCategories({ parse: true }))
-  }, [])
+  }, [itemGlobal])
 
   const onChangeField = ({ target: { name, value } }) => {
     setItem({
@@ -165,7 +167,7 @@ function ItemForm(props) {
             <CCol xs="12" lg="3">
               <CFormInput
                 label="Código"
-                type="number"
+                type="text"
                 name="code"
                 value={item.code}
                 feedback="Campo obligatorio"

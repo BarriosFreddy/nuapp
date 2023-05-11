@@ -16,16 +16,23 @@ import {
   CTableDataCell,
   CTableHead,
   CTableHeaderCell,
+  CInputGroup,
+  CFormInput,
 } from '@coreui/react'
 import ItemForm from './ItemForm'
 import DefaultImg from './../../../../assets/images/new.ico'
 import { useDispatch, useSelector } from 'react-redux'
 import { getItems, saveItem } from 'src/modules/billing/services/items.service'
+import CONSTANTS from 'src/constants'
+import { setItem } from '../../reducers/items.reducer'
+
+const { ENTER_KEYCODE, TAB_KEYCODE } = CONSTANTS
 
 function Item() {
   const dispatch = useDispatch()
   const items = useSelector((state) => state.items.items)
   const saveSuccess = useSelector((state) => state.items.saveSuccess)
+  const [searchTerm, setSearchTerm] = useState('')
   let [editing, setEditing] = useState(false)
   let [page, setPage] = useState(1)
 
@@ -55,6 +62,25 @@ function Item() {
     dispatch(getItems({ page: newPage }))
   }
 
+  const onChangeField = ({ target: { value } }) => {
+    setSearchTerm(value)
+  }
+
+  const onKeyDownCodeField = async ({ keyCode }) => {
+    if ([ENTER_KEYCODE, TAB_KEYCODE].includes(keyCode)) search()
+  }
+
+  const search = async () => {
+    if (!!searchTerm) {
+      dispatch(getItems({ code: searchTerm.trim(), name: searchTerm.trim(), page: 1 }))
+    }
+  }
+
+  const handleEdit = (item) => {
+    setEditing(true)
+    dispatch(setItem(item))
+  }
+
   return (
     <>
       <CContainer className="mt--6" fluid>
@@ -64,10 +90,25 @@ function Item() {
               {!editing && (
                 <CCardHeader className="border-0">
                   <CRow>
-                    <CCol xs="4">
+                    <CCol xs="4" lg="2">
                       <CButton variant="outline" color="success" onClick={() => setEditing(true)}>
                         NUEVO ITEM
                       </CButton>
+                    </CCol>
+                    <CCol lg="4">
+                      <CInputGroup>
+                        <CFormInput
+                          type="text"
+                          name="searchTerm"
+                          placeholder="..."
+                          value={searchTerm}
+                          onChange={(event) => onChangeField(event)}
+                          onKeyDown={(event) => onKeyDownCodeField(event)}
+                        />
+                        <CButton type="button" variant="outline" color="primary" onClick={search}>
+                          BUSCAR
+                        </CButton>
+                      </CInputGroup>
                     </CCol>
                   </CRow>
                 </CCardHeader>
@@ -115,21 +156,32 @@ function Item() {
                             <CTableHeaderCell>Código</CTableHeaderCell>
                             <CTableHeaderCell>Descripción</CTableHeaderCell>
                             <CTableHeaderCell>Precio</CTableHeaderCell>
+                            <CTableHeaderCell>&nbsp;</CTableHeaderCell>
                           </CTableRow>
                         </CTableHead>
                         <CTableBody>
-                          {items.map(({ code, name, description, units }) => (
-                            <CTableRow key={code}>
+                          {items.map((item) => (
+                            <CTableRow key={item.code}>
                               <CTableDataCell xs="12" className="text-uppercase">
-                                {name}
+                                {item.name}
                               </CTableDataCell>
                               <CTableDataCell className="fs-6" xs="12">
-                                {code}
+                                {item.code}
                               </CTableDataCell>
                               <CTableDataCell xs="12" className="text-break">
-                                {description}
+                                {item.description}
                               </CTableDataCell>
-                              <CTableDataCell xs="12">{units}</CTableDataCell>
+                              <CTableDataCell xs="12">{item.units}</CTableDataCell>
+                              <CTableDataCell xs="12">
+                                <CButton
+                                  size="sm"
+                                  variant="outline"
+                                  color="info"
+                                  onClick={() => handleEdit(item)}
+                                >
+                                  Editar
+                                </CButton>
+                              </CTableDataCell>
                             </CTableRow>
                           ))}
                         </CTableBody>

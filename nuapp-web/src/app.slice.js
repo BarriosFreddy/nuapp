@@ -5,6 +5,11 @@ const initialState = {
   isLoggedIn: false,
   infoUser: null,
   sidebarUnfoldable: false,
+  showToast: false,
+  toastConfig: {
+    message: '',
+    color: 'info',
+  },
 }
 
 export const appSlice = createSlice({
@@ -23,9 +28,22 @@ export const appSlice = createSlice({
     setSidebarUnfoldable: (state, action) => {
       state.sidebarUnfoldable = action.payload
     },
+    setShowToast: (state, action) => {
+      state.showToast = action.payload
+    },
+    setToastConfig: (state, action) => {
+      state.toastConfig = action.payload
+    },
   },
 })
 
-export const { setIsLoggedIn, setSidebarShow, setInfoUser, setSidebarUnfoldable } = appSlice.actions
+export const {
+  setIsLoggedIn,
+  setSidebarShow,
+  setInfoUser,
+  setSidebarUnfoldable,
+  setShowToast,
+  setToastConfig,
+} = appSlice.actions
 
 export default appSlice.reducer

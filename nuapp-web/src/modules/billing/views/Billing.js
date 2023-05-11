@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   CButton,
@@ -14,10 +14,6 @@ import {
   CTableHead,
   CTableHeaderCell,
   CTableRow,
-  CToast,
-  CToastBody,
-  CToastHeader,
-  CToaster,
 } from '@coreui/react'
 import BillingForm from './BillingForm'
 import { formatCurrency } from 'src/utils'
@@ -26,17 +22,8 @@ import { cilTrash } from '@coreui/icons'
 import PaymentComp from './Payment'
 import { v4 as uuidV4 } from 'uuid'
 import { saveBilling } from '../../../modules/billing/services/billings.service'
-
-const ToastMessage = (
-  <CToast>
-    <CToastHeader closeButton>
-      <div className="fw-bold me-auto">Alerta</div>
-    </CToastHeader>
-    <CToastBody>
-      <span>Revisa la cantidad recibida y el total</span>
-    </CToastBody>
-  </CToast>
-)
+import { setShowToast, setToastConfig } from 'src/app.slice'
+import { setSaveSuccess } from '../reducers/billings.reducer'
 
 function Billing() {
   const saveSuccess = useSelector((state) => state.billing.saveSuccess)
@@ -46,8 +33,6 @@ function Billing() {
   let [total, setTotal] = useState(0)
   let [itemUnits, setItemUnits] = useState({})
   let [paying, setPaying] = useState(false)
-  let [toast, setToast] = useState(false)
-  const toaster = useRef()
 
   useEffect(() => {
     if (saveSuccess) clear()
@@ -103,7 +88,13 @@ function Billing() {
       )
       return
     }
-    setToast(ToastMessage)
+    dispatch(
+      setToastConfig({
+        message: 'Revisa la cantidad recibida y el total',
+        color: 'warning',
+      }),
+    )
+    dispatch(setShowToast(true))
   }
 
   function clear() {
@@ -112,7 +103,15 @@ function Billing() {
     setTotal(0)
     setItemUnits({})
     setPaying(false)
-    setToast(false)
+    dispatch(
+      setToastConfig({
+        message: 'Guardado exitoso!',
+        color: 'success',
+        delay: 2000,
+      }),
+    )
+    dispatch(setShowToast(true))
+    dispatch(setSaveSuccess(false))
   }
 
   const getItemsId = () => items.map(({ _id }) => _id)
@@ -122,6 +121,20 @@ function Billing() {
   }
 
   const hanndleReceivedAmount = (receivedAmount) => setReceivedAmount(receivedAmount)
+
+  function handleProceed() {
+    if (items.length <= 0) {
+      dispatch(
+        setToastConfig({
+          message: 'No hay productos por facturar',
+          color: 'warning',
+        }),
+      )
+      dispatch(setShowToast(true))
+      return
+    }
+    setPaying(true)
+  }
 
   return (
     <>
@@ -205,13 +218,7 @@ function Billing() {
                 <CCol lg={{ span: 6, offset: 0 }}>
                   <div className="d-grid gap-2">
                     {!paying && (
-                      <CButton
-                        size="lg"
-                        color="primary"
-                        onClick={() => {
-                          setPaying(true)
-                        }}
-                      >
+                      <CButton size="lg" color="primary" onClick={handleProceed}>
                         FACTURAR
                       </CButton>
                     )}
@@ -231,7 +238,6 @@ function Billing() {
           </CCard>
         </CRow>
       </CContainer>
-      <CToaster ref={toaster} push={toast} placement="top-end" />
     </>
   )
 }
