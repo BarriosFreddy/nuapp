@@ -22,7 +22,7 @@ const app: Express = express();
     app.use(
       cors({
         credentials: true,
-        origin: ['https://nuapp-api.onrender.com', 'http://localhost:3000'],
+        origin: ['https://nuapp.vercel.app', 'http://localhost:3000'],
       }),
     );
     app.use(compression());
