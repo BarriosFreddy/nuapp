@@ -6,10 +6,7 @@ import {
 } from '../../../helpers/middleware/validation.middleware';
 
 import billingController from '../controllers/billing.controller';
-import {
-  BillCreateSchema,
-  BillUpdateSchema,
-} from '../db/schemas/billing.schema';
+import { BillCreateSchema } from '../db/schemas/billing.schema';
 import { roleValidation } from '../../../helpers/middleware/role-validation.middleware';
 import { generateAuthKeyPair } from '../../../helpers/util';
 import { ModuleCode } from '../../core/enums/modules-codes';
