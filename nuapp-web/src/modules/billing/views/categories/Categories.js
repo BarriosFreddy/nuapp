@@ -38,7 +38,7 @@ function Categories() {
   }, [])
 
   const cancel = async () => {
-    dispatch(setItemCategories([]))
+    dispatch(getItemCategories())
     setEditing(false)
   }
 
@@ -106,7 +106,7 @@ function Categories() {
                 {!editing && (
                   <>
                     <div className="d-lg-none">
-                      {itemCategories.map(({ _id, name, description }) => (
+                      {itemCategories.map(({ _id, code, name, description }) => (
                         <CCard
                           key={_id}
                           style={{
@@ -116,6 +116,9 @@ function Categories() {
                           <CRow className="g-0">
                             <CCol xs={12}>
                               <CCardBody>
+                                <CRow>
+                                  <CCol>{code}</CCol>
+                                </CRow>
                                 <CRow>
                                   <CCol>{name}</CCol>
                                 </CRow>

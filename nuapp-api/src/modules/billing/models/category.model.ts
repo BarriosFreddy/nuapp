@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 
 @modelOptions({
   options: {
-    customName: 'categories',
+    customName: 'item-categories',
   },
 })
 export class Category extends TimeStamps {

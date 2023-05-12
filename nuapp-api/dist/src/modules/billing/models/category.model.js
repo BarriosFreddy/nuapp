@@ -29,7 +29,7 @@ __decorate([
 Category = __decorate([
     (0, typegoose_1.modelOptions)({
         options: {
-            customName: 'categories',
+            customName: 'item-categories',
         },
     })
 ], Category);

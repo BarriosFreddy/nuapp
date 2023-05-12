@@ -9,8 +9,10 @@ const roleValidation = (modulePrivilege: string) => {
   return async (_req: Request, res: Response, next: NextFunction) => {
     try {
       const [moduleCode, privilege] = modulePrivilege.split(':');
+      
       const { infoUser } = res.locals;
       const module = await moduleService.findByCode(moduleCode);
+      console.log({ moduleCode, module });
       if (!module) throw new Error('module not found');
       if (!infoUser) throw new Error('infoUser not found');
       const { access } = module;

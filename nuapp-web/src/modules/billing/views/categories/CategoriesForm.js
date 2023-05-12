@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { CButton, CRow, CContainer, CCol, CFormInput, CForm } from '@coreui/react'
-import axios from 'axios'
 import { useDispatch } from 'react-redux'
 import { saveItemCategory } from 'src/modules/billing/services/item-categories.service'
 
-const { REACT_APP_BASE_URL } = process.env
-
 const categoryInitialState = {
+  code: '',
   name: '',
   description: '',
 }
@@ -20,10 +18,6 @@ function CategoriesForm(props) {
     code: false,
     description: false,
     name: false,
-    price: false,
-    categoryId: false,
-    units: false,
-    measurementUnit: false,
   })
 
   useEffect(() => {
@@ -43,12 +37,13 @@ function CategoriesForm(props) {
   }
 
   const isValidForm = () => {
-    const { name, description } = {
+    const { code, name, description } = {
       ...category,
     }
     const failedValidationsObj = { ...failedValidations }
-    failedValidationsObj.description = !description
+    failedValidationsObj.code = !code
     failedValidationsObj.name = !name
+    failedValidationsObj.description = !description
     setFailedValidations(failedValidationsObj)
     return Object.values(failedValidationsObj).every((validation) => validation === false)
   }
@@ -74,6 +69,18 @@ function CategoriesForm(props) {
       <CContainer fluid>
         <CForm className="row g-3 needs-validation" noValidate>
           <CRow style={{ marginTop: '40px' }}>
+            <CCol xs="12" lg="3">
+              <CFormInput
+                label="Código"
+                type="text"
+                name="code"
+                value={category.code}
+                feedbackInvalid="Campo obligatorio"
+                invalid={failedValidations.code}
+                required
+                onChange={(event) => onChangeField(event)}
+              />
+            </CCol>
             <CCol xs="12" lg="3">
               <CFormInput
                 label="Nombre"
