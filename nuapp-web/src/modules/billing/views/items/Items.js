@@ -22,7 +22,7 @@ import {
 import ItemForm from './ItemForm'
 import DefaultImg from './../../../../assets/images/new.ico'
 import { useDispatch, useSelector } from 'react-redux'
-import { getItems, saveItem } from 'src/modules/billing/services/items.service'
+import { getItems, saveItem, updateItem } from 'src/modules/billing/services/items.service'
 import CONSTANTS from 'src/constants'
 import { setItem } from '../../reducers/items.reducer'
 
@@ -42,6 +42,10 @@ function Item() {
   }, [saveSuccess])
 
   const save = (item) => {
+    if (item._id) {
+      dispatch(updateItem(item))
+      return
+    }
     dispatch(saveItem(item))
   }
 
@@ -85,17 +89,17 @@ function Item() {
     <>
       <CContainer className="mt--6" fluid>
         <CRow>
-          <div className="col">
-            <CCard className="shadow border-10">
-              {!editing && (
-                <CCardHeader className="border-0">
+          <CCol>
+            <CCard className="mt-6 shadow border-10">
+              <CCardHeader className="border-0">
+                {!editing && (
                   <CRow>
-                    <CCol xs="4" lg="2">
+                    <CCol xs="4" lg="3">
                       <CButton variant="outline" color="success" onClick={() => setEditing(true)}>
                         NUEVO ITEM
                       </CButton>
                     </CCol>
-                    <CCol lg="4">
+                    <CCol lg="5">
                       <CInputGroup>
                         <CFormInput
                           type="text"
@@ -111,8 +115,8 @@ function Item() {
                       </CInputGroup>
                     </CCol>
                   </CRow>
-                </CCardHeader>
-              )}
+                )}
+              </CCardHeader>
               <CCardBody>
                 {!editing && (
                   <>
@@ -221,7 +225,7 @@ function Item() {
                 {editing && <ItemForm save={save} cancel={cancel} />}
               </CCardBody>
             </CCard>
-          </div>
+          </CCol>
         </CRow>
       </CContainer>
     </>

@@ -15,15 +15,21 @@ import {
   CTableHeaderCell,
   CTableBody,
   CTableDataCell,
+  CInputGroup,
+  CFormInput,
 } from '@coreui/react'
 import CategoriesForm from './CategoriesForm'
 import { useDispatch, useSelector } from 'react-redux'
 import { getItemCategories } from 'src/modules/billing/services/item-categories.service'
 import { setItemCategories } from 'src/modules/billing/reducers/item-categories.reducer'
+import CONSTANTS from 'src/constants'
+
+const { ENTER_KEYCODE, TAB_KEYCODE } = CONSTANTS
 
 function Categories() {
   const dispatch = useDispatch()
   const itemCategories = useSelector((state) => state.itemCategories.itemCategories)
+  const [searchTerm, setSearchTerm] = useState('')
   let [editing, setEditing] = useState(false)
   let [page, setPage] = useState(1)
 
@@ -39,18 +45,32 @@ function Categories() {
   const handleNextPage = async () => {
     const newPage = page + 1
     setPage(newPage)
-    dispatch(getItemCategories(newPage))
+    dispatch(getItemCategories({ page: newPage }))
   }
 
   const handlePrevPage = async () => {
     const newPage = page === 1 ? 1 : page - 1
     setPage(newPage)
-    dispatch(getItemCategories(newPage))
+    dispatch(getItemCategories({ page: newPage }))
+  }
+
+  const onChangeField = ({ target: { value } }) => {
+    setSearchTerm(value)
+  }
+
+  const onKeyDownCodeField = async ({ keyCode }) => {
+    if ([ENTER_KEYCODE, TAB_KEYCODE].includes(keyCode)) search()
+  }
+
+  const search = async () => {
+    if (!!searchTerm) {
+      dispatch(getItemCategories({ code: searchTerm.trim(), name: searchTerm.trim(), page: 1 }))
+    }
   }
 
   return (
     <>
-      <CContainer className="mt--6" fluid>
+      <CContainer className="mt-6" fluid>
         <CRow>
           <div className="col">
             <CCard className="shadow border-10">
@@ -58,10 +78,25 @@ function Categories() {
                 <CCardHeader className="border-0">
                   <CContainer>
                     <CRow>
-                      <CCol xs="4">
+                      <CCol xs="4" lg="3">
                         <CButton variant="outline" color="success" onClick={() => setEditing(true)}>
-                          CREAR
+                          NUEVA CATEGORIA
                         </CButton>
+                      </CCol>
+                      <CCol lg="5">
+                        <CInputGroup>
+                          <CFormInput
+                            type="text"
+                            name="searchTerm"
+                            placeholder="..."
+                            value={searchTerm}
+                            onChange={(event) => onChangeField(event)}
+                            onKeyDown={(event) => onKeyDownCodeField(event)}
+                          />
+                          <CButton type="button" variant="outline" color="primary" onClick={search}>
+                            BUSCAR
+                          </CButton>
+                        </CInputGroup>
                       </CCol>
                     </CRow>
                   </CContainer>
@@ -103,8 +138,8 @@ function Categories() {
                           </CTableRow>
                         </CTableHead>
                         <CTableBody>
-                          {itemCategories.map(({ code, name, description }) => (
-                            <CTableRow key={code}>
+                          {itemCategories.map(({ _id, code, name, description }) => (
+                            <CTableRow key={_id}>
                               <CTableDataCell xs="12" className="text-uppercase">
                                 {code}
                               </CTableDataCell>

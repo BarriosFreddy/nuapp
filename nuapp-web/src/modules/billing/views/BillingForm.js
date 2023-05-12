@@ -131,10 +131,10 @@ const BillingForm = (props) => {
                 onChange={(event) => onChangeField(event)}
                 onKeyDown={(event) => onKeyDownCodeField(event)}
               />
-              <CButton type="button" color="primary" onClick={search}>
+              <CButton variant="outline" type="button" color="primary" onClick={search}>
                 BUSCAR
               </CButton>
-              <CButton type="button" color="light" onClick={clear}>
+              <CButton variant="outline" type="button" color="secondary" onClick={clear}>
                 BORRAR
               </CButton>
             </CInputGroup>

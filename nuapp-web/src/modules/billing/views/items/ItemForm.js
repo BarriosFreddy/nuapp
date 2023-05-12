@@ -164,7 +164,7 @@ function ItemForm(props) {
       <CContainer fluid>
         <CForm className="row g-3 needs-validation" noValidate>
           <CRow style={{ marginTop: '40px' }}>
-            <CCol xs="12" lg="3">
+            <CCol xs="12" lg="4">
               <CFormInput
                 label="Código"
                 type="text"
@@ -176,7 +176,7 @@ function ItemForm(props) {
                 onChange={(event) => onChangeField(event)}
               />
             </CCol>
-            <CCol xs="12" lg="3">
+            <CCol xs="12" lg="4">
               <CFormInput
                 label="Nombre"
                 type="text"
@@ -188,7 +188,7 @@ function ItemForm(props) {
                 onChange={(event) => onChangeField(event)}
               />
             </CCol>
-            <CCol xs="12" lg="3">
+            <CCol xs="12" lg="4">
               <CFormInput
                 label="Descripción"
                 type="text"
@@ -200,7 +200,7 @@ function ItemForm(props) {
                 onChange={(event) => onChangeField(event)}
               />
             </CCol>
-            <CCol xs="12" lg="3">
+            <CCol xs="12" lg="4">
               <CFormInput
                 label="Precio"
                 type="number"
@@ -213,8 +213,8 @@ function ItemForm(props) {
               />
             </CCol>
           </CRow>
-          <CRow style={{ marginTop: '40px' }}>
-            <CCol xs="12" lg="3">
+          <CRow>
+            <CCol xs="12" lg="4">
               <CFormSelect
                 label="Categoria"
                 name="categoryId"
@@ -225,7 +225,7 @@ function ItemForm(props) {
                 options={['Seleccione la categoria', ...itemCategories]}
               />
             </CCol>
-            <CCol xs="12" lg="3">
+            <CCol xs="12" lg="4">
               <CFormInput
                 label="Unidades"
                 type="number"
@@ -237,7 +237,7 @@ function ItemForm(props) {
                 onChange={(event) => onChangeField(event)}
               />
             </CCol>
-            <CCol xs="12" lg="3">
+            <CCol xs="12" lg="4">
               <CFormInput
                 label="Unidad de medida"
                 type="text"
@@ -250,15 +250,14 @@ function ItemForm(props) {
               />
             </CCol>
           </CRow>
-          <div style={{ margin: '20px' }} />
-          <CRow style={{ margin: '1000px 0' }}>
+          <CRow className="mt-5">
             <CCol xs="8" lg="2">
-              <CButton size="sm" color="success" type="button" onClick={() => save()}>
-                GUARDAR
+              <CButton variant="outline" color="success" type="button" onClick={() => save()}>
+                {itemGlobal ? 'ACTUALIZAR' : 'GUARDAR'}
               </CButton>
             </CCol>
             <CCol xs="4" lg="2">
-              <CButton size="sm" color="light" onClick={() => cancel()}>
+              <CButton variant="outline" color="secondary" onClick={() => cancel()}>
                 CANCELAR
               </CButton>
             </CCol>
@@ -273,7 +272,7 @@ function ItemForm(props) {
           <div id="reader" width="600px" style={{ maxWidth: '750px' }}></div>
         </CModalBody>
         <CModalFooter>
-          <CButton Ccolor="secondary" onClick={toggle}>
+          <CButton color="secondary" onClick={toggle}>
             Cancelar
           </CButton>
         </CModalFooter>

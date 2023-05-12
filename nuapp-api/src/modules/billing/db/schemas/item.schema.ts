@@ -18,6 +18,9 @@ const ItemUpdateSchema: Schema = joi.object({
   price: joi.number(),
   units: joi.number(),
   measurementUnit: joi.string(),
+  createdAt: joi.date(),
+  updatedAt: joi.date(),
+  __v: joi.number(),
 });
 
 export { ItemCreateSchema, ItemUpdateSchema };

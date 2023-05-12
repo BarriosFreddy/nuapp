@@ -5,10 +5,18 @@ import { Category } from '../models/category.model';
 
 const categoryService = container.resolve(CategoryService);
 
+interface RequestQuery {
+  page?: number;
+  name?: string;
+  code?: string;
+  parse?: string;
+}
+
 class CategorysController {
-  async findAll(req: Request, res: Response) {
-    const { parse } = req.query;
-    const categories = await categoryService.findAll();
+  async findAll(req: Request<{}, {}, {}, RequestQuery>, res: Response) {
+    let { parse, page = 1, name, code } = req.query;
+    page = +page;
+    const categories = await categoryService.findAll({ name, code, page });
     if (parse === 'true') {
       let itemCategoriesParse = categories.map(({ name, _id }) => {
         return {
