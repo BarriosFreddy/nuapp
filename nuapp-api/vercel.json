@@ -2,6 +2,8 @@
   "version": 2,
   "builds": [
     {
+      "buildCommand": "npm run build",
+      "installCommand": "npm install",
       "src": "dist/index.js",
       "use": "@vercel/node",
       "config": { "includeFiles": ["dist/**"] }
