@@ -9,30 +9,30 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.Category = void 0;
+exports.ItemCategory = void 0;
 const typegoose_1 = require("@typegoose/typegoose");
 const defaultClasses_1 = require("@typegoose/typegoose/lib/defaultClasses");
-let Category = class Category extends defaultClasses_1.TimeStamps {
+let ItemCategory = class ItemCategory extends defaultClasses_1.TimeStamps {
 };
 __decorate([
     (0, typegoose_1.prop)({ required: true }),
     __metadata("design:type", String)
-], Category.prototype, "code", void 0);
+], ItemCategory.prototype, "code", void 0);
 __decorate([
     (0, typegoose_1.prop)({ required: true }),
     __metadata("design:type", String)
-], Category.prototype, "name", void 0);
+], ItemCategory.prototype, "name", void 0);
 __decorate([
     (0, typegoose_1.prop)(),
     __metadata("design:type", String)
-], Category.prototype, "description", void 0);
-Category = __decorate([
+], ItemCategory.prototype, "description", void 0);
+ItemCategory = __decorate([
     (0, typegoose_1.modelOptions)({
         options: {
             customName: 'item-categories',
         },
     })
-], Category);
-exports.Category = Category;
-const CategoryModel = (0, typegoose_1.getModelForClass)(Category);
-exports.default = CategoryModel;
+], ItemCategory);
+exports.ItemCategory = ItemCategory;
+const ItemCategoryModel = (0, typegoose_1.getModelForClass)(ItemCategory);
+exports.default = ItemCategoryModel;

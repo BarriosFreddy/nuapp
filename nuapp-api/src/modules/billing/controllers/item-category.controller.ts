@@ -1,9 +1,9 @@
-import { CategoryService } from '../services/category.service';
+import { ItemCategoryService } from '../services/item-category.service';
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
-import { Category } from '../models/category.model';
+import { ItemCategory } from '../models/item-category.model';
 
-const categoryService = container.resolve(CategoryService);
+const categoryService = container.resolve(ItemCategoryService);
 
 interface RequestQuery {
   page?: number;
@@ -12,7 +12,7 @@ interface RequestQuery {
   parse?: string;
 }
 
-class CategorysController {
+class ItemCategoryController {
   async findAll(req: Request<{}, {}, {}, RequestQuery>, res: Response) {
     let { parse, page = 1, name, code } = req.query;
     page = +page;
@@ -32,25 +32,25 @@ class CategorysController {
 
   async findOne(req: Request, res: Response) {
     const { id } = req.params;
-    const category = await categoryService.findOne(id);
-    res.status(200).send(category);
+    const itemCategory = await categoryService.findOne(id);
+    res.status(200).send(itemCategory);
   }
 
   async save(req: Request, res: Response) {
-    const category: Category = req.body;
-    const savedCategory = await categoryService.save(category);
+    const itemCategory: ItemCategory = req.body;
+    const savedCategory = await categoryService.save(itemCategory);
     res.status(201).send(savedCategory);
   }
 
   async update(req: Request, res: Response) {
     const { id } = req.params;
-    const category: Category = req.body;
-    const savedCategory = await categoryService.update(id, category);
+    const itemCategory: ItemCategory = req.body;
+    const savedCategory = await categoryService.update(id, itemCategory);
     savedCategory
       ? res.status(201).send(savedCategory)
       : res.status(400).send('Something went wrong');
   }
 }
 
-const categoryController = new CategorysController();
-export default categoryController;
+const itemCategoryController = new ItemCategoryController();
+export default itemCategoryController;

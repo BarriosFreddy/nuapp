@@ -1,11 +1,11 @@
 import { BaseService } from '../../../helpers/abstracts/base.service';
-import CategoryModel, { Category } from '../models/category.model';
+import ItemCategoryModel, { ItemCategory } from '../models/item-category.model';
 import { singleton } from 'tsyringe';
 
 @singleton()
-export class CategoryService extends BaseService<Category> {
-  async findOne(id: string): Promise<Category | null> {
-    return await CategoryModel.findById(id).exec();
+export class ItemCategoryService extends BaseService<ItemCategory> {
+  async findOne(id: string): Promise<ItemCategory | null> {
+    return await ItemCategoryModel.findById(id).exec();
   }
   async findAll({
     page = 1,
@@ -15,7 +15,7 @@ export class CategoryService extends BaseService<Category> {
     page: number;
     name?: string;
     code?: string;
-  }): Promise<Category[]> {
+  }): Promise<ItemCategory[]> {
     let filters = {};
     let conditions = [];
     name && conditions.push({ name: new RegExp(`${name}`, 'i') });
@@ -23,26 +23,26 @@ export class CategoryService extends BaseService<Category> {
 
     conditions.length > 0 && (filters = { ['$or']: conditions, ...filters });
 
-    const categories = await CategoryModel.find(filters)
+    const categories = await ItemCategoryModel.find(filters)
       .skip(10 * (page - 1))
       .limit(10)
       .exec();
     return categories;
   }
-  async save(category: Category): Promise<Category> {
+  async save(itemCategory: ItemCategory): Promise<ItemCategory> {
     try {
-      category.createdAt = new Date();
-      return await CategoryModel.create(category);
+      itemCategory.createdAt = new Date();
+      return await ItemCategoryModel.create(itemCategory);
     } catch (error) {
       console.log(error);
       return Promise.reject(null);
     }
   }
 
-  async update(id: string, category: Category): Promise<Category | null> {
+  async update(id: string, itemCategory: ItemCategory): Promise<ItemCategory | null> {
     try {
-      category.updatedAt = new Date();
-      await CategoryModel.updateOne({ _id: id }, category);
+      itemCategory.updatedAt = new Date();
+      await ItemCategoryModel.updateOne({ _id: id }, itemCategory);
       return this.findOne(id);
     } catch (error) {
       console.log(error);

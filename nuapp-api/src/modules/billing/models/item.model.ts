@@ -1,7 +1,7 @@
 import { Ref, getModelForClass, prop } from '@typegoose/typegoose';
 import mongoose from 'mongoose';
 import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
-import { Category } from './category.model';
+import { ItemCategory } from './item-category.model';
 
 export class Item extends TimeStamps {
   _id!: mongoose.Types.ObjectId;
@@ -17,8 +17,8 @@ export class Item extends TimeStamps {
   public units?: number;
   @prop()
   public measurementUnit?: string;
-  @prop({ ref: () => Category  })
-  public categoryId?: Ref<Category>;
+  @prop({ ref: () => ItemCategory  })
+  public categoryId?: Ref<ItemCategory>;
   @prop()
   public modifiedBy?: mongoose.Types.ObjectId;
 }

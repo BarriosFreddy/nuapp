@@ -18,10 +18,9 @@ import {
   CInputGroup,
   CFormInput,
 } from '@coreui/react'
-import CategoriesForm from './CategoriesForm'
+import ItemCategoriesForm from './ItemCategoriesForm'
 import { useDispatch, useSelector } from 'react-redux'
 import { getItemCategories } from 'src/modules/billing/services/item-categories.service'
-import { setItemCategories } from 'src/modules/billing/reducers/item-categories.reducer'
 import CONSTANTS from 'src/constants'
 
 const { ENTER_KEYCODE, TAB_KEYCODE } = CONSTANTS
@@ -188,7 +187,7 @@ function Categories() {
                     </CCardFooter>
                   </>
                 )}
-                {editing && <CategoriesForm cancel={cancel} />}
+                {editing && <ItemCategoriesForm cancel={cancel} />}
               </CCardBody>
             </CCard>
           </div>

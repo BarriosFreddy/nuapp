@@ -7,7 +7,7 @@ import mongoose from 'mongoose';
     customName: 'item-categories',
   },
 })
-export class Category extends TimeStamps {
+export class ItemCategory extends TimeStamps {
   _id!: mongoose.Types.ObjectId;
   @prop({ required: true })
   public code!: string;
@@ -17,5 +17,5 @@ export class Category extends TimeStamps {
   public description?: string;
 }
 
-const CategoryModel = getModelForClass(Category);
-export default CategoryModel;
+const ItemCategoryModel = getModelForClass(ItemCategory);
+export default ItemCategoryModel;

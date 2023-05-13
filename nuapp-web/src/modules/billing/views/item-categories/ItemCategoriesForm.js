@@ -10,10 +10,10 @@ const categoryInitialState = {
   description: '',
 }
 
-function CategoriesForm(props) {
+function ItemCategoriesForm(props) {
   const dispatch = useDispatch()
 
-  const [category, setCategory] = useState(categoryInitialState)
+  const [itemCategory, setItemCategory] = useState(categoryInitialState)
   const [failedValidations, setFailedValidations] = useState({
     code: false,
     description: false,
@@ -25,20 +25,20 @@ function CategoriesForm(props) {
   }, [])
 
   const onChangeField = ({ target: { name, value } }) => {
-    setCategory({
-      ...category,
+    setItemCategory({
+      ...itemCategory,
       [name]: value,
     })
     setFailedValidations({ ...failedValidations, [name]: !value })
   }
 
   const clearFieldsForm = () => {
-    setCategory(categoryInitialState)
+    setItemCategory(categoryInitialState)
   }
 
   const isValidForm = () => {
     const { code, name, description } = {
-      ...category,
+      ...itemCategory,
     }
     const failedValidationsObj = { ...failedValidations }
     failedValidationsObj.code = !code
@@ -52,7 +52,7 @@ function CategoriesForm(props) {
     if (isValidForm()) {
       dispatch(
         saveItemCategory({
-          ...category,
+          ...itemCategory,
         }),
       )
       props.cancel()
@@ -74,7 +74,7 @@ function CategoriesForm(props) {
                 label="Código"
                 type="text"
                 name="code"
-                value={category.code}
+                value={itemCategory.code}
                 feedbackInvalid="Campo obligatorio"
                 invalid={failedValidations.code}
                 required
@@ -86,7 +86,7 @@ function CategoriesForm(props) {
                 label="Nombre"
                 type="text"
                 name="name"
-                value={category.name}
+                value={itemCategory.name}
                 feedbackInvalid="Campo obligatorio"
                 invalid={failedValidations.name}
                 required
@@ -98,7 +98,7 @@ function CategoriesForm(props) {
                 label="Descripción"
                 type="text"
                 name="description"
-                value={category.description}
+                value={itemCategory.description}
                 feedbackInvalid="Campo obligatorio"
                 invalid={failedValidations.description}
                 required
@@ -125,8 +125,8 @@ function CategoriesForm(props) {
   )
 }
 
-export default CategoriesForm
+export default ItemCategoriesForm
 
-CategoriesForm.propTypes = {
+ItemCategoriesForm.propTypes = {
   cancel: PropTypes.func.isRequired,
 }

@@ -5,7 +5,7 @@ const Dashboard = lazy(() => import('./modules/core/views/dashboard/Dashboard'))
 const Billing = lazy(() => import('./modules/billing/views/Billing'))
 const BillingsHistorical = lazy(() => import('./modules/billing/views/BillingsHistorical'))
 const Items = lazy(() => import('./modules/billing/views/items/Items'))
-const ItemCategories = lazy(() => import('./modules/billing/views/categories/Categories'))
+const ItemCategories = lazy(() => import('./modules/billing/views/item-categories/ItemCategories'))
 
 const Listings = lazy(() => import('./modules/core/views/Listings'))
 const DataLoader = lazy(() => import('./modules/billing/views/data-loader/DataLoader'))

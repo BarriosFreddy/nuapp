@@ -9,10 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const category_service_1 = require("../services/category.service");
+const item_category_service_1 = require("../services/item-category.service");
 const tsyringe_1 = require("tsyringe");
-const categoryService = tsyringe_1.container.resolve(category_service_1.CategoryService);
-class CategorysController {
+const categoryService = tsyringe_1.container.resolve(item_category_service_1.ItemCategoryService);
+class ItemCategoryController {
     findAll(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             let { parse, page = 1, name, code } = req.query;
@@ -34,27 +34,27 @@ class CategorysController {
     findOne(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            const category = yield categoryService.findOne(id);
-            res.status(200).send(category);
+            const itemCategory = yield categoryService.findOne(id);
+            res.status(200).send(itemCategory);
         });
     }
     save(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            const category = req.body;
-            const savedCategory = yield categoryService.save(category);
+            const itemCategory = req.body;
+            const savedCategory = yield categoryService.save(itemCategory);
             res.status(201).send(savedCategory);
         });
     }
     update(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { id } = req.params;
-            const category = req.body;
-            const savedCategory = yield categoryService.update(id, category);
+            const itemCategory = req.body;
+            const savedCategory = yield categoryService.update(id, itemCategory);
             savedCategory
                 ? res.status(201).send(savedCategory)
                 : res.status(400).send('Something went wrong');
         });
     }
 }
-const categoryController = new CategorysController();
-exports.default = categoryController;
+const itemCategoryController = new ItemCategoryController();
+exports.default = itemCategoryController;

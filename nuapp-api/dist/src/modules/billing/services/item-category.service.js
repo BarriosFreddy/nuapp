@@ -18,14 +18,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CategoryService = void 0;
+exports.ItemCategoryService = void 0;
 const base_service_1 = require("../../../helpers/abstracts/base.service");
-const category_model_1 = __importDefault(require("../models/category.model"));
+const item_category_model_1 = __importDefault(require("../models/item-category.model"));
 const tsyringe_1 = require("tsyringe");
-let CategoryService = class CategoryService extends base_service_1.BaseService {
+let ItemCategoryService = class ItemCategoryService extends base_service_1.BaseService {
     findOne(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            return yield category_model_1.default.findById(id).exec();
+            return yield item_category_model_1.default.findById(id).exec();
         });
     }
     findAll({ page = 1, name, code, }) {
@@ -35,18 +35,18 @@ let CategoryService = class CategoryService extends base_service_1.BaseService {
             name && conditions.push({ name: new RegExp(`${name}`, 'i') });
             code && conditions.push({ code: new RegExp(`${code}`, 'i') });
             conditions.length > 0 && (filters = Object.assign({ ['$or']: conditions }, filters));
-            const categories = yield category_model_1.default.find(filters)
+            const categories = yield item_category_model_1.default.find(filters)
                 .skip(10 * (page - 1))
                 .limit(10)
                 .exec();
             return categories;
         });
     }
-    save(category) {
+    save(itemCategory) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                category.createdAt = new Date();
-                return yield category_model_1.default.create(category);
+                itemCategory.createdAt = new Date();
+                return yield item_category_model_1.default.create(itemCategory);
             }
             catch (error) {
                 console.log(error);
@@ -54,11 +54,11 @@ let CategoryService = class CategoryService extends base_service_1.BaseService {
             }
         });
     }
-    update(id, category) {
+    update(id, itemCategory) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                category.updatedAt = new Date();
-                yield category_model_1.default.updateOne({ _id: id }, category);
+                itemCategory.updatedAt = new Date();
+                yield item_category_model_1.default.updateOne({ _id: id }, itemCategory);
                 return this.findOne(id);
             }
             catch (error) {
@@ -68,7 +68,7 @@ let CategoryService = class CategoryService extends base_service_1.BaseService {
         });
     }
 };
-CategoryService = __decorate([
+ItemCategoryService = __decorate([
     (0, tsyringe_1.singleton)()
-], CategoryService);
-exports.CategoryService = CategoryService;
+], ItemCategoryService);
+exports.ItemCategoryService = ItemCategoryService;

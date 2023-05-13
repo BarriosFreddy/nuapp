@@ -5,11 +5,11 @@ import {
   validateParameters,
 } from '../../../helpers/middleware/validation.middleware';
 
-import categoryController from '../controllers/category.controller';
+import itemCategoryController from '../controllers/item-category.controller';
 import {
   CategoryCreateSchema,
   CategoryUpdateSchema,
-} from '../db/schemas/category.schema';
+} from '../db/schemas/item-category.schema';
 import { roleValidation } from '../../../helpers/middleware/role-validation.middleware';
 import { generateAuthKeyPair } from '../../../helpers/util';
 import { ModuleCode } from '../../core/enums/modules-codes';
@@ -22,7 +22,7 @@ itemCategoryRouter.post(
   validateBody(CategoryCreateSchema),
   isAuthenticated,
   roleValidation(generateAuthKeyPair(ModuleCode.BILLING, Privilege.CREATE)),
-  categoryController.save,
+  itemCategoryController.save,
 );
 itemCategoryRouter.put(
   '/:id',
@@ -30,15 +30,15 @@ itemCategoryRouter.put(
   validateBody(CategoryUpdateSchema),
   isAuthenticated,
   roleValidation(generateAuthKeyPair(ModuleCode.BILLING, Privilege.UPDATE)),
-  categoryController.update,
+  itemCategoryController.update,
 );
 itemCategoryRouter.get(
   '/:id',
   validateParameters(idSchema),
   isAuthenticated,
   roleValidation(generateAuthKeyPair(ModuleCode.BILLING, Privilege.ACCESS)),
-  categoryController.findOne,
+  itemCategoryController.findOne,
 );
-itemCategoryRouter.get('/', isAuthenticated, categoryController.findAll);
+itemCategoryRouter.get('/', isAuthenticated, itemCategoryController.findAll);
 
 export default itemCategoryRouter;

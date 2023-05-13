@@ -16,7 +16,7 @@ exports.Item = void 0;
 const typegoose_1 = require("@typegoose/typegoose");
 const mongoose_1 = __importDefault(require("mongoose"));
 const defaultClasses_1 = require("@typegoose/typegoose/lib/defaultClasses");
-const category_model_1 = require("./category.model");
+const item_category_model_1 = require("./item-category.model");
 class Item extends defaultClasses_1.TimeStamps {
 }
 __decorate([
@@ -44,7 +44,7 @@ __decorate([
     __metadata("design:type", String)
 ], Item.prototype, "measurementUnit", void 0);
 __decorate([
-    (0, typegoose_1.prop)({ ref: () => category_model_1.Category }),
+    (0, typegoose_1.prop)({ ref: () => item_category_model_1.ItemCategory }),
     __metadata("design:type", Object)
 ], Item.prototype, "categoryId", void 0);
 __decorate([
