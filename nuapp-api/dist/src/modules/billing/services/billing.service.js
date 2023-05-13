@@ -44,7 +44,6 @@ let BillingService = class BillingService extends base_service_1.BaseService {
                 .skip(10 * (page - 1))
                 .limit(10)
                 .sort({ createdAt: -1 })
-                .populate('items', { name: 1, code: 1, units: 1, measurementUnit: 1 })
                 .exec();
             return bills;
         });

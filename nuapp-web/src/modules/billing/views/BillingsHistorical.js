@@ -150,22 +150,23 @@ function BillingsHistorical() {
                         <CTableRow>
                           <CTableHeaderCell lg="2">Fecha</CTableHeaderCell>
                           <CTableDataCell>{formatDate(billing.createdAt)}</CTableDataCell>
-                          <CTableHeaderCell lg="2">Código</CTableHeaderCell>
-                          <CTableDataCell>{billing.code}</CTableDataCell>
+                          <CTableHeaderCell lg="3">Código</CTableHeaderCell>
+                          <CTableDataCell colSpan={2}>{billing.code}</CTableDataCell>
                         </CTableRow>
                         <CTableRow>
-                          <CTableHeaderCell colSpan={4}>Items</CTableHeaderCell>
+                          <CTableHeaderCell colSpan={5}>Items</CTableHeaderCell>
                         </CTableRow>
-                        {billing.items?.map(({ _id, name, units, measurementUnit }) => (
+                        {billing.items?.map(({ _id, name, units, price, measurementUnit }) => (
                           <CTableRow key={_id}>
                             <CTableDataCell colSpan={2}>{name}</CTableDataCell>
                             <CTableDataCell colSpan={2}>
                               {units + ' ' + measurementUnit}
                             </CTableDataCell>
+                            <CTableDataCell colSpan={2}>{price}</CTableDataCell>
                           </CTableRow>
                         ))}
                         <CTableRow>
-                          <CTableHeaderCell className="text-end fs-4" colSpan={4}>
+                          <CTableHeaderCell className="text-end fs-4" colSpan={5}>
                             Total {formatCurrency(billing.billAmount)}
                           </CTableHeaderCell>
                         </CTableRow>

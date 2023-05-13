@@ -6,17 +6,17 @@ import {
 } from '../../../helpers/middleware/validation.middleware';
 
 import billingController from '../controllers/billing.controller';
-import { BillCreateSchema } from '../db/schemas/billing.schema';
 import { roleValidation } from '../../../helpers/middleware/role-validation.middleware';
 import { generateAuthKeyPair } from '../../../helpers/util';
 import { ModuleCode } from '../../core/enums/modules-codes';
 import { Privilege } from '../../core/enums/privileges';
 import { idSchema } from '../../../helpers/db/schemas/id.schema';
+import { BillingCreateSchema } from '../db/schemas/billing.schema';
 const billingRouter = express.Router();
 
 billingRouter.post(
   '/',
-  validateBody(BillCreateSchema),
+  validateBody(BillingCreateSchema),
   isAuthenticated,
   roleValidation(generateAuthKeyPair(ModuleCode.BILLING, Privilege.CREATE)),
   billingController.save,

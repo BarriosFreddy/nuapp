@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Billing = void 0;
 const typegoose_1 = require("@typegoose/typegoose");
 const mongoose_1 = __importDefault(require("mongoose"));
-const item_model_1 = require("./item.model");
 const defaultClasses_1 = require("@typegoose/typegoose/lib/defaultClasses");
 class Billing extends defaultClasses_1.TimeStamps {
 }
@@ -32,7 +31,7 @@ __decorate([
     __metadata("design:type", Number)
 ], Billing.prototype, "receivedAmount", void 0);
 __decorate([
-    (0, typegoose_1.prop)({ ref: () => item_model_1.Item }),
+    (0, typegoose_1.prop)(),
     __metadata("design:type", Array)
 ], Billing.prototype, "items", void 0);
 __decorate([
