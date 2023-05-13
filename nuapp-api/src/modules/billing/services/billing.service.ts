@@ -4,8 +4,10 @@ import { KardexTransactionService } from './kardex-transaction.service';
 import { KardexTransactionType } from '../enums/kardex-transaction-type';
 import { BaseService } from '../../../helpers/abstracts/base.service';
 import { KardexTransaction } from '../models/kardex-transaction.model';
+import { SequencedCodeService } from './sequenced-code.service';
 
 const kardexTransactionService = container.resolve(KardexTransactionService);
+const sequencedCodeService = container.resolve(SequencedCodeService);
 
 @singleton()
 export class BillingService extends BaseService<Billing> {
@@ -22,6 +24,7 @@ export class BillingService extends BaseService<Billing> {
   }
   async save(billing: Billing): Promise<Billing> {
     try {
+      billing.code = await generateSequencedCode();
       billing.createdAt = new Date();
       const saved = await BillingModel.create(billing);
       const { items } = saved;
@@ -44,4 +47,16 @@ export class BillingService extends BaseService<Billing> {
   async update(_: string, __: Billing): Promise<Billing | null> {
     throw new Error('Not Supported');
   }
+}
+
+async function generateSequencedCode(): Promise<string> {
+  let generatedSequencedCode = '';
+  const { _id, prefixPart1, prefixPart2, sequence } =
+    (await sequencedCodeService.findLastOne()) || {};
+  if (_id && sequence !== undefined) {
+    const newSequence = sequence + 1;
+    await sequencedCodeService.update(_id, newSequence);
+    generatedSequencedCode = `${prefixPart1}${prefixPart2}${newSequence}`;
+  }
+  return generatedSequencedCode;
 }

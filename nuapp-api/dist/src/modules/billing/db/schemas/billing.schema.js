@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.BillingCreateSchema = void 0;
 const joi_1 = __importDefault(require("joi"));
 const BillingCreateSchema = joi_1.default.object({
-    code: joi_1.default.string().required(),
     billAmount: joi_1.default.number().required(),
     items: joi_1.default
         .array()

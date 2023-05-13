@@ -31,7 +31,9 @@ const tsyringe_1 = require("tsyringe");
 const kardex_transaction_service_1 = require("./kardex-transaction.service");
 const kardex_transaction_type_1 = require("../enums/kardex-transaction-type");
 const base_service_1 = require("../../../helpers/abstracts/base.service");
+const sequenced_code_service_1 = require("./sequenced-code.service");
 const kardexTransactionService = tsyringe_1.container.resolve(kardex_transaction_service_1.KardexTransactionService);
+const sequencedCodeService = tsyringe_1.container.resolve(sequenced_code_service_1.SequencedCodeService);
 let BillingService = class BillingService extends base_service_1.BaseService {
     findOne(id) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -52,6 +54,7 @@ let BillingService = class BillingService extends base_service_1.BaseService {
         var _a, e_1, _b, _c;
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                billing.code = yield generateSequencedCode();
                 billing.createdAt = new Date();
                 const saved = yield billing_model_1.default.create(billing);
                 const { items } = saved;
@@ -99,3 +102,15 @@ BillingService = __decorate([
     (0, tsyringe_1.singleton)()
 ], BillingService);
 exports.BillingService = BillingService;
+function generateSequencedCode() {
+    return __awaiter(this, void 0, void 0, function* () {
+        let generatedSequencedCode = '';
+        const { _id, prefixPart1, prefixPart2, sequence } = (yield sequencedCodeService.findLastOne()) || {};
+        if (_id && sequence !== undefined) {
+            const newSequence = sequence + 1;
+            yield sequencedCodeService.update(_id, newSequence);
+            generatedSequencedCode = `${prefixPart1}${prefixPart2}${newSequence}`;
+        }
+        return generatedSequencedCode;
+    });
+}

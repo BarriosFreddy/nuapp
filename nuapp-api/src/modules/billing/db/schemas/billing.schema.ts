@@ -1,7 +1,6 @@
 import joi, { Schema } from 'joi';
 
 const BillingCreateSchema: Schema = joi.object({
-  code: joi.string().required(),
   billAmount: joi.number().required(),
   items: joi
     .array()

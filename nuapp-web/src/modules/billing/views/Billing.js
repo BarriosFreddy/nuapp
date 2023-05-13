@@ -20,7 +20,6 @@ import { formatCurrency } from 'src/utils'
 import CIcon from '@coreui/icons-react'
 import { cilTrash } from '@coreui/icons'
 import PaymentComp from './Payment'
-import { v4 as uuidV4 } from 'uuid'
 import { saveBilling } from '../../../modules/billing/services/billings.service'
 import { setShowToast, setToastConfig } from 'src/app.slice'
 import { setSaveSuccess } from '../reducers/billings.reducer'
@@ -29,6 +28,7 @@ function Billing() {
   const saveSuccess = useSelector((state) => state.billing.saveSuccess)
   const dispatch = useDispatch()
   let [items, setItems] = useState([])
+  let [loading, setLoading] = useState(false)
   let [receivedAmount, setReceivedAmount] = useState(0)
   let [total, setTotal] = useState(0)
   let [itemUnits, setItemUnits] = useState({})
@@ -81,11 +81,11 @@ function Billing() {
     if (isValid()) {
       dispatch(
         saveBilling({
-          code: uuidV4(),
           billAmount: total,
-          items: getItemsId(items),
+          items: getItemsData(items),
         }),
       )
+      setLoading(true)
       return
     }
     dispatch(
@@ -103,6 +103,7 @@ function Billing() {
     setTotal(0)
     setItemUnits({})
     setPaying(false)
+    setLoading(false)
     dispatch(
       setToastConfig({
         message: 'Guardado exitoso!',
@@ -114,7 +115,15 @@ function Billing() {
     dispatch(setSaveSuccess(false))
   }
 
-  const getItemsId = () => items.map(({ _id }) => _id)
+  const getItemsData = () =>
+    items.map(({ _id, name, code, price, units, measurementUnit }) => ({
+      _id,
+      name,
+      code,
+      price,
+      units,
+      measurementUnit,
+    }))
 
   const isValid = () => {
     return receivedAmount > 0 && receivedAmount >= total
@@ -223,7 +232,7 @@ function Billing() {
                       </CButton>
                     )}
                     {paying && (
-                      <CButton size="lg" color="success" onClick={save}>
+                      <CButton size="lg" color="success" onClick={save} disabled={loading}>
                         FACTURAR
                       </CButton>
                     )}
