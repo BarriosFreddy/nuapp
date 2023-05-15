@@ -18,7 +18,6 @@ import {
 import CIcon from '@coreui/icons-react'
 import { cilBell, cilEnvelopeOpen, cilList, cilMenu } from '@coreui/icons'
 
-import { AppBreadcrumb } from './index'
 import { AppHeaderDropdown } from './header/index'
 import { logo } from 'src/assets/brand/logo'
 import { setSidebarShow } from './../app.slice'
@@ -44,12 +43,6 @@ const AppHeader = () => {
               Dashboard
             </CNavLink>
           </CNavItem>
-          <CNavItem>
-            <CNavLink href="#">Users</CNavLink>
-          </CNavItem>
-          <CNavItem>
-            <CNavLink href="#">Settings</CNavLink>
-          </CNavItem>
         </CHeaderNav>
         <CHeaderNav>
           <CNavItem>
@@ -73,9 +66,9 @@ const AppHeader = () => {
         </CHeaderNav>
       </CContainer>
       <CHeaderDivider />
-      <CContainer fluid>
+      {/*       <CContainer fluid>
         <AppBreadcrumb />
-      </CContainer>
+      </CContainer> */}
       <CToaster placement="top-end">
         <CToast
           visible={showToast}

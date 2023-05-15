@@ -25,6 +25,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getItems, saveItem, updateItem } from 'src/modules/billing/services/items.service'
 import CONSTANTS from 'src/constants'
 import { setItem } from '../../reducers/items.reducer'
+import { formatCurrency } from 'src/utils'
 
 const { ENTER_KEYCODE, TAB_KEYCODE } = CONSTANTS
 
@@ -77,7 +78,9 @@ function Item() {
   const search = async () => {
     if (!!searchTerm) {
       dispatch(getItems({ code: searchTerm.trim(), name: searchTerm.trim(), page: 1 }))
+      return
     }
+    dispatch(getItems({ page: 1 }))
   }
 
   const handleEdit = (item) => {
@@ -175,7 +178,7 @@ function Item() {
                               <CTableDataCell xs="12" className="text-break">
                                 {item.description}
                               </CTableDataCell>
-                              <CTableDataCell xs="12">{item.units}</CTableDataCell>
+                              <CTableDataCell xs="12">{formatCurrency(item.price)}</CTableDataCell>
                               <CTableDataCell xs="12">
                                 <CButton
                                   size="sm"

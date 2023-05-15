@@ -12,13 +12,13 @@ let _nav = [
   },
   {
     component: CNavGroup,
-    name: 'Facturación',
+    name: 'Punto de venta',
     to: '/billing',
     icon: <CIcon icon={cilDollar} customClassName="nav-icon" />,
     items: [
       {
         component: CNavItem,
-        name: 'Punto de venta',
+        name: 'Facturación',
         to: '/billing',
         icon: <CIcon icon={cilDollar} customClassName="nav-icon" />,
       },
@@ -47,12 +47,6 @@ let _nav = [
         icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
       },
     ],
-  },
-  {
-    component: CNavItem,
-    name: 'Listados',
-    to: '/listings',
-    icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
   },
 ]
 

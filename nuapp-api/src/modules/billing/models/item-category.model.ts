@@ -9,7 +9,7 @@ import mongoose from 'mongoose';
 })
 export class ItemCategory extends TimeStamps {
   _id!: mongoose.Types.ObjectId;
-  @prop({ required: true })
+  @prop({ required: true, unique: true })
   public code!: string;
   @prop({ required: true })
   public name!: string;

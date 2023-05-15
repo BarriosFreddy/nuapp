@@ -19,19 +19,19 @@ const mongoose_1 = __importDefault(require("mongoose"));
 let UserAccount = class UserAccount extends defaultClasses_1.TimeStamps {
 };
 __decorate([
-    (0, typegoose_1.prop)(),
+    (0, typegoose_1.prop)({ required: true }),
     __metadata("design:type", String)
 ], UserAccount.prototype, "dniType", void 0);
 __decorate([
-    (0, typegoose_1.prop)(),
+    (0, typegoose_1.prop)({ required: true, unique: true }),
     __metadata("design:type", String)
 ], UserAccount.prototype, "dni", void 0);
 __decorate([
-    (0, typegoose_1.prop)(),
+    (0, typegoose_1.prop)({ required: true }),
     __metadata("design:type", String)
 ], UserAccount.prototype, "firstName", void 0);
 __decorate([
-    (0, typegoose_1.prop)(),
+    (0, typegoose_1.prop)({ required: true }),
     __metadata("design:type", String)
 ], UserAccount.prototype, "lastName", void 0);
 __decorate([
@@ -51,7 +51,7 @@ __decorate([
     __metadata("design:type", String)
 ], UserAccount.prototype, "address", void 0);
 __decorate([
-    (0, typegoose_1.prop)(),
+    (0, typegoose_1.prop)({ required: true, unique: true }),
     __metadata("design:type", String)
 ], UserAccount.prototype, "email", void 0);
 __decorate([

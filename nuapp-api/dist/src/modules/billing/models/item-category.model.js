@@ -15,7 +15,7 @@ const defaultClasses_1 = require("@typegoose/typegoose/lib/defaultClasses");
 let ItemCategory = class ItemCategory extends defaultClasses_1.TimeStamps {
 };
 __decorate([
-    (0, typegoose_1.prop)({ required: true }),
+    (0, typegoose_1.prop)({ required: true, unique: true }),
     __metadata("design:type", String)
 ], ItemCategory.prototype, "code", void 0);
 __decorate([

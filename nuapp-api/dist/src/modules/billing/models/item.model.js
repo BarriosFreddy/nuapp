@@ -20,7 +20,7 @@ const item_category_model_1 = require("./item-category.model");
 class Item extends defaultClasses_1.TimeStamps {
 }
 __decorate([
-    (0, typegoose_1.prop)({ required: true }),
+    (0, typegoose_1.prop)({ required: true, unique: true }),
     __metadata("design:type", String)
 ], Item.prototype, "code", void 0);
 __decorate([

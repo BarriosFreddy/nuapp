@@ -64,41 +64,41 @@ function Categories() {
   const search = async () => {
     if (!!searchTerm) {
       dispatch(getItemCategories({ code: searchTerm.trim(), name: searchTerm.trim(), page: 1 }))
+      return
     }
+    dispatch(getItemCategories({ page: 1 }))
   }
 
   return (
     <>
       <CContainer className="mt-6" fluid>
         <CRow>
-          <div className="col">
-            <CCard className="shadow border-10">
+          <CCol>
+            <CCard className="mt-6 shadow border-10">
               {!editing && (
                 <CCardHeader className="border-0">
-                  <CContainer>
-                    <CRow>
-                      <CCol xs="4" lg="3">
-                        <CButton variant="outline" color="success" onClick={() => setEditing(true)}>
-                          NUEVA CATEGORIA
+                  <CRow>
+                    <CCol xs="4" lg="3">
+                      <CButton variant="outline" color="success" onClick={() => setEditing(true)}>
+                        NUEVA CATEGORIA
+                      </CButton>
+                    </CCol>
+                    <CCol lg="5">
+                      <CInputGroup>
+                        <CFormInput
+                          type="text"
+                          name="searchTerm"
+                          placeholder="..."
+                          value={searchTerm}
+                          onChange={(event) => onChangeField(event)}
+                          onKeyDown={(event) => onKeyDownCodeField(event)}
+                        />
+                        <CButton type="button" variant="outline" color="primary" onClick={search}>
+                          BUSCAR
                         </CButton>
-                      </CCol>
-                      <CCol lg="5">
-                        <CInputGroup>
-                          <CFormInput
-                            type="text"
-                            name="searchTerm"
-                            placeholder="..."
-                            value={searchTerm}
-                            onChange={(event) => onChangeField(event)}
-                            onKeyDown={(event) => onKeyDownCodeField(event)}
-                          />
-                          <CButton type="button" variant="outline" color="primary" onClick={search}>
-                            BUSCAR
-                          </CButton>
-                        </CInputGroup>
-                      </CCol>
-                    </CRow>
-                  </CContainer>
+                      </CInputGroup>
+                    </CCol>
+                  </CRow>
                 </CCardHeader>
               )}
               <CCardBody>
@@ -190,7 +190,7 @@ function Categories() {
                 {editing && <ItemCategoriesForm cancel={cancel} />}
               </CCardBody>
             </CCard>
-          </div>
+          </CCol>
         </CRow>
       </CContainer>
     </>

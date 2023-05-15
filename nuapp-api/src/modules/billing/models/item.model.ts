@@ -5,7 +5,7 @@ import { ItemCategory } from './item-category.model';
 
 export class Item extends TimeStamps {
   _id!: mongoose.Types.ObjectId;
-  @prop({ required: true })
+  @prop({ required: true, unique: true })
   public code!: string;
   @prop({ required: true })
   public name?: string;
@@ -17,7 +17,7 @@ export class Item extends TimeStamps {
   public units?: number;
   @prop()
   public measurementUnit?: string;
-  @prop({ ref: () => ItemCategory  })
+  @prop({ ref: () => ItemCategory })
   public categoryId?: Ref<ItemCategory>;
   @prop()
   public modifiedBy?: mongoose.Types.ObjectId;

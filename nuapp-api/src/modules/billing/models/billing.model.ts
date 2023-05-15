@@ -5,7 +5,7 @@ import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 
 export class Billing extends TimeStamps {
   _id!: mongoose.Types.ObjectId;
-  @prop({ required: true })
+  @prop({ required: true, unique: true })
   public code!: string;
   @prop()
   public billAmount?: number;

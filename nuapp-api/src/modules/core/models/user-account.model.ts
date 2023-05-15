@@ -9,13 +9,13 @@ import mongoose from 'mongoose';
 })
 export class UserAccount extends TimeStamps {
   _id!: mongoose.Types.ObjectId;
-  @prop()
+  @prop({ required: true })
   public dniType?: string;
-  @prop()
+  @prop({ required: true, unique: true })
   public dni?: string;
-  @prop()
+  @prop({ required: true })
   public firstName?: string;
-  @prop()
+  @prop({ required: true })
   public lastName?: string;
   @prop()
   public birthdate?: Date;
@@ -25,7 +25,7 @@ export class UserAccount extends TimeStamps {
   public phone?: string;
   @prop()
   public address?: string;
-  @prop()
+  @prop({ required: true, unique: true })
   public email?: string;
   @prop()
   public password?: string;

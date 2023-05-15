@@ -19,7 +19,7 @@ const mongoose_1 = __importDefault(require("mongoose"));
 class Role extends defaultClasses_1.TimeStamps {
 }
 __decorate([
-    (0, typegoose_1.prop)(),
+    (0, typegoose_1.prop)({ required: true, unique: true }),
     __metadata("design:type", String)
 ], Role.prototype, "name", void 0);
 __decorate([
