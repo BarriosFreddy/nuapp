@@ -28,6 +28,20 @@ class ItemsController {
             res.status(200).send(item);
         });
     }
+    existByCode(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { code } = req.params;
+            const item = !!(yield itemsService.existByCode(code));
+            res.status(200).send(item);
+        });
+    }
+    existByName(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { name } = req.params;
+            const item = !!(yield itemsService.existByName(name));
+            res.status(200).send(item);
+        });
+    }
     save(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const item = req.body;

@@ -1,11 +1,18 @@
 import { BaseService } from '../../../helpers/abstracts/base.service';
 import ItemCategoryModel, { ItemCategory } from '../models/item-category.model';
 import { singleton } from 'tsyringe';
+import { ExistsModel } from '../../../helpers/abstracts/exists.model';
 
 @singleton()
 export class ItemCategoryService extends BaseService<ItemCategory> {
   async findOne(id: string): Promise<ItemCategory | null> {
     return await ItemCategoryModel.findById(id).exec();
+  }
+  async existByCode(code: string): Promise<ExistsModel | null> {
+    return await ItemCategoryModel.exists({ code }).exec();
+  }
+  async existByName(name: string): Promise<ExistsModel | null> {
+    return await ItemCategoryModel.exists({ name }).exec();
   }
   async findAll({
     page = 1,
@@ -39,7 +46,10 @@ export class ItemCategoryService extends BaseService<ItemCategory> {
     }
   }
 
-  async update(id: string, itemCategory: ItemCategory): Promise<ItemCategory | null> {
+  async update(
+    id: string,
+    itemCategory: ItemCategory,
+  ): Promise<ItemCategory | null> {
     try {
       itemCategory.updatedAt = new Date();
       await ItemCategoryModel.updateOne({ _id: id }, itemCategory);

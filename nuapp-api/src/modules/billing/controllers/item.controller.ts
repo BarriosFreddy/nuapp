@@ -23,7 +23,16 @@ class ItemsController {
     const item = await itemsService.findOne(id);
     res.status(200).send(item);
   }
-
+  async existByCode(req: Request, res: Response) {
+    const { code } = req.params;
+    const item = !!(await itemsService.existByCode(code));
+    res.status(200).send(item);
+  }
+  async existByName(req: Request, res: Response) {
+    const { name } = req.params;
+    const item = !!(await itemsService.existByName(name));
+    res.status(200).send(item);
+  }
   async save(req: Request, res: Response) {
     const item: Item = req.body;
     const savedItem = await itemsService.save(item);

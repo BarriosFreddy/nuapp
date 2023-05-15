@@ -28,6 +28,16 @@ let ItemService = class ItemService extends base_service_1.BaseService {
             return yield item_model_1.default.findById(id).exec();
         });
     }
+    existByCode(code) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield item_model_1.default.exists({ code }).exec();
+        });
+    }
+    existByName(name) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield item_model_1.default.exists({ name }).exec();
+        });
+    }
     findAll({ page = 1, name, code, }) {
         return __awaiter(this, void 0, void 0, function* () {
             let filters = {};

@@ -28,6 +28,16 @@ let ItemCategoryService = class ItemCategoryService extends base_service_1.BaseS
             return yield item_category_model_1.default.findById(id).exec();
         });
     }
+    existByCode(code) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield item_category_model_1.default.exists({ code }).exec();
+        });
+    }
+    existByName(name) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return yield item_category_model_1.default.exists({ name }).exec();
+        });
+    }
     findAll({ page = 1, name, code, }) {
         return __awaiter(this, void 0, void 0, function* () {
             let filters = {};

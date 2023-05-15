@@ -39,6 +39,18 @@ itemCategoryRouter.get(
   roleValidation(generateAuthKeyPair(ModuleCode.BILLING, Privilege.ACCESS)),
   itemCategoryController.findOne,
 );
+itemCategoryRouter.get(
+  '/code/:code',
+  isAuthenticated,
+  roleValidation(generateAuthKeyPair(ModuleCode.BILLING, Privilege.ACCESS)),
+  itemCategoryController.existByCode,
+);
+itemCategoryRouter.get(
+  '/name/:name',
+  isAuthenticated,
+  roleValidation(generateAuthKeyPair(ModuleCode.BILLING, Privilege.ACCESS)),
+  itemCategoryController.existByName,
+);
 itemCategoryRouter.get('/', isAuthenticated, itemCategoryController.findAll);
 
 export default itemCategoryRouter;

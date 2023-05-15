@@ -1,11 +1,18 @@
 import { BaseService } from '../../../helpers/abstracts/base.service';
 import ItemModel, { Item } from '../models/item.model';
 import { singleton } from 'tsyringe';
+import { ExistsModel } from '../../../helpers/abstracts/exists.model';
 
 @singleton()
 export class ItemService extends BaseService<Item> {
   async findOne(id: string): Promise<Item | null> {
     return await ItemModel.findById(id).exec();
+  }
+  async existByCode(code: string): Promise<ExistsModel | null> {
+    return await ItemModel.exists({ code }).exec();
+  }
+  async existByName(name: string): Promise<ExistsModel | null> {
+    return await ItemModel.exists({ name }).exec();
   }
   async findAll({
     page = 1,

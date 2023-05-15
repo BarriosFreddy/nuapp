@@ -38,6 +38,20 @@ class ItemCategoryController {
             res.status(200).send(itemCategory);
         });
     }
+    existByCode(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { code } = req.params;
+            const itemCategory = !!(yield categoryService.existByCode(code));
+            res.status(200).send(itemCategory);
+        });
+    }
+    existByName(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { name } = req.params;
+            const itemCategory = !!(yield categoryService.existByName(name));
+            res.status(200).send(itemCategory);
+        });
+    }
     save(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const itemCategory = req.body;

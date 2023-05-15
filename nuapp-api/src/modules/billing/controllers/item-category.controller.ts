@@ -35,7 +35,16 @@ class ItemCategoryController {
     const itemCategory = await categoryService.findOne(id);
     res.status(200).send(itemCategory);
   }
-
+  async existByCode(req: Request, res: Response) {
+    const { code } = req.params;
+    const itemCategory = !!(await categoryService.existByCode(code));
+    res.status(200).send(itemCategory);
+  }
+  async existByName(req: Request, res: Response) {
+    const { name } = req.params;
+    const itemCategory = !!(await categoryService.existByName(name));
+    res.status(200).send(itemCategory);
+  }
   async save(req: Request, res: Response) {
     const itemCategory: ItemCategory = req.body;
     const savedCategory = await categoryService.save(itemCategory);
