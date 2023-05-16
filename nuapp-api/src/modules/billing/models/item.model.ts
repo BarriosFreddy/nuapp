@@ -17,6 +17,12 @@ export class Item extends TimeStamps {
   public units?: number;
   @prop()
   public measurementUnit?: string;
+  @prop()
+  public lot?: string;
+  @prop()
+  public expirationDate?: string;
+  @prop()
+  public laboratory?: string;
   @prop({ ref: () => ItemCategory })
   public categoryId?: Ref<ItemCategory>;
   @prop()

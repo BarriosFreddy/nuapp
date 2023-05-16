@@ -44,6 +44,18 @@ __decorate([
     __metadata("design:type", String)
 ], Item.prototype, "measurementUnit", void 0);
 __decorate([
+    (0, typegoose_1.prop)(),
+    __metadata("design:type", String)
+], Item.prototype, "lot", void 0);
+__decorate([
+    (0, typegoose_1.prop)(),
+    __metadata("design:type", String)
+], Item.prototype, "expirationDate", void 0);
+__decorate([
+    (0, typegoose_1.prop)(),
+    __metadata("design:type", String)
+], Item.prototype, "laboratory", void 0);
+__decorate([
     (0, typegoose_1.prop)({ ref: () => item_category_model_1.ItemCategory }),
     __metadata("design:type", Object)
 ], Item.prototype, "categoryId", void 0);

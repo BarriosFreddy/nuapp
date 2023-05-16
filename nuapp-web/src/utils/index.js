@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 
 export const formatCurrency = (amount) => {
-  return Number.isSafeInteger(amount) && amount >= 0
+  return Number.isInteger(amount) && amount >= 0
     ? new Intl.NumberFormat('es-CO', {
         style: 'currency',
         currency: 'COP',

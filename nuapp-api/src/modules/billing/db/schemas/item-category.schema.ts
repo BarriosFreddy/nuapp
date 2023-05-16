@@ -9,6 +9,7 @@ const CategoryCreateSchema: Schema = joi.object({
 const CategoryUpdateSchema: Schema = joi.object({
   name: joi.string(),
   description: joi.string(),
+  __v: joi.number(),
 });
 
 export { CategoryCreateSchema, CategoryUpdateSchema };

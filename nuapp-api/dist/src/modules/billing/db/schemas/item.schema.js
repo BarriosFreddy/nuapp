@@ -13,6 +13,9 @@ const ItemCreateSchema = joi_1.default.object({
     price: joi_1.default.number().required(),
     units: joi_1.default.number().required(),
     measurementUnit: joi_1.default.string().required(),
+    lot: joi_1.default.string(),
+    expirationDate: joi_1.default.string(),
+    laboratory: joi_1.default.string(),
 });
 exports.ItemCreateSchema = ItemCreateSchema;
 const ItemUpdateSchema = joi_1.default.object({
@@ -23,6 +26,9 @@ const ItemUpdateSchema = joi_1.default.object({
     price: joi_1.default.number(),
     units: joi_1.default.number(),
     measurementUnit: joi_1.default.string(),
+    lot: joi_1.default.string(),
+    expirationDate: joi_1.default.string(),
+    laboratory: joi_1.default.string(),
     createdAt: joi_1.default.date(),
     updatedAt: joi_1.default.date(),
     __v: joi_1.default.number(),

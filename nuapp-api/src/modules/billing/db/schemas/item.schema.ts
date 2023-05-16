@@ -8,6 +8,9 @@ const ItemCreateSchema: Schema = joi.object({
   price: joi.number().required(),
   units: joi.number().required(),
   measurementUnit: joi.string().required(),
+  lot: joi.string(),
+  expirationDate: joi.string(),
+  laboratory: joi.string(),
 });
 
 const ItemUpdateSchema: Schema = joi.object({
@@ -18,6 +21,9 @@ const ItemUpdateSchema: Schema = joi.object({
   price: joi.number(),
   units: joi.number(),
   measurementUnit: joi.string(),
+  lot: joi.string(),
+  expirationDate: joi.string(),
+  laboratory: joi.string(),
   createdAt: joi.date(),
   updatedAt: joi.date(),
   __v: joi.number(),
