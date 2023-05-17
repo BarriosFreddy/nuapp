@@ -12,7 +12,6 @@ const roleValidation = (modulePrivilege: string) => {
       
       const { infoUser } = res.locals;
       const module = await moduleService.findByCode(moduleCode);
-      console.log({ moduleCode, module });
       if (!module) throw new Error('module not found');
       if (!infoUser) throw new Error('infoUser not found');
       const { access } = module;

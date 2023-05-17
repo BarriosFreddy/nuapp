@@ -32,6 +32,7 @@ const kardex_transaction_service_1 = require("./kardex-transaction.service");
 const kardex_transaction_type_1 = require("../enums/kardex-transaction-type");
 const base_service_1 = require("../../../helpers/abstracts/base.service");
 const sequenced_code_service_1 = require("./sequenced-code.service");
+const dayjs_1 = __importDefault(require("dayjs"));
 const kardexTransactionService = tsyringe_1.container.resolve(kardex_transaction_service_1.KardexTransactionService);
 const sequencedCodeService = tsyringe_1.container.resolve(sequenced_code_service_1.SequencedCodeService);
 let BillingService = class BillingService extends base_service_1.BaseService {
@@ -48,6 +49,86 @@ let BillingService = class BillingService extends base_service_1.BaseService {
                 .sort({ createdAt: -1 })
                 .exec();
             return bills;
+        });
+    }
+    findPerDate(date, projection) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const startDate = (0, dayjs_1.default)(date)
+                .set('hours', 0)
+                .set('minutes', 0)
+                .set('seconds', 0)
+                .toDate();
+            const endDate = (0, dayjs_1.default)(date)
+                .set('hours', 23)
+                .set('minutes', 59)
+                .set('seconds', 59)
+                .toDate();
+            const billings = yield billing_model_1.default.find({
+                createdAt: {
+                    $gte: startDate,
+                    $lte: endDate,
+                },
+            }, projection).exec();
+            return billings;
+        });
+    }
+    findGreaterThanDate(date) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const startDate = (0, dayjs_1.default)(date)
+                .set('hours', 0)
+                .set('minutes', 0)
+                .set('seconds', 0)
+                .toDate();
+            const billings = yield billing_model_1.default.aggregate([
+                {
+                    $match: {
+                        createdAt: {
+                            $gte: startDate,
+                        },
+                    },
+                },
+                {
+                    $project: {
+                        createdAt: 1,
+                        billAmount: 1,
+                    },
+                },
+                {
+                    $addFields: {
+                        createdAt: {
+                            $substr: ['$createdAt', 0, 10],
+                        },
+                    },
+                },
+                {
+                    $group: {
+                        _id: '$createdAt',
+                        billAmount: {
+                            $sum: '$billAmount',
+                        },
+                    },
+                },
+                {
+                    $addFields: {
+                        createdAt: {
+                            $toDate: '$_id',
+                        },
+                    },
+                },
+                {
+                    $sort: {
+                        createdAt: 1,
+                    },
+                },
+                {
+                    $project: {
+                        _id: 0,
+                        createdAt: '$_id',
+                        billAmount: 1,
+                    },
+                },
+            ]).exec();
+            return billings;
         });
     }
     save(billing) {

@@ -20,7 +20,6 @@ const roleValidation = (modulePrivilege) => {
             const [moduleCode, privilege] = modulePrivilege.split(':');
             const { infoUser } = res.locals;
             const module = yield moduleService.findByCode(moduleCode);
-            console.log({ moduleCode, module });
             if (!module)
                 throw new Error('module not found');
             if (!infoUser)

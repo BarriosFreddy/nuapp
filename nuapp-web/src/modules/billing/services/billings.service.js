@@ -11,3 +11,8 @@ export const getBillings =
     const { data, status } = await api.get(`/billings?page=${page}`)
     if (status === 200) dispatch(setBillings(data))
   }
+
+export const getBillingsGTDate = (date) => async (dispatch, _, api) => {
+  const { data, status } = await api.get(`/billings/per/${date}`)
+  if (status === 200) dispatch(setBillings(data))
+}

@@ -5,6 +5,10 @@ import { KardexTransactionType } from '../enums/kardex-transaction-type';
 import { BaseService } from '../../../helpers/abstracts/base.service';
 import { KardexTransaction } from '../models/kardex-transaction.model';
 import { SequencedCodeService } from './sequenced-code.service';
+import { ProjectionType } from 'mongoose';
+import { DocumentType } from '@typegoose/typegoose';
+import { BeAnObject } from '@typegoose/typegoose/lib/types';
+import dayjs from 'dayjs';
 
 const kardexTransactionService = container.resolve(KardexTransactionService);
 const sequencedCodeService = container.resolve(SequencedCodeService);
@@ -21,6 +25,91 @@ export class BillingService extends BaseService<Billing> {
       .sort({ createdAt: -1 })
       .exec();
     return bills;
+  }
+  async findPerDate(
+    date: Date,
+    projection:
+      | ProjectionType<DocumentType<Billing, BeAnObject>>
+      | null
+      | undefined,
+  ): Promise<Billing[]> {
+    const startDate = dayjs(date)
+      .set('hours', 0)
+      .set('minutes', 0)
+      .set('seconds', 0)
+      .toDate();
+    const endDate = dayjs(date)
+      .set('hours', 23)
+      .set('minutes', 59)
+      .set('seconds', 59)
+      .toDate();
+    const billings: Billing[] = await BillingModel.find(
+      {
+        createdAt: {
+          $gte: startDate,
+          $lte: endDate,
+        },
+      },
+      projection,
+    ).exec();
+    return billings;
+  }
+  async findGreaterThanDate(date: string): Promise<Billing[]> {
+    const startDate = dayjs(date)
+      .set('hours', 0)
+      .set('minutes', 0)
+      .set('seconds', 0)
+      .toDate();
+    const billings: Billing[] = await BillingModel.aggregate([
+      {
+        $match: {
+          createdAt: {
+            $gte: startDate,
+          },
+        },
+      },
+      {
+        $project: {
+          createdAt: 1,
+          billAmount: 1,
+        },
+      },
+      {
+        $addFields: {
+          createdAt: {
+            $substr: ['$createdAt', 0, 10],
+          },
+        },
+      },
+      {
+        $group: {
+          _id: '$createdAt',
+          billAmount: {
+            $sum: '$billAmount',
+          },
+        },
+      },
+      {
+        $addFields: {
+          createdAt: {
+            $toDate: '$_id',
+          },
+        },
+      },
+      {
+        $sort: {
+          createdAt: 1,
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          createdAt: '$_id',
+          billAmount: 1,
+        },
+      },
+    ]).exec();
+    return billings;
   }
   async save(billing: Billing): Promise<Billing> {
     try {

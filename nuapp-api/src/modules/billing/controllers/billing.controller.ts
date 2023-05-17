@@ -18,6 +18,11 @@ class BillingController {
     const billing = await billingService.findOne(id);
     res.status(200).send(billing);
   }
+  async findGreaterThanDate(req: Request, res: Response) {
+    const { date } = req.params;
+    const billings = await billingService.findGreaterThanDate(date);
+    res.status(200).send(billings);
+  }
 
   async save(req: Request, res: Response) {
     const billing: Billing = req.body;

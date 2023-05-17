@@ -43,15 +43,17 @@ const BillingForm = (props) => {
 
   const onChangeField = ({ target: { value } }) => {
     setSearchTerm(value)
+    search(value)
   }
 
   const onKeyDownCodeField = async ({ keyCode }) => {
     if ([ENTER_KEYCODE, TAB_KEYCODE].includes(keyCode)) search()
   }
 
-  const search = async () => {
-    if (!!searchTerm) {
-      dispatch(getItems({ code: searchTerm, name: searchTerm, page: 1 }))
+  const search = async (term) => {
+    const termToSearch = term ?? searchTerm
+    if (!!termToSearch) {
+      dispatch(getItems({ code: termToSearch, name: termToSearch, page: 1 }))
     }
   }
 
@@ -131,9 +133,6 @@ const BillingForm = (props) => {
                 onChange={(event) => onChangeField(event)}
                 onKeyDown={(event) => onKeyDownCodeField(event)}
               />
-              <CButton variant="outline" type="button" color="primary" onClick={search}>
-                BUSCAR
-              </CButton>
               <CButton variant="outline" type="button" color="secondary" onClick={clear}>
                 BORRAR
               </CButton>

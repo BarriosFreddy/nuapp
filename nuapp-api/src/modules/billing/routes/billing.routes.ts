@@ -28,6 +28,12 @@ billingRouter.get(
   roleValidation(generateAuthKeyPair(ModuleCode.BILLING, Privilege.ACCESS)),
   billingController.findOne,
 );
+billingRouter.get(
+  '/per/:date',
+  isAuthenticated,
+  roleValidation(generateAuthKeyPair(ModuleCode.BILLING, Privilege.ACCESS)),
+  billingController.findGreaterThanDate,
+);
 billingRouter.get('/', isAuthenticated, billingController.findAll);
 
 export default billingRouter;

@@ -28,6 +28,13 @@ class BillingController {
             res.status(200).send(billing);
         });
     }
+    findGreaterThanDate(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const { date } = req.params;
+            const billings = yield billingService.findGreaterThanDate(date);
+            res.status(200).send(billings);
+        });
+    }
     save(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const billing = req.body;
