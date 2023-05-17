@@ -25,7 +25,7 @@ class AuthController {
                 .cookie('access_token', access_token, {
                 httpOnly: true,
                 secure: NODE_ENV === 'production',
-                sameSite: 'none',
+                sameSite: NODE_ENV === 'production' ? 'none' : 'Lax',
             })
                 .send({
                 message: 'Authenticated successfully',

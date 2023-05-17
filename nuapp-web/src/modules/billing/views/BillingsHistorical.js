@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   CCard,
@@ -94,8 +94,10 @@ function BillingsHistorical() {
                             <CTableDataCell className="fs-6" xs="12">
                               {billing.code}
                             </CTableDataCell>
-                            <CTableDataCell xs="12">{billing.items.length}</CTableDataCell>
-                            <CTableDataCell xs="12">{billing.billAmount}</CTableDataCell>
+                            <CTableDataCell xs="12">{billing.items?.length}</CTableDataCell>
+                            <CTableDataCell xs="12">
+                              {formatCurrency(billing.billAmount)}
+                            </CTableDataCell>
                             <CTableDataCell xs="12">
                               <CButton
                                 size="sm"

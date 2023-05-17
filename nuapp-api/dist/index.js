@@ -46,7 +46,7 @@ const morgan_1 = __importDefault(require("morgan"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const routes_1 = require("./src/routes");
 const mongodb_1 = require("./src/helpers/db/mongodb");
-const { PORT = 3000, DATABASE_URI = '' } = process.env;
+const { PORT = 3000, DATABASE_URI = '', NODE_ENV } = process.env;
 const app = (0, express_1.default)();
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -55,7 +55,9 @@ const app = (0, express_1.default)();
         app.use((0, cookie_parser_1.default)());
         app.use((0, cors_1.default)({
             credentials: true,
-            origin: ['https://nuapp.vercel.app', 'http://localhost:3000'],
+            origin: NODE_ENV === 'production'
+                ? 'https://nuapp.vercel.app'
+                : 'http://localhost:3000',
         }));
         app.use((0, compression_1.default)());
         app.use((0, morgan_1.default)('common'));

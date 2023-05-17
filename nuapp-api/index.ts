@@ -10,7 +10,7 @@ import cookieParser from 'cookie-parser';
 import { registerRoutes } from './src/routes';
 import { connectDB } from './src/helpers/db/mongodb';
 
-const { PORT = 3000, DATABASE_URI = '' } = process.env;
+const { PORT = 3000, DATABASE_URI = '', NODE_ENV } = process.env;
 
 const app: Express = express();
 
@@ -22,7 +22,10 @@ const app: Express = express();
     app.use(
       cors({
         credentials: true,
-        origin: ['https://nuapp.vercel.app', 'http://localhost:3000'],
+        origin:
+          NODE_ENV === 'production'
+            ? 'https://nuapp.vercel.app'
+            : 'http://localhost:3000',
       }),
     );
     app.use(compression());
