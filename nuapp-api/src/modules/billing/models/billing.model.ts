@@ -11,7 +11,7 @@ export class Billing extends TimeStamps {
   public billAmount?: number;
   @prop()
   public receivedAmount?: number;
-  @prop()
+  @prop({ ref: () => Item })
   public items!: Item[];
   @prop()
   public modifiedBy?: mongoose.Types.ObjectId;

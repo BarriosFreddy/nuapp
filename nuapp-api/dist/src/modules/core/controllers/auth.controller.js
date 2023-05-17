@@ -25,7 +25,7 @@ class AuthController {
                 .cookie('access_token', access_token, {
                 httpOnly: true,
                 secure: NODE_ENV === 'production',
-                sameSite: NODE_ENV === 'production' ? 'none' : 'Lax',
+                sameSite: NODE_ENV === 'production' ? 'none' : 'lax',
             })
                 .send({
                 message: 'Authenticated successfully',
@@ -34,6 +34,7 @@ class AuthController {
     }
     logout(_req, res) {
         return __awaiter(this, void 0, void 0, function* () {
+            res.locals.infoUser = null;
             return res
                 .status(200)
                 .clearCookie('access_token')
@@ -43,7 +44,12 @@ class AuthController {
     infoUser(_req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const { infoUser } = res.locals;
-            return res.status(200).send(infoUser);
+            if (infoUser) {
+                res.status(200).send(infoUser);
+            }
+            else {
+                res.status(403).send(null);
+            }
         });
     }
 }

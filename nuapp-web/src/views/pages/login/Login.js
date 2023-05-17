@@ -23,8 +23,8 @@ const Login = () => {
   const isLoggedIn = useSelector((state) => state.app.isLoggedIn)
   const dispatch = useDispatch()
   const [userAccountLogin, setUserAccountLogin] = useState({
-    email: 'admin@f.com',
-    password: 'fbarrios',
+    email: '',
+    password: '',
   })
 
   const onChangeInput = ({ target }) => {
