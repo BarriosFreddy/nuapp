@@ -30,7 +30,11 @@ class AuthController {
     res.locals.infoUser = null;
     return res
       .status(200)
-      .clearCookie('access_token')
+      .clearCookie('access_token', {
+        httpOnly: true,
+        secure: NODE_ENV === 'production',
+        sameSite: NODE_ENV === 'production' ? 'none' : 'lax',
+      })
       .send({ message: 'Logged out successfully' });
   }
 
