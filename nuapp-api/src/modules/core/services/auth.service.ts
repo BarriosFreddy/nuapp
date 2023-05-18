@@ -22,11 +22,10 @@ export class AuthService {
     if (!isTheSame) return null;
     const data = {
       _id: userAccount._id,
-      email: userAccount.email,
       roles: userAccount.roles,
     };
     const access_token = this.generateToken(data);
-    return access_token;
+    return { access_token, data };
   }
 
   private generateToken(data: {}): string {

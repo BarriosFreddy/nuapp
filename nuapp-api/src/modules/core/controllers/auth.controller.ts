@@ -10,7 +10,9 @@ const authService = container.resolve(AuthService);
 class AuthController {
   async authenticate(req: Request, res: Response) {
     const userAccountLogin: UserAccountLogin = req.body;
-    const access_token = await authService.authenticate(userAccountLogin);
+    const { access_token, data } = await authService.authenticate(
+      userAccountLogin,
+    );
     if (!access_token)
       return res.status(403).send({ message: 'credentials invalid' });
 
@@ -21,9 +23,7 @@ class AuthController {
         secure: NODE_ENV === 'production',
         sameSite: NODE_ENV === 'production' ? 'none' : 'lax',
       })
-      .send({
-        message: 'Authenticated successfully',
-      });
+      .send(data);
   }
 
   async logout(_req: Request, res: Response) {

@@ -17,7 +17,7 @@ class AuthController {
     authenticate(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             const userAccountLogin = req.body;
-            const access_token = yield authService.authenticate(userAccountLogin);
+            const { access_token, data } = yield authService.authenticate(userAccountLogin);
             if (!access_token)
                 return res.status(403).send({ message: 'credentials invalid' });
             return res
@@ -27,9 +27,7 @@ class AuthController {
                 secure: NODE_ENV === 'production',
                 sameSite: NODE_ENV === 'production' ? 'none' : 'lax',
             })
-                .send({
-                message: 'Authenticated successfully',
-            });
+                .send(data);
         });
     }
     logout(_req, res) {
