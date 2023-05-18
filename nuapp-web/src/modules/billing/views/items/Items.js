@@ -32,15 +32,14 @@ const { ENTER_KEYCODE, TAB_KEYCODE } = CONSTANTS
 function Item() {
   const dispatch = useDispatch()
   const items = useSelector((state) => state.items.items)
-  const saveSuccess = useSelector((state) => state.items.saveSuccess)
+  //const saveSuccess = useSelector((state) => state.items.saveSuccess)
   const [searchTerm, setSearchTerm] = useState('')
   let [editing, setEditing] = useState(false)
   let [page, setPage] = useState(1)
 
   useEffect(() => {
     dispatch(getItems())
-    //if (saveSuccess)
-  }, [saveSuccess])
+  }, [dispatch])
 
   const save = (item) => {
     if (item._id) {

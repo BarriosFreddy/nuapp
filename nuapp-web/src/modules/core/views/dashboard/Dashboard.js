@@ -70,8 +70,7 @@ const Dashboard = () => {
   const tenDaysBefore = dayjs().subtract(10, 'days').format('YYYY-MM-DD')
   useEffect(() => {
     dispatch(getBillingsGTDate(tenDaysBefore))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [dispatch, tenDaysBefore])
 
   const labels = billings ? billings.map(({ createdAt }) => createdAt) : []
   const data = billings ? billings.map(({ billAmount }) => billAmount) : []

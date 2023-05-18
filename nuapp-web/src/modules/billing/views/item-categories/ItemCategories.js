@@ -34,7 +34,7 @@ function Categories() {
 
   useEffect(() => {
     dispatch(getItemCategories())
-  }, [])
+  }, [dispatch])
 
   const cancel = async () => {
     dispatch(getItemCategories())

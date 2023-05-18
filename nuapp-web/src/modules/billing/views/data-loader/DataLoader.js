@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react'
+import React, { useState, useEffect, Fragment, useCallback } from 'react'
 
 import {
   CCard,
@@ -28,11 +28,7 @@ function DataLoader() {
   let [items, setItems] = useState([])
   let [feedbackInvalid, setFeedbackInvalid] = useState(null)
 
-  useEffect(() => {
-    saveSuccess && showSuccessfulPopup()
-  }, [saveSuccess])
-
-  function showSuccessfulPopup() {
+  const showSuccessfulPopup = useCallback(() => {
     dispatch(
       setToastConfig({
         message: 'Carga de datos exitosa',
@@ -42,7 +38,11 @@ function DataLoader() {
     dispatch(setShowToast(true))
     dispatch(setSaveSuccess(false))
     setItems([])
-  }
+  }, [dispatch])
+
+  useEffect(() => {
+    saveSuccess && showSuccessfulPopup()
+  }, [saveSuccess, showSuccessfulPopup])
 
   const handleChange = ({ target }) => {
     const file = target.files[0]

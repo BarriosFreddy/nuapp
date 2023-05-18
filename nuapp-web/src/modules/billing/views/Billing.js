@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   CButton,
@@ -28,15 +28,29 @@ function Billing() {
   const saveSuccess = useSelector((state) => state.billing.saveSuccess)
   const dispatch = useDispatch()
   let [items, setItems] = useState([])
-  let [loading, setLoading] = useState(false)
   let [receivedAmount, setReceivedAmount] = useState(0)
   let [total, setTotal] = useState(0)
   let [itemUnits, setItemUnits] = useState({})
-  let [paying, setPaying] = useState(false)
+
+  const clear = useCallback(() => {
+    setItems([])
+    setReceivedAmount(0)
+    setTotal(0)
+    setItemUnits({})
+    dispatch(
+      setToastConfig({
+        message: 'Guardado exitoso!',
+        color: 'success',
+        delay: 2000,
+      }),
+    )
+    dispatch(setShowToast(true))
+    dispatch(setSaveSuccess(false))
+  }, [dispatch])
 
   useEffect(() => {
     if (saveSuccess) clear()
-  }, [saveSuccess])
+  }, [saveSuccess, clear])
 
   const addItem = async (item) => {
     let itemUnitsAdded = {}
@@ -78,41 +92,32 @@ function Billing() {
   }
 
   const save = async () => {
-    if (isValid()) {
+    if (isNotValid()) {
       dispatch(
-        saveBilling({
-          billAmount: total,
-          items: getItemsData(items),
+        setToastConfig({
+          message: 'Revisa la cantidad recibida y el total',
+          color: 'warning',
         }),
       )
-      setLoading(true)
+      dispatch(setShowToast(true))
+      return
+    }
+    if (hasNotItems()) {
+      dispatch(
+        setToastConfig({
+          message: 'No hay productos por facturar',
+          color: 'warning',
+        }),
+      )
+      dispatch(setShowToast(true))
       return
     }
     dispatch(
-      setToastConfig({
-        message: 'Revisa la cantidad recibida y el total',
-        color: 'warning',
+      saveBilling({
+        billAmount: total,
+        items: getItemsData(items),
       }),
     )
-    dispatch(setShowToast(true))
-  }
-
-  function clear() {
-    setItems([])
-    setReceivedAmount(0)
-    setTotal(0)
-    setItemUnits({})
-    setPaying(false)
-    setLoading(false)
-    dispatch(
-      setToastConfig({
-        message: 'Guardado exitoso!',
-        color: 'success',
-        delay: 2000,
-      }),
-    )
-    dispatch(setShowToast(true))
-    dispatch(setSaveSuccess(false))
   }
 
   const getItemsData = () =>
@@ -125,39 +130,23 @@ function Billing() {
       measurementUnit,
     }))
 
-  const isValid = () => {
-    return receivedAmount > 0 && receivedAmount >= total
-  }
+  const isNotValid = () => receivedAmount <= 0 && receivedAmount < total
+
+  const hasNotItems = () => items.length <= 0
 
   const hanndleReceivedAmount = (receivedAmount) => setReceivedAmount(receivedAmount)
-
-  function handleProceed() {
-    if (items.length <= 0) {
-      dispatch(
-        setToastConfig({
-          message: 'No hay productos por facturar',
-          color: 'warning',
-        }),
-      )
-      dispatch(setShowToast(true))
-      return
-    }
-    setPaying(true)
-  }
 
   return (
     <>
       <CContainer className="mt--6" fluid>
         <CRow>
-          <CCol>
+          <CCol lg="5">
             <CCard className="shadow border-10" style={{ height: '68vh' }}>
               <CCardBody style={{ overflow: 'auto' }}>
                 <CTable hover>
                   <CTableHead>
                     <CTableRow>
-                      <CTableHeaderCell>Nombre</CTableHeaderCell>
-                      <CTableHeaderCell>Código</CTableHeaderCell>
-                      <CTableHeaderCell>Precio</CTableHeaderCell>
+                      <CTableHeaderCell>Producto</CTableHeaderCell>
                       <CTableHeaderCell>Cantidad</CTableHeaderCell>
                       <CTableHeaderCell>Subtotal</CTableHeaderCell>
                       <CTableHeaderCell>&nbsp;</CTableHeaderCell>
@@ -166,14 +155,13 @@ function Billing() {
                   <CTableBody>
                     {items.map(({ code, name, price }) => (
                       <CTableRow key={code}>
-                        <CTableDataCell xs="12" className="text-uppercase">
-                          {name}
-                        </CTableDataCell>
-                        <CTableDataCell className="fs-6" xs="12">
-                          {code}
-                        </CTableDataCell>
-                        <CTableDataCell xs="12" className="text-break">
-                          {formatCurrency(price)}
+                        <CTableDataCell xs="12">
+                          <CRow>
+                            <CCol className="text-uppercase">{name}</CCol>
+                          </CRow>
+                          <CRow>
+                            <CCol style={{ fontSize: 10 }}>{code}</CCol>
+                          </CRow>
                         </CTableDataCell>
                         <CTableDataCell colSpan={1}>
                           <CFormInput
@@ -202,20 +190,13 @@ function Billing() {
               </CCardBody>
             </CCard>
           </CCol>
-          <CCol>
+          <CCol lg="7">
             <CCard className="shadow border-10" style={{ height: '68vh' }}>
               <CCardBody>
-                <CRow>
-                  <CCol>
-                    {!paying && <BillingForm addItem={addItem} />}
-                    {paying && (
-                      <PaymentComp
-                        setReceivedAmount={hanndleReceivedAmount}
-                        total={total}
-                      ></PaymentComp>
-                    )}
-                  </CCol>
-                </CRow>
+                <div style={{ height: '35vh', overflowY: 'auto' }}>
+                  <BillingForm addItem={addItem} />
+                </div>
+                <PaymentComp setReceivedAmount={hanndleReceivedAmount} total={total}></PaymentComp>
               </CCardBody>
             </CCard>
           </CCol>
@@ -223,19 +204,17 @@ function Billing() {
         <CRow className="mt-3 align-items-end">
           <CCard className="shadow border-10">
             <CCardBody>
-              <CRow>
-                <CCol lg={{ span: 6, offset: 0 }}>
+              <CRow className="mt-3">
+                <CCol lg="4">
                   <div className="d-grid gap-2">
-                    {!paying && (
-                      <CButton size="lg" color="primary" onClick={handleProceed}>
-                        FACTURAR
-                      </CButton>
-                    )}
-                    {paying && (
-                      <CButton size="lg" color="success" onClick={save} disabled={loading}>
-                        FACTURAR
-                      </CButton>
-                    )}
+                    <CButton
+                      size="lg"
+                      color="success"
+                      onClick={save}
+                      disabled={isNotValid() || hasNotItems()}
+                    >
+                      FACTURAR
+                    </CButton>
                   </div>
                 </CCol>
                 <CCol lg="6" className="fs-1">

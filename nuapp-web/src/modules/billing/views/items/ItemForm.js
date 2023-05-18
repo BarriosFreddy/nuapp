@@ -49,7 +49,7 @@ function ItemForm(props) {
   useEffect(() => {
     itemGlobal && setItem(itemGlobal)
     dispatch(getItemCategories({ parse: true }))
-  }, [itemGlobal])
+  }, [dispatch, itemGlobal])
 
   const onChangeField = ({ target: { name, value } }) => {
     setItem({

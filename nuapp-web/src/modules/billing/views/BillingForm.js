@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import Quagga from 'quagga'
 import { PropTypes } from 'prop-types'
 
@@ -37,9 +37,15 @@ const BillingForm = (props) => {
   const toggle = () => setModal(!modal)
   const searchTermInput = useRef()
 
+  const clear = useCallback(() => {
+    dispatch(setItems([]))
+    setSearchTerm('')
+    searchTermInput.current.focus()
+  }, [dispatch])
+
   useEffect(() => {
     clear()
-  }, [])
+  }, [clear])
 
   const onChangeField = ({ target: { value } }) => {
     setSearchTerm(value)
@@ -57,11 +63,7 @@ const BillingForm = (props) => {
     }
   }
 
-  function clear() {
-    dispatch(setItems([]))
-    setSearchTerm('')
-    searchTermInput.current.focus()
-  }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
 
   // eslint-disable-next-line no-unused-vars
   const scanItem = () => {
@@ -145,7 +147,6 @@ const BillingForm = (props) => {
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell>Nombre</CTableHeaderCell>
-                  <CTableHeaderCell>Código</CTableHeaderCell>
                   <CTableHeaderCell>Precio</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
@@ -156,9 +157,13 @@ const BillingForm = (props) => {
                     onClick={() => addItem(item)}
                     style={{ cursor: 'pointer' }}
                   >
-                    <CTableDataCell className="text-uppercase">{item.name}</CTableDataCell>
-                    <CTableDataCell className="fs-6" xs="12">
-                      {item.code}
+                    <CTableDataCell xs="12">
+                      <CRow>
+                        <CCol className="text-uppercase">{item.name}</CCol>
+                      </CRow>
+                      <CRow>
+                        <CCol style={{ fontSize: 10 }}>{item.code}</CCol>
+                      </CRow>
                     </CTableDataCell>
                     <CTableDataCell className="text-break">
                       {formatCurrency(item.price)}

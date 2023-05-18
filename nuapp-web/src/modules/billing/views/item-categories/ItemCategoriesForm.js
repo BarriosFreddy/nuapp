@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { CButton, CRow, CContainer, CCol, CFormInput, CForm } from '@coreui/react'
 import { useDispatch } from 'react-redux'
@@ -19,10 +19,6 @@ function ItemCategoriesForm(props) {
     description: false,
     name: false,
   })
-
-  useEffect(() => {
-    ;(async () => {})()
-  }, [])
 
   const onChangeField = ({ target: { name, value } }) => {
     setItemCategory({

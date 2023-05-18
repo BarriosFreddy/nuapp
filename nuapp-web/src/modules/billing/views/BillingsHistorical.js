@@ -26,7 +26,7 @@ function BillingsHistorical() {
 
   useEffect(() => {
     dispatch(getBillings())
-  }, [])
+  }, [dispatch])
 
   const handlePrevPage = async () => {
     const newPage = page === 1 ? 1 : page - 1
