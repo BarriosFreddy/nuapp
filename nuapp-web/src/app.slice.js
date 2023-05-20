@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  sidebarShow: false,
+  sidebarShow: true,
+  sidebarUnfoldable: true,
+  showHeader: true,
   isLoggedIn: false,
   infoUser: null,
-  sidebarUnfoldable: false,
   showToast: false,
   toastConfig: {
     message: '',
@@ -21,6 +22,9 @@ export const appSlice = createSlice({
     },
     setSidebarShow: (state, action) => {
       state.sidebarShow = action.payload
+    },
+    setShowHeader: (state, action) => {
+      state.showHeader = action.payload
     },
     setInfoUser: (state, action) => {
       state.infoUser = action.payload
@@ -44,6 +48,7 @@ export const {
   setSidebarUnfoldable,
   setShowToast,
   setToastConfig,
+  setShowHeader,
 } = appSlice.actions
 
 export default appSlice.reducer

@@ -87,7 +87,7 @@ function BillingsHistorical() {
                       </CTableHead>
                       <CTableBody>
                         {billings.map((billing) => (
-                          <CTableRow key={billing.code}>
+                          <CTableRow key={billing._id}>
                             <CTableDataCell xs="12" className="text-uppercase">
                               {formatDate(billing.createdAt)}
                             </CTableDataCell>

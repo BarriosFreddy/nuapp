@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect, useCallback, useRef, createRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   CButton,
@@ -21,16 +21,24 @@ import CIcon from '@coreui/icons-react'
 import { cilTrash } from '@coreui/icons'
 import PaymentComp from './Payment'
 import { saveBilling } from '../../../modules/billing/services/billings.service'
-import { setShowToast, setToastConfig } from 'src/app.slice'
+import { setShowToast, setSidebarUnfoldable, setToastConfig } from 'src/app.slice'
 import { setSaveSuccess } from '../reducers/billings.reducer'
 
 function Billing() {
   const saveSuccess = useSelector((state) => state.billing.saveSuccess)
+
   const dispatch = useDispatch()
   let [items, setItems] = useState([])
   let [receivedAmount, setReceivedAmount] = useState(0)
   let [total, setTotal] = useState(0)
   let [itemUnits, setItemUnits] = useState({})
+  let [paying, setPaying] = useState(false)
+  const isReceivedLTTotal = receivedAmount < total
+  const hasNotItems = items.length <= 0
+
+  useEffect(() => {
+    dispatch(setSidebarUnfoldable(true))
+  }, [dispatch])
 
   const clear = useCallback(() => {
     setItems([])
@@ -91,18 +99,22 @@ function Billing() {
     calculateTotal(items, itemUnitsAdded)
   }
 
-  const save = async () => {
-    if (isNotValid()) {
+  const handleCharge = () => {
+    setPaying(true)
+  }
+
+  const handleSave = async () => {
+    if (isReceivedLTTotal) {
       dispatch(
         setToastConfig({
-          message: 'Revisa la cantidad recibida y el total',
+          message: 'Revisa el monto recibido y el total',
           color: 'warning',
         }),
       )
       dispatch(setShowToast(true))
       return
     }
-    if (hasNotItems()) {
+    if (hasNotItems) {
       dispatch(
         setToastConfig({
           message: 'No hay productos por facturar',
@@ -114,10 +126,12 @@ function Billing() {
     }
     dispatch(
       saveBilling({
+        receivedAmount,
         billAmount: total,
         items: getItemsData(items),
       }),
     )
+    setPaying(false)
   }
 
   const getItemsData = () =>
@@ -130,18 +144,13 @@ function Billing() {
       measurementUnit,
     }))
 
-  const isNotValid = () => receivedAmount <= 0 && receivedAmount < total
-
-  const hasNotItems = () => items.length <= 0
-
   const hanndleReceivedAmount = (receivedAmount) => setReceivedAmount(receivedAmount)
-
   return (
     <>
       <CContainer className="mt--6" fluid>
         <CRow>
           <CCol lg="5">
-            <CCard className="shadow border-10" style={{ height: '68vh' }}>
+            <CCard className="shadow border-10" style={{ height: '78vh' }}>
               <CCardBody style={{ overflow: 'auto' }}>
                 <CTable hover>
                   <CTableHead>
@@ -191,12 +200,10 @@ function Billing() {
             </CCard>
           </CCol>
           <CCol lg="7">
-            <CCard className="shadow border-10" style={{ height: '68vh' }}>
+            <CCard className="shadow border-10" style={{ height: '78vh', overflowY: 'auto' }}>
               <CCardBody>
-                <div style={{ height: '35vh', overflowY: 'auto' }}>
-                  <BillingForm addItem={addItem} />
-                </div>
-                <PaymentComp setReceivedAmount={hanndleReceivedAmount} total={total}></PaymentComp>
+                {!paying && <BillingForm addItem={addItem} />}
+                {paying && <PaymentComp setReceivedAmount={hanndleReceivedAmount} total={total} />}
               </CCardBody>
             </CCard>
           </CCol>
@@ -205,20 +212,20 @@ function Billing() {
           <CCard className="shadow border-10">
             <CCardBody>
               <CRow className="mt-3">
-                <CCol lg="4">
+                <CCol lg="5">
                   <div className="d-grid gap-2">
                     <CButton
                       size="lg"
-                      color="success"
-                      onClick={save}
-                      disabled={isNotValid() || hasNotItems()}
+                      color={paying ? 'success' : 'primary'}
+                      onClick={paying ? handleSave : handleCharge}
+                      disabled={paying ? isReceivedLTTotal : hasNotItems}
                     >
-                      FACTURAR
+                      {paying ? 'FACTURAR' : 'COBRAR'}
                     </CButton>
                   </div>
                 </CCol>
                 <CCol lg="6" className="fs-1">
-                  <span style={{ fontWeight: 'bold' }}>POR COBRAR</span>&nbsp;
+                  <span>POR COBRAR</span>&nbsp;
                   {formatCurrency(total)}
                 </CCol>
               </CRow>
