@@ -53,7 +53,12 @@ const BillingForm = (props) => {
   }
 
   const onKeyDownCodeField = async ({ keyCode }) => {
-    if ([ENTER_KEYCODE, TAB_KEYCODE].includes(keyCode)) search()
+    if ([ENTER_KEYCODE, TAB_KEYCODE].includes(keyCode)) {
+      search()
+      setTimeout(() => {
+        if (items.length > 0) addItem(items[0])
+      }, 500)
+    }
   }
 
   const search = async (term) => {

@@ -4,6 +4,7 @@ const initialState = {
   saveSuccess: false,
   items: [],
   item: null,
+  loading: false,
 }
 
 export const itemsSlice = createSlice({
@@ -11,6 +12,7 @@ export const itemsSlice = createSlice({
   initialState,
   reducers: {
     saveSuccess: (state, action) => void (state.saveSuccess = action.payload),
+    setLoading: (state, action) => void (state.loading = action.payload),
     setItems: (state, action) => void (state.items = action.payload),
     setItem: (state, action) => void (state.item = action.payload),
   },
