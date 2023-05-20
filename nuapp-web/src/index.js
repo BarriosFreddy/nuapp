@@ -6,6 +6,7 @@ import App from './App'
 import reportWebVitals from './reportWebVitals'
 import { Provider } from 'react-redux'
 import store from './store'
+import { register } from './serviceWorkerRegistration'
 
 createRoot(document.getElementById('root')).render(
   <Provider store={store}>
@@ -17,3 +18,4 @@ createRoot(document.getElementById('root')).render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals()
+register()
