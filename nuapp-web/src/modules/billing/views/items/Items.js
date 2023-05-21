@@ -86,7 +86,7 @@ function Item() {
     setEditing(true)
     dispatch(setItem(item))
   }
-
+  console.log({ items })
   return (
     <>
       <CContainer className="mt--6" fluid>

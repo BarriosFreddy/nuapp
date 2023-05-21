@@ -38,17 +38,24 @@ let ItemService = class ItemService extends base_service_1.BaseService {
             return yield item_model_1.default.exists({ name }).exec();
         });
     }
-    findAll({ page = 1, name, code, }) {
+    findAll({ page, name, code, }) {
         return __awaiter(this, void 0, void 0, function* () {
             let filters = {};
             let conditions = [];
             name && conditions.push({ name: new RegExp(`${name}`, 'i') });
             code && conditions.push({ code: new RegExp(`${code}`, 'i') });
             conditions.length > 0 && (filters = Object.assign({ ['$or']: conditions }, filters));
-            const items = yield item_model_1.default.find(filters)
-                .skip(10 * (page - 1))
-                .limit(10)
-                .exec();
+            const query = item_model_1.default.find(filters, {
+                code: 1,
+                name: 1,
+                description: 1,
+                price: 1,
+                measurementUnit: 1,
+                expirationDate: 1,
+            });
+            if (page)
+                query.skip(10 * (page - 1)).limit(10);
+            const items = yield query.exec();
             return items;
         });
     }

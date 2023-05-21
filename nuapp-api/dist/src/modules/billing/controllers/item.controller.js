@@ -15,8 +15,7 @@ const itemsService = tsyringe_1.container.resolve(item_service_1.ItemService);
 class ItemsController {
     findAll(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
-            let { page = 1, name, code } = req.query;
-            page = +page;
+            let { page, name, code } = req.query;
             const items = yield itemsService.findAll({ name, code, page });
             res.status(200).send(items);
         });

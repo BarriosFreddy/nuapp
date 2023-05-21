@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import isOnline from 'is-online'
 import {
   CCard,
   CCardFooter,
@@ -17,16 +18,26 @@ import {
 } from '@coreui/react'
 import { formatCurrency, formatDate } from '../../../utils'
 import { getBillings } from 'src/modules/billing/services/billings.service'
+import { setBillings } from '../reducers/billings.reducer'
 
 function BillingsHistorical() {
   const dispatch = useDispatch()
   const billings = useSelector((state) => state.billing.billings)
+  const billingsOffline = useSelector((state) => state.billing.offline.billings)
   let [billing, setBilling] = useState(null)
   let [page, setPage] = useState(1)
-
   useEffect(() => {
     dispatch(getBillings())
   }, [dispatch])
+
+  useEffect(() => {
+    ;(async () => {
+      const isonline = await isOnline()
+      if (!isonline) {
+        dispatch(setBillings(billingsOffline))
+      }
+    })()
+  }, [dispatch, billingsOffline])
 
   const handlePrevPage = async () => {
     const newPage = page === 1 ? 1 : page - 1
@@ -49,9 +60,9 @@ function BillingsHistorical() {
               <CCol>
                 <>
                   <div className="d-lg-none">
-                    {billings.map(({ createdAt, code, items, billAmount }) => (
+                    {billings.map(({ createdAt, code, billAmount }, index) => (
                       <CCard
-                        key={code}
+                        key={index}
                         style={{
                           width: 'auto',
                         }}
@@ -86,13 +97,13 @@ function BillingsHistorical() {
                         </CTableRow>
                       </CTableHead>
                       <CTableBody>
-                        {billings.map((billing) => (
-                          <CTableRow key={billing._id}>
+                        {billings.map((billing, index) => (
+                          <CTableRow key={index}>
                             <CTableDataCell xs="12" className="text-uppercase">
                               {formatDate(billing.createdAt)}
                             </CTableDataCell>
                             <CTableDataCell className="fs-6" xs="12">
-                              {billing.code}
+                              {billing.code ? billing.code : 'No Disponible'}
                             </CTableDataCell>
                             <CTableDataCell xs="12">{billing.items?.length}</CTableDataCell>
                             <CTableDataCell xs="12">
@@ -158,15 +169,17 @@ function BillingsHistorical() {
                         <CTableRow>
                           <CTableHeaderCell colSpan={5}>Items</CTableHeaderCell>
                         </CTableRow>
-                        {billing.items?.map(({ _id, name, units, price, measurementUnit }) => (
-                          <CTableRow key={_id}>
-                            <CTableDataCell colSpan={2}>{name}</CTableDataCell>
-                            <CTableDataCell colSpan={2}>
-                              {units + ' ' + measurementUnit}
-                            </CTableDataCell>
-                            <CTableDataCell colSpan={2}>{price}</CTableDataCell>
-                          </CTableRow>
-                        ))}
+                        {billing.items?.map(
+                          ({ _id, name, units, price, measurementUnit }, index) => (
+                            <CTableRow key={index}>
+                              <CTableDataCell colSpan={2}>{name}</CTableDataCell>
+                              <CTableDataCell colSpan={2}>
+                                {units + ' ' + measurementUnit}
+                              </CTableDataCell>
+                              <CTableDataCell colSpan={2}>{price}</CTableDataCell>
+                            </CTableRow>
+                          ),
+                        )}
                         <CTableRow>
                           <CTableHeaderCell className="text-end fs-4" colSpan={5}>
                             Total {formatCurrency(billing.billAmount)}

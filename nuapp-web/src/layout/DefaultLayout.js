@@ -1,7 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { AppContent, AppSidebar } from '../components/index'
+import { useDispatch } from 'react-redux'
+import { getAllItems } from 'src/modules/billing/services/items.service'
 
 const DefaultLayout = (props) => {
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(getAllItems())
+  }, [dispatch])
   return (
     <div>
       <AppSidebar />

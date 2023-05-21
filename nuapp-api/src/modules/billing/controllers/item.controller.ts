@@ -12,8 +12,7 @@ interface RequestQuery {
 }
 class ItemsController {
   async findAll(req: Request<{}, {}, {}, RequestQuery>, res: Response) {
-    let { page = 1, name, code } = req.query;
-    page = +page;
+    let { page, name, code } = req.query;
     const items = await itemsService.findAll({ name, code, page });
     res.status(200).send(items);
   }

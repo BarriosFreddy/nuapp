@@ -14,7 +14,8 @@
   "author": "The CoreUI Team (https://github.com/orgs/coreui/people)",
   "scripts": {
     "build": "react-scripts build",
-    "changelog": "auto-changelog --starting-version 4.4.0 --commit-limit false --hide-credit",
+    "start:build": "serve -s build",
+    "changelog": "auto-changelog --starting-version 0.0.1 --commit-limit false --hide-credit",
     "eject": "react-scripts eject",
     "lint": "eslint \"src/**/*.js\"",
     "start": "react-scripts start",
@@ -36,6 +37,7 @@
     "classnames": "^2.3.1",
     "core-js": "^3.24.1",
     "dayjs": "^1.11.7",
+    "is-online": "^10.0.0",
     "moment": "^2.29.4",
     "prop-types": "^15.8.1",
     "quagga": "^0.12.1",

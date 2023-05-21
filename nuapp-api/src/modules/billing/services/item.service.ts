@@ -15,11 +15,11 @@ export class ItemService extends BaseService<Item> {
     return await ItemModel.exists({ name }).exec();
   }
   async findAll({
-    page = 1,
+    page,
     name,
     code,
   }: {
-    page: number;
+    page?: number;
     name?: string;
     code?: string;
   }): Promise<Item[]> {
@@ -29,10 +29,16 @@ export class ItemService extends BaseService<Item> {
     code && conditions.push({ code: new RegExp(`${code}`, 'i') });
 
     conditions.length > 0 && (filters = { ['$or']: conditions, ...filters });
-    const items: Item[] = await ItemModel.find(filters)
-      .skip(10 * (page - 1))
-      .limit(10)
-      .exec();
+    const query = ItemModel.find(filters, {
+      code: 1,
+      name: 1,
+      description: 1,
+      price: 1,
+      measurementUnit: 1,
+      expirationDate: 1,
+    });
+    if (page) query.skip(10 * (page - 1)).limit(10);
+    const items: Item[] = await query.exec();
     return items;
   }
   async save(item: Item): Promise<Item> {
