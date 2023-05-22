@@ -1,4 +1,5 @@
 import { setInfoUser, setIsLoggedIn } from 'src/app.slice'
+import isOnline from 'is-online'
 
 export const login = (userAccountLogin) => async (dispatch, _, api) => {
   const { status, data } = await api.post('/auth/authenticate', userAccountLogin)
@@ -16,8 +17,12 @@ export const logout = () => async (dispatch, _, api) => {
   }
 }
 
-export const getInfoUser = () => async (dispatch, _, api) => {
-  const { data, status } = await api.get('/auth/info-user')
+export const getInfoUser = () => async (dispatch, getState, api) => {
+  const state = getState()
+  const isonline = await isOnline()
+  const { data, status } = isonline
+    ? await api.get('/auth/info-user')
+    : { status: 200, data: state.app.infoUser }
   if (status === 200) {
     dispatch(setIsLoggedIn(!!data))
     dispatch(setInfoUser(data))
