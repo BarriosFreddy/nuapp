@@ -24,7 +24,7 @@ const app: Express = express();
         credentials: true,
         origin:
           NODE_ENV === 'production'
-            ? 'https://nuapp.vercel.app'
+            ? 'https://nuapp-web.onrender.com'
             : 'http://localhost:3000',
       }),
     );

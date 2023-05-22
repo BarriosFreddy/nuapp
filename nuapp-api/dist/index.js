@@ -56,7 +56,7 @@ const app = (0, express_1.default)();
         app.use((0, cors_1.default)({
             credentials: true,
             origin: NODE_ENV === 'production'
-                ? 'https://nuapp.vercel.app'
+                ? 'https://nuapp-web.onrender.com'
                 : 'http://localhost:3000',
         }));
         app.use((0, compression_1.default)());
