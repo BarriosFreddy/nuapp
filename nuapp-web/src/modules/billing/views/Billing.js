@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef, createRef } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   CButton,
@@ -23,6 +23,7 @@ import PaymentComp from './Payment'
 import { saveBilling } from '../../../modules/billing/services/billings.service'
 import { setShowToast, setSidebarUnfoldable, setToastConfig } from 'src/app.slice'
 import { setSaveSuccess } from '../reducers/billings.reducer'
+import { Helmet } from 'react-helmet'
 
 function Billing() {
   const saveSuccess = useSelector((state) => state.billing.saveSuccess)
@@ -148,6 +149,9 @@ function Billing() {
   return (
     <>
       <CContainer className="mt--6" fluid>
+        <Helmet>
+          <title>Billing</title>
+        </Helmet>
         <CRow>
           <CCol lg="5">
             <CCard className="shadow border-10" style={{ height: '78vh' }}>
