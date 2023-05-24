@@ -105,30 +105,31 @@ function Categories() {
                 {!editing && (
                   <>
                     <div className="d-lg-none">
-                      {itemCategories.map(({ _id, code, name, description }) => (
-                        <CCard
-                          key={_id}
-                          style={{
-                            width: 'auto',
-                          }}
-                        >
-                          <CRow className="g-0">
-                            <CCol xs={12}>
-                              <CCardBody>
-                                <CRow>
-                                  <CCol>{code}</CCol>
-                                </CRow>
-                                <CRow>
-                                  <CCol>{name}</CCol>
-                                </CRow>
-                                <CRow>
-                                  <CCol>{description}</CCol>
-                                </CRow>
-                              </CCardBody>
-                            </CCol>
-                          </CRow>
-                        </CCard>
-                      ))}
+                      {itemCategories &&
+                        itemCategories.map(({ _id, code, name, description }) => (
+                          <CCard
+                            key={_id}
+                            style={{
+                              width: 'auto',
+                            }}
+                          >
+                            <CRow className="g-0">
+                              <CCol xs={12}>
+                                <CCardBody>
+                                  <CRow>
+                                    <CCol>{code}</CCol>
+                                  </CRow>
+                                  <CRow>
+                                    <CCol>{name}</CCol>
+                                  </CRow>
+                                  <CRow>
+                                    <CCol>{description}</CCol>
+                                  </CRow>
+                                </CCardBody>
+                              </CCol>
+                            </CRow>
+                          </CCard>
+                        ))}
                     </div>
                     <div className="d-none d-lg-block">
                       <CTable>
@@ -140,19 +141,20 @@ function Categories() {
                           </CTableRow>
                         </CTableHead>
                         <CTableBody>
-                          {itemCategories.map(({ _id, code, name, description }) => (
-                            <CTableRow key={_id}>
-                              <CTableDataCell xs="12" className="text-uppercase">
-                                {code}
-                              </CTableDataCell>
-                              <CTableDataCell className="fs-6" xs="12">
-                                {name}
-                              </CTableDataCell>
-                              <CTableDataCell xs="12" className="text-break">
-                                {description}
-                              </CTableDataCell>
-                            </CTableRow>
-                          ))}
+                          {itemCategories &&
+                            itemCategories.map(({ _id, code, name, description }) => (
+                              <CTableRow key={_id}>
+                                <CTableDataCell xs="12" className="text-uppercase">
+                                  {code}
+                                </CTableDataCell>
+                                <CTableDataCell className="fs-6" xs="12">
+                                  {name}
+                                </CTableDataCell>
+                                <CTableDataCell xs="12" className="text-break">
+                                  {description}
+                                </CTableDataCell>
+                              </CTableRow>
+                            ))}
                         </CTableBody>
                       </CTable>
                     </div>

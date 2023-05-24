@@ -24,6 +24,7 @@ import { saveBilling } from '../../../modules/billing/services/billings.service'
 import { setShowToast, setSidebarUnfoldable, setToastConfig } from 'src/app.slice'
 import { setSaveSuccess } from '../reducers/billings.reducer'
 import { Helmet } from 'react-helmet'
+import { useDidUpdate } from 'src/hooks/useDidUpdate'
 
 function Billing() {
   const saveSuccess = useSelector((state) => state.billing.saveSuccess)
@@ -41,7 +42,7 @@ function Billing() {
     dispatch(setSidebarUnfoldable(true))
   }, [dispatch])
 
-  const clear = useCallback(() => {
+  useDidUpdate(() => {
     setItems([])
     setReceivedAmount(0)
     setTotal(0)
@@ -55,11 +56,7 @@ function Billing() {
     )
     dispatch(setShowToast(true))
     dispatch(setSaveSuccess(false))
-  }, [dispatch])
-
-  useEffect(() => {
-    if (saveSuccess) clear()
-  }, [saveSuccess, clear])
+  }, [saveSuccess])
 
   const addItem = async (item) => {
     let itemUnitsAdded = {}

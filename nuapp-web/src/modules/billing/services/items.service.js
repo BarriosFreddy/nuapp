@@ -1,4 +1,4 @@
-import { saveSuccess, setItems, setItemsLocally } from '../reducers/items.reducer'
+import { saveSuccess, setItems, setItemsLocally, setExistsByCode } from '../reducers/items.reducer'
 import isOnline from 'is-online'
 let isonline = false
 
@@ -18,6 +18,12 @@ export const updateItem = (item) => async (dispatch, _, api) => {
 export const saveItemCategoriesBulk = (items) => async (dispatch, _, api) => {
   const { status } = await api.post('/items/bulk', items)
   status === 201 ? dispatch(saveSuccess(true)) : dispatch(saveSuccess(false))
+}
+
+export const existByCode = (code) => async (dispatch, _, api) => {
+  if (!code) return
+  const { data, status } = await api.get(`/items/code/${code}`)
+  if (status === 200) dispatch(setExistsByCode(data))
 }
 
 export const getItems = (queryParams) => async (dispatch, getState, api) => {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { PropTypes } from 'prop-types'
 
 import { CRow, CCol, CContainer, CFormInput, CCard, CCardBody } from '@coreui/react'
@@ -11,6 +11,12 @@ const PaymentComp = (props) => {
   const [receivedAmount, setReceivedAmount] = useState(0)
   const [receivedAmountInvalid, setReceivedAmountInvalid] = useState(false)
   const [changeAmount, setChangeAmount] = useState(0)
+  const receivedAmountInput = useRef()
+
+  useEffect(() => {
+    receivedAmountInput.current.focus()
+    receivedAmountInput.current.select()
+  }, [])
 
   const onChangeField = ({ target: { value } }) => {
     setReceivedAmount(value)
@@ -60,6 +66,7 @@ const PaymentComp = (props) => {
           </CCol>
           <CCol lg="8">
             <CFormInput
+              ref={receivedAmountInput}
               data-testid="receivedAmountId"
               type="number"
               size="lg"

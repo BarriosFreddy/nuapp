@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 
 import {
   CCard,
@@ -20,6 +20,7 @@ import { saveItemCategoriesBulk } from 'src/modules/billing/services/items.servi
 import { setShowToast, setToastConfig } from 'src/app.slice'
 import { setSaveSuccess } from '../../reducers/billings.reducer'
 import { formatCurrency } from 'src/utils'
+import { useDidUpdate } from 'src/hooks/useDidUpdate'
 
 const LIMIT_5_MB = 5242880
 function DataLoader() {
@@ -40,9 +41,9 @@ function DataLoader() {
     setItems([])
   }, [dispatch])
 
-  useEffect(() => {
-    saveSuccess && showSuccessfulPopup()
-  }, [saveSuccess, showSuccessfulPopup])
+  useDidUpdate(() => {
+    showSuccessfulPopup()
+  }, [saveSuccess])
 
   const handleChange = ({ target }) => {
     const file = target.files[0]

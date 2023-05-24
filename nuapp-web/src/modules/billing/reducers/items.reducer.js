@@ -5,6 +5,7 @@ const initialState = {
   items: [],
   item: null,
   loading: false,
+  existsByCode: false,
   offline: {
     items: [],
   },
@@ -15,6 +16,7 @@ export const itemsSlice = createSlice({
   initialState,
   reducers: {
     saveSuccess: (state, action) => void (state.saveSuccess = action.payload),
+    setExistsByCode: (state, action) => void (state.existsByCode = action.payload),
     setLoading: (state, action) => void (state.loading = action.payload),
     setItems: (state, action) => void (state.items = action.payload),
     setItem: (state, action) => void (state.item = action.payload),
@@ -23,7 +25,14 @@ export const itemsSlice = createSlice({
   },
 })
 
-export const { saveSuccess, setItems, setItem, setLoading, setItemsLocally, getItemsLocally } =
-  itemsSlice.actions
+export const {
+  saveSuccess,
+  setItems,
+  setItem,
+  setLoading,
+  setItemsLocally,
+  getItemsLocally,
+  setExistsByCode,
+} = itemsSlice.actions
 
 export default itemsSlice.reducer

@@ -17,7 +17,7 @@ import {
 } from '@coreui/react'
 import Quagga from 'quagga'
 import { getItemCategories } from 'src/modules/billing/services/item-categories.service'
-import { saveItem } from '../../services/items.service'
+import { existByCode, saveItem } from '../../services/items.service'
 
 const itemInitialState = {
   name: '',
@@ -33,6 +33,7 @@ function ItemForm(props) {
   const dispatch = useDispatch()
   const itemCategories = useSelector((state) => state.itemCategories.itemCategories)
   const itemGlobal = useSelector((state) => state.items.item)
+  const codeRegistered = useSelector((state) => state.items.existsByCode)
   const [item, setItem] = useState(itemInitialState)
   const [failedValidations, setFailedValidations] = useState({
     code: false,
@@ -51,12 +52,19 @@ function ItemForm(props) {
     dispatch(getItemCategories({ parse: true }))
   }, [dispatch, itemGlobal])
 
+  const validateCodeExistence = (code) => {
+    dispatch(existByCode(code))
+  }
+
   const onChangeField = ({ target: { name, value } }) => {
     setItem({
       ...item,
       [name]: value,
     })
     setFailedValidations({ ...failedValidations, [name]: !value })
+    if (name === 'code') {
+      validateCodeExistence(value)
+    }
   }
 
   const populateFieldsForm = ({ _id, code, description, price }) => {
@@ -135,7 +143,7 @@ function ItemForm(props) {
       ...item,
     }
     const failedValidationsObj = { ...failedValidations }
-    failedValidationsObj.code = !code
+    failedValidationsObj.code = !code || codeRegistered
     failedValidationsObj.description = !description
     failedValidationsObj.name = !name
     failedValidationsObj.price = !price
@@ -158,7 +166,7 @@ function ItemForm(props) {
   const cancel = () => {
     props.cancel()
   }
-
+  console.log({ codeRegistered })
   return (
     <>
       <CContainer fluid>
@@ -170,8 +178,10 @@ function ItemForm(props) {
                 type="text"
                 name="code"
                 value={item.code}
-                feedback="Campo obligatorio"
-                invalid={failedValidations.code}
+                feedback={
+                  codeRegistered ? 'El código ya se encuentra registrado' : 'Campo obligatorio'
+                }
+                invalid={codeRegistered || failedValidations.code}
                 required
                 onChange={(event) => onChangeField(event)}
               />

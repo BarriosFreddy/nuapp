@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   CButton,
@@ -13,21 +13,16 @@ import {
 import { Helmet } from 'react-helmet'
 import { saveBillingBulk } from 'src/modules/billing/services/billings.service'
 import { saveBillingLocally } from 'src/modules/billing/reducers/billings.reducer'
+import { useDidUpdate } from 'src/hooks/useDidUpdate'
 
 function Billing() {
   const billingsOffiline = useSelector((state) => state.billing.offline.billings)
   const loading = useSelector((state) => state.billing.loading)
   const dispatch = useDispatch()
-  const mounted = useRef(false)
   console.log({ billingsOffiline })
-  useEffect(() => {
-    if (!mounted.current && loading) {
-      mounted.current = loading
-    } else if (mounted.current && !loading) {
-      console.log('Updated')
-      dispatch(saveBillingLocally([]))
-    }
-  }, [dispatch, loading])
+  useDidUpdate(() => {
+    dispatch(saveBillingLocally([]))
+  }, [loading])
 
   const handleSynchronize = () => {
     dispatch(saveBillingBulk(billingsOffiline))

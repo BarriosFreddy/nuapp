@@ -38,7 +38,7 @@ function Item() {
   let [page, setPage] = useState(1)
 
   useEffect(() => {
-    dispatch(getItems())
+    dispatch(getItems({ page: 1 }))
   }, [dispatch])
 
   const save = (item) => {
@@ -50,7 +50,7 @@ function Item() {
   }
 
   const cancel = async () => {
-    dispatch(getItems())
+    dispatch(getItems({ page: 1 }))
     setEditing(false)
   }
 
@@ -86,7 +86,7 @@ function Item() {
     setEditing(true)
     dispatch(setItem(item))
   }
-  console.log({ items })
+
   return (
     <>
       <CContainer className="mt--6" fluid>
