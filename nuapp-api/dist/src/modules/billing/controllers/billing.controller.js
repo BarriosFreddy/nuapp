@@ -42,6 +42,13 @@ class BillingController {
             res.status(201).send(savedBill);
         });
     }
+    saveAll(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const billings = req.body;
+            const result = yield billingService.saveAll(billings);
+            res.status(201).send(result);
+        });
+    }
 }
 const billingController = new BillingController();
 exports.default = billingController;

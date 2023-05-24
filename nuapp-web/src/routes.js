@@ -9,6 +9,7 @@ const ItemCategories = lazy(() => import('./modules/billing/views/item-categorie
 
 const Listings = lazy(() => import('./modules/core/views/Listings'))
 const DataLoader = lazy(() => import('./modules/billing/views/data-loader/DataLoader'))
+const Synchronizer = lazy(() => import('./modules/core/views/synchronizer/Synchronizer'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -19,6 +20,7 @@ const routes = [
   { path: '/listings', name: 'Listings', element: Listings },
   { path: '/data-loader', name: 'Cargador de datos', element: DataLoader },
   { path: '/item-categories', name: 'Categorias de items', element: ItemCategories },
+  { path: '/synchronizer', name: 'Sinchronizer', element: Synchronizer },
 ]
 
 export default routes

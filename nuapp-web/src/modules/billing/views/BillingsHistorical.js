@@ -60,30 +60,31 @@ function BillingsHistorical() {
               <CCol>
                 <>
                   <div className="d-lg-none">
-                    {billings.map(({ createdAt, code, billAmount }, index) => (
-                      <CCard
-                        key={index}
-                        style={{
-                          width: 'auto',
-                        }}
-                      >
-                        <CRow className="g-0" key={code}>
-                          <CCol xs={8}>
-                            <CCardBody>
-                              <CRow>
-                                <CCol>{createdAt}</CCol>
-                              </CRow>
-                              <CRow>
-                                <CCol>{code}</CCol>
-                              </CRow>
-                              <CRow>
-                                <CCol>${billAmount}</CCol>
-                              </CRow>
-                            </CCardBody>
-                          </CCol>
-                        </CRow>
-                      </CCard>
-                    ))}
+                    {billings &&
+                      billings.map(({ createdAt, code, billAmount }, index) => (
+                        <CCard
+                          key={index}
+                          style={{
+                            width: 'auto',
+                          }}
+                        >
+                          <CRow className="g-0" key={code}>
+                            <CCol xs={8}>
+                              <CCardBody>
+                                <CRow>
+                                  <CCol>{createdAt}</CCol>
+                                </CRow>
+                                <CRow>
+                                  <CCol>{code}</CCol>
+                                </CRow>
+                                <CRow>
+                                  <CCol>${billAmount}</CCol>
+                                </CRow>
+                              </CCardBody>
+                            </CCol>
+                          </CRow>
+                        </CCard>
+                      ))}
                   </div>
                   <div className="d-none d-lg-block">
                     <CTable>
@@ -97,30 +98,31 @@ function BillingsHistorical() {
                         </CTableRow>
                       </CTableHead>
                       <CTableBody>
-                        {billings.map((billing, index) => (
-                          <CTableRow key={index}>
-                            <CTableDataCell xs="12" className="text-uppercase">
-                              {formatDate(billing.createdAt)}
-                            </CTableDataCell>
-                            <CTableDataCell className="fs-6" xs="12">
-                              {billing.code ? billing.code : 'No Disponible'}
-                            </CTableDataCell>
-                            <CTableDataCell xs="12">{billing.items?.length}</CTableDataCell>
-                            <CTableDataCell xs="12">
-                              {formatCurrency(billing.billAmount)}
-                            </CTableDataCell>
-                            <CTableDataCell xs="12">
-                              <CButton
-                                size="sm"
-                                variant="outline"
-                                color="info"
-                                onClick={() => setBilling(billing)}
-                              >
-                                Detalle
-                              </CButton>
-                            </CTableDataCell>
-                          </CTableRow>
-                        ))}
+                        {billings &&
+                          billings.map((billing, index) => (
+                            <CTableRow key={index}>
+                              <CTableDataCell xs="12" className="text-uppercase">
+                                {formatDate(billing.createdAt)}
+                              </CTableDataCell>
+                              <CTableDataCell className="fs-6" xs="12">
+                                {billing.code ? billing.code : 'No Disponible'}
+                              </CTableDataCell>
+                              <CTableDataCell xs="12">{billing.items?.length}</CTableDataCell>
+                              <CTableDataCell xs="12">
+                                {formatCurrency(billing.billAmount)}
+                              </CTableDataCell>
+                              <CTableDataCell xs="12">
+                                <CButton
+                                  size="sm"
+                                  variant="outline"
+                                  color="info"
+                                  onClick={() => setBilling(billing)}
+                                >
+                                  Detalle
+                                </CButton>
+                              </CTableDataCell>
+                            </CTableRow>
+                          ))}
                       </CTableBody>
                     </CTable>
                   </div>

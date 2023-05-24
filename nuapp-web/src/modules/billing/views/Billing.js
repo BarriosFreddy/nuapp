@@ -136,12 +136,12 @@ function Billing() {
   }
 
   const getItemsData = () =>
-    items.map(({ _id, name, code, price, units, measurementUnit }) => ({
+    items.map(({ _id, name, code, price, measurementUnit }) => ({
       _id,
       name,
       code,
       price,
-      units,
+      units: itemUnits[code],
       measurementUnit,
     }))
 

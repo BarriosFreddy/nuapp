@@ -1,13 +1,28 @@
-import { setSaveSuccess, setBillings, saveBillingLocally } from '../reducers/billings.reducer'
+import {
+  setSaveSuccess,
+  setBillings,
+  saveBillingLocally,
+  setLoading,
+} from '../reducers/billings.reducer'
 import isOnline from 'is-online'
 let isonline = false
 
 export const saveBilling = (billing) => async (dispatch, getState, api) => {
   isonline = await isOnline()
+  dispatch(setLoading(true))
   const { status } = isonline
     ? await api.post('/billings', billing)
     : saveLocally(dispatch, getState(), billing)
   status === 201 ? dispatch(setSaveSuccess(true)) : dispatch(setSaveSuccess(false))
+  dispatch(setLoading(false))
+}
+
+export const saveBillingBulk = (billings) => async (dispatch, getState, api) => {
+  isonline = await isOnline()
+  dispatch(setLoading(true))
+  const { status } = await api.post('/billings/bulk', billings)
+  status === 201 ? dispatch(setSaveSuccess(true)) : dispatch(setSaveSuccess(false))
+  dispatch(setLoading(false))
 }
 
 export const getBillings =

@@ -22,7 +22,7 @@ export class KardexTransaction extends TimeStamps{
   @prop({ ref: () => Item })
   public itemId!: Ref<Item>;
   @prop()
-  public units!: number;
+  public units?: number;
   @prop()
   public createdBy?: mongoose.Types.ObjectId;
 }

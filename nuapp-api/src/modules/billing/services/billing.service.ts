@@ -9,6 +9,7 @@ import { ProjectionType } from 'mongoose';
 import { DocumentType } from '@typegoose/typegoose';
 import { BeAnObject } from '@typegoose/typegoose/lib/types';
 import dayjs from 'dayjs';
+import { Item } from '../models/item.model';
 
 const kardexTransactionService = container.resolve(KardexTransactionService);
 const sequencedCodeService = container.resolve(SequencedCodeService);
@@ -117,16 +118,26 @@ export class BillingService extends BaseService<Billing> {
       billing.createdAt = new Date();
       const saved = await BillingModel.create(billing);
       const { items } = saved;
-      for await (const item of items) {
-        const kardexTransaction: KardexTransaction = {
-          code: new Date().getMilliseconds().toString(),
-          type: KardexTransactionType.OUT,
-          itemId: item._id,
-          units: 1,
-        };
-        await kardexTransactionService.save(kardexTransaction);
-      }
+      await this.saveKardexTransaction(items);
       return saved;
+    } catch (error) {
+      console.log(error);
+      return Promise.reject(null);
+    }
+  }
+
+  async saveAll(billings: Billing[]): Promise<any> {
+    try {
+      for (const billing of billings) {
+        billing.createdAt = new Date();
+        billing.code = await generateSequencedCode();
+      }
+      let billingModels = billings.map((billing) => new BillingModel(billing));
+      const result = await BillingModel.bulkSave(billingModels);
+      for (const { items } of billings) {
+        await this.saveKardexTransaction(items);
+      }
+      return result;
     } catch (error) {
       console.log(error);
       return Promise.reject(null);
@@ -135,6 +146,18 @@ export class BillingService extends BaseService<Billing> {
 
   async update(_: string, __: Billing): Promise<Billing | null> {
     throw new Error('Not Supported');
+  }
+
+  async saveKardexTransaction(items: Item[]) {
+    for await (const item of items) {
+      const kardexTransaction: KardexTransaction = {
+        code: new Date().getMilliseconds().toString(),
+        type: KardexTransactionType.OUT,
+        itemId: item._id,
+        units: item.units,
+      };
+      await kardexTransactionService.save(kardexTransaction);
+    }
   }
 }
 

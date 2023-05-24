@@ -29,6 +29,12 @@ class BillingController {
     const savedBill = await billingService.save(billing);
     res.status(201).send(savedBill);
   }
+
+  async saveAll(req: Request, res: Response) {
+    const billings: Billing[] = req.body;
+    const result = await billingService.saveAll(billings);
+    res.status(201).send(result);
+  }
 }
 
 const billingController = new BillingController();

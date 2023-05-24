@@ -15,6 +15,7 @@ const id_schema_1 = require("../../../helpers/db/schemas/id.schema");
 const billing_schema_1 = require("../db/schemas/billing.schema");
 const billingRouter = express_1.default.Router();
 billingRouter.post('/', (0, validation_middleware_1.validateBody)(billing_schema_1.BillingCreateSchema), authenticate_middleware_1.default, (0, role_validation_middleware_1.roleValidation)((0, util_1.generateAuthKeyPair)(modules_codes_1.ModuleCode.BILLING, privileges_1.Privilege.CREATE)), billing_controller_1.default.save);
+billingRouter.post('/bulk', authenticate_middleware_1.default, (0, role_validation_middleware_1.roleValidation)((0, util_1.generateAuthKeyPair)(modules_codes_1.ModuleCode.BILLING, privileges_1.Privilege.CREATE)), billing_controller_1.default.saveAll);
 billingRouter.get('/:id', (0, validation_middleware_1.validateParameters)(id_schema_1.idSchema), authenticate_middleware_1.default, (0, role_validation_middleware_1.roleValidation)((0, util_1.generateAuthKeyPair)(modules_codes_1.ModuleCode.BILLING, privileges_1.Privilege.ACCESS)), billing_controller_1.default.findOne);
 billingRouter.get('/per/:date', authenticate_middleware_1.default, (0, role_validation_middleware_1.roleValidation)((0, util_1.generateAuthKeyPair)(modules_codes_1.ModuleCode.BILLING, privileges_1.Privilege.ACCESS)), billing_controller_1.default.findGreaterThanDate);
 billingRouter.get('/', authenticate_middleware_1.default, billing_controller_1.default.findAll);

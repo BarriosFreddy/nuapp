@@ -21,6 +21,12 @@ billingRouter.post(
   roleValidation(generateAuthKeyPair(ModuleCode.BILLING, Privilege.CREATE)),
   billingController.save,
 );
+billingRouter.post(
+  '/bulk',
+  isAuthenticated,
+  roleValidation(generateAuthKeyPair(ModuleCode.BILLING, Privilege.CREATE)),
+  billingController.saveAll,
+);
 billingRouter.get(
   '/:id',
   validateParameters(idSchema),

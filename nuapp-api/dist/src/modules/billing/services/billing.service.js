@@ -132,40 +132,34 @@ let BillingService = class BillingService extends base_service_1.BaseService {
         });
     }
     save(billing) {
-        var _a, e_1, _b, _c;
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 billing.code = yield generateSequencedCode();
                 billing.createdAt = new Date();
                 const saved = yield billing_model_1.default.create(billing);
                 const { items } = saved;
-                try {
-                    for (var _d = true, items_1 = __asyncValues(items), items_1_1; items_1_1 = yield items_1.next(), _a = items_1_1.done, !_a;) {
-                        _c = items_1_1.value;
-                        _d = false;
-                        try {
-                            const item = _c;
-                            const kardexTransaction = {
-                                code: new Date().getMilliseconds().toString(),
-                                type: kardex_transaction_type_1.KardexTransactionType.OUT,
-                                itemId: item._id,
-                                units: 1,
-                            };
-                            yield kardexTransactionService.save(kardexTransaction);
-                        }
-                        finally {
-                            _d = true;
-                        }
-                    }
-                }
-                catch (e_1_1) { e_1 = { error: e_1_1 }; }
-                finally {
-                    try {
-                        if (!_d && !_a && (_b = items_1.return)) yield _b.call(items_1);
-                    }
-                    finally { if (e_1) throw e_1.error; }
-                }
+                yield this.saveKardexTransaction(items);
                 return saved;
+            }
+            catch (error) {
+                console.log(error);
+                return Promise.reject(null);
+            }
+        });
+    }
+    saveAll(billings) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                for (const billing of billings) {
+                    billing.createdAt = new Date();
+                    billing.code = yield generateSequencedCode();
+                }
+                let billingModels = billings.map((billing) => new billing_model_1.default(billing));
+                const result = yield billing_model_1.default.bulkSave(billingModels);
+                for (const { items } of billings) {
+                    yield this.saveKardexTransaction(items);
+                }
+                return result;
             }
             catch (error) {
                 console.log(error);
@@ -176,6 +170,38 @@ let BillingService = class BillingService extends base_service_1.BaseService {
     update(_, __) {
         return __awaiter(this, void 0, void 0, function* () {
             throw new Error('Not Supported');
+        });
+    }
+    saveKardexTransaction(items) {
+        var _a, items_1, items_1_1;
+        var _b, e_1, _c, _d;
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                for (_a = true, items_1 = __asyncValues(items); items_1_1 = yield items_1.next(), _b = items_1_1.done, !_b;) {
+                    _d = items_1_1.value;
+                    _a = false;
+                    try {
+                        const item = _d;
+                        const kardexTransaction = {
+                            code: new Date().getMilliseconds().toString(),
+                            type: kardex_transaction_type_1.KardexTransactionType.OUT,
+                            itemId: item._id,
+                            units: item.units,
+                        };
+                        yield kardexTransactionService.save(kardexTransaction);
+                    }
+                    finally {
+                        _a = true;
+                    }
+                }
+            }
+            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+            finally {
+                try {
+                    if (!_a && !_b && (_c = items_1.return)) yield _c.call(items_1);
+                }
+                finally { if (e_1) throw e_1.error; }
+            }
         });
     }
 };

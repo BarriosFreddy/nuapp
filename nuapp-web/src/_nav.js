@@ -53,6 +53,13 @@ let _nav = [
         icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
         roles: ['ADMIN'],
       },
+      {
+        component: CNavItem,
+        name: 'Sincronizador',
+        to: '/synchronizer',
+        icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+        roles: ['ADMIN'],
+      },
     ],
   },
 ]
