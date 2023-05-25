@@ -38,6 +38,10 @@ function Item() {
   let [page, setPage] = useState(1)
 
   useEffect(() => {
+    setSearchTerm('')
+  }, [])
+
+  useEffect(() => {
     dispatch(getItems({ page: 1 }))
   }, [dispatch])
 
@@ -87,6 +91,11 @@ function Item() {
     dispatch(setItem(item))
   }
 
+  const handleNewItem = () => {
+    dispatch(setItem(null))
+    setEditing(true)
+  }
+
   return (
     <>
       <CContainer className="mt--6" fluid>
@@ -97,7 +106,7 @@ function Item() {
                 {!editing && (
                   <CRow>
                     <CCol xs="4" lg="3">
-                      <CButton variant="outline" color="success" onClick={() => setEditing(true)}>
+                      <CButton variant="outline" color="success" onClick={handleNewItem}>
                         NUEVO ITEM
                       </CButton>
                     </CCol>

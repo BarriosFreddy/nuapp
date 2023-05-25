@@ -25,7 +25,7 @@ const itemInitialState = {
   description: '',
   price: '',
   categoryId: '',
-  units: '',
+  units: 0,
   measurementUnit: '',
 }
 
@@ -41,7 +41,6 @@ function ItemForm(props) {
     name: false,
     price: false,
     categoryId: false,
-    units: false,
     measurementUnit: false,
   })
   const [modal, setModal] = useState(false)
@@ -139,7 +138,7 @@ function ItemForm(props) {
   )
 
   const isValidForm = () => {
-    const { name, code, description, price, categoryId, units, measurementUnit } = {
+    const { name, code, description, price, categoryId, measurementUnit } = {
       ...item,
     }
     const failedValidationsObj = { ...failedValidations }
@@ -148,7 +147,6 @@ function ItemForm(props) {
     failedValidationsObj.name = !name
     failedValidationsObj.price = !price
     failedValidationsObj.categoryId = !categoryId
-    failedValidationsObj.units = !units
     failedValidationsObj.measurementUnit = !measurementUnit
     setFailedValidations(failedValidationsObj)
     return Object.values(failedValidationsObj).every((validation) => validation === false)
@@ -210,6 +208,8 @@ function ItemForm(props) {
                 onChange={(event) => onChangeField(event)}
               />
             </CCol>
+          </CRow>
+          <CRow>
             <CCol xs="12" lg="4">
               <CFormInput
                 label="Precio"
@@ -222,8 +222,6 @@ function ItemForm(props) {
                 onChange={(event) => onChangeField(event)}
               />
             </CCol>
-          </CRow>
-          <CRow>
             <CCol xs="12" lg="4">
               <CFormSelect
                 label="Categoria"
@@ -233,18 +231,6 @@ function ItemForm(props) {
                 onChange={(event) => onChangeField(event)}
                 aria-label="Default select example"
                 options={['Seleccione la categoria', ...itemCategories]}
-              />
-            </CCol>
-            <CCol xs="12" lg="4">
-              <CFormInput
-                label="Unidades"
-                type="number"
-                name="units"
-                value={item.units}
-                feedbackInvalid="Campo obligatorio"
-                invalid={failedValidations.units}
-                required
-                onChange={(event) => onChangeField(event)}
               />
             </CCol>
             <CCol xs="12" lg="4">
