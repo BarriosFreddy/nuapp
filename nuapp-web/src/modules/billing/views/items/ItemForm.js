@@ -14,6 +14,10 @@ import {
   CFormInput,
   CForm,
   CFormSelect,
+  CCardBody,
+  CCardHeader,
+  CCard,
+  CCardFooter,
 } from '@coreui/react'
 import Quagga from 'quagga'
 import { getItemCategories } from 'src/modules/billing/services/item-categories.service'
@@ -158,97 +162,103 @@ function ItemForm(props) {
   return (
     <>
       <CContainer fluid>
-        <CForm className="row g-3 needs-validation" noValidate>
-          <CRow style={{ marginTop: '40px' }}>
-            <CCol xs="12" lg="4">
-              <CFormInput
-                label="Código"
-                type="text"
-                name="code"
-                value={item.code}
-                feedback={
-                  codeRegistered ? 'El código ya se encuentra registrado' : 'Campo obligatorio'
-                }
-                invalid={codeRegistered || failedValidations.code}
-                required
-                onChange={(event) => onChangeField(event)}
-              />
-            </CCol>
-            <CCol xs="12" lg="4">
-              <CFormInput
-                label="Nombre"
-                type="text"
-                name="name"
-                value={item.name}
-                feedbackInvalid="Campo obligatorio"
-                invalid={failedValidations.name}
-                required
-                onChange={(event) => onChangeField(event)}
-              />
-            </CCol>
-            <CCol xs="12" lg="4">
-              <CFormInput
-                label="Descripción"
-                type="text"
-                name="description"
-                value={item.description}
-                feedbackInvalid="Campo obligatorio"
-                invalid={failedValidations.description}
-                required
-                onChange={(event) => onChangeField(event)}
-              />
-            </CCol>
-          </CRow>
-          <CRow>
-            <CCol xs="12" lg="4">
-              <CFormInput
-                label="Precio"
-                type="number"
-                name="price"
-                value={item.price}
-                feedbackInvalid="Campo obligatorio"
-                invalid={failedValidations.price}
-                required
-                onChange={(event) => onChangeField(event)}
-              />
-            </CCol>
-            <CCol xs="12" lg="4">
-              <CFormSelect
-                label="Categoria"
-                name="categoryId"
-                value={item.categoryId}
-                required
-                onChange={(event) => onChangeField(event)}
-                aria-label="Default select example"
-                options={['Seleccione la categoria', ...itemCategories]}
-              />
-            </CCol>
-            <CCol xs="12" lg="4">
-              <CFormInput
-                label="Unidad de medida"
-                type="text"
-                name="measurementUnit"
-                value={item.measurementUnit}
-                feedbackInvalid="Campo obligatorio"
-                invalid={failedValidations.measurementUnit}
-                required
-                onChange={(event) => onChangeField(event)}
-              />
-            </CCol>
-          </CRow>
-          <CRow className="mt-5">
-            <CCol xs="8" lg="2">
-              <CButton variant="outline" color="success" type="button" onClick={() => save()}>
-                {props.item ? 'ACTUALIZAR' : 'GUARDAR'}
-              </CButton>
-            </CCol>
-            <CCol xs="4" lg="2">
-              <CButton variant="outline" color="secondary" onClick={() => cancel()}>
-                CANCELAR
-              </CButton>
-            </CCol>
-          </CRow>
-        </CForm>
+        <CCard>
+          <CCardHeader>{props.item ? 'EDITANDO' : 'CREANDO'} ITEM</CCardHeader>
+          <CCardBody>
+            <CForm className="mt-2 row g-3 needs-validation" noValidate>
+              <CRow style={{ marginTop: '40px' }}>
+                <CCol xs="12" lg="4">
+                  <CFormInput
+                    label="Código"
+                    type="text"
+                    name="code"
+                    value={item.code}
+                    feedback={
+                      codeRegistered ? 'El código ya se encuentra registrado' : 'Campo obligatorio'
+                    }
+                    invalid={codeRegistered || failedValidations.code}
+                    required
+                    onChange={(event) => onChangeField(event)}
+                  />
+                </CCol>
+                <CCol xs="12" lg="4">
+                  <CFormInput
+                    label="Nombre"
+                    type="text"
+                    name="name"
+                    value={item.name}
+                    feedbackInvalid="Campo obligatorio"
+                    invalid={failedValidations.name}
+                    required
+                    onChange={(event) => onChangeField(event)}
+                  />
+                </CCol>
+                <CCol xs="12" lg="4">
+                  <CFormInput
+                    label="Descripción"
+                    type="text"
+                    name="description"
+                    value={item.description}
+                    feedbackInvalid="Campo obligatorio"
+                    invalid={failedValidations.description}
+                    required
+                    onChange={(event) => onChangeField(event)}
+                  />
+                </CCol>
+              </CRow>
+              <CRow>
+                <CCol xs="12" lg="4">
+                  <CFormInput
+                    label="Precio"
+                    type="number"
+                    name="price"
+                    value={item.price}
+                    feedbackInvalid="Campo obligatorio"
+                    invalid={failedValidations.price}
+                    required
+                    onChange={(event) => onChangeField(event)}
+                  />
+                </CCol>
+                <CCol xs="12" lg="4">
+                  <CFormSelect
+                    label="Categoria"
+                    name="categoryId"
+                    value={item.categoryId}
+                    required
+                    onChange={(event) => onChangeField(event)}
+                    aria-label="Default select example"
+                    options={['Seleccione la categoria', ...itemCategories]}
+                  />
+                </CCol>
+                <CCol xs="12" lg="4">
+                  <CFormInput
+                    label="Unidad de medida"
+                    type="text"
+                    name="measurementUnit"
+                    value={item.measurementUnit}
+                    feedbackInvalid="Campo obligatorio"
+                    invalid={failedValidations.measurementUnit}
+                    required
+                    onChange={(event) => onChangeField(event)}
+                  />
+                </CCol>
+              </CRow>
+            </CForm>
+          </CCardBody>
+          <CCardFooter className="mt-2">
+            <CRow className="mt-0">
+              <CCol className="text-center" xs="8" lg={{ offset: 4, span: 4 }}>
+                <CButton color="success" type="button" onClick={() => save()}>
+                  {props.item ? 'EDITAR' : 'GUARDAR'}
+                </CButton>
+                &nbsp; &nbsp;
+                <CButton variant="outline" color="secondary" onClick={() => cancel()}>
+                  CANCELAR
+                </CButton>
+              </CCol>
+            </CRow>
+          </CCardFooter>
+        </CCard>
       </CContainer>
       <CModal isOpen={modal} toggle={toggle}>
         <CModalHeader toggle={toggle} close={closeBtn}>

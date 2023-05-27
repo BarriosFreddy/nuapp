@@ -49,6 +49,8 @@ function Item() {
 
   useDidUpdate(() => {
     sendToast(dispatch, { message: 'Guardado exitosamente!' })
+    setItem(null)
+    setEditing(false)
   }, [saveSuccess])
 
   const save = (item) => {
