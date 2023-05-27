@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link, Navigate } from 'react-router-dom'
 import {
+  CAlert,
   CButton,
   CCard,
   CCardBody,
@@ -18,14 +19,19 @@ import { cilLockLocked, cilUser } from '@coreui/icons'
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { login } from 'src/modules/core/services/auth.service'
+import { setLoading } from 'src/modules/core/reducers/auth.reducer'
 
 const Login = () => {
-  const isLoggedIn = useSelector((state) => state.app.isLoggedIn)
   const dispatch = useDispatch()
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
+  const loginSuccess = useSelector((state) => state.auth.loginSuccess)
+  const loading = useSelector((state) => state.auth.loading)
   const [userAccountLogin, setUserAccountLogin] = useState({
     email: '',
     password: '',
   })
+
+  useEffect(() => () => dispatch(setLoading(false)), [dispatch])
 
   const onChangeInput = ({ target }) => {
     const { name, value } = target
@@ -50,7 +56,7 @@ const Login = () => {
               <CCard className="p-4">
                 <CCardBody>
                   <CForm>
-                    <h1>Login</h1>
+                    <h1>Iniciar sessión</h1>
                     <p className="text-medium-emphasis">Sign In to your account</p>
                     <CInputGroup className="mb-3">
                       <CInputGroupText>
@@ -76,15 +82,27 @@ const Login = () => {
                         onKeyDown={onKeyDownLogin}
                       />
                     </CInputGroup>
+                    {!loginSuccess && (
+                      <CAlert color="danger">Correo electrónico y/o clave incorrecta</CAlert>
+                    )}
                     <CRow>
-                      <CCol xs={6}>
-                        <CButton onClick={onClickLogin} color="primary" className="px-4">
-                          Login
+                      <CCol xs={12} className="text-right">
+                        <CButton color="link" className="px-0">
+                          ¿Olvidaste tu clave?
                         </CButton>
                       </CCol>
-                      <CCol xs={6} className="text-right">
-                        <CButton color="link" className="px-0">
-                          Forgot password?
+                    </CRow>
+                    <br />
+                    <CRow>
+                      <CCol xs={12}>
+                        <CButton
+                          size="lg"
+                          onClick={onClickLogin}
+                          color="primary"
+                          className="px-4"
+                          disabled={loading}
+                        >
+                          Acceder
                         </CButton>
                       </CCol>
                     </CRow>

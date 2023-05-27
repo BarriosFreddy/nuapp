@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux'
 
 export const AppSidebarNav = ({ items }) => {
   const location = useLocation()
-  const { roles: userRoles = [] } = useSelector((state) => state.app.infoUser) ?? {}
+  const { roles: userRoles = [] } = useSelector((state) => state.auth.infoUser) ?? {}
   const navLink = (name, icon, badge) => {
     return (
       <>

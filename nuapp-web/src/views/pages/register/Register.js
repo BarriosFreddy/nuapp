@@ -17,7 +17,7 @@ import { Navigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
 const Register = () => {
-  const isLoggedIn = useSelector((state) => state.app.isLoggedIn)
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
 
   return isLoggedIn ? (
     <Navigate to="/home" replace />

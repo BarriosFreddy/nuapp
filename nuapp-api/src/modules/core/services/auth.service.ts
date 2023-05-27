@@ -10,7 +10,9 @@ const { SECRET_KEY } = process.env;
 export class AuthService {
   constructor(public userAccountService: UserAccountService) {}
 
-  async authenticate(userAccountLogin: UserAccountLogin): Promise<any> {
+  async authenticate(
+    userAccountLogin: UserAccountLogin,
+  ): Promise<{ access_token: string; data: object } | null> {
     const { email, password } = userAccountLogin;
     const userAccount: UserAccount | null =
       await this.userAccountService.findByEmail(email);

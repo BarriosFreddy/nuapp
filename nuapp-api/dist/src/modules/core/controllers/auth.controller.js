@@ -15,9 +15,10 @@ const { NODE_ENV = 'development' } = process.env;
 const authService = tsyringe_1.container.resolve(auth_service_1.AuthService);
 class AuthController {
     authenticate(req, res) {
+        var _a;
         return __awaiter(this, void 0, void 0, function* () {
             const userAccountLogin = req.body;
-            const { access_token, data } = yield authService.authenticate(userAccountLogin);
+            const { access_token = null, data } = (_a = (yield authService.authenticate(userAccountLogin))) !== null && _a !== void 0 ? _a : {};
             if (!access_token)
                 return res.status(403).send({ message: 'credentials invalid' });
             return res

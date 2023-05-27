@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux'
 import RequiredAuth from './RequireAuth'
 
 const AppContent = () => {
-  const isLoggedIn = useSelector((state) => state.app.isLoggedIn)
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
   return (
     <Suspense fallback={<CSpinner color="primary" />}>
       <Routes>
@@ -29,7 +29,7 @@ const AppContent = () => {
             )
           )
         })}
-        <Route render path="/" element={<Navigate to="dashboard" replace />} />
+        <Route render path="/" element={<Navigate to="home" replace />} />
       </Routes>
     </Suspense>
   )

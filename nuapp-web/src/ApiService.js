@@ -9,11 +9,12 @@ const axiosInstance = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+  validateStatus: () => true,
 })
 
 export const ApiService = {
   async post(uri, data) {
-    return await axiosInstance({
+    return axiosInstance({
       url: uri,
       method: 'POST',
       data,

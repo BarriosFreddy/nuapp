@@ -1,12 +1,8 @@
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import React from 'react'
 
 import {
-  CButton,
-  CButtonGroup,
   CCard,
   CCardBody,
-  CCardFooter,
   CCardHeader,
   CCol,
   CHeaderNav,
@@ -14,37 +10,17 @@ import {
   CNavLink,
   CProgress,
   CRow,
-  CTable,
-  CTableBody,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
-  CTableRow,
 } from '@coreui/react'
-import { CChartLine } from '@coreui/react-chartjs'
-import { getStyle, hexToRgba } from '@coreui/utils'
 import CIcon from '@coreui/icons-react'
 import {
   cibGoogle,
   cibFacebook,
   cibLinkedin,
   cibTwitter,
-  cilCloudDownload,
   cilUser,
   cilUserFemale,
 } from '@coreui/icons'
-import dayjs from 'dayjs'
-import { getBillingsGTDate } from '../../../billing/services/billings.service'
-import { formatCurrency } from 'src/utils'
 import { NavLink } from 'react-router-dom'
-
-const progressExample = [
-  { title: 'Visits', value: '29.703 Users', percent: 40, color: 'success' },
-  { title: 'Unique', value: '24.093 Users', percent: 20, color: 'info' },
-  { title: 'Pageviews', value: '78.706 Views', percent: 60, color: 'warning' },
-  { title: 'New Users', value: '22.123 Users', percent: 80, color: 'danger' },
-  { title: 'Bounce Rate', value: 'Average Rate', percent: 40.15, color: 'primary' },
-]
 
 const progressGroupExample1 = [
   { title: 'Monday', value1: 34, value2: 78 },
