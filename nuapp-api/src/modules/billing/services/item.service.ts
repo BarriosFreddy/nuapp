@@ -34,8 +34,8 @@ export class ItemService extends BaseService<Item> {
       name: 1,
       description: 1,
       price: 1,
+      categoryId: 1,
       measurementUnit: 1,
-      expirationDate: 1,
     });
     if (page) query.skip(10 * (page - 1)).limit(10);
     const items: Item[] = await query.exec();

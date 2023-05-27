@@ -17,7 +17,8 @@ import {
 } from '@coreui/react'
 import Quagga from 'quagga'
 import { getItemCategories } from 'src/modules/billing/services/item-categories.service'
-import { existByCode, saveItem } from '../../services/items.service'
+import { existByCode } from '../../services/items.service'
+import { useDidUpdate } from 'src/hooks/useDidUpdate'
 
 const itemInitialState = {
   name: '',
@@ -32,7 +33,6 @@ const itemInitialState = {
 function ItemForm(props) {
   const dispatch = useDispatch()
   const itemCategories = useSelector((state) => state.itemCategories.itemCategories)
-  const itemGlobal = useSelector((state) => state.items.item)
   const codeRegistered = useSelector((state) => state.items.existsByCode)
   const [item, setItem] = useState(itemInitialState)
   const [failedValidations, setFailedValidations] = useState({
@@ -47,9 +47,9 @@ function ItemForm(props) {
   const toggle = () => setModal(!modal)
 
   useEffect(() => {
-    itemGlobal && setItem(itemGlobal)
+    props.item && setItem(props.item)
     dispatch(getItemCategories({ parse: true }))
-  }, [dispatch, itemGlobal])
+  }, [dispatch, props.item])
 
   const validateCodeExistence = (code) => {
     dispatch(existByCode(code))
@@ -64,16 +64,6 @@ function ItemForm(props) {
     if (name === 'code') {
       validateCodeExistence(value)
     }
-  }
-
-  const populateFieldsForm = ({ _id, code, description, price }) => {
-    setItem({
-      ...item,
-      _id,
-      code,
-      description,
-      price,
-    })
   }
 
   const clearFieldsForm = () => {
@@ -154,7 +144,7 @@ function ItemForm(props) {
 
   const save = async () => {
     if (isValidForm()) {
-      props.save({
+      props.onSave({
         ...item,
       })
       clearFieldsForm()
@@ -162,9 +152,9 @@ function ItemForm(props) {
   }
 
   const cancel = () => {
-    props.cancel()
+    props.onCancel()
   }
-  console.log({ codeRegistered })
+
   return (
     <>
       <CContainer fluid>
@@ -249,7 +239,7 @@ function ItemForm(props) {
           <CRow className="mt-5">
             <CCol xs="8" lg="2">
               <CButton variant="outline" color="success" type="button" onClick={() => save()}>
-                {itemGlobal ? 'ACTUALIZAR' : 'GUARDAR'}
+                {props.item ? 'ACTUALIZAR' : 'GUARDAR'}
               </CButton>
             </CCol>
             <CCol xs="4" lg="2">
@@ -280,6 +270,7 @@ function ItemForm(props) {
 export default ItemForm
 
 ItemForm.propTypes = {
-  cancel: PropTypes.func.isRequired,
-  save: PropTypes.func.isRequired,
+  onCancel: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
+  item: PropTypes.object,
 }

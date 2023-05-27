@@ -30,7 +30,7 @@ const AppSidebar = () => {
   const unfoldable = useSelector((state) => state.app.sidebarUnfoldable)
   const showToast = useSelector((state) => state.app.showToast)
   const toastConfig = useSelector((state) => state.app.toastConfig)
-  //const sidebarShow = useSelector((state) => state.app.sidebarShow)
+  const sidebarShow = useSelector((state) => state.app.sidebarShow)
 
   const onClickLogout = () => dispatch(logout())
 
@@ -38,8 +38,8 @@ const AppSidebar = () => {
     <>
       <CSidebar
         position="fixed"
-        unfoldable={true}
-        visible={true}
+        unfoldable={unfoldable}
+        visible={sidebarShow}
         onVisibleChange={(visible) => {
           dispatch(setSidebarShow(visible))
         }}

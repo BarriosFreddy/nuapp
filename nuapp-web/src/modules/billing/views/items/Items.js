@@ -24,17 +24,19 @@ import DefaultImg from './../../../../assets/images/new.ico'
 import { useDispatch, useSelector } from 'react-redux'
 import { getItems, saveItem, updateItem } from 'src/modules/billing/services/items.service'
 import CONSTANTS from 'src/constants'
-import { setItem } from '../../reducers/items.reducer'
 import { formatCurrency } from 'src/utils'
+import { useDidUpdate } from 'src/hooks/useDidUpdate'
+import { sendToast } from '../../../shared/services/notification.service'
 
 const { ENTER_KEYCODE, TAB_KEYCODE } = CONSTANTS
 
 function Item() {
   const dispatch = useDispatch()
   const items = useSelector((state) => state.items.items)
-  //const saveSuccess = useSelector((state) => state.items.saveSuccess)
+  const saveSuccess = useSelector((state) => state.items.saveSuccess)
   const [searchTerm, setSearchTerm] = useState('')
   let [editing, setEditing] = useState(false)
+  let [item, setItem] = useState(null)
   let [page, setPage] = useState(1)
 
   useEffect(() => {
@@ -44,6 +46,10 @@ function Item() {
   useEffect(() => {
     dispatch(getItems({ page: 1 }))
   }, [dispatch])
+
+  useDidUpdate(() => {
+    sendToast(dispatch, { message: 'Guardado exitosamente!' })
+  }, [saveSuccess])
 
   const save = (item) => {
     if (item._id) {
@@ -88,11 +94,11 @@ function Item() {
 
   const handleEdit = (item) => {
     setEditing(true)
-    dispatch(setItem(item))
+    setItem(item)
   }
 
   const handleNewItem = () => {
-    dispatch(setItem(null))
+    setItem(null)
     setEditing(true)
   }
 
@@ -233,7 +239,7 @@ function Item() {
                     </CCardFooter>
                   </>
                 )}
-                {editing && <ItemForm save={save} cancel={cancel} />}
+                {editing && <ItemForm item={item} onSave={save} onCancel={cancel} />}
               </CCardBody>
             </CCard>
           </CCol>

@@ -6,7 +6,7 @@ export const useDidUpdate = (callback, dependecies) => {
 
   useEffect(() => {
     if (mounted.current) {
-      callback()
+      return callback()
     } else {
       mounted.current = true
     }

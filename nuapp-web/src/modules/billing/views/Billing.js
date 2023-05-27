@@ -21,10 +21,11 @@ import CIcon from '@coreui/icons-react'
 import { cilTrash } from '@coreui/icons'
 import PaymentComp from './Payment'
 import { saveBilling } from '../../../modules/billing/services/billings.service'
-import { setShowToast, setSidebarUnfoldable, setToastConfig } from 'src/app.slice'
+import { setShowHeader, setShowToast, setSidebarUnfoldable, setToastConfig } from 'src/app.slice'
 import { setSaveSuccess } from '../reducers/billings.reducer'
 import { Helmet } from 'react-helmet'
 import { useDidUpdate } from 'src/hooks/useDidUpdate'
+import { sendToast } from '../../shared/services/notification.service'
 
 function Billing() {
   const saveSuccess = useSelector((state) => state.billing.saveSuccess)
@@ -39,7 +40,11 @@ function Billing() {
   const hasNotItems = items.length <= 0
 
   useEffect(() => {
+    dispatch(setShowHeader(false))
     dispatch(setSidebarUnfoldable(true))
+    return () => {
+      dispatch(setShowHeader(true))
+    }
   }, [dispatch])
 
   useDidUpdate(() => {
@@ -47,14 +52,7 @@ function Billing() {
     setReceivedAmount(0)
     setTotal(0)
     setItemUnits({})
-    dispatch(
-      setToastConfig({
-        message: 'Guardado exitoso!',
-        color: 'success',
-        delay: 2000,
-      }),
-    )
-    dispatch(setShowToast(true))
+    sendToast(dispatch, { message: 'Guardado exitosamente!' })
     dispatch(setSaveSuccess(false))
   }, [saveSuccess])
 
@@ -145,7 +143,7 @@ function Billing() {
   const hanndleReceivedAmount = (receivedAmount) => setReceivedAmount(receivedAmount)
   return (
     <>
-      <CContainer className="mt--6" fluid>
+      <CContainer className="mt-3" fluid>
         <Helmet>
           <title>Billing</title>
         </Helmet>
@@ -216,6 +214,7 @@ function Billing() {
                 <CCol lg="5">
                   <div className="d-grid gap-2">
                     <CButton
+                      type="button"
                       size="lg"
                       color={paying ? 'success' : 'primary'}
                       onClick={paying ? handleSave : handleCharge}
