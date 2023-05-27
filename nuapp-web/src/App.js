@@ -5,11 +5,11 @@ import './scss/style.scss'
 import { CSpinner } from '@coreui/react'
 import { getInfoUser } from './modules/core/services/auth.service'
 
-/* const loading = (
+const loading = (
   <div className="pt-3 text-center">
     <div className="sk-spinner sk-spinner-pulse"></div>
   </div>
-) */
+)
 
 // Containers
 const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
@@ -28,7 +28,7 @@ const App = () => {
     {
       path: '/login',
       element: (
-        <React.Suspense fallback={<CSpinner color="primary" />}>
+        <React.Suspense fallback={loading}>
           <Login />
         </React.Suspense>
       ),
@@ -36,7 +36,7 @@ const App = () => {
     {
       path: '/register',
       element: (
-        <React.Suspense fallback={<CSpinner color="primary" />}>
+        <React.Suspense fallback={loading}>
           <Register />
         </React.Suspense>
       ),
@@ -44,7 +44,7 @@ const App = () => {
     {
       path: '*',
       element: (
-        <React.Suspense fallback={<CSpinner color="primary" />}>
+        <React.Suspense fallback={loading}>
           <DefaultLayout />
         </React.Suspense>
       ),

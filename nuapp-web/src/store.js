@@ -22,9 +22,9 @@ const persistedItemsReducer = persistReducer(persistConfig, itemsReducer)
 const store = configureStore({
   //devTools: process.env.NODE_ENV !== 'production',
   reducer: {
-    app: persistedAppReducer,
-    billing: persistedBillingReducer,
-    items: persistedItemsReducer,
+    app: appReducer,
+    billing: billingReducer,
+    items: itemsReducer,
     itemCategories: itemCategoriesReducer,
   },
   middleware: (getDefaultMiddleware) =>

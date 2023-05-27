@@ -10,6 +10,7 @@ const DefaultLayout = (props) => {
   useEffect(() => {
     dispatch(getAllItems())
   }, [dispatch])
+  console.log({ showHeader })
   return (
     <div>
       <ErrorBoundary fallback={<h1>Algo salió mal!</h1>}>

@@ -10,9 +10,6 @@ function Listings() {
           <CCol>
             <CListGroup>
               <CListGroupItem component="a" href="/categories">
-                Categorias de items
-              </CListGroupItem>
-              <CListGroupItem component="a" href="/categories">
                 Documento de identidad
               </CListGroupItem>
             </CListGroup>

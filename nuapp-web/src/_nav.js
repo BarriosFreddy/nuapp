@@ -6,10 +6,10 @@ import { CNavGroup, CNavItem } from '@coreui/react'
 let _nav = [
   {
     component: CNavItem,
-    name: 'Dashboard',
-    to: '/dashboard',
+    name: 'Home',
+    to: '/home',
     icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
-    roles: ['ADMIN'],
+    roles: ['ADMIN', 'SELLER'],
   },
   {
     component: CNavGroup,
@@ -18,6 +18,13 @@ let _nav = [
     icon: <CIcon icon={cilDollar} customClassName="nav-icon" />,
     roles: ['ADMIN', 'SELLER'],
     items: [
+      {
+        component: CNavItem,
+        name: 'Dashboard',
+        to: '/billing/dashboard',
+        icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
+        roles: ['ADMIN'],
+      },
       {
         component: CNavItem,
         name: 'Facturación',
@@ -35,28 +42,28 @@ let _nav = [
       {
         component: CNavItem,
         name: 'Items',
-        to: '/items',
+        to: '/billing/items',
         icon: <CIcon icon={cilDollar} customClassName="nav-icon" />,
         roles: ['ADMIN'],
       },
       {
         component: CNavItem,
         name: 'Categorias de items',
-        to: '/item-categories',
+        to: '/billing/item-categories',
         icon: <CIcon icon={cilDollar} customClassName="nav-icon" />,
         roles: ['ADMIN'],
       },
       {
         component: CNavItem,
         name: 'Cargador de datos',
-        to: '/data-loader',
+        to: '/billing/data-loader',
         icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
         roles: ['ADMIN'],
       },
       {
         component: CNavItem,
         name: 'Sincronizador',
-        to: '/synchronizer',
+        to: '/billing/synchronizer',
         icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
         roles: ['ADMIN'],
       },

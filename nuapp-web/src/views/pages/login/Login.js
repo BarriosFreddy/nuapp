@@ -40,7 +40,7 @@ const Login = () => {
   const onKeyDownLogin = ({ keyCode }) => keyCode === 13 && onClickLogin()
 
   return isLoggedIn ? (
-    <Navigate to="/dashboard" replace />
+    <Navigate to="/home" replace />
   ) : (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <CContainer>
