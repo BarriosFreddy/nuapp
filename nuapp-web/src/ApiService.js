@@ -4,7 +4,7 @@ const { REACT_APP_BASE_URL } = process.env
 
 const axiosInstance = axios.create({
   baseURL: REACT_APP_BASE_URL,
-  timeout: 3000,
+  timeout: 5000,
   withCredentials: true,
   headers: {
     'Content-Type': 'application/json',

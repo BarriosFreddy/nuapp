@@ -1,6 +1,19 @@
 import React from 'react'
 import CIcon from '@coreui/icons-react'
-import { cilDescription, cilPuzzle, cilSpeedometer, cilDollar } from '@coreui/icons'
+import {
+  cilDescription,
+  cilPuzzle,
+  cilSpeedometer,
+  cilDollar,
+  cilHome,
+  cilMoney,
+  cilChartLine,
+  cilHistory,
+  cilSquare,
+  cilSitemap,
+  cilCloudUpload,
+  cilSync,
+} from '@coreui/icons'
 import { CNavGroup, CNavItem } from '@coreui/react'
 
 let _nav = [
@@ -8,21 +21,21 @@ let _nav = [
     component: CNavItem,
     name: 'Home',
     to: '/home',
-    icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilHome} customClassName="nav-icon" />,
     roles: ['ADMIN', 'SELLER'],
   },
   {
     component: CNavGroup,
     name: 'Punto de venta',
     to: '/billing',
-    icon: <CIcon icon={cilDollar} customClassName="nav-icon" />,
+    icon: <CIcon icon={cilMoney} customClassName="nav-icon" />,
     roles: ['ADMIN', 'SELLER'],
     items: [
       {
         component: CNavItem,
         name: 'Dashboard',
         to: '/billing/dashboard',
-        icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
+        icon: <CIcon icon={cilChartLine} customClassName="nav-icon" />,
         roles: ['ADMIN'],
       },
       {
@@ -36,35 +49,35 @@ let _nav = [
         component: CNavItem,
         name: 'Historial de facturas',
         to: '/billings',
-        icon: <CIcon icon={cilDollar} customClassName="nav-icon" />,
+        icon: <CIcon icon={cilHistory} customClassName="nav-icon" />,
         roles: ['ADMIN', 'SELLER'],
       },
       {
         component: CNavItem,
         name: 'Items',
         to: '/billing/items',
-        icon: <CIcon icon={cilDollar} customClassName="nav-icon" />,
+        icon: <CIcon icon={cilSquare} customClassName="nav-icon" />,
         roles: ['ADMIN'],
       },
       {
         component: CNavItem,
         name: 'Categorias de items',
         to: '/billing/item-categories',
-        icon: <CIcon icon={cilDollar} customClassName="nav-icon" />,
+        icon: <CIcon icon={cilSitemap} customClassName="nav-icon" />,
         roles: ['ADMIN'],
       },
       {
         component: CNavItem,
         name: 'Cargador de datos',
         to: '/billing/data-loader',
-        icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+        icon: <CIcon icon={cilCloudUpload} customClassName="nav-icon" />,
         roles: ['ADMIN'],
       },
       {
         component: CNavItem,
         name: 'Sincronizador',
         to: '/billing/synchronizer',
-        icon: <CIcon icon={cilPuzzle} customClassName="nav-icon" />,
+        icon: <CIcon icon={cilSync} customClassName="nav-icon" />,
         roles: ['ADMIN'],
       },
     ],
