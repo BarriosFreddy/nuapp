@@ -29,10 +29,15 @@ const ConfirmDialog = forwardRef(function ConfirmDialog({ message, onResponse },
         </CModalHeader>
         <CModalBody>{message}</CModalBody>
         <CModalFooter>
-          <CButton color="primary" onClick={() => handleResponse(true)}>
+          <CButton
+            style={{ width: 50 }}
+            variant="outline"
+            color="secondary"
+            onClick={() => handleResponse(true)}
+          >
             SI
           </CButton>
-          <CButton color="secondary" onClick={() => handleResponse(false)}>
+          <CButton style={{ width: 50 }} color="primary" onClick={() => handleResponse(false)}>
             NO
           </CButton>
         </CModalFooter>

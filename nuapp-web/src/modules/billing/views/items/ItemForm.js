@@ -161,9 +161,12 @@ function ItemForm(props) {
     confirmDialogRef.current.show(true)
   }
 
-  const handleResponse = (sureCancel) => {
+  const handleResponseCancel = (sureCancel) => {
     sureCancel && props.onCancel()
-    !sureCancel && confirmDialogRef.current.show(false)
+    if (!sureCancel) {
+      confirmDialogRef.current.show(false)
+      clearFieldsForm()
+    }
   }
 
   return (
@@ -232,6 +235,8 @@ function ItemForm(props) {
                     name="categoryId"
                     value={item.categoryId}
                     required
+                    feedbackInvalid="Campo obligatorio"
+                    invalid={failedValidations.categoryId}
                     onChange={(event) => onChangeField(event)}
                     aria-label="Default select example"
                     options={['Seleccione la categoria', ...itemCategories]}
@@ -269,7 +274,7 @@ function ItemForm(props) {
       </CContainer>
       <ConfirmDialog
         ref={confirmDialogRef}
-        onResponse={handleResponse}
+        onResponse={handleResponseCancel}
         message="¿Estás seguro que quieres cancelar?"
       ></ConfirmDialog>
       <CModal isOpen={modal} toggle={toggle}>
