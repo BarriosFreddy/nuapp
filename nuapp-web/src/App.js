@@ -2,7 +2,6 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import './scss/style.scss'
-import { CSpinner } from '@coreui/react'
 import { getInfoUser } from './modules/core/services/auth.service'
 
 const loading = (

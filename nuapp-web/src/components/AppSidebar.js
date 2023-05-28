@@ -10,8 +10,6 @@ import {
   CToastBody,
   CToastClose,
   CSidebarFooter,
-  CDropdownItem,
-  CNavItem,
 } from '@coreui/react'
 import { AppSidebarNav } from './AppSidebarNav'
 import SimpleBar from 'simplebar-react'
