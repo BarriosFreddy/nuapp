@@ -2,7 +2,7 @@
   "name": "@coreui/coreui-free-react-admin-template",
   "version": "4.4.0",
   "description": "Nuapp",
-  "homepage": "./build/",
+  "homepage": "./",
   "bugs": {
     "url": "https://github.com/coreui/coreui-free-react-admin-template/issues"
   },
