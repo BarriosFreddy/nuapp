@@ -43,9 +43,6 @@ function Item() {
 
   useEffect(() => {
     setSearchTerm('')
-  }, [])
-
-  useEffect(() => {
     dispatch(getItems({ page: 1 }))
   }, [dispatch])
 
@@ -106,6 +103,11 @@ function Item() {
     setEditing(true)
   }
 
+  const handleClear = () => {
+    setSearchTerm('')
+    dispatch(getItems({ page: 1 }))
+  }
+
   return (
     <>
       <CContainer className="mt--6" fluid>
@@ -138,6 +140,14 @@ function Item() {
                         />
                         <CButton type="button" variant="outline" color="primary" onClick={search}>
                           BUSCAR
+                        </CButton>
+                        <CButton
+                          variant="outline"
+                          type="button"
+                          color="secondary"
+                          onClick={handleClear}
+                        >
+                          BORRAR
                         </CButton>
                       </CInputGroup>
                     </CCol>

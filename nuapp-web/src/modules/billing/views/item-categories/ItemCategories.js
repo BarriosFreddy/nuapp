@@ -24,6 +24,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getItemCategories } from 'src/modules/billing/services/item-categories.service'
 import CONSTANTS from 'src/constants'
 import { Helmet } from 'react-helmet'
+import { saveItemCategory, updateItemCategory } from '../../services/item-categories.service'
 
 const { ENTER_KEYCODE, TAB_KEYCODE } = CONSTANTS
 
@@ -31,15 +32,29 @@ function Categories() {
   const dispatch = useDispatch()
   const itemCategories = useSelector((state) => state.itemCategories.itemCategories)
   const [searchTerm, setSearchTerm] = useState('')
+  let [itemCategory, setItemCategory] = useState(null)
   let [editing, setEditing] = useState(false)
   let [page, setPage] = useState(1)
 
   useEffect(() => {
+    setSearchTerm('')
     dispatch(getItemCategories())
   }, [dispatch])
 
-  const cancel = async () => {
-    dispatch(getItemCategories())
+  const handleSave = (itemCategory) => {
+    if (itemCategory._id) dispatch(updateItemCategory(itemCategory))
+    else dispatch(saveItemCategory(itemCategory))
+    setItemCategory(null)
+    setEditing(false)
+  }
+
+  const handleEdit = (itemCategory) => {
+    setEditing(true)
+    setItemCategory(itemCategory)
+  }
+
+  const handleCancel = async () => {
+    dispatch(getItemCategories({ page: 1 }))
     setEditing(false)
   }
 
@@ -71,6 +86,16 @@ function Categories() {
     dispatch(getItemCategories({ page: 1 }))
   }
 
+  const handleNew = () => {
+    setEditing(true)
+    setItemCategory(null)
+  }
+
+  const handleClear = () => {
+    setSearchTerm('')
+    dispatch(getItemCategories({ page: 1 }))
+  }
+
   return (
     <>
       <CContainer className="mt-6" fluid>
@@ -85,7 +110,7 @@ function Categories() {
             {!editing && (
               <CRow>
                 <CCol xs="4" lg="3">
-                  <CButton variant="outline" color="success" onClick={() => setEditing(true)}>
+                  <CButton variant="outline" color="success" onClick={handleNew}>
                     NUEVA CATEGORIA
                   </CButton>
                 </CCol>
@@ -101,6 +126,14 @@ function Categories() {
                     />
                     <CButton type="button" variant="outline" color="primary" onClick={search}>
                       BUSCAR
+                    </CButton>
+                    <CButton
+                      variant="outline"
+                      type="button"
+                      color="secondary"
+                      onClick={handleClear}
+                    >
+                      BORRAR
                     </CButton>
                   </CInputGroup>
                 </CCol>
@@ -142,20 +175,31 @@ function Categories() {
                         <CTableHeaderCell>Código</CTableHeaderCell>
                         <CTableHeaderCell>Nombre</CTableHeaderCell>
                         <CTableHeaderCell>Descripción</CTableHeaderCell>
+                        <CTableHeaderCell>&nbsp;</CTableHeaderCell>
                       </CTableRow>
                     </CTableHead>
                     <CTableBody>
                       {itemCategories &&
-                        itemCategories.map(({ _id, code, name, description }) => (
-                          <CTableRow key={_id}>
+                        itemCategories.map((itemCategory) => (
+                          <CTableRow key={itemCategory._id}>
                             <CTableDataCell xs="12" className="text-uppercase">
-                              {code}
+                              {itemCategory.code}
                             </CTableDataCell>
                             <CTableDataCell className="fs-6" xs="12">
-                              {name}
+                              {itemCategory.name}
                             </CTableDataCell>
                             <CTableDataCell xs="12" className="text-break">
-                              {description}
+                              {itemCategory.description}
+                            </CTableDataCell>
+                            <CTableDataCell xs="12">
+                              <CButton
+                                size="sm"
+                                variant="outline"
+                                color="info"
+                                onClick={() => handleEdit(itemCategory)}
+                              >
+                                Editar
+                              </CButton>
                             </CTableDataCell>
                           </CTableRow>
                         ))}
@@ -193,7 +237,13 @@ function Categories() {
                 </CCardFooter>
               </>
             )}
-            {editing && <ItemCategoriesForm cancel={cancel} />}
+            {editing && (
+              <ItemCategoriesForm
+                itemCategory={itemCategory}
+                onSave={handleSave}
+                onCancel={handleCancel}
+              />
+            )}
           </CCardBody>
         </CCard>
       </CContainer>

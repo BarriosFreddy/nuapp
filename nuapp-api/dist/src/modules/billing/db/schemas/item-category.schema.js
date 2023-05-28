@@ -12,8 +12,11 @@ const CategoryCreateSchema = joi_1.default.object({
 });
 exports.CategoryCreateSchema = CategoryCreateSchema;
 const CategoryUpdateSchema = joi_1.default.object({
+    code: joi_1.default.string(),
     name: joi_1.default.string(),
     description: joi_1.default.string(),
+    createdAt: joi_1.default.date(),
+    updatedAt: joi_1.default.date(),
     __v: joi_1.default.number(),
 });
 exports.CategoryUpdateSchema = CategoryUpdateSchema;

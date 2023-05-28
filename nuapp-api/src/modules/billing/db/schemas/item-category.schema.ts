@@ -7,8 +7,11 @@ const CategoryCreateSchema: Schema = joi.object({
 });
 
 const CategoryUpdateSchema: Schema = joi.object({
+  code: joi.string(),
   name: joi.string(),
   description: joi.string(),
+  createdAt: joi.date(),
+  updatedAt: joi.date(),
   __v: joi.number(),
 });
 

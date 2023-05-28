@@ -22,7 +22,6 @@ import {
 import Quagga from 'quagga'
 import { getItemCategories } from 'src/modules/billing/services/item-categories.service'
 import { existByCode } from '../../services/items.service'
-import { useDidUpdate } from 'src/hooks/useDidUpdate'
 import ConfirmDialog from 'src/components/shared/ConfirmDialog'
 
 const itemInitialState = {
@@ -50,6 +49,7 @@ function ItemForm(props) {
   })
   const [modal, setModal] = useState(false)
   const confirmDialogRef = useRef()
+  const oldCode = props.item?.code
 
   useEffect(() => {
     props.item && setItem(props.item)
@@ -58,7 +58,9 @@ function ItemForm(props) {
 
   const toggle = () => setModal(!modal)
   const validateCodeExistence = (code) => {
-    dispatch(existByCode(code))
+    if (props.item && oldCode !== code) {
+      dispatch(existByCode(code))
+    }
   }
 
   const onChangeField = ({ target: { name, value } }) => {
@@ -67,9 +69,7 @@ function ItemForm(props) {
       [name]: value,
     })
     setFailedValidations({ ...failedValidations, [name]: !value })
-    if (name === 'code') {
-      validateCodeExistence(value)
-    }
+    if (name === 'code') validateCodeExistence(value)
   }
 
   const clearFieldsForm = () => {
