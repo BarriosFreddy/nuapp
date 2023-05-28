@@ -21,6 +21,7 @@ import {
   cilUserFemale,
 } from '@coreui/icons'
 import { NavLink } from 'react-router-dom'
+import { Helmet } from 'react-helmet'
 
 const progressGroupExample1 = [
   { title: 'Monday', value1: 34, value2: 78 },
@@ -48,6 +49,9 @@ const Home = () => {
   return (
     <>
       <CCard className="mb-4">
+        <Helmet>
+          <title>HOME</title>
+        </Helmet>
         <CCardBody>
           <CHeaderNav className="d-none d-md-flex me-auto">
             <CNavItem>

@@ -145,7 +145,7 @@ function Billing() {
     <>
       <CContainer className="mt-3" fluid>
         <Helmet>
-          <title>Billing</title>
+          <title>FACTURACIÓN</title>
         </Helmet>
         <CRow>
           <CCol lg="5">

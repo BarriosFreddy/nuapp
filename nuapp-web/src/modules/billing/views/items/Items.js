@@ -18,6 +18,7 @@ import {
   CTableHeaderCell,
   CInputGroup,
   CFormInput,
+  CCardTitle,
 } from '@coreui/react'
 import ItemForm from './ItemForm'
 import DefaultImg from './../../../../assets/images/new.ico'
@@ -27,6 +28,7 @@ import CONSTANTS from 'src/constants'
 import { formatCurrency } from 'src/utils'
 import { useDidUpdate } from 'src/hooks/useDidUpdate'
 import { sendToast } from '../../../shared/services/notification.service'
+import { Helmet } from 'react-helmet'
 
 const { ENTER_KEYCODE, TAB_KEYCODE } = CONSTANTS
 
@@ -110,7 +112,13 @@ function Item() {
         <CRow>
           <CCol>
             <CCard className="mt-6 shadow border-10">
-              <CCardHeader className="border-0">
+              <CCardHeader>
+                <Helmet>
+                  <title>ITEMS</title>
+                </Helmet>
+                <CCardTitle>ITEMS</CCardTitle>
+              </CCardHeader>
+              <CCardBody>
                 {!editing && (
                   <CRow>
                     <CCol xs="4" lg="3">
@@ -135,8 +143,6 @@ function Item() {
                     </CCol>
                   </CRow>
                 )}
-              </CCardHeader>
-              <CCardBody>
                 {!editing && (
                   <>
                     <div className="d-lg-none">

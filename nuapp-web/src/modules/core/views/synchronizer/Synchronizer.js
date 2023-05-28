@@ -32,11 +32,11 @@ function Billing() {
     <>
       <CContainer className="mt--6" fluid>
         <Helmet>
-          <title>Sync</title>
+          <title>SINCRONIZADOR</title>
         </Helmet>
         <CCard>
           <CCardHeader>
-            <CCardTitle>Sincronizador</CCardTitle>
+            <CCardTitle>SINCRONIZADOR</CCardTitle>
           </CCardHeader>
           <CCardBody>
             <CRow>

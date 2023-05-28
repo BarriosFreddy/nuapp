@@ -17,11 +17,13 @@ import {
   CTableDataCell,
   CInputGroup,
   CFormInput,
+  CCardTitle,
 } from '@coreui/react'
 import ItemCategoriesForm from './ItemCategoriesForm'
 import { useDispatch, useSelector } from 'react-redux'
 import { getItemCategories } from 'src/modules/billing/services/item-categories.service'
 import CONSTANTS from 'src/constants'
+import { Helmet } from 'react-helmet'
 
 const { ENTER_KEYCODE, TAB_KEYCODE } = CONSTANTS
 
@@ -72,128 +74,128 @@ function Categories() {
   return (
     <>
       <CContainer className="mt-6" fluid>
-        <CRow>
-          <CCol>
-            <CCard className="mt-6 shadow border-10">
-              {!editing && (
-                <CCardHeader className="border-0">
-                  <CRow>
-                    <CCol xs="4" lg="3">
-                      <CButton variant="outline" color="success" onClick={() => setEditing(true)}>
-                        NUEVA CATEGORIA
-                      </CButton>
-                    </CCol>
-                    <CCol lg="5">
-                      <CInputGroup>
-                        <CFormInput
-                          type="text"
-                          name="searchTerm"
-                          placeholder="..."
-                          value={searchTerm}
-                          onChange={(event) => onChangeField(event)}
-                          onKeyDown={(event) => onKeyDownCodeField(event)}
-                        />
-                        <CButton type="button" variant="outline" color="primary" onClick={search}>
-                          BUSCAR
-                        </CButton>
-                      </CInputGroup>
-                    </CCol>
-                  </CRow>
-                </CCardHeader>
-              )}
-              <CCardBody>
-                {!editing && (
-                  <>
-                    <div className="d-lg-none">
+        <CCard className="mt-6 shadow border-10">
+          <CCardHeader>
+            <Helmet>
+              <title>CATEGORIA DE ITEMS</title>
+            </Helmet>
+            <CCardTitle>CATEGORIA DE ITEMS</CCardTitle>
+          </CCardHeader>
+          <CCardBody>
+            {!editing && (
+              <CRow>
+                <CCol xs="4" lg="3">
+                  <CButton variant="outline" color="success" onClick={() => setEditing(true)}>
+                    NUEVA CATEGORIA
+                  </CButton>
+                </CCol>
+                <CCol lg="5">
+                  <CInputGroup>
+                    <CFormInput
+                      type="text"
+                      name="searchTerm"
+                      placeholder="..."
+                      value={searchTerm}
+                      onChange={(event) => onChangeField(event)}
+                      onKeyDown={(event) => onKeyDownCodeField(event)}
+                    />
+                    <CButton type="button" variant="outline" color="primary" onClick={search}>
+                      BUSCAR
+                    </CButton>
+                  </CInputGroup>
+                </CCol>
+              </CRow>
+            )}
+            {!editing && (
+              <>
+                <div className="d-lg-none">
+                  {itemCategories &&
+                    itemCategories.map(({ _id, code, name, description }) => (
+                      <CCard
+                        key={_id}
+                        style={{
+                          width: 'auto',
+                        }}
+                      >
+                        <CRow className="g-0">
+                          <CCol xs={12}>
+                            <CCardBody>
+                              <CRow>
+                                <CCol>{code}</CCol>
+                              </CRow>
+                              <CRow>
+                                <CCol>{name}</CCol>
+                              </CRow>
+                              <CRow>
+                                <CCol>{description}</CCol>
+                              </CRow>
+                            </CCardBody>
+                          </CCol>
+                        </CRow>
+                      </CCard>
+                    ))}
+                </div>
+                <div className="d-none d-lg-block">
+                  <CTable>
+                    <CTableHead>
+                      <CTableRow>
+                        <CTableHeaderCell>Código</CTableHeaderCell>
+                        <CTableHeaderCell>Nombre</CTableHeaderCell>
+                        <CTableHeaderCell>Descripción</CTableHeaderCell>
+                      </CTableRow>
+                    </CTableHead>
+                    <CTableBody>
                       {itemCategories &&
                         itemCategories.map(({ _id, code, name, description }) => (
-                          <CCard
-                            key={_id}
-                            style={{
-                              width: 'auto',
-                            }}
-                          >
-                            <CRow className="g-0">
-                              <CCol xs={12}>
-                                <CCardBody>
-                                  <CRow>
-                                    <CCol>{code}</CCol>
-                                  </CRow>
-                                  <CRow>
-                                    <CCol>{name}</CCol>
-                                  </CRow>
-                                  <CRow>
-                                    <CCol>{description}</CCol>
-                                  </CRow>
-                                </CCardBody>
-                              </CCol>
-                            </CRow>
-                          </CCard>
-                        ))}
-                    </div>
-                    <div className="d-none d-lg-block">
-                      <CTable>
-                        <CTableHead>
-                          <CTableRow>
-                            <CTableHeaderCell>Código</CTableHeaderCell>
-                            <CTableHeaderCell>Nombre</CTableHeaderCell>
-                            <CTableHeaderCell>Descripción</CTableHeaderCell>
+                          <CTableRow key={_id}>
+                            <CTableDataCell xs="12" className="text-uppercase">
+                              {code}
+                            </CTableDataCell>
+                            <CTableDataCell className="fs-6" xs="12">
+                              {name}
+                            </CTableDataCell>
+                            <CTableDataCell xs="12" className="text-break">
+                              {description}
+                            </CTableDataCell>
                           </CTableRow>
-                        </CTableHead>
-                        <CTableBody>
-                          {itemCategories &&
-                            itemCategories.map(({ _id, code, name, description }) => (
-                              <CTableRow key={_id}>
-                                <CTableDataCell xs="12" className="text-uppercase">
-                                  {code}
-                                </CTableDataCell>
-                                <CTableDataCell className="fs-6" xs="12">
-                                  {name}
-                                </CTableDataCell>
-                                <CTableDataCell xs="12" className="text-break">
-                                  {description}
-                                </CTableDataCell>
-                              </CTableRow>
-                            ))}
-                        </CTableBody>
-                      </CTable>
-                    </div>
+                        ))}
+                    </CTableBody>
+                  </CTable>
+                </div>
 
-                    <CCardFooter className="py-4">
-                      <CRow>
-                        <CCol>
-                          <div className="d-grid col-12 mx-auto">
-                            <CButton
-                              type="button"
-                              variant="outline"
-                              color="secondary"
-                              onClick={handlePrevPage}
-                            >
-                              ANTERIOR
-                            </CButton>
-                          </div>
-                        </CCol>
-                        <CCol>
-                          <div className="d-grid col-12 mx-auto">
-                            <CButton
-                              type="button"
-                              variant="outline"
-                              color="secondary"
-                              onClick={handleNextPage}
-                            >
-                              SIGUIENTE
-                            </CButton>
-                          </div>
-                        </CCol>
-                      </CRow>
-                    </CCardFooter>
-                  </>
-                )}
-                {editing && <ItemCategoriesForm cancel={cancel} />}
-              </CCardBody>
-            </CCard>
-          </CCol>
-        </CRow>
+                <CCardFooter className="py-4">
+                  <CRow>
+                    <CCol>
+                      <div className="d-grid col-12 mx-auto">
+                        <CButton
+                          type="button"
+                          variant="outline"
+                          color="secondary"
+                          onClick={handlePrevPage}
+                        >
+                          ANTERIOR
+                        </CButton>
+                      </div>
+                    </CCol>
+                    <CCol>
+                      <div className="d-grid col-12 mx-auto">
+                        <CButton
+                          type="button"
+                          variant="outline"
+                          color="secondary"
+                          onClick={handleNextPage}
+                        >
+                          SIGUIENTE
+                        </CButton>
+                      </div>
+                    </CCol>
+                  </CRow>
+                </CCardFooter>
+              </>
+            )}
+            {editing && <ItemCategoriesForm cancel={cancel} />}
+          </CCardBody>
+        </CCard>
       </CContainer>
     </>
   )

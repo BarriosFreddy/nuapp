@@ -15,10 +15,13 @@ import {
   CTableDataCell,
   CTableHead,
   CTableHeaderCell,
+  CCardHeader,
+  CCardTitle,
 } from '@coreui/react'
 import { formatCurrency, formatDate } from '../../../utils'
 import { getBillings } from 'src/modules/billing/services/billings.service'
 import { setBillings } from '../reducers/billings.reducer'
+import { Helmet } from 'react-helmet'
 
 function BillingsHistorical() {
   const dispatch = useDispatch()
@@ -54,6 +57,12 @@ function BillingsHistorical() {
   return (
     <>
       <CCard className="shadow border-10 m-4">
+        <CCardHeader>
+          <Helmet>
+            <title>HISTORIAL DE FACTURAS</title>
+          </Helmet>
+          <CCardTitle>HISTORIAL DE FACTURAS</CCardTitle>
+        </CCardHeader>
         <CCardBody>
           <CContainer className="mt--6" fluid>
             <CRow>

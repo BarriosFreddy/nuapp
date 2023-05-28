@@ -24,6 +24,7 @@ import { cilCloudDownload } from '@coreui/icons'
 import dayjs from 'dayjs'
 import { getBillingsGTDate } from '../../../billing/services/billings.service'
 import { formatCurrency } from 'src/utils'
+import { Helmet } from 'react-helmet'
 
 const progressExample = [
   { title: 'Visits', value: '29.703 Users', percent: 40, color: 'success' },
@@ -47,6 +48,9 @@ const Dashboard = () => {
   return (
     <>
       <CCard className="mb-4">
+        <Helmet>
+          <title>DASHBOARD</title>
+        </Helmet>
         <CCardBody>
           <CRow>
             <CCol sm={5}>

@@ -68,7 +68,7 @@ let _nav = [
       },
       {
         component: CNavItem,
-        name: 'Cargador de datos',
+        name: 'Migrador de datos',
         to: '/billing/data-loader',
         icon: <CIcon icon={cilCloudUpload} customClassName="nav-icon" />,
         roles: ['ADMIN'],

@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, createRef, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import PropTypes from 'prop-types'
 import {
@@ -23,6 +23,7 @@ import Quagga from 'quagga'
 import { getItemCategories } from 'src/modules/billing/services/item-categories.service'
 import { existByCode } from '../../services/items.service'
 import { useDidUpdate } from 'src/hooks/useDidUpdate'
+import ConfirmDialog from 'src/components/shared/ConfirmDialog'
 
 const itemInitialState = {
   name: '',
@@ -48,13 +49,14 @@ function ItemForm(props) {
     measurementUnit: false,
   })
   const [modal, setModal] = useState(false)
-  const toggle = () => setModal(!modal)
+  const confirmDialogRef = useRef()
 
   useEffect(() => {
     props.item && setItem(props.item)
     dispatch(getItemCategories({ parse: true }))
   }, [dispatch, props.item])
 
+  const toggle = () => setModal(!modal)
   const validateCodeExistence = (code) => {
     dispatch(existByCode(code))
   }
@@ -156,7 +158,12 @@ function ItemForm(props) {
   }
 
   const cancel = () => {
-    props.onCancel()
+    confirmDialogRef.current.show(true)
+  }
+
+  const handleResponse = (sureCancel) => {
+    sureCancel && props.onCancel()
+    !sureCancel && confirmDialogRef.current.show(false)
   }
 
   return (
@@ -260,6 +267,11 @@ function ItemForm(props) {
           </CCardFooter>
         </CCard>
       </CContainer>
+      <ConfirmDialog
+        ref={confirmDialogRef}
+        onResponse={handleResponse}
+        message="¿Estás seguro que quieres cancelar?"
+      ></ConfirmDialog>
       <CModal isOpen={modal} toggle={toggle}>
         <CModalHeader toggle={toggle} close={closeBtn}>
           Escaneando

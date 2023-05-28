@@ -14,6 +14,9 @@ import {
   CTableRow,
   CTableDataCell,
   CTableBody,
+  CTableHead,
+  CTableHeaderCell,
+  CCardTitle,
 } from '@coreui/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { saveItemCategoriesBulk } from 'src/modules/billing/services/items.service'
@@ -21,6 +24,7 @@ import { setShowToast, setToastConfig } from 'src/app.slice'
 import { setSaveSuccess } from '../../reducers/billings.reducer'
 import { formatCurrency } from 'src/utils'
 import { useDidUpdate } from 'src/hooks/useDidUpdate'
+import { Helmet } from 'react-helmet'
 
 const LIMIT_5_MB = 5242880
 function DataLoader() {
@@ -94,114 +98,121 @@ function DataLoader() {
   return (
     <>
       <CContainer className="mt--6" fluid>
-        <CRow>
-          <div className="col">
-            <CCard className="shadow border-10">
-              <CCardHeader className="border-0">
-                <CContainer>
+        <CCard className="shadow border-10">
+          <CCardHeader className="border-0">
+            <Helmet>
+              <title>MIGRADOR DE DATOS</title>
+            </Helmet>
+            <CCardTitle>MIGRADOR DE DATOS</CCardTitle>
+          </CCardHeader>
+          <CCardBody>
+            <>
+              <CCard
+                style={{
+                  width: 'auto',
+                }}
+              >
+                <CCardBody>
                   <CRow>
-                    <CCol xs="4"> </CCol>
+                    <CCol xs="12">
+                      <div className="mb-3">
+                        <CFormInput
+                          type="file"
+                          id="formFile"
+                          label="Cargar datos"
+                          onChange={handleChange}
+                          feedbackInvalid={feedbackInvalid}
+                          invalid={!!feedbackInvalid}
+                          required
+                        />
+                      </div>
+                    </CCol>
+                    <CCol xs="12">
+                      <CButton
+                        color="success"
+                        type="button"
+                        disabled={items.length <= 0}
+                        onClick={handleLoad}
+                      >
+                        Cargar datos
+                      </CButton>
+                    </CCol>
                   </CRow>
-                </CContainer>
-              </CCardHeader>
-              <CCardBody>
-                <>
-                  <CCard
-                    style={{
-                      width: 'auto',
-                    }}
-                  >
-                    <CCardBody>
-                      <CRow>
-                        <CCol xs="12">
-                          <div className="mb-3">
-                            <CFormInput
-                              type="file"
-                              id="formFile"
-                              label="Cargar datos"
-                              onChange={handleChange}
-                              feedbackInvalid={feedbackInvalid}
-                              invalid={!!feedbackInvalid}
-                              required
-                            />
-                          </div>
-                        </CCol>
-                        <CCol xs="12">
-                          <CButton
-                            color="success"
-                            type="button"
-                            disabled={items.length <= 0}
-                            onClick={handleLoad}
-                          >
-                            Cargar datos
-                          </CButton>
-                        </CCol>
-                      </CRow>
-                      <div className="d-lg-none">
-                        {items.map(({ code, name, description, units }) => (
-                          <CCard className="shadow mt-1" key={code}>
-                            <CCardBody>
-                              <CRow>
-                                <CCol xs="12" className="text-uppercase">
-                                  {name}
-                                </CCol>
-                                <CCol className="fs-6" xs="12">
-                                  {code}
-                                </CCol>
-                                <CCol xs="12" className="text-break">
-                                  {description}
-                                </CCol>
-                                <CCol xs="12">{units}</CCol>
-                              </CRow>
-                            </CCardBody>
-                          </CCard>
-                        ))}
-                      </div>
-                      <div className="d-none d-lg-block">
-                        <CTable>
-                          <CTableBody>
-                            {items.map(
-                              ({
-                                code,
-                                name,
-                                description,
-                                price,
-                                units,
-                                measurementUnit,
-                                expirationDate,
-                                laboratory,
-                              }) => (
-                                <CTableRow key={code}>
-                                  <CTableDataCell xs="12" className="text-uppercase">
-                                    {name}
-                                  </CTableDataCell>
-                                  <CTableDataCell className="fs-6" xs="12">
-                                    {code}
-                                  </CTableDataCell>
-                                  <CTableDataCell xs="12" className="text-break">
-                                    {description}
-                                  </CTableDataCell>
-                                  <CTableDataCell xs="12">{formatCurrency(price)}</CTableDataCell>
-                                  <CTableDataCell xs="12">{units}</CTableDataCell>
-                                  <CTableDataCell xs="12">{measurementUnit}</CTableDataCell>
-                                  <CTableDataCell xs="12">{expirationDate}</CTableDataCell>
-                                  <CTableDataCell xs="12">{laboratory}</CTableDataCell>
-                                </CTableRow>
-                              ),
-                            )}
-                          </CTableBody>
-                        </CTable>
-                      </div>
-                    </CCardBody>
-                  </CCard>
-                  <CCardFooter className="py-4">
-                    <CCol></CCol>
-                  </CCardFooter>
-                </>
-              </CCardBody>
-            </CCard>
-          </div>
-        </CRow>
+                  <div className="d-lg-none">
+                    {items.map(({ code, name, description, units }) => (
+                      <CCard className="shadow mt-1" key={code}>
+                        <CCardBody>
+                          <CRow>
+                            <CCol xs="12" className="text-uppercase">
+                              {name}
+                            </CCol>
+                            <CCol className="fs-6" xs="12">
+                              {code}
+                            </CCol>
+                            <CCol xs="12" className="text-break">
+                              {description}
+                            </CCol>
+                            <CCol xs="12">{units}</CCol>
+                          </CRow>
+                        </CCardBody>
+                      </CCard>
+                    ))}
+                  </div>
+                  <div className="d-none d-lg-block">
+                    <CTable>
+                      <CTableHead>
+                        <CTableRow>
+                          <CTableHeaderCell>Nombre</CTableHeaderCell>
+                          <CTableHeaderCell>Código</CTableHeaderCell>
+                          <CTableHeaderCell>Descripción</CTableHeaderCell>
+                          <CTableHeaderCell>Precio</CTableHeaderCell>
+                          <CTableHeaderCell>Unidades</CTableHeaderCell>
+                          <CTableHeaderCell>Uniad de medida</CTableHeaderCell>
+                          <CTableHeaderCell>Fecha de vencimiento</CTableHeaderCell>
+                          <CTableHeaderCell>Laboratorio</CTableHeaderCell>
+                        </CTableRow>
+                      </CTableHead>
+                      <CTableBody>
+                        {items.map(
+                          ({
+                            code,
+                            name,
+                            description,
+                            price,
+                            units,
+                            measurementUnit,
+                            expirationDate,
+                            laboratory,
+                          }) => (
+                            <CTableRow key={code}>
+                              <CTableDataCell xs="12" className="text-uppercase">
+                                {name}
+                              </CTableDataCell>
+                              <CTableDataCell className="fs-6" xs="12">
+                                {code}
+                              </CTableDataCell>
+                              <CTableDataCell xs="12" className="text-break">
+                                {description}
+                              </CTableDataCell>
+                              <CTableDataCell xs="12">{formatCurrency(price)}</CTableDataCell>
+                              <CTableDataCell xs="12">{units}</CTableDataCell>
+                              <CTableDataCell xs="12">{measurementUnit}</CTableDataCell>
+                              <CTableDataCell xs="12">{expirationDate}</CTableDataCell>
+                              <CTableDataCell xs="12">{laboratory}</CTableDataCell>
+                            </CTableRow>
+                          ),
+                        )}
+                      </CTableBody>
+                    </CTable>
+                  </div>
+                </CCardBody>
+              </CCard>
+              <CCardFooter className="py-4">
+                <CCol></CCol>
+              </CCardFooter>
+            </>
+          </CCardBody>
+        </CCard>
       </CContainer>
     </>
   )
