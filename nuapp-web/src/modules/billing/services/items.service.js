@@ -35,7 +35,7 @@ export const existByCode = (code) => async (dispatch, _, api) => {
 export const getItems = (queryParams, useCacheOnly) => async (dispatch, getState, api) => {
   dispatch(setLoading(true))
   const urlQueryParams = new URLSearchParams(queryParams).toString()
-  isonline = useCacheOnly ? useCacheOnly : await isOnline()
+  isonline = useCacheOnly ? false : await isOnline()
   const { data, status } = isonline
     ? await api.get(`/items${urlQueryParams.length > 0 ? '?' + urlQueryParams.toString() : ''}`)
     : getLocally(getState(), queryParams)
