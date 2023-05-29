@@ -1,4 +1,10 @@
-import { saveSuccess, setItems, setItemsLocally, setExistsByCode } from '../reducers/items.reducer'
+import {
+  saveSuccess,
+  setItems,
+  setItemsLocally,
+  setExistsByCode,
+  setLoading,
+} from '../reducers/items.reducer'
 import isOnline from 'is-online'
 let isonline = false
 
@@ -26,13 +32,15 @@ export const existByCode = (code) => async (dispatch, _, api) => {
   if (status === 200) dispatch(setExistsByCode(data))
 }
 
-export const getItems = (queryParams) => async (dispatch, getState, api) => {
+export const getItems = (queryParams, useCacheOnly) => async (dispatch, getState, api) => {
+  dispatch(setLoading(true))
   const urlQueryParams = new URLSearchParams(queryParams).toString()
-  isonline = await isOnline()
+  isonline = useCacheOnly ? useCacheOnly : await isOnline()
   const { data, status } = isonline
     ? await api.get(`/items${urlQueryParams.length > 0 ? '?' + urlQueryParams.toString() : ''}`)
     : getLocally(getState(), queryParams)
   if (status === 200) dispatch(setItems(data))
+  dispatch(setLoading(false))
 }
 
 export const getAllItems = () => async (dispatch, state, api) => {

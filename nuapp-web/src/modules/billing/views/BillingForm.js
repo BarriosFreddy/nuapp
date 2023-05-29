@@ -26,12 +26,14 @@ import { useDispatch, useSelector } from 'react-redux'
 import { setItems } from 'src/modules/billing/reducers/items.reducer'
 import { getItems } from 'src/modules/billing/services/items.service'
 import CONSTANTS from './../../../constants'
+import { useDidUpdate } from 'src/hooks/useDidUpdate'
 
 const { ENTER_KEYCODE, TAB_KEYCODE } = CONSTANTS
 
 const BillingForm = (props) => {
   const dispatch = useDispatch()
   const items = useSelector((state) => state.items.items)
+  const loading = useSelector((state) => state.items.loading)
   const [searchTerm, setSearchTerm] = useState('')
   const [modal, setModal] = useState(false)
   const toggle = () => setModal(!modal)
@@ -47,6 +49,10 @@ const BillingForm = (props) => {
     clear()
   }, [clear])
 
+  useDidUpdate(() => {
+    if (items.length === 1) addItem(items[0])
+  }, [loading])
+
   const onChangeField = ({ target: { value } }) => {
     setSearchTerm(value)
     search(value)
@@ -55,16 +61,13 @@ const BillingForm = (props) => {
   const onKeyDownCodeField = async ({ keyCode }) => {
     if ([ENTER_KEYCODE, TAB_KEYCODE].includes(keyCode)) {
       search()
-      setTimeout(() => {
-        if (items.length > 0) addItem(items[0])
-      }, 500)
     }
   }
 
   const search = async (term) => {
     const termToSearch = term ?? searchTerm
     if (!!termToSearch) {
-      dispatch(getItems({ code: termToSearch, name: termToSearch, page: 1 }))
+      dispatch(getItems({ code: termToSearch, name: termToSearch, page: 1 }, true))
     }
   }
 
