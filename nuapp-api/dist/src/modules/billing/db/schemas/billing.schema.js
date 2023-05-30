@@ -19,5 +19,9 @@ const BillingCreateSchema = joi_1.default.object({
         measurementUnit: joi_1.default.string(),
     }))
         .required(),
+    createdAt: joi_1.default.object({
+        date: joi_1.default.number(),
+        offset: joi_1.default.number(),
+    }),
 });
 exports.BillingCreateSchema = BillingCreateSchema;

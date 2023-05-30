@@ -1,7 +1,7 @@
 import joi, { Schema } from 'joi';
 
 const BillingCreateSchema: Schema = joi.object({
-  receivedAmount: joi.number().required(), 
+  receivedAmount: joi.number().required(),
   billAmount: joi.number().required(),
   items: joi
     .array()
@@ -16,8 +16,10 @@ const BillingCreateSchema: Schema = joi.object({
       }),
     )
     .required(),
+  createdAt: joi.object({
+    date: joi.number(),
+    offset: joi.number(),
+  }),
 });
 
-export {
-  BillingCreateSchema,
-};
+export { BillingCreateSchema };

@@ -33,6 +33,8 @@ const kardex_transaction_type_1 = require("../enums/kardex-transaction-type");
 const base_service_1 = require("../../../helpers/abstracts/base.service");
 const sequenced_code_service_1 = require("./sequenced-code.service");
 const dayjs_1 = __importDefault(require("dayjs"));
+const utc_1 = __importDefault(require("dayjs/plugin/utc"));
+dayjs_1.default.extend(utc_1.default);
 const kardexTransactionService = tsyringe_1.container.resolve(kardex_transaction_service_1.KardexTransactionService);
 const sequencedCodeService = tsyringe_1.container.resolve(sequenced_code_service_1.SequencedCodeService);
 let BillingService = class BillingService extends base_service_1.BaseService {
@@ -43,32 +45,11 @@ let BillingService = class BillingService extends base_service_1.BaseService {
     }
     findAll({ page = 1 }) {
         return __awaiter(this, void 0, void 0, function* () {
-            const bills = yield billing_model_1.default.find()
+            const billings = yield billing_model_1.default.find()
                 .skip(10 * (page - 1))
                 .limit(10)
-                .sort({ createdAt: -1 })
+                .sort({ 'createdAt.date': -1 })
                 .exec();
-            return bills;
-        });
-    }
-    findPerDate(date, projection) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const startDate = (0, dayjs_1.default)(date)
-                .set('hours', 0)
-                .set('minutes', 0)
-                .set('seconds', 0)
-                .toDate();
-            const endDate = (0, dayjs_1.default)(date)
-                .set('hours', 23)
-                .set('minutes', 59)
-                .set('seconds', 59)
-                .toDate();
-            const billings = yield billing_model_1.default.find({
-                createdAt: {
-                    $gte: startDate,
-                    $lte: endDate,
-                },
-            }, projection).exec();
             return billings;
         });
     }
@@ -78,11 +59,13 @@ let BillingService = class BillingService extends base_service_1.BaseService {
                 .set('hours', 0)
                 .set('minutes', 0)
                 .set('seconds', 0)
-                .toDate();
+                .utcOffset(-5)
+                .toDate()
+                .getTime();
             const billings = yield billing_model_1.default.aggregate([
                 {
                     $match: {
-                        createdAt: {
+                        'createdAt.date': {
                             $gte: startDate,
                         },
                     },
@@ -91,12 +74,20 @@ let BillingService = class BillingService extends base_service_1.BaseService {
                     $project: {
                         createdAt: 1,
                         billAmount: 1,
+                        code: 1,
+                    },
+                },
+                {
+                    $addFields: {
+                        createdAtAsDate: {
+                            $toDate: { $sum: ['$createdAt.date', '$createdAt.offset'] },
+                        },
                     },
                 },
                 {
                     $addFields: {
                         createdAt: {
-                            $substr: ['$createdAt', 0, 10],
+                            $substr: ['$createdAtAsDate', 0, 10],
                         },
                     },
                 },
@@ -135,7 +126,6 @@ let BillingService = class BillingService extends base_service_1.BaseService {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 billing.code = yield generateSequencedCode();
-                billing.createdAt = new Date();
                 const saved = yield billing_model_1.default.create(billing);
                 const { items } = saved;
                 yield this.saveKardexTransaction(items);
@@ -151,7 +141,6 @@ let BillingService = class BillingService extends base_service_1.BaseService {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 for (const billing of billings) {
-                    billing.createdAt = new Date();
                     billing.code = yield generateSequencedCode();
                 }
                 let billingModels = billings.map((billing) => new billing_model_1.default(billing));

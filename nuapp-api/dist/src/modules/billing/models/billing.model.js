@@ -15,8 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.Billing = void 0;
 const typegoose_1 = require("@typegoose/typegoose");
 const mongoose_1 = __importDefault(require("mongoose"));
-const defaultClasses_1 = require("@typegoose/typegoose/lib/defaultClasses");
-class Billing extends defaultClasses_1.TimeStamps {
+const timestamps_abstract_1 = require("../../../helpers/abstracts/timestamps.abstract");
+class Billing extends timestamps_abstract_1.TimeStamps {
 }
 __decorate([
     (0, typegoose_1.prop)({ required: true, unique: true }),

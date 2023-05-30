@@ -9,6 +9,8 @@ import { ProjectionType } from 'mongoose';
 import { DocumentType } from '@typegoose/typegoose';
 import { BeAnObject } from '@typegoose/typegoose/lib/types';
 import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+dayjs.extend(utc);
 import { Item } from '../models/item.model';
 
 const kardexTransactionService = container.resolve(KardexTransactionService);
@@ -20,39 +22,11 @@ export class BillingService extends BaseService<Billing> {
     return await BillingModel.findById(id).exec();
   }
   async findAll({ page = 1 }): Promise<Billing[]> {
-    const bills: Billing[] = await BillingModel.find()
+    const billings: Billing[] = await BillingModel.find()
       .skip(10 * (page - 1))
       .limit(10)
-      .sort({ createdAt: -1 })
+      .sort({ 'createdAt.date': -1 })
       .exec();
-    return bills;
-  }
-  async findPerDate(
-    date: Date,
-    projection:
-      | ProjectionType<DocumentType<Billing, BeAnObject>>
-      | null
-      | undefined,
-  ): Promise<Billing[]> {
-    const startDate = dayjs(date)
-      .set('hours', 0)
-      .set('minutes', 0)
-      .set('seconds', 0)
-      .toDate();
-    const endDate = dayjs(date)
-      .set('hours', 23)
-      .set('minutes', 59)
-      .set('seconds', 59)
-      .toDate();
-    const billings: Billing[] = await BillingModel.find(
-      {
-        createdAt: {
-          $gte: startDate,
-          $lte: endDate,
-        },
-      },
-      projection,
-    ).exec();
     return billings;
   }
   async findGreaterThanDate(date: string): Promise<Billing[]> {
@@ -60,11 +34,13 @@ export class BillingService extends BaseService<Billing> {
       .set('hours', 0)
       .set('minutes', 0)
       .set('seconds', 0)
-      .toDate();
+      .utcOffset(-5)
+      .toDate()
+      .getTime();
     const billings: Billing[] = await BillingModel.aggregate([
       {
         $match: {
-          createdAt: {
+          'createdAt.date': {
             $gte: startDate,
           },
         },
@@ -73,12 +49,20 @@ export class BillingService extends BaseService<Billing> {
         $project: {
           createdAt: 1,
           billAmount: 1,
+          code: 1,
+        },
+      },
+      {
+        $addFields: {
+          createdAtAsDate: {
+            $toDate: { $sum: ['$createdAt.date', '$createdAt.offset'] },
+          },
         },
       },
       {
         $addFields: {
           createdAt: {
-            $substr: ['$createdAt', 0, 10],
+            $substr: ['$createdAtAsDate', 0, 10],
           },
         },
       },
@@ -115,7 +99,6 @@ export class BillingService extends BaseService<Billing> {
   async save(billing: Billing): Promise<Billing> {
     try {
       billing.code = await generateSequencedCode();
-      billing.createdAt = new Date();
       const saved = await BillingModel.create(billing);
       const { items } = saved;
       await this.saveKardexTransaction(items);
@@ -129,7 +112,6 @@ export class BillingService extends BaseService<Billing> {
   async saveAll(billings: Billing[]): Promise<any> {
     try {
       for (const billing of billings) {
-        billing.createdAt = new Date();
         billing.code = await generateSequencedCode();
       }
       let billingModels = billings.map((billing) => new BillingModel(billing));

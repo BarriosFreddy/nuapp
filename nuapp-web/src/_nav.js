@@ -34,7 +34,7 @@ let _nav = [
         name: 'Dashboard',
         to: '/billing-dashboard',
         icon: <CIcon icon={cilChartLine} customClassName="nav-icon" />,
-        roles: ['ADMIN'],
+        roles: ['ADMIN', 'SELLER'],
       },
       {
         component: CNavItem,
@@ -55,7 +55,7 @@ let _nav = [
         name: 'Items',
         to: '/billing-items',
         icon: <CIcon icon={cilSquare} customClassName="nav-icon" />,
-        roles: ['ADMIN'],
+        roles: ['ADMIN', 'SELLER'],
       },
       {
         component: CNavItem,

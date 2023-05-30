@@ -1,7 +1,7 @@
 import { getModelForClass, prop } from '@typegoose/typegoose';
 import mongoose from 'mongoose';
 import { Item } from './item.model';
-import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
+import { TimeStamps } from '../../../helpers/abstracts/timestamps.abstract';
 
 export class Billing extends TimeStamps {
   _id!: mongoose.Types.ObjectId;

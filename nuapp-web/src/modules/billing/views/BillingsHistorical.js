@@ -81,7 +81,7 @@ function BillingsHistorical() {
                             <CCol xs={8}>
                               <CCardBody>
                                 <CRow>
-                                  <CCol>{createdAt}</CCol>
+                                  <CCol>{formatDate(createdAt)}</CCol>
                                 </CRow>
                                 <CRow>
                                   <CCol>{code}</CCol>

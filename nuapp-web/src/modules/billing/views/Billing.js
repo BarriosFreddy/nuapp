@@ -26,6 +26,9 @@ import { setSaveSuccess } from '../reducers/billings.reducer'
 import { Helmet } from 'react-helmet'
 import { useDidUpdate } from 'src/hooks/useDidUpdate'
 import { sendToast } from '../../shared/services/notification.service'
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+dayjs.extend(utc)
 
 function Billing() {
   const saveSuccess = useSelector((state) => state.billing.saveSuccess)
@@ -122,6 +125,10 @@ function Billing() {
     }
     dispatch(
       saveBilling({
+        createdAt: {
+          date: dayjs().utc().valueOf(),
+          offset: dayjs().utcOffset() * 60000,
+        },
         receivedAmount,
         billAmount: total,
         items: getItemsData(items),
