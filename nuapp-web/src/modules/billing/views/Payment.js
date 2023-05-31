@@ -14,8 +14,7 @@ const PaymentComp = (props) => {
   const receivedAmountInput = useRef()
 
   useEffect(() => {
-    receivedAmountInput.current.focus()
-    receivedAmountInput.current.select()
+    focusAndSelectReceivedInput()
   }, [])
 
   const onChangeField = ({ target: { value } }) => {
@@ -28,10 +27,13 @@ const PaymentComp = (props) => {
     setReceivedAmount(amount)
     props.setReceivedAmount(amount)
     calculateAmountChange(amount)
+    focusAndSelectReceivedInput()
   }
 
   const onKeyDownCodeField = async ({ keyCode }) => {
-    if ([ENTER_KEYCODE, TAB_KEYCODE].includes(keyCode)) calculateAmountChange()
+    if ([ENTER_KEYCODE, TAB_KEYCODE].includes(keyCode)) {
+      props.cargeButtonRef && props.cargeButtonRef.current.focus()
+    }
   }
 
   const calculateAmountChange = (received) => {
@@ -46,6 +48,10 @@ const PaymentComp = (props) => {
     setChangeAmount(0)
   }
 
+  function focusAndSelectReceivedInput() {
+    receivedAmountInput.current.focus()
+    receivedAmountInput.current.select()
+  }
   return (
     <>
       <CContainer fluid>
@@ -97,4 +103,5 @@ export default PaymentComp
 PaymentComp.propTypes = {
   total: PropTypes.number,
   setReceivedAmount: PropTypes.func,
+  cargeButtonRef: PropTypes.object,
 }

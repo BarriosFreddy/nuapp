@@ -41,7 +41,6 @@ const Dashboard = () => {
   useEffect(() => {
     dispatch(getBillingsGTDate(tenDaysBefore))
   }, [dispatch, tenDaysBefore])
-  console.log({ billings })
   const labels = billings ? billings.map(({ createdAt }) => createdAt) : []
   const data = billings ? billings.map(({ billAmount }) => billAmount) : []
   const dataReversed = [...billings].reverse()

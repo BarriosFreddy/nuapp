@@ -140,6 +140,7 @@ const BillingForm = (props) => {
               <CFormInput
                 ref={searchTermInput}
                 type="text"
+                autoComplete="off"
                 name="searchTerm"
                 placeholder="Buscar"
                 value={searchTerm}

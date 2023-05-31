@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   CButton,
@@ -39,6 +39,7 @@ function Billing() {
   let [total, setTotal] = useState(0)
   let [itemUnits, setItemUnits] = useState({})
   let [paying, setPaying] = useState(false)
+  const cargeButtonRef = useRef()
   const isReceivedLTTotal = receivedAmount < total
   const hasNotItems = items.length <= 0
 
@@ -209,7 +210,13 @@ function Billing() {
             <CCard className="shadow border-10" style={{ height: '78vh', overflowY: 'auto' }}>
               <CCardBody>
                 {!paying && <BillingForm addItem={addItem} />}
-                {paying && <PaymentComp setReceivedAmount={hanndleReceivedAmount} total={total} />}
+                {paying && (
+                  <PaymentComp
+                    cargeButtonRef={cargeButtonRef}
+                    setReceivedAmount={hanndleReceivedAmount}
+                    total={total}
+                  />
+                )}
               </CCardBody>
             </CCard>
           </CCol>
@@ -221,6 +228,8 @@ function Billing() {
                 <CCol lg="5">
                   <div className="d-grid gap-2">
                     <CButton
+                      ref={cargeButtonRef}
+                      tabIndex={0}
                       type="button"
                       size="lg"
                       color={paying ? 'success' : 'primary'}
