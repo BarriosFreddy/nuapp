@@ -10,7 +10,12 @@ import cookieParser from 'cookie-parser';
 import { registerRoutes } from './src/routes';
 import { connectDB } from './src/helpers/db/mongodb';
 
-const { PORT = 3000, DATABASE_URI = '', NODE_ENV } = process.env;
+const {
+  PORT = 3000,
+  DATABASE_URI = '',
+  NODE_ENV,
+  FRONTEND_ORIGIN,
+} = process.env;
 
 const app: Express = express();
 
@@ -23,9 +28,7 @@ const app: Express = express();
       cors({
         credentials: true,
         origin:
-          NODE_ENV === 'production'
-            ? 'https://nuapp-web.onrender.com'
-            : 'http://localhost:3000',
+          NODE_ENV === 'production' ? FRONTEND_ORIGIN : 'http://localhost:3000',
       }),
     );
     app.use(compression());
