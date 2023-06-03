@@ -23,6 +23,9 @@ import CIcon from '@coreui/icons-react'
 import { useDispatch } from 'react-redux'
 import { logout } from 'src/modules/core/services/auth.service'
 
+const { REACT_APP_RENDER_GIT_COMMIT } = process.env
+console.log({ REACT_APP_RENDER_GIT_COMMIT })
+
 const AppHeaderDropdown = () => {
   const dispatch = useDispatch()
   const onClickLogout = () => dispatch(logout())
@@ -40,6 +43,12 @@ const AppHeaderDropdown = () => {
           Updates
           <CBadge color="info" className="ms-2">
             42
+          </CBadge>
+        </CDropdownItem>
+        <CDropdownItem href="#">
+          <CIcon icon={cilBell} className="me-2" />
+          <CBadge color="info" className="ms-2">
+            {REACT_APP_RENDER_GIT_COMMIT}
           </CBadge>
         </CDropdownItem>
         <CDropdownItem href="#">
