@@ -19,10 +19,10 @@ import {
   CCard,
   CCardFooter,
 } from '@coreui/react'
-import Quagga from 'quagga'
 import { getItemCategories } from 'src/modules/billing/services/item-categories.service'
 import { existByCode } from '../../services/items.service'
 import ConfirmDialog from 'src/components/shared/ConfirmDialog'
+import CurrencyFormInput from '../../../../components/shared/CurrencyFormInput'
 
 const itemInitialState = {
   name: '',
@@ -58,7 +58,7 @@ function ItemForm(props) {
 
   const toggle = () => setModal(!modal)
   const validateCodeExistence = (code) => {
-    if (props.item && oldCode !== code) {
+    if (props.item || oldCode !== code) {
       dispatch(existByCode(code))
     }
   }
@@ -74,57 +74,6 @@ function ItemForm(props) {
 
   const clearFieldsForm = () => {
     setItem(itemInitialState)
-  }
-
-  const scanItem = () => {
-    toggle()
-    setTimeout(() => {
-      Quagga.init(
-        {
-          inputStream: {
-            name: 'Live',
-            type: 'LiveStream',
-            constraints: {
-              width: 320,
-              height: 380,
-              facingMode: 'environment',
-            },
-            target: document.querySelector('#reader'), // Or '#yourElement' (optional)
-          },
-          decoder: {
-            readers: [
-              {
-                format: 'ean_reader',
-                config: {
-                  supplements: ['ean_13_reader'],
-                },
-              },
-            ],
-          },
-        },
-        function (err) {
-          if (err) {
-            console.log(err)
-            return
-          }
-          console.log('Ready to start')
-          Quagga.start()
-        },
-      )
-      Quagga.onDetected(({ codeResult: { code } }) => {
-        console.log({ code })
-        setItem({
-          ...item,
-          code,
-        })
-        setModal(false)
-        Quagga.stop()
-      })
-      Quagga.onProcessed((result) => {
-        const drawingCanvas = Quagga.canvas.dom.overlay
-        drawingCanvas.style.display = 'none'
-      })
-    }, 300)
   }
 
   const closeBtn = (
@@ -179,6 +128,7 @@ function ItemForm(props) {
               <CRow style={{ marginTop: '40px' }}>
                 <CCol xs="12" lg="4">
                   <CFormInput
+                    className="text-uppercase"
                     label="Código"
                     type="text"
                     name="code"
@@ -193,6 +143,7 @@ function ItemForm(props) {
                 </CCol>
                 <CCol xs="12" lg="4">
                   <CFormInput
+                    className="text-uppercase"
                     label="Nombre"
                     type="text"
                     name="name"
@@ -205,6 +156,7 @@ function ItemForm(props) {
                 </CCol>
                 <CCol xs="12" lg="4">
                   <CFormInput
+                    className="text-uppercase"
                     label="Descripción"
                     type="text"
                     name="description"
@@ -218,7 +170,7 @@ function ItemForm(props) {
               </CRow>
               <CRow>
                 <CCol xs="12" lg="4">
-                  <CFormInput
+                  <CurrencyFormInput
                     label="Precio"
                     type="number"
                     name="price"
@@ -244,6 +196,7 @@ function ItemForm(props) {
                 </CCol>
                 <CCol xs="12" lg="4">
                   <CFormInput
+                    className="text-uppercase"
                     label="Unidad de medida"
                     type="text"
                     name="measurementUnit"

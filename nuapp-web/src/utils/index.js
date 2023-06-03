@@ -3,12 +3,12 @@ import utc from 'dayjs/plugin/utc'
 dayjs.extend(utc)
 
 export const formatCurrency = (amount) => {
-  return Number.isInteger(amount) && amount >= 0
+  return !isNaN(amount) && +amount >= 0
     ? new Intl.NumberFormat('es-CO', {
         style: 'currency',
         currency: 'COP',
         maximumFractionDigits: 0,
-      }).format(amount)
+      }).format(+amount)
     : amount
 }
 
