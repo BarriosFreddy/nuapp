@@ -56,7 +56,6 @@ const Dashboard = () => {
               <h4 id="traffic" className="card-title mb-0">
                 Ventas por día
               </h4>
-              {/* <div className="small text-medium-emphasis">January - July 2021</div> */}
             </CCol>
             <CCol sm={7} className="d-none d-md-block">
               <CButton color="primary" className="float-end">
@@ -128,7 +127,6 @@ const Dashboard = () => {
             }}
           />
           <br />
-
           <CTable align="middle" className="mb-0 border" hover responsive>
             <CTableHead color="light">
               <CTableRow>
