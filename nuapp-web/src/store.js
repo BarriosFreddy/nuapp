@@ -1,12 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
-import appReducer from './app.slice'
 import { ApiService } from './ApiService'
+import appReducer from './app.slice'
+import authReducer from './modules/core/reducers/auth.reducer'
 import billingReducer from './modules/billing/reducers/billings.reducer'
-import itemsReducer from './modules/billing/reducers/items.reducer'
-import itemCategoriesReducer from './modules/billing/reducers/item-categories.reducer'
+import itemsReducer from './modules/inventory/reducers/items.reducer'
+import itemCategoriesReducer from './modules/inventory/reducers/item-categories.reducer'
 import storage from 'redux-persist/lib/storage'
 import { persistReducer, persistStore } from 'redux-persist'
-import authReducer from './modules/core/reducers/auth.reducer'
 
 const persistedBillingReducer = persistReducer(
   {

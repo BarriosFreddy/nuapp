@@ -23,7 +23,7 @@ import {
 import ItemForm from './ItemForm'
 import DefaultImg from './../../../../assets/images/new.ico'
 import { useDispatch, useSelector } from 'react-redux'
-import { getItems, saveItem, updateItem } from 'src/modules/billing/services/items.service'
+import { getItems, saveItem, updateItem } from 'src/modules/inventory/services/items.service'
 import CONSTANTS from 'src/constants'
 import { formatCurrency } from 'src/utils'
 import { useDidUpdate } from 'src/hooks/useDidUpdate'

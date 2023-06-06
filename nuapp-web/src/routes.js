@@ -5,11 +5,13 @@ const Home = lazy(() => import('./modules/core/views/home/Home'))
 const Dashboard = lazy(() => import('./modules/billing/views/dashboard/Dashboard'))
 const Billing = lazy(() => import('./modules/billing/views/Billing'))
 const BillingsHistorical = lazy(() => import('./modules/billing/views/BillingsHistorical'))
-const Items = lazy(() => import('./modules/billing/views/items/Items'))
-const ItemCategories = lazy(() => import('./modules/billing/views/item-categories/ItemCategories'))
-
-const DataLoader = lazy(() => import('./modules/billing/views/data-loader/DataLoader'))
 const Synchronizer = lazy(() => import('./modules/core/views/synchronizer/Synchronizer'))
+
+const Items = lazy(() => import('./modules/inventory/views/items/Items'))
+const ItemCategories = lazy(() =>
+  import('./modules/inventory/views/item-categories/ItemCategories'),
+)
+const DataLoader = lazy(() => import('./modules/inventory/views/data-loader/DataLoader'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },

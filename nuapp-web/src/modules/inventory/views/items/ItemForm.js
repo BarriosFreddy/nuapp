@@ -19,7 +19,7 @@ import {
   CCard,
   CCardFooter,
 } from '@coreui/react'
-import { getItemCategories } from 'src/modules/billing/services/item-categories.service'
+import { getItemCategories } from 'src/modules/inventory/services/item-categories.service'
 import { existByCode } from '../../services/items.service'
 import ConfirmDialog from 'src/components/shared/ConfirmDialog'
 import CurrencyFormInput from '../../../../components/shared/CurrencyFormInput'

@@ -23,8 +23,8 @@ import {
 } from '@coreui/react'
 import { formatCurrency } from 'src/utils'
 import { useDispatch, useSelector } from 'react-redux'
-import { setItems } from 'src/modules/billing/reducers/items.reducer'
-import { getItems } from 'src/modules/billing/services/items.service'
+import { setItems } from 'src/modules/inventory/reducers/items.reducer'
+import { getItems } from 'src/modules/inventory/services/items.service'
 import CONSTANTS from './../../../constants'
 import { useDidUpdate } from 'src/hooks/useDidUpdate'
 

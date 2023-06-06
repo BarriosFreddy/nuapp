@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { AppContent, AppHeader, AppSidebar } from '../components/index'
 import { useDispatch, useSelector } from 'react-redux'
-import { getAllItems } from 'src/modules/billing/services/items.service'
+import { getAllItems } from 'src/modules/inventory/services/items.service'
 import { ErrorBoundary } from 'react-error-boundary'
 
 const DefaultLayout = (props) => {

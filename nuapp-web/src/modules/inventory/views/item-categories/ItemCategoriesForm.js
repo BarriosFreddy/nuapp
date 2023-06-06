@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import { CButton, CRow, CContainer, CCol, CFormInput, CForm } from '@coreui/react'
 import ConfirmDialog from '../../../../components/shared/ConfirmDialog'
 import { useDispatch, useSelector } from 'react-redux'
-import { validateCodeRegistered } from '../../services/item-categories.service'
-import { setCodeRegistered } from '../../reducers/item-categories.reducer'
+import { validateCodeRegistered } from '../../../inventory/services/item-categories.service'
+import { setCodeRegistered } from '../../../inventory/reducers/item-categories.reducer'
 
 const categoryInitialState = {
   code: '',

@@ -19,9 +19,9 @@ import {
   CCardTitle,
 } from '@coreui/react'
 import { useDispatch, useSelector } from 'react-redux'
-import { saveItemCategoriesBulk } from 'src/modules/billing/services/items.service'
+import { saveItemCategoriesBulk } from 'src/modules/inventory/services/items.service'
 import { setShowToast, setToastConfig } from 'src/app.slice'
-import { setSaveSuccess } from '../../reducers/billings.reducer'
+import { setSaveSuccess } from '../../../billing/reducers/billings.reducer'
 import { formatCurrency } from 'src/utils'
 import { useDidUpdate } from 'src/hooks/useDidUpdate'
 import { Helmet } from 'react-helmet'
