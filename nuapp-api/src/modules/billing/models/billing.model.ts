@@ -1,8 +1,14 @@
-import { getModelForClass, prop } from '@typegoose/typegoose';
+import {
+  getModelForClass,
+  prop,
+  Severity,
+  modelOptions,
+} from '@typegoose/typegoose';
 import mongoose from 'mongoose';
-import { Item } from './item.model';
 import { TimeStamps } from '../../../helpers/abstracts/timestamps.abstract';
+import { Item } from './item.model';
 
+@modelOptions({ options: { allowMixed: Severity.ALLOW } })
 export class Billing extends TimeStamps {
   _id!: mongoose.Types.ObjectId;
   @prop({ required: true, unique: true })

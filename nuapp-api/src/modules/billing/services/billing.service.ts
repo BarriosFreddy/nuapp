@@ -1,16 +1,11 @@
 import BillingModel, { Billing } from '../models/billing.model';
 import { singleton, container } from 'tsyringe';
-import { KardexTransactionService } from './kardex-transaction.service';
-import { KardexTransactionType } from '../enums/kardex-transaction-type';
 import { BaseService } from '../../../helpers/abstracts/base.service';
-import { KardexTransaction } from '../models/kardex-transaction.model';
 import { SequencedCodeService } from './sequenced-code.service';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 dayjs.extend(utc);
-import { Item } from '../models/item.model';
 
-const kardexTransactionService = container.resolve(KardexTransactionService);
 const sequencedCodeService = container.resolve(SequencedCodeService);
 
 @singleton()
@@ -97,8 +92,6 @@ export class BillingService extends BaseService<Billing> {
     try {
       billing.code = await generateSequencedCode();
       const saved = await BillingModel.create(billing);
-      const { items } = saved;
-      await this.saveKardexTransaction(items);
       return saved;
     } catch (error) {
       console.log(error);
@@ -113,9 +106,6 @@ export class BillingService extends BaseService<Billing> {
       }
       let billingModels = billings.map((billing) => new BillingModel(billing));
       const result = await BillingModel.bulkSave(billingModels);
-      for (const { items } of billings) {
-        await this.saveKardexTransaction(items);
-      }
       return result;
     } catch (error) {
       console.log(error);
@@ -125,18 +115,6 @@ export class BillingService extends BaseService<Billing> {
 
   async update(_: string, __: Billing): Promise<Billing | null> {
     throw new Error('Not Supported');
-  }
-
-  async saveKardexTransaction(items: Item[]) {
-    for await (const item of items) {
-      const kardexTransaction: KardexTransaction = {
-        code: new Date().getMilliseconds().toString(),
-        type: KardexTransactionType.OUT,
-        itemId: item._id,
-        units: item.units,
-      };
-      await kardexTransactionService.save(kardexTransaction);
-    }
   }
 }
 

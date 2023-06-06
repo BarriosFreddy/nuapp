@@ -1,6 +1,7 @@
-import { getModelForClass, prop } from '@typegoose/typegoose';
+import { Ref, getModelForClass, prop } from '@typegoose/typegoose';
 import mongoose from 'mongoose';
 import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
+import { ItemCategory } from './item-category.model';
 
 export class Item extends TimeStamps {
   _id!: mongoose.Types.ObjectId;
@@ -22,6 +23,10 @@ export class Item extends TimeStamps {
   public expirationDate?: string;
   @prop()
   public laboratory?: string;
+  @prop({ ref: () => ItemCategory })
+  public categoryId?: Ref<ItemCategory>;
+  @prop()
+  public modifiedBy?: mongoose.Types.ObjectId;
 }
 
 const ItemModel = getModelForClass(Item);

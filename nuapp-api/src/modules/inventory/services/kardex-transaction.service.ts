@@ -37,4 +37,16 @@ export class KardexTransactionService extends BaseService<KardexTransaction> {
       return Promise.reject(null);
     }
   }
+
+  /*   async saveKardexTransaction(items: Item[]) {
+    for await (const item of items) {
+      const kardexTransaction: KardexTransaction = {
+        code: new Date().getMilliseconds().toString(),
+        type: KardexTransactionType.OUT,
+        itemId: item._id,
+        units: item.units,
+      };
+      await kardexTransactionService.save(kardexTransaction);
+    }
+  } */
 }

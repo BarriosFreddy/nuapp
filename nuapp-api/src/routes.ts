@@ -1,6 +1,7 @@
 import { Express, Request, Response } from 'express';
 import * as coreRouter from './modules/core/routes/index';
 import * as billingRouter from './modules/billing/routes/index';
+import * as inventoryRouter from './modules/inventory/routes/index';
 
 export function registerRoutes(app: Express): void {
   app.get('/', (_req: Request, res: Response) => {
@@ -13,8 +14,8 @@ export function registerRoutes(app: Express): void {
   app.use('/user-accounts', coreRouter.userAccountRouter);
   app.use('/roles', coreRouter.roleRouter);
   app.use('/auth', coreRouter.authRouter);
-  app.use('/items', billingRouter.itemRouter);
-  app.use('/item-categories', billingRouter.itemCategoryRouter);
   app.use('/billings', billingRouter.billingRouter);
   app.use('/enumerations', coreRouter.enumerationsRouter);
+  app.use('/items', inventoryRouter.itemRouter);
+  app.use('/item-categories', inventoryRouter.itemCategoryRouter);
 }

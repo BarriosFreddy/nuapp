@@ -1,4 +1,6 @@
-import { prop } from '@typegoose/typegoose';
+import { prop, modelOptions, Severity } from '@typegoose/typegoose';
+
+@modelOptions({ options: { allowMixed: Severity.ALLOW } })
 export abstract class TimeStamps {
   @prop()
   createdAt?: {
