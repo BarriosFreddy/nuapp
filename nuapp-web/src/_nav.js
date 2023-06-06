@@ -25,7 +25,6 @@ let _nav = [
   {
     component: CNavGroup,
     name: 'Punto de venta',
-    to: '/billing',
     icon: <CIcon icon={cilMoney} customClassName="nav-icon" />,
     roles: ['ADMIN', 'SELLER'],
     items: [
@@ -52,30 +51,38 @@ let _nav = [
       },
       {
         component: CNavItem,
+        name: 'Sincronizador',
+        to: '/billing-synchronizer',
+        icon: <CIcon icon={cilSync} customClassName="nav-icon" />,
+        roles: ['ADMIN'],
+      },
+    ],
+  },
+  {
+    component: CNavGroup,
+    name: 'Inventario',
+    icon: <CIcon icon={cilMoney} customClassName="nav-icon" />,
+    roles: ['ADMIN', 'SELLER'],
+    items: [
+      {
+        component: CNavItem,
         name: 'Items',
-        to: '/billing-items',
+        to: '/inventory-items',
         icon: <CIcon icon={cilSquare} customClassName="nav-icon" />,
         roles: ['ADMIN', 'SELLER'],
       },
       {
         component: CNavItem,
         name: 'Categorias de items',
-        to: '/billing-item-categories',
+        to: '/inventory-item-categories',
         icon: <CIcon icon={cilSitemap} customClassName="nav-icon" />,
         roles: ['ADMIN'],
       },
       {
         component: CNavItem,
         name: 'Migrador de datos',
-        to: '/billing-data-loader',
+        to: '/inventory-data-loader',
         icon: <CIcon icon={cilCloudUpload} customClassName="nav-icon" />,
-        roles: ['ADMIN'],
-      },
-      {
-        component: CNavItem,
-        name: 'Sincronizador',
-        to: '/billing-synchronizer',
-        icon: <CIcon icon={cilSync} customClassName="nav-icon" />,
         roles: ['ADMIN'],
       },
     ],
