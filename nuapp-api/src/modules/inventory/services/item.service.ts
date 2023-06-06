@@ -34,6 +34,9 @@ export class ItemService extends BaseService<Item> {
       name: 1,
       description: 1,
       price: 1,
+      cost: 1,
+      stock: 1,
+      reorderPoint: 1,
       categoryId: 1,
       measurementUnit: 1,
     });

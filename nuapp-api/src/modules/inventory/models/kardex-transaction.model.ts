@@ -13,10 +13,8 @@ import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
     customName: 'kardex-transactions',
   },
 })
-export class KardexTransaction extends TimeStamps{
+export class KardexTransaction extends TimeStamps {
   _id?: mongoose.Types.ObjectId;
-  @prop({ required: true })
-  public code!: string;
   @prop()
   public type!: string;
   @prop({ ref: () => Item })

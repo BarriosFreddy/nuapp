@@ -28,9 +28,11 @@ const itemInitialState = {
   name: '',
   code: '',
   description: '',
-  price: '',
+  price: 0,
   categoryId: '',
-  units: 0,
+  stock: '',
+  cost: 0,
+  reorderPoint: '',
   measurementUnit: '',
 }
 
@@ -44,6 +46,9 @@ function ItemForm(props) {
     description: false,
     name: false,
     price: false,
+    stock: false,
+    cost: false,
+    reorderPoint: false,
     categoryId: false,
     measurementUnit: false,
   })
@@ -83,14 +88,17 @@ function ItemForm(props) {
   )
 
   const isValidForm = () => {
-    const { name, code, description, price, categoryId, measurementUnit } = {
+    const { name, code, description, price, cost, stock, categoryId, measurementUnit } = {
       ...item,
     }
+    console.log({ price, cost })
     const failedValidationsObj = { ...failedValidations }
     failedValidationsObj.code = !code || codeRegistered
     failedValidationsObj.description = !description
     failedValidationsObj.name = !name
-    failedValidationsObj.price = !price
+    failedValidationsObj.price = price <= 0
+    failedValidationsObj.cost = cost <= 0
+    failedValidationsObj.stock = !stock
     failedValidationsObj.categoryId = !categoryId
     failedValidationsObj.measurementUnit = !measurementUnit
     setFailedValidations(failedValidationsObj)
@@ -178,6 +186,42 @@ function ItemForm(props) {
                     feedbackInvalid="Campo obligatorio"
                     invalid={failedValidations.price}
                     required
+                    onChange={(event) => onChangeField(event)}
+                  />
+                </CCol>
+                <CCol xs="12" lg="4">
+                  <CurrencyFormInput
+                    label="Costo"
+                    type="number"
+                    name="cost"
+                    value={item.cost}
+                    feedbackInvalid="Campo obligatorio"
+                    invalid={failedValidations.cost}
+                    required
+                    onChange={(event) => onChangeField(event)}
+                  />
+                </CCol>
+                <CCol xs="12" lg="4">
+                  <CFormInput
+                    label="Stock"
+                    type="number"
+                    name="stock"
+                    value={item.stock}
+                    feedbackInvalid="Campo obligatorio"
+                    invalid={failedValidations.stock}
+                    required
+                    onChange={(event) => onChangeField(event)}
+                  />
+                </CCol>
+              </CRow>
+              <CRow>
+                <CCol xs="12" lg="4">
+                  <CFormInput
+                    label="Punto de recompra (Opcional)"
+                    type="number"
+                    name="reorderPoint"
+                    value={item.reorderPoint}
+                    invalid={failedValidations.reorderPoint}
                     onChange={(event) => onChangeField(event)}
                   />
                 </CCol>

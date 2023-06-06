@@ -1,10 +1,16 @@
 import { CFormInput } from '@coreui/react'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { PropTypes } from 'prop-types'
 import { formatCurrency } from '../../utils/index'
 
 const CurrencyFormInput = (props) => {
   const [innerValue, setInnerValue] = useState('')
+  const { name, value } = props
+
+  useEffect(() => {
+    handleChange({ target: { name, value } })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value])
 
   const handleChange = (event) => {
     const {
@@ -33,4 +39,5 @@ export default CurrencyFormInput
 CurrencyFormInput.propTypes = {
   onChange: PropTypes.func,
   name: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
 }

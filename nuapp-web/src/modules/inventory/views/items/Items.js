@@ -50,6 +50,7 @@ function Item() {
     sendToast(dispatch, { message: 'Guardado exitosamente!' })
     setItem(null)
     setEditing(false)
+    handleClear()
   }, [saveSuccess])
 
   const save = (item) => {
