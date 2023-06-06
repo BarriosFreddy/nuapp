@@ -2,7 +2,7 @@ db.items.createIndex(
   { code: 1, name: 1 },
   { name: 'code_name_idx', unique: true },
 );
-db.items.createIndex({ createdAt: -1 }, { name: 'created_at_idx' });
+db.items.createIndex({ 'createdAt.date': -1 }, { name: 'created_at_date_idx' });
 
 // user accounts
 db.getCollection('user-accounts').insertMany([
@@ -125,3 +125,48 @@ db.getCollection('sequenced-codes').insertOne({
   prefixPart2: '230000000',
   sequence: 0,
 });
+
+db.modules.insertMany([
+  {
+    name: 'Facturación',
+    uri: '/billing',
+    icon: 'billing',
+    createdAt: '15/01/2023',
+    updatedAt: '15/01/2023',
+    code: 'BILLING',
+    access: [
+      {
+        roleCode: 'ADMIN',
+        canAccess: true,
+        canCreate: true,
+        canUpdate: true,
+        canDelete: true,
+        canExecute: true,
+      },
+      {
+        roleCode: 'SELLER',
+        canAccess: true,
+        canCreate: true,
+        canUpdate: false,
+        canDelete: false,
+        canExecute: false,
+      },
+    ],
+  },
+  {
+    name: 'Cuenta de usuario',
+    code: 'USER_ACCOUNT',
+    uri: '/user-account',
+    icon: 'user-account',
+    access: [
+      {
+        roleCode: 'ADMIN',
+        canAccess: true,
+        canCreate: true,
+        canUpdate: true,
+        canDelete: true,
+        canExecute: true,
+      },
+    ],
+  },
+]);
