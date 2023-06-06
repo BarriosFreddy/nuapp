@@ -3,6 +3,7 @@ import {
   setBillings,
   saveBillingLocally,
   setLoading,
+  setBillingsGraph,
 } from '../reducers/billings.reducer'
 import isOnline from 'is-online'
 let isonline = false
@@ -37,7 +38,7 @@ export const getBillings =
 
 export const getBillingsGTDate = (date) => async (dispatch, _, api) => {
   const { data, status } = await api.get(`/billings/per/${date}`)
-  if (status === 200) dispatch(setBillings(data))
+  if (status === 200) dispatch(setBillingsGraph(data))
 }
 
 function saveLocally(dispatch, state, billing) {

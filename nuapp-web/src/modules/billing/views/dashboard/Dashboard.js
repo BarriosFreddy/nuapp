@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
 import {
@@ -34,16 +34,23 @@ const progressExample = [
   { title: 'Bounce Rate', value: 'Average Rate', percent: 40.15, color: 'primary' },
 ]
 
+const SALES_DAYS = [
+  { label: 'Hoy', value: 0 },
+  { label: 'Últimos 7 días', value: 6 },
+  { label: 'Mes pasado', value: 30 },
+]
+
 const Dashboard = () => {
   const dispatch = useDispatch()
-  const billings = useSelector((state) => state.billing.billings)
-  const tenDaysBefore = dayjs().subtract(10, 'days').format('YYYY-MM-DD')
+  const billingsGraph = useSelector((state) => state.billing.billingsGraph)
+  const [days, setDays] = useState(0)
+  const tenDaysBefore = dayjs().subtract(days, 'days').format('YYYY-MM-DD')
   useEffect(() => {
     dispatch(getBillingsGTDate(tenDaysBefore))
   }, [dispatch, tenDaysBefore])
-  const labels = billings ? billings.map(({ createdAt }) => createdAt) : []
-  const data = billings ? billings.map(({ billAmount }) => billAmount) : []
-  const dataReversed = [...billings].reverse()
+  const labels = billingsGraph ? billingsGraph.map(({ createdAt }) => createdAt) : []
+  const data = billingsGraph ? billingsGraph.map(({ billAmount }) => billAmount) : []
+  const dataReversed = [...billingsGraph].reverse()
   return (
     <>
       <CCard className="mb-4">
@@ -62,14 +69,15 @@ const Dashboard = () => {
                 <CIcon icon={cilCloudDownload} />
               </CButton>
               <CButtonGroup className="float-end me-3">
-                {['Day', 'Month', 'Year'].map((value) => (
+                {SALES_DAYS.map(({ label, value }) => (
                   <CButton
                     color="outline-secondary"
                     key={value}
                     className="mx-0"
-                    active={value === 'Day'}
+                    active={value === days}
+                    onClick={() => setDays(value)}
                   >
-                    {value}
+                    {label}
                   </CButton>
                 ))}
               </CButtonGroup>
