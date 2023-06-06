@@ -24,7 +24,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getItemCategories } from 'src/modules/inventory/services/item-categories.service'
 import CONSTANTS from 'src/constants'
 import { Helmet } from 'react-helmet'
-import { saveItemCategory, updateItemCategory } from '../../../inventory/services/item-categories.service'
+import {
+  saveItemCategory,
+  updateItemCategory,
+} from '../../../inventory/services/item-categories.service'
 
 const { ENTER_KEYCODE, TAB_KEYCODE } = CONSTANTS
 
