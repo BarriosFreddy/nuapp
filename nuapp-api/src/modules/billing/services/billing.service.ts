@@ -4,8 +4,11 @@ import { BaseService } from '../../../helpers/abstracts/base.service';
 import { SequencedCodeService } from './sequenced-code.service';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
+import { KardexTransactionService } from '../../inventory/services/kardex-transaction.service';
+import { KardexTransactionType } from '../../inventory/enums/kardex-transaction-type';
 dayjs.extend(utc);
 
+const kardexTransactionService = container.resolve(KardexTransactionService);
 const sequencedCodeService = container.resolve(SequencedCodeService);
 
 @singleton()
@@ -92,6 +95,20 @@ export class BillingService extends BaseService<Billing> {
     try {
       billing.code = await generateSequencedCode();
       const saved = await BillingModel.create(billing);
+      setImmediate(async () => {
+        try {
+          const itemsMovement = saved.items.map(({ _id, units = 1 }) => ({
+            itemId: _id,
+            units,
+            type: KardexTransactionType.OUT,
+            createdAt: saved.createdAt,
+            computed: false,
+          }));
+          await kardexTransactionService.saveAll(itemsMovement);
+        } catch (error) {
+          console.error(error);
+        }
+      });
       return saved;
     } catch (error) {
       console.log(error);

@@ -16,8 +16,22 @@ export class KardexTransactionService extends BaseService<KardexTransaction> {
   }
   async save(kardexTransaction: KardexTransaction): Promise<KardexTransaction> {
     try {
-      kardexTransaction.createdAt = new Date();
       return await KardexTransactionModel.create(kardexTransaction);
+    } catch (error) {
+      console.log(error);
+      return Promise.reject(null);
+    }
+  }
+
+  async saveAll(kardexTransactions: KardexTransaction[]): Promise<any> {
+    try {
+      let kardexTransactionModels = kardexTransactions.map(
+        (kardex) => new KardexTransactionModel(kardex),
+      );
+      const result = await KardexTransactionModel.bulkSave(
+        kardexTransactionModels,
+      );
+      return result;
     } catch (error) {
       console.log(error);
       return Promise.reject(null);
@@ -29,7 +43,6 @@ export class KardexTransactionService extends BaseService<KardexTransaction> {
     kardexTransaction: KardexTransaction,
   ): Promise<KardexTransaction | null> {
     try {
-      kardexTransaction.updatedAt = new Date();
       await KardexTransactionModel.updateOne({ _id: id }, kardexTransaction);
       return this.findOne(id);
     } catch (error) {
@@ -37,16 +50,4 @@ export class KardexTransactionService extends BaseService<KardexTransaction> {
       return Promise.reject(null);
     }
   }
-
-  /*   async saveKardexTransaction(items: Item[]) {
-    for await (const item of items) {
-      const kardexTransaction: KardexTransaction = {
-        code: new Date().getMilliseconds().toString(),
-        type: KardexTransactionType.OUT,
-        itemId: item._id,
-        units: item.units,
-      };
-      await kardexTransactionService.save(kardexTransaction);
-    }
-  } */
 }

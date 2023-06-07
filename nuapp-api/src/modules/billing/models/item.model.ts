@@ -7,13 +7,13 @@ export class Item extends TimeStamps {
   @prop({ required: true, unique: true })
   public code!: string;
   @prop({ required: true })
-  public name?: string;
+  public name!: string;
   @prop()
   public description?: string;
   @prop()
-  public price?: number;
+  public price!: number;
   @prop()
-  public units?: number;
+  public units!: number;
   @prop()
   public measurementUnit?: string;
   @prop()
