@@ -13,16 +13,17 @@ import {
 import { Helmet } from 'react-helmet'
 import { saveBillingBulk } from 'src/modules/billing/services/billings.service'
 import { saveBillingLocally } from 'src/modules/billing/reducers/billings.reducer'
-import { useDidUpdate } from 'src/hooks/useDidUpdate'
+import { useDidUpdateControl } from '../../../../hooks/useDidUpdateControl'
 
 function Billing() {
   const billingsOffiline = useSelector((state) => state.billing.offline.billings)
-  const loading = useSelector((state) => state.billing.loading)
+  const saving = useSelector((state) => state.billing.saving)
   const dispatch = useDispatch()
   console.log({ billingsOffiline })
-  useDidUpdate(() => {
+
+  useDidUpdateControl(() => {
     dispatch(saveBillingLocally([]))
-  }, [loading])
+  }, saving)
 
   const handleSynchronize = () => {
     dispatch(saveBillingBulk(billingsOffiline))
@@ -43,7 +44,7 @@ function Billing() {
               <CCol className="text-uppercase">Facturas sin sincronizar</CCol>
               <CCol>{billingsOffiline && billingsOffiline.length}</CCol>
               <CCol>
-                <CButton role="button" onClick={handleSynchronize} disabled={loading}>
+                <CButton role="button" onClick={handleSynchronize} disabled={saving}>
                   Sincronizar
                 </CButton>
               </CCol>

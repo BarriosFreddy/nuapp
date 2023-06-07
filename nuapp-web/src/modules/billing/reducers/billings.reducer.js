@@ -3,6 +3,8 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
   saveSuccess: false,
   loading: false,
+  fetching: false,
+  saving: false,
   billings: [],
   billingsGraph: [],
   billing: null,
@@ -21,6 +23,8 @@ export const billingSlice = createSlice({
     saveBillingLocally: (state, action) => void (state.offline.billings = action.payload),
     setBilling: (state, action) => void (state.billing = action.payload),
     setLoading: (state, action) => void (state.loading = action.payload),
+    setSaving: (state, action) => void (state.saving = action.payload),
+    setFetching: (state, action) => void (state.fetching = action.payload),
   },
 })
 
@@ -31,6 +35,8 @@ export const {
   saveBillingLocally,
   setLoading,
   setBillingsGraph,
+  setSaving,
+  setFetching,
 } = billingSlice.actions
 
 export default billingSlice.reducer

@@ -24,6 +24,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getItemCategories } from 'src/modules/inventory/services/item-categories.service'
 import CONSTANTS from 'src/constants'
 import { Helmet } from 'react-helmet'
+import { useDidUpdateControl } from '../../../../hooks/useDidUpdateControl'
+import { sendToast } from '../../../shared/services/notification.service'
 import {
   saveItemCategory,
   updateItemCategory,
@@ -34,6 +36,8 @@ const { ENTER_KEYCODE, TAB_KEYCODE } = CONSTANTS
 function Categories() {
   const dispatch = useDispatch()
   const itemCategories = useSelector((state) => state.itemCategories.itemCategories)
+  const saving = useSelector((state) => state.itemCategories.saving)
+  const saveSuccess = useSelector((state) => state.itemCategories.saveSuccess)
   const [searchTerm, setSearchTerm] = useState('')
   let [itemCategory, setItemCategory] = useState(null)
   let [editing, setEditing] = useState(false)
@@ -41,14 +45,20 @@ function Categories() {
 
   useEffect(() => {
     setSearchTerm('')
-    dispatch(getItemCategories())
+    dispatch(getItemCategories({ page: 1 }))
   }, [dispatch])
+
+  useDidUpdateControl(() => {
+    if (saveSuccess) {
+      dispatch(getItemCategories({ page: 1 }))
+      setEditing(false)
+      sendToast(dispatch, { message: 'Guardado exitosamente!' })
+    } else sendToast(dispatch, { message: 'No se pudo guardar los datos', color: 'danger' })
+  }, saving)
 
   const handleSave = (itemCategory) => {
     if (itemCategory._id) dispatch(updateItemCategory(itemCategory))
     else dispatch(saveItemCategory(itemCategory))
-    setItemCategory(null)
-    setEditing(false)
   }
 
   const handleEdit = (itemCategory) => {
@@ -201,7 +211,7 @@ function Categories() {
                                 color="info"
                                 onClick={() => handleEdit(itemCategory)}
                               >
-                                Editar
+                                EDITAR
                               </CButton>
                             </CTableDataCell>
                           </CTableRow>

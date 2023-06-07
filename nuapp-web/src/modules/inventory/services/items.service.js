@@ -3,27 +3,32 @@ import {
   setItems,
   setItemsLocally,
   setExistsByCode,
-  setLoading,
+  setSaving,
+  setFetching,
 } from '../reducers/items.reducer'
 import isOnline from 'is-online'
 let isonline = false
 
 export const saveItem = (item) => async (dispatch, _, api) => {
+  dispatch(setSaving(true))
   const { status } = await api.post('/items', item)
-  status === 201 ? dispatch(saveSuccess(true)) : dispatch(saveSuccess(false))
+  dispatch(saveSuccess(status === 201))
+  dispatch(setSaving(false))
 }
 
 export const updateItem = (item) => async (dispatch, _, api) => {
+  dispatch(setSaving(true))
   const itemToUpdate = { ...item }
   const id = itemToUpdate._id
   delete itemToUpdate._id
   const { status } = await api.put(`/items/${id}`, itemToUpdate)
-  status === 201 ? dispatch(saveSuccess(true)) : dispatch(saveSuccess(false))
+  dispatch(saveSuccess(status === 201))
+  dispatch(setSaving(false))
 }
 
 export const saveItemCategoriesBulk = (items) => async (dispatch, _, api) => {
   const { status } = await api.post('/items/bulk', items)
-  status === 201 ? dispatch(saveSuccess(true)) : dispatch(saveSuccess(false))
+  dispatch(saveSuccess(status === 201))
 }
 
 export const existByCode = (code) => async (dispatch, _, api) => {
@@ -33,14 +38,14 @@ export const existByCode = (code) => async (dispatch, _, api) => {
 }
 
 export const getItems = (queryParams, useCacheOnly) => async (dispatch, getState, api) => {
-  dispatch(setLoading(true))
+  dispatch(setFetching(true))
   const urlQueryParams = new URLSearchParams(queryParams).toString()
   isonline = useCacheOnly ? false : await isOnline()
   const { data, status } = isonline
     ? await api.get(`/items${urlQueryParams.length > 0 ? '?' + urlQueryParams.toString() : ''}`)
     : getLocally(getState(), queryParams)
   if (status === 200) dispatch(setItems(data))
-  dispatch(setLoading(false))
+  dispatch(setFetching(false))
 }
 
 export const getAllItems = () => async (dispatch, state, api) => {

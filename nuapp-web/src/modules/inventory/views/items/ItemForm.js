@@ -23,6 +23,7 @@ import { getItemCategories } from 'src/modules/inventory/services/item-categorie
 import { existByCode } from '../../services/items.service'
 import ConfirmDialog from 'src/components/shared/ConfirmDialog'
 import CurrencyFormInput from '../../../../components/shared/CurrencyFormInput'
+import FormInput from '../../../../components/shared/FormInput'
 
 const itemInitialState = {
   name: '',
@@ -54,18 +55,17 @@ function ItemForm(props) {
   })
   const [modal, setModal] = useState(false)
   const confirmDialogRef = useRef()
-  const oldCode = props.item?.code
 
   useEffect(() => {
     props.item && setItem(props.item)
     dispatch(getItemCategories({ parse: true }))
   }, [dispatch, props.item])
 
+  // INIT
+  const oldCode = props.item?.code
   const toggle = () => setModal(!modal)
   const validateCodeExistence = (code) => {
-    if (props.item || oldCode !== code) {
-      dispatch(existByCode(code))
-    }
+    if (oldCode !== code) dispatch(existByCode(code))
   }
 
   const onChangeField = ({ target: { name, value } }) => {
@@ -91,7 +91,6 @@ function ItemForm(props) {
     const { name, code, description, price, cost, stock, categoryId, measurementUnit } = {
       ...item,
     }
-    console.log({ price, cost })
     const failedValidationsObj = { ...failedValidations }
     failedValidationsObj.code = !code || codeRegistered
     failedValidationsObj.description = !description
@@ -135,10 +134,10 @@ function ItemForm(props) {
             <CForm className="mt-2 row g-3 needs-validation" noValidate>
               <CRow style={{ marginTop: '40px' }}>
                 <CCol xs="12" lg="4">
-                  <CFormInput
-                    className="text-uppercase"
+                  <FormInput
                     label="Código"
                     type="text"
+                    uppercase=""
                     name="code"
                     value={item.code}
                     feedback={
@@ -150,10 +149,11 @@ function ItemForm(props) {
                   />
                 </CCol>
                 <CCol xs="12" lg="4">
-                  <CFormInput
+                  <FormInput
                     className="text-uppercase"
                     label="Nombre"
                     type="text"
+                    uppercase=""
                     name="name"
                     value={item.name}
                     feedbackInvalid="Campo obligatorio"
@@ -163,10 +163,11 @@ function ItemForm(props) {
                   />
                 </CCol>
                 <CCol xs="12" lg="4">
-                  <CFormInput
+                  <FormInput
                     className="text-uppercase"
                     label="Descripción"
                     type="text"
+                    uppercase=""
                     name="description"
                     value={item.description}
                     feedbackInvalid="Campo obligatorio"
@@ -239,10 +240,11 @@ function ItemForm(props) {
                   />
                 </CCol>
                 <CCol xs="12" lg="4">
-                  <CFormInput
+                  <FormInput
                     className="text-uppercase"
                     label="Unidad de medida"
                     type="text"
+                    uppercase=""
                     name="measurementUnit"
                     value={item.measurementUnit}
                     feedbackInvalid="Campo obligatorio"

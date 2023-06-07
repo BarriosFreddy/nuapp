@@ -20,11 +20,11 @@ import {
 } from '@coreui/react'
 import { useDispatch, useSelector } from 'react-redux'
 import { saveItemCategoriesBulk } from 'src/modules/inventory/services/items.service'
-import { setShowToast, setToastConfig } from 'src/app.slice'
 import { setSaveSuccess } from '../../../billing/reducers/billings.reducer'
 import { formatCurrency } from 'src/utils'
 import { useDidUpdate } from 'src/hooks/useDidUpdate'
 import { Helmet } from 'react-helmet'
+import { sendToast } from '../../../shared/services/notification.service'
 
 const LIMIT_5_MB = 5242880
 function DataLoader() {
@@ -34,13 +34,10 @@ function DataLoader() {
   let [feedbackInvalid, setFeedbackInvalid] = useState(null)
 
   const showSuccessfulPopup = useCallback(() => {
-    dispatch(
-      setToastConfig({
-        message: 'Carga de datos exitosa',
-        color: 'success',
-      }),
-    )
-    dispatch(setShowToast(true))
+    sendToast({
+      message: 'Carga de datos exitosa',
+      color: 'success',
+    })
     dispatch(setSaveSuccess(false))
     setItems([])
   }, [dispatch])

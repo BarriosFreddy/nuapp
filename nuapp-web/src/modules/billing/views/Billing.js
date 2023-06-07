@@ -21,18 +21,17 @@ import CIcon from '@coreui/icons-react'
 import { cilTrash } from '@coreui/icons'
 import PaymentComp from './Payment'
 import { saveBilling } from '../../../modules/billing/services/billings.service'
-import { setShowHeader, setShowToast, setSidebarUnfoldable, setToastConfig } from 'src/app.slice'
-import { setSaveSuccess } from '../reducers/billings.reducer'
+import { setShowHeader, setSidebarUnfoldable } from 'src/app.slice'
 import { Helmet } from 'react-helmet'
-import { useDidUpdate } from 'src/hooks/useDidUpdate'
 import { sendToast } from '../../shared/services/notification.service'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
+import { useDidUpdateControl } from '../../../hooks/useDidUpdateControl'
 dayjs.extend(utc)
 
 function Billing() {
   const saveSuccess = useSelector((state) => state.billing.saveSuccess)
-
+  const saving = useSelector((state) => state.billing.saving)
   const dispatch = useDispatch()
   let [items, setItems] = useState([])
   let [receivedAmount, setReceivedAmount] = useState(0)
@@ -51,14 +50,24 @@ function Billing() {
     }
   }, [dispatch])
 
-  useDidUpdate(() => {
-    setItems([])
-    setReceivedAmount(0)
-    setTotal(0)
-    setItemUnits({})
-    sendToast(dispatch, { message: 'Guardado exitosamente!' })
-    dispatch(setSaveSuccess(false))
-  }, [saveSuccess])
+  useDidUpdateControl(
+    () => {
+      if (saveSuccess) {
+        setItems([])
+        setReceivedAmount(0)
+        setTotal(0)
+        setItemUnits({})
+        sendToast(dispatch, { message: 'Guardado exitosamente!' })
+        setPaying(false)
+      } else {
+        sendToast(dispatch, { message: 'No se pudo guardar los datos', color: 'danger' })
+      }
+    },
+    saving,
+    [saveSuccess],
+  )
+
+  // Init
 
   const addItem = async (item) => {
     let itemUnitsAdded = {}
@@ -105,23 +114,11 @@ function Billing() {
 
   const handleSave = async () => {
     if (isReceivedLTTotal) {
-      dispatch(
-        setToastConfig({
-          message: 'Revisa el monto recibido y el total',
-          color: 'warning',
-        }),
-      )
-      dispatch(setShowToast(true))
+      sendToast(dispatch, { message: 'Revisa el monto recibido y el total', color: 'warning' })
       return
     }
     if (hasNotItems) {
-      dispatch(
-        setToastConfig({
-          message: 'No hay productos por facturar',
-          color: 'warning',
-        }),
-      )
-      dispatch(setShowToast(true))
+      sendToast(dispatch, { message: 'No hay productos por facturar', color: 'warning' })
       return
     }
     dispatch(
@@ -135,7 +132,6 @@ function Billing() {
         items: getItemsData(items),
       }),
     )
-    setPaying(false)
   }
 
   const getItemsData = () =>
@@ -221,6 +217,7 @@ function Billing() {
             </CCard>
           </CCol>
         </CRow>
+        {/*         isReceivedLTTotal ||  */}
         <CRow className="mt-3 align-items-end">
           <CCard className="shadow border-10">
             <CCardBody>
@@ -234,7 +231,7 @@ function Billing() {
                       size="lg"
                       color={paying ? 'success' : 'primary'}
                       onClick={paying ? handleSave : handleCharge}
-                      disabled={paying ? isReceivedLTTotal : hasNotItems}
+                      disabled={paying ? saving : hasNotItems}
                     >
                       {paying ? 'FACTURAR' : 'COBRAR'}
                     </CButton>

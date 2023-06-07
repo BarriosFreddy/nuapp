@@ -33,7 +33,7 @@ const { ENTER_KEYCODE, TAB_KEYCODE } = CONSTANTS
 const BillingForm = (props) => {
   const dispatch = useDispatch()
   const items = useSelector((state) => state.items.items)
-  const loading = useSelector((state) => state.items.loading)
+  const fetching = useSelector((state) => state.items.fetching)
   const [searchTerm, setSearchTerm] = useState('')
   const [modal, setModal] = useState(false)
   const toggle = () => setModal(!modal)
@@ -51,7 +51,7 @@ const BillingForm = (props) => {
 
   useDidUpdate(() => {
     if (items.length === 1) addItem(items[0])
-  }, [loading])
+  }, [fetching])
 
   const onChangeField = ({ target: { value } }) => {
     setSearchTerm(value)

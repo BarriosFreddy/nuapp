@@ -2,7 +2,8 @@ import {
   setSaveSuccess,
   setBillings,
   saveBillingLocally,
-  setLoading,
+  setSaving,
+  setFetching,
   setBillingsGraph,
 } from '../reducers/billings.reducer'
 import isOnline from 'is-online'
@@ -10,35 +11,38 @@ let isonline = false
 
 export const saveBilling = (billing) => async (dispatch, getState, api) => {
   isonline = await isOnline()
-  dispatch(setLoading(true))
+  dispatch(setSaving(true))
   const { status } = isonline
     ? await api.post('/billings', billing)
     : saveLocally(dispatch, getState(), billing)
-  status === 201 ? dispatch(setSaveSuccess(true)) : dispatch(setSaveSuccess(false))
-  dispatch(setLoading(false))
+  dispatch(setSaveSuccess(isonline ? status === 201 : true))
+  dispatch(setSaving(false))
 }
 
 export const saveBillingBulk = (billings) => async (dispatch, getState, api) => {
-  isonline = await isOnline()
-  dispatch(setLoading(true))
+  dispatch(setSaving(true))
   const { status } = await api.post('/billings/bulk', billings)
-  status === 201 ? dispatch(setSaveSuccess(true)) : dispatch(setSaveSuccess(false))
-  dispatch(setLoading(false))
+  dispatch(setSaveSuccess(status === 201))
+  dispatch(setSaving(false))
 }
 
 export const getBillings =
   ({ page = 1 } = {}) =>
   async (dispatch, getState, api) => {
+    dispatch(setFetching(true))
     isonline = await isOnline()
     const { data, status } = isonline
       ? await api.get(`/billings?page=${page}`)
       : getLocally(dispatch, getState())
     if (status === 200) dispatch(setBillings(data))
+    dispatch(setFetching(false))
   }
 
 export const getBillingsGTDate = (date) => async (dispatch, _, api) => {
+  dispatch(setFetching(true))
   const { data, status } = await api.get(`/billings/per/${date}`)
   if (status === 200) dispatch(setBillingsGraph(data))
+  dispatch(setFetching(false))
 }
 
 function saveLocally(dispatch, state, billing) {

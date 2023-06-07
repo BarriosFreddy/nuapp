@@ -5,6 +5,7 @@ import ConfirmDialog from '../../../../components/shared/ConfirmDialog'
 import { useDispatch, useSelector } from 'react-redux'
 import { validateCodeRegistered } from '../../../inventory/services/item-categories.service'
 import { setCodeRegistered } from '../../../inventory/reducers/item-categories.reducer'
+import FormInput from '../../../../components/shared/FormInput'
 
 const categoryInitialState = {
   code: '',
@@ -30,9 +31,7 @@ function ItemCategoriesForm(props) {
   }, [props.itemCategory])
 
   const validateCodeExistence = (code) => {
-    if (props.itemCategory && oldCode !== code) {
-      dispatch(validateCodeRegistered(code))
-    }
+    if (oldCode !== code) dispatch(validateCodeRegistered(code))
   }
 
   const onChangeField = ({ target: { name, value } }) => {
@@ -89,9 +88,10 @@ function ItemCategoriesForm(props) {
         <CForm className="row g-3 needs-validation" noValidate>
           <CRow className="mt-2">
             <CCol xs="12" lg="4">
-              <CFormInput
+              <FormInput
                 label="Código"
                 type="text"
+                uppercase="true"
                 name="code"
                 value={itemCategory.code}
                 feedback={
@@ -103,9 +103,10 @@ function ItemCategoriesForm(props) {
               />
             </CCol>
             <CCol xs="12" lg="4">
-              <CFormInput
+              <FormInput
                 label="Nombre"
                 type="text"
+                uppercase="true"
                 name="name"
                 value={itemCategory.name}
                 feedbackInvalid="Campo obligatorio"
@@ -115,9 +116,10 @@ function ItemCategoriesForm(props) {
               />
             </CCol>
             <CCol xs="12" lg="4">
-              <CFormInput
+              <FormInput
                 label="Descripción"
                 type="text"
+                uppercase="true"
                 name="description"
                 value={itemCategory.description}
                 feedbackInvalid="Campo obligatorio"

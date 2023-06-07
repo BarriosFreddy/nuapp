@@ -26,9 +26,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getItems, saveItem, updateItem } from 'src/modules/inventory/services/items.service'
 import CONSTANTS from 'src/constants'
 import { formatCurrency } from 'src/utils'
-import { useDidUpdate } from 'src/hooks/useDidUpdate'
 import { sendToast } from '../../../shared/services/notification.service'
 import { Helmet } from 'react-helmet'
+import { useDidUpdateControl } from '../../../../hooks/useDidUpdateControl'
 
 const { ENTER_KEYCODE, TAB_KEYCODE } = CONSTANTS
 
@@ -36,6 +36,7 @@ function Item() {
   const dispatch = useDispatch()
   const items = useSelector((state) => state.items.items)
   const saveSuccess = useSelector((state) => state.items.saveSuccess)
+  const saving = useSelector((state) => state.items.saving)
   const [searchTerm, setSearchTerm] = useState('')
   let [editing, setEditing] = useState(false)
   let [item, setItem] = useState(null)
@@ -46,12 +47,20 @@ function Item() {
     dispatch(getItems({ page: 1 }))
   }, [dispatch])
 
-  useDidUpdate(() => {
-    sendToast(dispatch, { message: 'Guardado exitosamente!' })
-    setItem(null)
-    setEditing(false)
-    handleClear()
-  }, [saveSuccess])
+  useDidUpdateControl(
+    () => {
+      if (saveSuccess) {
+        sendToast(dispatch, { message: 'Guardado exitosamente!' })
+        setItem(null)
+        setEditing(false)
+        handleClear()
+      } else {
+        sendToast(dispatch, { message: 'No se pudo guardar los datos', color: 'danger' })
+      }
+    },
+    saving,
+    [saveSuccess],
+  )
 
   const save = (item) => {
     if (item._id) {
@@ -219,7 +228,7 @@ function Item() {
                                   color="info"
                                   onClick={() => handleEdit(item)}
                                 >
-                                  Editar
+                                  EDITAR
                                 </CButton>
                               </CTableDataCell>
                             </CTableRow>
