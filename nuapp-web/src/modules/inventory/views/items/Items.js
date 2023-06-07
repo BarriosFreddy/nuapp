@@ -3,32 +3,23 @@ import React, { useState, useEffect } from 'react'
 import {
   CCard,
   CCardHeader,
-  CCardFooter,
   CContainer,
   CRow,
   CButton,
   CCardBody,
   CCol,
-  CCardImage,
-  CTable,
-  CTableBody,
-  CTableRow,
-  CTableDataCell,
-  CTableHead,
-  CTableHeaderCell,
   CInputGroup,
   CFormInput,
   CCardTitle,
 } from '@coreui/react'
 import ItemForm from './ItemForm'
-import DefaultImg from './../../../../assets/images/new.ico'
 import { useDispatch, useSelector } from 'react-redux'
 import { getItems, saveItem, updateItem } from 'src/modules/inventory/services/items.service'
 import CONSTANTS from 'src/constants'
-import { formatCurrency } from 'src/utils'
 import { sendToast } from '../../../shared/services/notification.service'
 import { Helmet } from 'react-helmet'
 import { useDidUpdateControl } from '../../../../hooks/useDidUpdateControl'
+import ItemList from './ItemList'
 
 const { ENTER_KEYCODE, TAB_KEYCODE } = CONSTANTS
 
@@ -164,108 +155,12 @@ function Item() {
                   </CRow>
                 )}
                 {!editing && (
-                  <>
-                    <div className="d-lg-none">
-                      {items.map(({ name, code, description, price }) => (
-                        <CCard
-                          key={code}
-                          style={{
-                            width: 'auto',
-                          }}
-                        >
-                          <CRow className="g-0" key={code}>
-                            <CCol xs={4}>
-                              <CCardImage src={DefaultImg} />
-                            </CCol>
-                            <CCol xs={8}>
-                              <CCardBody>
-                                <CRow>
-                                  <CCol>{name}</CCol>
-                                </CRow>
-                                <CRow>
-                                  <CCol>{code}</CCol>
-                                </CRow>
-                                <CRow>
-                                  <CCol>{description}</CCol>
-                                </CRow>
-                                <CRow>
-                                  <CCol>${price}</CCol>
-                                </CRow>
-                              </CCardBody>
-                            </CCol>
-                          </CRow>
-                        </CCard>
-                      ))}
-                    </div>
-                    <div className="d-none d-lg-block">
-                      <CTable>
-                        <CTableHead>
-                          <CTableRow>
-                            <CTableHeaderCell>Nombre</CTableHeaderCell>
-                            <CTableHeaderCell>Código</CTableHeaderCell>
-                            <CTableHeaderCell>Descripción</CTableHeaderCell>
-                            <CTableHeaderCell>Precio</CTableHeaderCell>
-                            <CTableHeaderCell>&nbsp;</CTableHeaderCell>
-                          </CTableRow>
-                        </CTableHead>
-                        <CTableBody>
-                          {items.map((item) => (
-                            <CTableRow key={item.code}>
-                              <CTableDataCell xs="12" className="text-uppercase">
-                                {item.name}
-                              </CTableDataCell>
-                              <CTableDataCell className="fs-6" xs="12">
-                                {item.code}
-                              </CTableDataCell>
-                              <CTableDataCell xs="12" className="text-break">
-                                {item.description}
-                              </CTableDataCell>
-                              <CTableDataCell xs="12">{formatCurrency(item.price)}</CTableDataCell>
-                              <CTableDataCell xs="12">
-                                <CButton
-                                  size="sm"
-                                  variant="outline"
-                                  color="info"
-                                  onClick={() => handleEdit(item)}
-                                >
-                                  EDITAR
-                                </CButton>
-                              </CTableDataCell>
-                            </CTableRow>
-                          ))}
-                        </CTableBody>
-                      </CTable>
-                    </div>
-
-                    <CCardFooter className="py-4">
-                      <CRow>
-                        <CCol>
-                          <div className="d-grid col-12 mx-auto">
-                            <CButton
-                              type="button"
-                              variant="outline"
-                              color="secondary"
-                              onClick={handlePrevPage}
-                            >
-                              ANTERIOR
-                            </CButton>
-                          </div>
-                        </CCol>
-                        <CCol>
-                          <div className="d-grid col-12 mx-auto">
-                            <CButton
-                              type="button"
-                              variant="outline"
-                              color="secondary"
-                              onClick={handleNextPage}
-                            >
-                              SIGUIENTE
-                            </CButton>
-                          </div>
-                        </CCol>
-                      </CRow>
-                    </CCardFooter>
-                  </>
+                  <ItemList
+                    items={items}
+                    onEdit={handleEdit}
+                    onPrevPage={handlePrevPage}
+                    onNextPage={handleNextPage}
+                  />
                 )}
                 {editing && <ItemForm item={item} onSave={save} onCancel={cancel} />}
               </CCardBody>
