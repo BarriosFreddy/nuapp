@@ -5,19 +5,19 @@ import { ItemCategory } from './item-category.model';
 import { Supplier } from './supplier.model';
 
 export class Item extends TimeStamps {
-  _id!: mongoose.Types.ObjectId;
+  _id?: mongoose.Types.ObjectId;
   @prop({ required: true, unique: true })
   public code!: string;
   @prop({ required: true })
-  public name?: string;
+  public name!: string;
   @prop()
   public description?: string;
   @prop()
-  public price?: number;
+  public price!: number;
   @prop()
-  public cost?: number;
+  public cost!: number;
   @prop()
-  public stock?: number;
+  public stock!: number;
   @prop()
   public reorderPoint?: number; // lowest point to alert and reorder it
   @prop()

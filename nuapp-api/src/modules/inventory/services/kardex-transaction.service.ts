@@ -2,7 +2,11 @@ import { BaseService } from '../../../helpers/abstracts/base.service';
 import KardexTransactionModel, {
   KardexTransaction,
 } from '../models/kardex-transaction.model';
-import { singleton } from 'tsyringe';
+import { singleton, container } from 'tsyringe';
+import { ItemService } from './item.service';
+import { KardexTransactionType } from '../enums/kardex-transaction-type';
+
+const itemService = container.resolve(ItemService);
 
 @singleton()
 export class KardexTransactionService extends BaseService<KardexTransaction> {
@@ -31,10 +35,36 @@ export class KardexTransactionService extends BaseService<KardexTransaction> {
       const result = await KardexTransactionModel.bulkSave(
         kardexTransactionModels,
       );
+
+      setImmediate(async () => {
+        await this.applyKardexMovements(kardexTransactions);
+      });
+
       return result;
     } catch (error) {
       console.log(error);
       return Promise.reject(null);
+    }
+  }
+
+  async applyKardexMovements(kardexTransactions: KardexTransaction[]) {
+    try {
+      for await (const kardex of kardexTransactions) {
+        const { itemId, units, type } = kardex;
+        const item = await itemService.findOne(itemId.toString());
+        if (!item) continue;
+        let newStock = item.stock;
+        if (type === KardexTransactionType.IN) {
+          newStock += units;
+        } else if (type === KardexTransactionType.OUT) {
+          const subtraction = item.stock - units;
+          newStock = subtraction <= 0 ? 0 : subtraction;
+        }
+        item.stock = newStock;
+        await itemService.update(itemId.toString(), item);
+      }
+    } catch (error) {
+      console.error(error);
     }
   }
 

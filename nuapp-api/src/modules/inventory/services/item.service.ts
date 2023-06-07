@@ -2,10 +2,11 @@ import { BaseService } from '../../../helpers/abstracts/base.service';
 import ItemModel, { Item } from '../models/item.model';
 import { singleton } from 'tsyringe';
 import { ExistsModel } from '../../../helpers/abstracts/exists.model';
+import { ObjectId } from 'mongoose';
 
 @singleton()
 export class ItemService extends BaseService<Item> {
-  async findOne(id: string): Promise<Item | null> {
+  async findOne(id: string | ObjectId): Promise<Item | null> {
     return await ItemModel.findById(id).exec();
   }
   async existByCode(code: string): Promise<ExistsModel | null> {
