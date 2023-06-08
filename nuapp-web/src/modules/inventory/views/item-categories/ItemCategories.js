@@ -3,18 +3,11 @@ import React, { useState, useEffect } from 'react'
 import {
   CCard,
   CCardHeader,
-  CCardFooter,
   CContainer,
   CRow,
   CButton,
   CCardBody,
   CCol,
-  CTable,
-  CTableHead,
-  CTableRow,
-  CTableHeaderCell,
-  CTableBody,
-  CTableDataCell,
   CInputGroup,
   CFormInput,
   CCardTitle,
@@ -30,6 +23,7 @@ import {
   saveItemCategory,
   updateItemCategory,
 } from '../../../inventory/services/item-categories.service'
+import ItemCategoriesList from './ItemCategoriesList'
 
 const { ENTER_KEYCODE, TAB_KEYCODE } = CONSTANTS
 
@@ -153,102 +147,12 @@ function Categories() {
               </CRow>
             )}
             {!editing && (
-              <>
-                <div className="d-lg-none">
-                  {itemCategories &&
-                    itemCategories.map(({ _id, code, name, description }) => (
-                      <CCard
-                        key={_id}
-                        style={{
-                          width: 'auto',
-                        }}
-                      >
-                        <CRow className="g-0">
-                          <CCol xs={12}>
-                            <CCardBody>
-                              <CRow>
-                                <CCol>{code}</CCol>
-                              </CRow>
-                              <CRow>
-                                <CCol>{name}</CCol>
-                              </CRow>
-                              <CRow>
-                                <CCol>{description}</CCol>
-                              </CRow>
-                            </CCardBody>
-                          </CCol>
-                        </CRow>
-                      </CCard>
-                    ))}
-                </div>
-                <div className="d-none d-lg-block">
-                  <CTable>
-                    <CTableHead>
-                      <CTableRow>
-                        <CTableHeaderCell>Código</CTableHeaderCell>
-                        <CTableHeaderCell>Nombre</CTableHeaderCell>
-                        <CTableHeaderCell>Descripción</CTableHeaderCell>
-                        <CTableHeaderCell>&nbsp;</CTableHeaderCell>
-                      </CTableRow>
-                    </CTableHead>
-                    <CTableBody>
-                      {itemCategories &&
-                        itemCategories.map((itemCategory) => (
-                          <CTableRow key={itemCategory._id}>
-                            <CTableDataCell xs="12" className="text-uppercase">
-                              {itemCategory.code}
-                            </CTableDataCell>
-                            <CTableDataCell className="fs-6" xs="12">
-                              {itemCategory.name}
-                            </CTableDataCell>
-                            <CTableDataCell xs="12" className="text-break">
-                              {itemCategory.description}
-                            </CTableDataCell>
-                            <CTableDataCell xs="12">
-                              <CButton
-                                size="sm"
-                                variant="outline"
-                                color="info"
-                                onClick={() => handleEdit(itemCategory)}
-                              >
-                                EDITAR
-                              </CButton>
-                            </CTableDataCell>
-                          </CTableRow>
-                        ))}
-                    </CTableBody>
-                  </CTable>
-                </div>
-
-                <CCardFooter className="py-4">
-                  <CRow>
-                    <CCol>
-                      <div className="d-grid col-12 mx-auto">
-                        <CButton
-                          type="button"
-                          variant="outline"
-                          color="secondary"
-                          onClick={handlePrevPage}
-                        >
-                          ANTERIOR
-                        </CButton>
-                      </div>
-                    </CCol>
-                    <CCol>
-                      <div className="d-grid col-12 mx-auto">
-                        <CButton
-                          type="button"
-                          variant="outline"
-                          color="secondary"
-                          onClick={handleNextPage}
-                        >
-                          SIGUIENTE
-                        </CButton>
-                      </div>
-                    </CCol>
-                  </CRow>
-                </CCardFooter>
-              </>
+              <ItemCategoriesList
+                itemCategories={itemCategories}
+                onEdit={handleEdit}
+                onPrevPage={handlePrevPage}
+                onNextPage={handleNextPage}
+              />
             )}
             {editing && (
               <ItemCategoriesForm
