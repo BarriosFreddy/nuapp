@@ -29,10 +29,10 @@ const itemInitialState = {
   name: '',
   code: '',
   description: '',
-  price: 0,
+  price: '',
   categoryId: '',
   stock: '',
-  cost: 0,
+  cost: '',
   reorderPoint: '',
   measurementUnit: '',
 }
@@ -77,10 +77,6 @@ function ItemForm(props) {
     if (name === 'code') validateCodeExistence(value)
   }
 
-  const clearFieldsForm = () => {
-    setItem(itemInitialState)
-  }
-
   const closeBtn = (
     <button className="close" onClick={toggle}>
       &times;
@@ -109,7 +105,7 @@ function ItemForm(props) {
       props.onSave({
         ...item,
       })
-      clearFieldsForm()
+      setItem(itemInitialState)
     }
   }
 
@@ -121,7 +117,7 @@ function ItemForm(props) {
     sureCancel && props.onCancel()
     if (!sureCancel) {
       confirmDialogRef.current.show(false)
-      clearFieldsForm()
+      setItem(itemInitialState)
     }
   }
 
@@ -137,7 +133,7 @@ function ItemForm(props) {
                   <FormInput
                     label="Código"
                     type="text"
-                    uppercase=""
+                    uppercase="true"
                     name="code"
                     value={item.code}
                     feedback={
@@ -153,7 +149,7 @@ function ItemForm(props) {
                     className="text-uppercase"
                     label="Nombre"
                     type="text"
-                    uppercase=""
+                    uppercase="true"
                     name="name"
                     value={item.name}
                     feedbackInvalid="Campo obligatorio"
@@ -167,7 +163,7 @@ function ItemForm(props) {
                     className="text-uppercase"
                     label="Descripción"
                     type="text"
-                    uppercase=""
+                    uppercase="true"
                     name="description"
                     value={item.description}
                     feedbackInvalid="Campo obligatorio"
@@ -244,7 +240,7 @@ function ItemForm(props) {
                     className="text-uppercase"
                     label="Unidad de medida"
                     type="text"
-                    uppercase=""
+                    uppercase="true"
                     name="measurementUnit"
                     value={item.measurementUnit}
                     feedbackInvalid="Campo obligatorio"

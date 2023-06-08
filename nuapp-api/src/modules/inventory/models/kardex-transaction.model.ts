@@ -6,6 +6,7 @@ import {
 } from '@typegoose/typegoose';
 import mongoose from 'mongoose';
 import { Item } from './item.model';
+import { DateObject } from '../../../helpers/abstracts/timestamps.abstract';
 
 @modelOptions({
   options: {
@@ -25,10 +26,7 @@ export class KardexTransaction {
   @prop()
   public createdBy?: mongoose.Types.ObjectId;
   @prop()
-  public createdAt?: {
-    date: number;
-    offset: number;
-  };
+  public createdAt?: DateObject;
 }
 
 const KardexTransactionModel = getModelForClass(KardexTransaction);

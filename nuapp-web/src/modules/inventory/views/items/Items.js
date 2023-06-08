@@ -42,9 +42,9 @@ function Item() {
     () => {
       if (saveSuccess) {
         sendToast(dispatch, { message: 'Guardado exitosamente!' })
-        setItem(null)
-        setEditing(false)
         handleClear()
+        setEditing(false)
+        setItem(null)
       } else {
         sendToast(dispatch, { message: 'No se pudo guardar los datos', color: 'danger' })
       }

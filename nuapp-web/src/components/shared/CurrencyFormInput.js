@@ -16,6 +16,7 @@ const CurrencyFormInput = (props) => {
     const {
       target: { name, value },
     } = event
+    if (!value) return
     const valueClear = `${value}`.replace(/[\s$.]/gi, '')
     if (/^[\d]{0,}$/g.test(valueClear)) {
       setInnerValue(formatCurrency(valueClear))
