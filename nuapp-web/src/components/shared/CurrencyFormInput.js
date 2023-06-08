@@ -1,16 +1,32 @@
 import { CFormInput } from '@coreui/react'
-import React, { useEffect, useState } from 'react'
+import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
 import { PropTypes } from 'prop-types'
 import { formatCurrency } from '../../utils/index'
 
-const CurrencyFormInput = (props) => {
+const CurrencyFormInput = forwardRef(function CurrencyFormInput(props, ref) {
   const [innerValue, setInnerValue] = useState('')
+  const inputRef = useRef()
   const { name, value } = props
 
   useEffect(() => {
     handleChange({ target: { name, value } })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value])
+
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        focus() {
+          inputRef.current.focus()
+        },
+        select() {
+          inputRef.current.select()
+        },
+      }
+    },
+    [],
+  )
 
   const handleChange = (event) => {
     const {
@@ -26,6 +42,7 @@ const CurrencyFormInput = (props) => {
 
   return (
     <CFormInput
+      ref={inputRef}
       {...props}
       name={props.name}
       value={innerValue}
@@ -33,7 +50,7 @@ const CurrencyFormInput = (props) => {
       onChange={handleChange}
     />
   )
-}
+})
 
 export default CurrencyFormInput
 

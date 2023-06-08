@@ -152,7 +152,7 @@ function Billing() {
           <title>FACTURACIÓN</title>
         </Helmet>
         <CRow>
-          <CCol lg="5">
+          <CCol lg="6">
             <CCard className="shadow border-10" style={{ height: '78vh' }}>
               <CCardBody style={{ overflow: 'auto' }}>
                 <CTable hover>
@@ -202,7 +202,7 @@ function Billing() {
               </CCardBody>
             </CCard>
           </CCol>
-          <CCol lg="7">
+          <CCol lg="6">
             <CCard className="shadow border-10" style={{ height: '78vh', overflowY: 'auto' }}>
               <CCardBody>
                 {!paying && <BillingForm addItem={addItem} />}
@@ -217,7 +217,6 @@ function Billing() {
             </CCard>
           </CCol>
         </CRow>
-        {/*         isReceivedLTTotal ||  */}
         <CRow className="mt-3 align-items-end">
           <CCard className="shadow border-10">
             <CCardBody>

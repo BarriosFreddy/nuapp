@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { PropTypes } from 'prop-types'
 
-import { CRow, CCol, CContainer, CFormInput, CCard, CCardBody } from '@coreui/react'
+import { CRow, CCol, CContainer, CCard, CCardBody } from '@coreui/react'
 import { formatCurrency } from './../../../utils'
 import CONSTANTS from './../../../constants'
+import CurrencyFormInput from '../../../components/shared/CurrencyFormInput'
 
 const { ENTER_KEYCODE, TAB_KEYCODE } = CONSTANTS
 
@@ -42,12 +43,6 @@ const PaymentComp = (props) => {
     setChangeAmount(receivedMoney - props.total)
   }
 
-  // eslint-disable-next-line no-unused-vars
-  const clear = () => {
-    setReceivedAmount(0)
-    setChangeAmount(0)
-  }
-
   function focusAndSelectReceivedInput() {
     receivedAmountInput.current.focus()
     receivedAmountInput.current.select()
@@ -71,7 +66,7 @@ const PaymentComp = (props) => {
             <h5>RECIBIDO</h5>
           </CCol>
           <CCol lg="8">
-            <CFormInput
+            <CurrencyFormInput
               ref={receivedAmountInput}
               data-testid="receivedAmountId"
               type="number"
