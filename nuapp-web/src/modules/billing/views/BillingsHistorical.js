@@ -27,6 +27,7 @@ function BillingsHistorical() {
   const dispatch = useDispatch()
   const billings = useSelector((state) => state.billing.billings)
   const billingsOffline = useSelector((state) => state.billing.offline.billings)
+  let [detailing, setDetailing] = useState(false)
   let [billing, setBilling] = useState(null)
   let [page, setPage] = useState(1)
   useEffect(() => {
@@ -54,6 +55,16 @@ function BillingsHistorical() {
     dispatch(getBillings({ page: newPage }))
   }
 
+  const handleDetail = (billing) => {
+    setBilling(billing)
+    setDetailing(true)
+  }
+
+  const handleBack = () => {
+    setBilling(null)
+    setDetailing(false)
+  }
+
   return (
     <>
       <CCard className="shadow border-10 m-4">
@@ -66,107 +77,109 @@ function BillingsHistorical() {
         <CCardBody>
           <CContainer className="mt--6" fluid>
             <CRow>
-              <CCol>
-                <>
-                  <div className="d-lg-none">
-                    {billings &&
-                      billings.map(({ createdAt, code, billAmount }, index) => (
-                        <CCard
-                          key={index}
-                          style={{
-                            width: 'auto',
-                          }}
-                        >
-                          <CRow className="g-0" key={code}>
-                            <CCol xs={8}>
-                              <CCardBody>
-                                <CRow>
-                                  <CCol>{formatDate(createdAt)}</CCol>
-                                </CRow>
-                                <CRow>
-                                  <CCol>{code}</CCol>
-                                </CRow>
-                                <CRow>
-                                  <CCol>${billAmount}</CCol>
-                                </CRow>
-                              </CCardBody>
-                            </CCol>
-                          </CRow>
-                        </CCard>
-                      ))}
-                  </div>
-                  <div className="d-none d-lg-block">
-                    <CTable>
-                      <CTableHead>
-                        <CTableRow>
-                          <CTableHeaderCell>Fecha</CTableHeaderCell>
-                          <CTableHeaderCell>Código</CTableHeaderCell>
-                          <CTableHeaderCell>N° de productos</CTableHeaderCell>
-                          <CTableHeaderCell>Total</CTableHeaderCell>
-                          <CTableHeaderCell>&nbsp;</CTableHeaderCell>
-                        </CTableRow>
-                      </CTableHead>
-                      <CTableBody>
-                        {billings &&
-                          billings.map((billing, index) => (
-                            <CTableRow key={index}>
-                              <CTableDataCell xs="12" className="text-uppercase">
-                                {formatDate(billing.createdAt)}
-                              </CTableDataCell>
-                              <CTableDataCell className="fs-6" xs="12">
-                                {billing.code ? billing.code : 'No Disponible'}
-                              </CTableDataCell>
-                              <CTableDataCell xs="12">{billing.items?.length}</CTableDataCell>
-                              <CTableDataCell xs="12">
-                                {formatCurrency(billing.billAmount)}
-                              </CTableDataCell>
-                              <CTableDataCell xs="12">
-                                <CButton
-                                  size="sm"
-                                  variant="outline"
-                                  color="info"
-                                  onClick={() => setBilling(billing)}
-                                >
-                                  Detalle
-                                </CButton>
-                              </CTableDataCell>
-                            </CTableRow>
-                          ))}
-                      </CTableBody>
-                    </CTable>
-                  </div>
+              {!detailing && (
+                <CCol>
+                  <>
+                    <div className="d-lg-none">
+                      {billings &&
+                        billings.map(({ createdAt, code, billAmount }, index) => (
+                          <CCard
+                            key={index}
+                            style={{
+                              width: 'auto',
+                            }}
+                          >
+                            <CRow className="g-0" key={code}>
+                              <CCol xs={8}>
+                                <CCardBody>
+                                  <CRow>
+                                    <CCol>{formatDate(createdAt)}</CCol>
+                                  </CRow>
+                                  <CRow>
+                                    <CCol>{code}</CCol>
+                                  </CRow>
+                                  <CRow>
+                                    <CCol>${billAmount}</CCol>
+                                  </CRow>
+                                </CCardBody>
+                              </CCol>
+                            </CRow>
+                          </CCard>
+                        ))}
+                    </div>
+                    <div className="d-none d-lg-block">
+                      <CTable>
+                        <CTableHead>
+                          <CTableRow>
+                            <CTableHeaderCell>Fecha</CTableHeaderCell>
+                            <CTableHeaderCell>Código</CTableHeaderCell>
+                            <CTableHeaderCell>N° de productos</CTableHeaderCell>
+                            <CTableHeaderCell>Total</CTableHeaderCell>
+                            <CTableHeaderCell>&nbsp;</CTableHeaderCell>
+                          </CTableRow>
+                        </CTableHead>
+                        <CTableBody>
+                          {billings &&
+                            billings.map((billing, index) => (
+                              <CTableRow key={index}>
+                                <CTableDataCell xs="12" className="text-uppercase">
+                                  {formatDate(billing.createdAt)}
+                                </CTableDataCell>
+                                <CTableDataCell className="fs-6" xs="12">
+                                  {billing.code ? billing.code : 'No Disponible'}
+                                </CTableDataCell>
+                                <CTableDataCell xs="12">{billing.items?.length}</CTableDataCell>
+                                <CTableDataCell xs="12">
+                                  {formatCurrency(billing.billAmount)}
+                                </CTableDataCell>
+                                <CTableDataCell xs="12">
+                                  <CButton
+                                    size="sm"
+                                    variant="outline"
+                                    color="info"
+                                    onClick={() => handleDetail(billing)}
+                                  >
+                                    Detalle
+                                  </CButton>
+                                </CTableDataCell>
+                              </CTableRow>
+                            ))}
+                        </CTableBody>
+                      </CTable>
+                    </div>
 
-                  <CCardFooter className="py-4">
-                    <CRow>
-                      <CCol>
-                        <div className="d-grid col-12 mx-auto">
-                          <CButton
-                            type="button"
-                            variant="outline"
-                            color="secondary"
-                            onClick={handlePrevPage}
-                          >
-                            ANTERIOR
-                          </CButton>
-                        </div>
-                      </CCol>
-                      <CCol>
-                        <div className="d-grid col-12 mx-auto">
-                          <CButton
-                            type="button"
-                            variant="outline"
-                            color="secondary"
-                            onClick={handleNextPage}
-                          >
-                            SIGUIENTE
-                          </CButton>
-                        </div>
-                      </CCol>
-                    </CRow>
-                  </CCardFooter>
-                </>
-              </CCol>
-              {billing && (
+                    <CCardFooter className="py-4">
+                      <CRow>
+                        <CCol>
+                          <div className="d-grid col-12 mx-auto">
+                            <CButton
+                              type="button"
+                              variant="outline"
+                              color="secondary"
+                              onClick={handlePrevPage}
+                            >
+                              ANTERIOR
+                            </CButton>
+                          </div>
+                        </CCol>
+                        <CCol>
+                          <div className="d-grid col-12 mx-auto">
+                            <CButton
+                              type="button"
+                              variant="outline"
+                              color="secondary"
+                              onClick={handleNextPage}
+                            >
+                              SIGUIENTE
+                            </CButton>
+                          </div>
+                        </CCol>
+                      </CRow>
+                    </CCardFooter>
+                  </>
+                </CCol>
+              )}
+              {detailing && (
                 <CCol>
                   <div className="d-none d-lg-block">
                     <CTable>
@@ -202,6 +215,15 @@ function BillingsHistorical() {
                 </CCol>
               )}
             </CRow>
+            {detailing && (
+              <CRow>
+                <CCol>
+                  <CButton variant="outline" color="info" onClick={() => handleBack()}>
+                    Regresar
+                  </CButton>
+                </CCol>
+              </CRow>
+            )}
           </CContainer>
         </CCardBody>
       </CCard>
