@@ -23,7 +23,7 @@ import CIcon from '@coreui/icons-react'
 import { useDispatch } from 'react-redux'
 import { logout } from 'src/modules/core/services/auth.service'
 
-const { REACT_APP_RENDER_GIT_COMMIT } = process.env
+const { REACT_APP_RENDER_GIT_COMMIT = '' } = process.env
 console.log({ REACT_APP_RENDER_GIT_COMMIT })
 
 const AppHeaderDropdown = () => {
@@ -48,7 +48,7 @@ const AppHeaderDropdown = () => {
         <CDropdownItem href="#">
           <CIcon icon={cilBell} className="me-2" />
           <CBadge color="info" className="ms-2">
-            {REACT_APP_RENDER_GIT_COMMIT}
+            {REACT_APP_RENDER_GIT_COMMIT.substring(0, 6)}
           </CBadge>
         </CDropdownItem>
         <CDropdownItem href="#">
