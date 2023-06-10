@@ -22,3 +22,10 @@ export const formatDate = (dateObject, format = 'DD-MM-YYYY hh:mm a') => {
     .utcOffset(offset / 60000)
     .format(format)
 }
+
+export const getDateObject = () => {
+  return {
+    date: dayjs().utc().valueOf(),
+    offset: dayjs().utcOffset() * 60000,
+  }
+}

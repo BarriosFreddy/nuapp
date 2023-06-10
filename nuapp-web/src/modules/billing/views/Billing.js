@@ -16,7 +16,7 @@ import {
   CTableRow,
 } from '@coreui/react'
 import BillingForm from './BillingForm'
-import { formatCurrency } from 'src/utils'
+import { formatCurrency, getDateObject } from 'src/utils'
 import CIcon from '@coreui/icons-react'
 import { cilTrash } from '@coreui/icons'
 import PaymentComp from './Payment'
@@ -24,10 +24,7 @@ import { saveBilling } from '../../../modules/billing/services/billings.service'
 import { setShowHeader, setSidebarUnfoldable } from 'src/app.slice'
 import { Helmet } from 'react-helmet'
 import { sendToast } from '../../shared/services/notification.service'
-import dayjs from 'dayjs'
-import utc from 'dayjs/plugin/utc'
 import { useDidUpdateControl } from '../../../hooks/useDidUpdateControl'
-dayjs.extend(utc)
 
 function Billing() {
   const saveSuccess = useSelector((state) => state.billing.saveSuccess)
@@ -123,10 +120,7 @@ function Billing() {
     }
     dispatch(
       saveBilling({
-        createdAt: {
-          date: dayjs().utc().valueOf(),
-          offset: dayjs().utcOffset() * 60000,
-        },
+        createdAt: getDateObject(),
         receivedAmount,
         billAmount: total,
         items: getItemsData(items),

@@ -13,6 +13,7 @@ import {
   CTableDataCell,
   CTableHead,
   CTableHeaderCell,
+  CBadge,
 } from '@coreui/react'
 import DefaultImg from './../../../../assets/images/new.ico'
 import { formatCurrency } from 'src/utils'
@@ -59,7 +60,7 @@ const ItemList = ({ items, onEdit, onPrevPage, onNextPage }) => {
             <CTableRow>
               <CTableHeaderCell>Nombre</CTableHeaderCell>
               <CTableHeaderCell>Código</CTableHeaderCell>
-              <CTableHeaderCell>Descripción</CTableHeaderCell>
+              <CTableHeaderCell>En Stock</CTableHeaderCell>
               <CTableHeaderCell>Precio</CTableHeaderCell>
               <CTableHeaderCell>&nbsp;</CTableHeaderCell>
             </CTableRow>
@@ -68,13 +69,31 @@ const ItemList = ({ items, onEdit, onPrevPage, onNextPage }) => {
             {items.map((item) => (
               <CTableRow key={item.code}>
                 <CTableDataCell xs="12" className="text-uppercase">
-                  {item.name}
+                  <CRow>
+                    <CCol className="text-uppercase text-break">{item.name}</CCol>
+                  </CRow>
+                  <CRow>
+                    <CCol style={{ fontSize: 10 }} className="text-break">
+                      {item.description}
+                    </CCol>
+                  </CRow>
                 </CTableDataCell>
                 <CTableDataCell className="fs-6" xs="12">
                   {item.code}
                 </CTableDataCell>
-                <CTableDataCell xs="12" className="text-break">
-                  {item.description}
+                <CTableDataCell xs="12">
+                  <CBadge
+                    color={
+                      item.stock
+                        ? item.stock <= item.reoderPoint
+                          ? 'warning'
+                          : 'success'
+                        : 'danger'
+                    }
+                    shape="rounded-pill"
+                  >
+                    {item.stock ?? 0}
+                  </CBadge>
                 </CTableDataCell>
                 <CTableDataCell xs="12">{formatCurrency(item.price)}</CTableDataCell>
                 <CTableDataCell xs="12">

@@ -20,9 +20,9 @@ function ItemCategoriesList({ itemCategories, onEdit, onPrevPage, onNextPage }) 
     <>
       <div className="d-lg-none">
         {itemCategories &&
-          itemCategories.map(({ _id, code, name, description }) => (
+          itemCategories.map(({ _id, code, name, description }, index) => (
             <CCard
-              key={_id}
+              key={index}
               style={{
                 width: 'auto',
               }}
@@ -57,8 +57,8 @@ function ItemCategoriesList({ itemCategories, onEdit, onPrevPage, onNextPage }) 
           </CTableHead>
           <CTableBody>
             {itemCategories &&
-              itemCategories.map((itemCategory) => (
-                <CTableRow key={itemCategory._id}>
+              itemCategories.map((itemCategory, index) => (
+                <CTableRow key={index}>
                   <CTableDataCell xs="12" className="text-uppercase">
                     {itemCategory.code}
                   </CTableDataCell>

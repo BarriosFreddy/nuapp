@@ -14,8 +14,9 @@ export function registerRoutes(app: Express): void {
   app.use('/user-accounts', coreRouter.userAccountRouter);
   app.use('/roles', coreRouter.roleRouter);
   app.use('/auth', coreRouter.authRouter);
-  app.use('/billings', billingRouter.billingRouter);
   app.use('/enumerations', coreRouter.enumerationsRouter);
+  app.use('/billings', billingRouter.billingRouter);
   app.use('/items', inventoryRouter.itemRouter);
   app.use('/item-categories', inventoryRouter.itemCategoryRouter);
+  app.use('/kardex', inventoryRouter.kardexTransactionRouter);
 }

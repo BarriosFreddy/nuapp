@@ -7,6 +7,7 @@ import itemsReducer from './modules/inventory/reducers/items.reducer'
 import itemCategoriesReducer from './modules/inventory/reducers/item-categories.reducer'
 import storage from 'redux-persist/lib/storage'
 import { persistReducer, persistStore } from 'redux-persist'
+import kardexesReducer from './modules/inventory/reducers/kardexes.reducer'
 
 const persistedBillingReducer = persistReducer(
   {
@@ -44,6 +45,7 @@ const store = configureStore({
     billing: persistedBillingReducer,
     items: persistedItemsReducer,
     itemCategories: itemCategoriesReducer,
+    kardexes: kardexesReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

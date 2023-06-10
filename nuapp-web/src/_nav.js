@@ -86,6 +86,13 @@ let _nav = [
         icon: <CIcon icon={cilCloudUpload} customClassName="nav-icon" />,
         roles: ['ADMIN'],
       },
+      {
+        component: CNavItem,
+        name: 'Entrada y salida',
+        to: '/kardex',
+        icon: <CIcon icon={cilCloudUpload} customClassName="nav-icon" />,
+        roles: ['ADMIN'],
+      },
     ],
   },
 ]

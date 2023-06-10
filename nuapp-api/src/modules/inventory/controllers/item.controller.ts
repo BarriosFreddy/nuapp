@@ -6,14 +6,15 @@ import { Item } from '../models/item.model';
 const itemsService = container.resolve(ItemService);
 
 interface RequestQuery {
-  page?: number;
   name?: string;
   code?: string;
+  page?: number;
+  size?: number;
 }
 class ItemsController {
   async findAll(req: Request<{}, {}, {}, RequestQuery>, res: Response) {
-    let { page, name, code } = req.query;
-    const items = await itemsService.findAll({ name, code, page });
+    let { page, name, code, size } = req.query;
+    const items = await itemsService.findAll({ name, code, page, size });
     res.status(200).send(items);
   }
   async findOne(req: Request, res: Response) {

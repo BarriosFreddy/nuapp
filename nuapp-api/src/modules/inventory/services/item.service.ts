@@ -19,10 +19,12 @@ export class ItemService extends BaseService<Item> {
     page,
     name,
     code,
+    size = 10,
   }: {
-    page?: number;
     name?: string;
     code?: string;
+    page?: number;
+    size?: number;
   }): Promise<Item[]> {
     let filters = {};
     let conditions = [];
@@ -41,7 +43,7 @@ export class ItemService extends BaseService<Item> {
       categoryId: 1,
       measurementUnit: 1,
     });
-    if (page) query.skip(10 * (page - 1)).limit(10);
+    if (page) query.skip(size * (page - 1)).limit(size);
     const items: Item[] = await query.exec();
     return items;
   }

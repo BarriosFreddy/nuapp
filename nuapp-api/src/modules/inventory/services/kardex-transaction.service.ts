@@ -52,12 +52,12 @@ export class KardexTransactionService extends BaseService<KardexTransaction> {
       for await (const kardex of kardexTransactions) {
         const { itemId, units, type } = kardex;
         const item = await itemService.findOne(itemId.toString());
-        if (!item) continue;
-        let newStock = item.stock;
+        if (!item || units <= 0) continue;
+        let newStock = item.stock ?? 0;
         if (type === KardexTransactionType.IN) {
-          newStock += units;
+          newStock += +units;
         } else if (type === KardexTransactionType.OUT) {
-          const subtraction = item.stock - units;
+          const subtraction = item.stock - +units;
           newStock = subtraction <= 0 ? 0 : subtraction;
         }
         item.stock = newStock;

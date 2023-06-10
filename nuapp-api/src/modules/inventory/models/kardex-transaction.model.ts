@@ -20,9 +20,11 @@ export class KardexTransaction {
   @prop({ ref: () => Item })
   public itemId!: Ref<Item>;
   @prop()
+  public code!: string;
+  @prop()
   public units!: number;
   @prop()
-  public computed!: boolean;
+  public computed: boolean = false;
   @prop()
   public createdBy?: mongoose.Types.ObjectId;
   @prop()

@@ -20,6 +20,7 @@ import {
   CTableHeaderCell,
   CTableBody,
   CTableDataCell,
+  CBadge,
 } from '@coreui/react'
 import { formatCurrency } from 'src/utils'
 import { useDispatch, useSelector } from 'react-redux'
@@ -179,6 +180,20 @@ const BillingForm = (props) => {
                     </CTableDataCell>
                     <CTableDataCell className="text-break">
                       {formatCurrency(item.price)}
+                    </CTableDataCell>
+                    <CTableDataCell xs="12">
+                      <CBadge
+                        color={
+                          item.stock
+                            ? item.stock <= item.reoderPoint
+                              ? 'warning'
+                              : 'success'
+                            : 'danger'
+                        }
+                        shape="rounded-pill"
+                      >
+                        {item.stock ?? 0}
+                      </CBadge>
                     </CTableDataCell>
                   </CTableRow>
                 ))}
