@@ -6,7 +6,6 @@ import {
   CButton,
   CCardBody,
   CCol,
-  CCardImage,
   CTable,
   CTableBody,
   CTableRow,
@@ -15,7 +14,6 @@ import {
   CTableHeaderCell,
   CBadge,
 } from '@coreui/react'
-import DefaultImg from './../../../../assets/images/new.ico'
 import { formatCurrency } from 'src/utils'
 import { PropTypes } from 'prop-types'
 
@@ -30,12 +28,9 @@ const ItemList = ({ items, onEdit, onPrevPage, onNextPage }) => {
               width: 'auto',
             }}
           >
-            <CRow className="g-0" key={code}>
-              <CCol xs={4}>
-                <CCardImage src={DefaultImg} />
-              </CCol>
-              <CCol xs={8}>
-                <CCardBody>
+            <CCardBody>
+              <CRow className="g-0" key={code}>
+                <CCol xs={12}>
                   <CRow>
                     <CCol>{name}</CCol>
                   </CRow>
@@ -48,9 +43,9 @@ const ItemList = ({ items, onEdit, onPrevPage, onNextPage }) => {
                   <CRow>
                     <CCol>${price}</CCol>
                   </CRow>
-                </CCardBody>
-              </CCol>
-            </CRow>
+                </CCol>
+              </CRow>
+            </CCardBody>
           </CCard>
         ))}
       </div>
@@ -85,7 +80,7 @@ const ItemList = ({ items, onEdit, onPrevPage, onNextPage }) => {
                   <CBadge
                     color={
                       item.stock
-                        ? item.stock <= item.reoderPoint
+                        ? item.stock <= item.reorderPoint
                           ? 'warning'
                           : 'success'
                         : 'danger'

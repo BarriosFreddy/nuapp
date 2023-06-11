@@ -185,7 +185,7 @@ const BillingForm = (props) => {
                       <CBadge
                         color={
                           item.stock
-                            ? item.stock <= item.reoderPoint
+                            ? item.stock <= item.reorderPoint
                               ? 'warning'
                               : 'success'
                             : 'danger'

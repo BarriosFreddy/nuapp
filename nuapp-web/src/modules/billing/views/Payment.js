@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { PropTypes } from 'prop-types'
 
-import { CRow, CCol, CContainer, CCard, CCardBody } from '@coreui/react'
+import { CRow, CCol, CContainer, CFormSelect, CButton } from '@coreui/react'
 import { formatCurrency } from './../../../utils'
 import CONSTANTS from './../../../constants'
 import CurrencyFormInput from '../../../components/shared/CurrencyFormInput'
@@ -24,6 +24,7 @@ const PaymentComp = (props) => {
     calculateAmountChange(value)
   }
 
+  // eslint-disable-next-line no-unused-vars
   const handleReceivedAmount = (amount) => {
     setReceivedAmount(amount)
     props.setReceivedAmount(amount)
@@ -47,23 +48,32 @@ const PaymentComp = (props) => {
     receivedAmountInput.current.focus()
     receivedAmountInput.current.select()
   }
+
+  const handleBack = () => {
+    props.onBack && props.onBack()
+  }
+
   return (
     <>
       <CContainer fluid>
         <CRow>
-          {CONSTANTS.AVAILABLE_BILLS.map((amount) => (
-            <CCol lg="6" key={amount} className="mt-2" style={{ cursor: 'pointer' }}>
-              <CCard onClick={() => handleReceivedAmount(amount)}>
-                <CCardBody>
-                  <h4 className="text-center">{formatCurrency(amount)}</h4>
-                </CCardBody>
-              </CCard>
-            </CCol>
-          ))}
+          <CCol>
+            <CButton variant="outline" color="info" onClick={() => handleBack()}>
+              REGRESAR
+            </CButton>
+          </CCol>
         </CRow>
         <CRow className="mt-4">
-          <CCol lg="4">
-            <h5>RECIBIDO</h5>
+          <CCol lg="4" className="fs-5">
+            MEDIO DE PAGO
+          </CCol>
+          <CCol lg="8">
+            <CFormSelect name="paymentMethod" size="lg" required options={['EFECTIVO']} />
+          </CCol>
+        </CRow>
+        <CRow className="mt-4">
+          <CCol lg="4" className="fs-5">
+            EFECTIVO
           </CCol>
           <CCol lg="8">
             <CurrencyFormInput
@@ -81,8 +91,8 @@ const PaymentComp = (props) => {
           </CCol>
         </CRow>
         <CRow className="mt-4">
-          <CCol lg="4">
-            <h5>CAMBIO</h5>
+          <CCol lg="4" className="fs-5">
+            CAMBIO
           </CCol>
           <CCol lg="8" className="align-self-end">
             <span className="fs-3">{formatCurrency(changeAmount)}</span>
@@ -99,4 +109,5 @@ PaymentComp.propTypes = {
   total: PropTypes.number,
   setReceivedAmount: PropTypes.func,
   cargeButtonRef: PropTypes.object,
+  onBack: PropTypes.func,
 }

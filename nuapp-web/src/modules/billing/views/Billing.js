@@ -139,6 +139,8 @@ function Billing() {
     }))
 
   const hanndleReceivedAmount = (receivedAmount) => setReceivedAmount(receivedAmount)
+
+  const handleBack = () => setPaying(false)
   return (
     <>
       <CContainer className="mt-3" fluid>
@@ -204,6 +206,7 @@ function Billing() {
                   <PaymentComp
                     cargeButtonRef={cargeButtonRef}
                     setReceivedAmount={hanndleReceivedAmount}
+                    onBack={handleBack}
                     total={total}
                   />
                 )}
