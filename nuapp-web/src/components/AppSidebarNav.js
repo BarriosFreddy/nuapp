@@ -33,6 +33,7 @@ export const AppSidebarNav = ({ items }) => {
           })}
         key={index}
         {...rest}
+        reloadDocument
       >
         {navLink(name, icon, badge)}
       </Component>
