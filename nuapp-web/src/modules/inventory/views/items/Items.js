@@ -28,6 +28,7 @@ function Item() {
   const items = useSelector((state) => state.items.items)
   const saveSuccess = useSelector((state) => state.items.saveSuccess)
   const saving = useSelector((state) => state.items.saving)
+  const fetching = useSelector((state) => state.items.fetching)
   const [searchTerm, setSearchTerm] = useState('')
   let [editing, setEditing] = useState(false)
   let [item, setItem] = useState(null)
@@ -159,6 +160,7 @@ function Item() {
                   <ItemList
                     items={items}
                     page={page}
+                    fetching={fetching}
                     onEdit={handleEdit}
                     onPrevPage={handlePrevPage}
                     onNextPage={handleNextPage}
