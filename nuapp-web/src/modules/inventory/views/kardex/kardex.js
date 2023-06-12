@@ -80,11 +80,6 @@ const Kardex = () => {
     setKardexes(kardexesClone)
   }
 
-  const handleChangeCode = ({ target: { value } }, index) => {
-    setCurrentIndex(index)
-    searchByCode(value)
-  }
-
   const handleNew = () => {
     setKardexes([...kardexes, initialKardex])
   }
@@ -95,19 +90,11 @@ const Kardex = () => {
     setKardexes(kardexesClone)
   }
 
-  const onKeyDownCodeField = ({ keyCode }, kardex) => {
-    if ([ENTER_KEYCODE, TAB_KEYCODE].includes(keyCode)) {
-      searchByCode(kardex.code)
-    }
+  const onKeyUpCodeField = ({ keyCode }, kardex) => {
+    if ([ENTER_KEYCODE, TAB_KEYCODE].includes(keyCode)) searchByCode(kardex)
   }
 
-  const searchByCode = (code) => {
-    if (kardexes.some((kardex) => kardex.code === code)) {
-      sendWarningToast(dispatch, {
-        message: `El item con código ${code} ya está agregado!`,
-      })
-      return
-    }
+  const searchByCode = ({ itemId, code, name }) => {
     if (!!code) dispatch(getItems({ code: code, page: 1, size: 1 }, false))
   }
 
@@ -156,6 +143,12 @@ const Kardex = () => {
   function fillKardexFields() {
     if (items.length > 0) {
       const { _id, code, name, description } = items[0]
+      if (kardexes.some((kardex) => kardex.itemId === _id)) {
+        sendWarningToast(dispatch, {
+          message: `El item "${name}" ya está agregado!`,
+        })
+        return
+      }
       const kardexesClone = replaceKardex(
         {
           code,
@@ -168,7 +161,11 @@ const Kardex = () => {
         currentIndex,
       )
       setKardexes(kardexesClone)
+      return
     }
+    sendWarningToast(dispatch, {
+      message: `Item no encontrado`,
+    })
   }
 
   return (
@@ -204,8 +201,8 @@ const Kardex = () => {
                         required
                         name="code"
                         value={kardex.code}
-                        onChange={(event) => handleChangeCode(event, index)}
-                        onKeyDown={(event) => onKeyDownCodeField(event, index)}
+                        onChange={(event) => onChangeField(event, kardex, index)}
+                        onKeyUp={(event) => onKeyUpCodeField(event, kardex)}
                       />
                     </CTableDataCell>
                     <CTableDataCell className="text-uppercase">{kardex.name}</CTableDataCell>
