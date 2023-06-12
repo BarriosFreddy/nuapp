@@ -29,3 +29,7 @@ export const getDateObject = () => {
     offset: dayjs().utcOffset() * 60000,
   }
 }
+
+export const getDateAsString = (format = 'YYYY-MM-DD') => {
+  return dayjs().utcOffset(-5).format(format)
+}

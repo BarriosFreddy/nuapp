@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 import {
   CCard,
@@ -36,6 +36,7 @@ function Categories() {
   let [itemCategory, setItemCategory] = useState(null)
   let [editing, setEditing] = useState(false)
   let [page, setPage] = useState(1)
+  const searchInputRef = useRef()
 
   useEffect(() => {
     setSearchTerm('')
@@ -44,8 +45,10 @@ function Categories() {
 
   useDidUpdateControl(() => {
     if (saveSuccess) {
-      dispatch(getItemCategories({ page: 1 }))
+      setSearchTerm('')
+      dispatch(getItemCategories({ page }))
       setEditing(false)
+      setItemCategory(null)
       sendToast(dispatch, { message: 'Guardado exitosamente!' })
     } else sendToast(dispatch, { message: 'No se pudo guardar los datos', color: 'danger' })
   }, saving)
@@ -61,7 +64,7 @@ function Categories() {
   }
 
   const handleCancel = async () => {
-    dispatch(getItemCategories({ page: 1 }))
+    dispatch(getItemCategories({ page }))
     setEditing(false)
   }
 
@@ -101,6 +104,7 @@ function Categories() {
   const handleClear = () => {
     setSearchTerm('')
     dispatch(getItemCategories({ page: 1 }))
+    searchInputRef.current.focus()
   }
 
   return (
@@ -124,6 +128,7 @@ function Categories() {
                 <CCol lg="5">
                   <CInputGroup>
                     <CFormInput
+                      ref={searchInputRef}
                       type="text"
                       name="searchTerm"
                       placeholder="..."
@@ -149,6 +154,7 @@ function Categories() {
             {!editing && (
               <ItemCategoriesList
                 itemCategories={itemCategories}
+                page={page}
                 onEdit={handleEdit}
                 onPrevPage={handlePrevPage}
                 onNextPage={handleNextPage}

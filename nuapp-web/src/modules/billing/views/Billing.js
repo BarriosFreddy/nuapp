@@ -16,7 +16,7 @@ import {
   CTableRow,
 } from '@coreui/react'
 import BillingForm from './BillingForm'
-import { formatCurrency, getDateObject } from 'src/utils'
+import { formatCurrency, getDateAsString, getDateObject } from 'src/utils'
 import CIcon from '@coreui/icons-react'
 import { cilTrash } from '@coreui/icons'
 import PaymentComp from './Payment'
@@ -25,6 +25,7 @@ import { setShowHeader, setSidebarUnfoldable } from 'src/app.slice'
 import { Helmet } from 'react-helmet'
 import { sendToast } from '../../shared/services/notification.service'
 import { useDidUpdateControl } from '../../../hooks/useDidUpdateControl'
+import { getAllItems } from 'src/modules/inventory/services/items.service'
 
 function Billing() {
   const saveSuccess = useSelector((state) => state.billing.saveSuccess)
@@ -56,6 +57,7 @@ function Billing() {
         setItemUnits({})
         sendToast(dispatch, { message: 'Guardado exitosamente!' })
         setPaying(false)
+        dispatch(getAllItems())
       } else {
         sendToast(dispatch, { message: 'No se pudo guardar los datos', color: 'danger' })
       }
@@ -124,6 +126,7 @@ function Billing() {
         receivedAmount,
         billAmount: total,
         items: getItemsData(items),
+        creationDate: getDateAsString(),
       }),
     )
   }

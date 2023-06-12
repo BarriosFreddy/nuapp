@@ -2,7 +2,6 @@ import React from 'react'
 import { PropTypes } from 'prop-types'
 import {
   CCard,
-  CCardFooter,
   CRow,
   CButton,
   CCardBody,
@@ -13,9 +12,10 @@ import {
   CTableHeaderCell,
   CTableBody,
   CTableDataCell,
+  CTableFoot,
 } from '@coreui/react'
 
-function ItemCategoriesList({ itemCategories, onEdit, onPrevPage, onNextPage }) {
+function ItemCategoriesList({ itemCategories, page, onEdit, onPrevPage, onNextPage }) {
   return (
     <>
       <div className="d-lg-none">
@@ -81,27 +81,45 @@ function ItemCategoriesList({ itemCategories, onEdit, onPrevPage, onNextPage }) 
                 </CTableRow>
               ))}
           </CTableBody>
+          <CTableFoot>
+            <CTableRow>
+              <CTableDataCell colSpan={5} className="text-center">
+                Página {page}
+              </CTableDataCell>
+            </CTableRow>
+            <CTableRow className="mt-2">
+              <CTableDataCell colSpan={5}>
+                <CRow>
+                  <CCol>
+                    <div className="d-grid col-12 mx-auto">
+                      <CButton
+                        type="button"
+                        variant="outline"
+                        color="secondary"
+                        onClick={onPrevPage}
+                      >
+                        ANTERIOR
+                      </CButton>
+                    </div>
+                  </CCol>
+                  <CCol>
+                    <div className="d-grid col-12 mx-auto">
+                      <CButton
+                        type="button"
+                        variant="outline"
+                        color="secondary"
+                        onClick={onNextPage}
+                      >
+                        SIGUIENTE
+                      </CButton>
+                    </div>
+                  </CCol>
+                </CRow>
+              </CTableDataCell>
+            </CTableRow>
+          </CTableFoot>
         </CTable>
       </div>
-
-      <CCardFooter className="py-4">
-        <CRow>
-          <CCol>
-            <div className="d-grid col-12 mx-auto">
-              <CButton type="button" variant="outline" color="secondary" onClick={onPrevPage}>
-                ANTERIOR
-              </CButton>
-            </div>
-          </CCol>
-          <CCol>
-            <div className="d-grid col-12 mx-auto">
-              <CButton type="button" variant="outline" color="secondary" onClick={onNextPage}>
-                SIGUIENTE
-              </CButton>
-            </div>
-          </CCol>
-        </CRow>
-      </CCardFooter>
     </>
   )
 }
@@ -110,6 +128,7 @@ export default ItemCategoriesList
 
 ItemCategoriesList.propTypes = {
   itemCategories: PropTypes.array.isRequired,
+  page: PropTypes.number.isRequired,
   onEdit: PropTypes.func.isRequired,
   onPrevPage: PropTypes.func.isRequired,
   onNextPage: PropTypes.func.isRequired,
