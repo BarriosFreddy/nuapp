@@ -31,6 +31,7 @@ function Categories() {
   const dispatch = useDispatch()
   const itemCategories = useSelector((state) => state.itemCategories.itemCategories)
   const saving = useSelector((state) => state.itemCategories.saving)
+  const fetching = useSelector((state) => state.itemCategories.fetching)
   const saveSuccess = useSelector((state) => state.itemCategories.saveSuccess)
   const [searchTerm, setSearchTerm] = useState('')
   let [itemCategory, setItemCategory] = useState(null)
@@ -155,6 +156,7 @@ function Categories() {
               <ItemCategoriesList
                 itemCategories={itemCategories}
                 page={page}
+                fetching={fetching}
                 onEdit={handleEdit}
                 onPrevPage={handlePrevPage}
                 onNextPage={handleNextPage}

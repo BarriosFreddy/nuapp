@@ -17,7 +17,7 @@ import {
 import { formatCurrency } from 'src/utils'
 import { PropTypes } from 'prop-types'
 
-const ItemList = ({ items, onEdit, page, onPrevPage, onNextPage }) => {
+const ItemList = ({ items, fetching, page, onEdit, onPrevPage, onNextPage }) => {
   return (
     <>
       <div className="d-lg-none">
@@ -92,7 +92,13 @@ const ItemList = ({ items, onEdit, page, onPrevPage, onNextPage }) => {
                 </CTableDataCell>
                 <CTableDataCell xs="12">{formatCurrency(item.price)}</CTableDataCell>
                 <CTableDataCell xs="12">
-                  <CButton size="sm" variant="outline" color="info" onClick={() => onEdit(item)}>
+                  <CButton
+                    size="sm"
+                    variant="outline"
+                    color="info"
+                    disabled={fetching}
+                    onClick={() => onEdit(item)}
+                  >
                     EDITAR
                   </CButton>
                 </CTableDataCell>
@@ -114,6 +120,7 @@ const ItemList = ({ items, onEdit, page, onPrevPage, onNextPage }) => {
                         type="button"
                         variant="outline"
                         color="secondary"
+                        disabled={fetching}
                         onClick={onPrevPage}
                       >
                         ANTERIOR
@@ -126,6 +133,7 @@ const ItemList = ({ items, onEdit, page, onPrevPage, onNextPage }) => {
                         type="button"
                         variant="outline"
                         color="secondary"
+                        disabled={fetching}
                         onClick={onNextPage}
                       >
                         SIGUIENTE
@@ -146,8 +154,9 @@ export default ItemList
 
 ItemList.propTypes = {
   items: PropTypes.array.isRequired,
-  onEdit: PropTypes.func.isRequired,
   page: PropTypes.number.isRequired,
+  fetching: PropTypes.bool.isRequired,
+  onEdit: PropTypes.func.isRequired,
   onPrevPage: PropTypes.func.isRequired,
   onNextPage: PropTypes.func.isRequired,
 }

@@ -15,7 +15,7 @@ import {
   CTableFoot,
 } from '@coreui/react'
 
-function ItemCategoriesList({ itemCategories, page, onEdit, onPrevPage, onNextPage }) {
+function ItemCategoriesList({ itemCategories, fetching, page, onEdit, onPrevPage, onNextPage }) {
   return (
     <>
       <div className="d-lg-none">
@@ -73,6 +73,7 @@ function ItemCategoriesList({ itemCategories, page, onEdit, onPrevPage, onNextPa
                       size="sm"
                       variant="outline"
                       color="info"
+                      disabled={fetching}
                       onClick={() => onEdit(itemCategory)}
                     >
                       EDITAR
@@ -96,6 +97,7 @@ function ItemCategoriesList({ itemCategories, page, onEdit, onPrevPage, onNextPa
                         type="button"
                         variant="outline"
                         color="secondary"
+                        disabled={fetching}
                         onClick={onPrevPage}
                       >
                         ANTERIOR
@@ -108,6 +110,7 @@ function ItemCategoriesList({ itemCategories, page, onEdit, onPrevPage, onNextPa
                         type="button"
                         variant="outline"
                         color="secondary"
+                        disabled={fetching}
                         onClick={onNextPage}
                       >
                         SIGUIENTE
@@ -128,6 +131,7 @@ export default ItemCategoriesList
 
 ItemCategoriesList.propTypes = {
   itemCategories: PropTypes.array.isRequired,
+  fetching: PropTypes.bool.isRequired,
   page: PropTypes.number.isRequired,
   onEdit: PropTypes.func.isRequired,
   onPrevPage: PropTypes.func.isRequired,
