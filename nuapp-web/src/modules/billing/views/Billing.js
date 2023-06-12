@@ -16,7 +16,7 @@ import {
   CTableRow,
 } from '@coreui/react'
 import BillingForm from './BillingForm'
-import { formatCurrency, getDateObject } from 'src/utils'
+import { formatCurrency, getDateAsString, getDateObject } from 'src/utils'
 import CIcon from '@coreui/icons-react'
 import { cilTrash } from '@coreui/icons'
 import PaymentComp from './Payment'
@@ -126,6 +126,7 @@ function Billing() {
         receivedAmount,
         billAmount: total,
         items: getItemsData(items),
+        creationDate: getDateAsString(),
       }),
     )
   }
