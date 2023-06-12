@@ -48,7 +48,6 @@ function ItemForm(props) {
     name: false,
     price: false,
     stock: false,
-    cost: false,
     reorderPoint: false,
     categoryId: false,
     measurementUnit: false,
@@ -92,7 +91,6 @@ function ItemForm(props) {
     failedValidationsObj.description = !description
     failedValidationsObj.name = !name
     failedValidationsObj.price = price <= 0
-    failedValidationsObj.cost = cost <= 0
     failedValidationsObj.stock = !stock
     failedValidationsObj.categoryId = !categoryId
     failedValidationsObj.measurementUnit = !measurementUnit
@@ -192,9 +190,6 @@ function ItemForm(props) {
                     type="number"
                     name="cost"
                     value={item.cost}
-                    feedbackInvalid="Campo obligatorio"
-                    invalid={failedValidations.cost}
-                    required
                     onChange={(event) => onChangeField(event)}
                   />
                 </CCol>
