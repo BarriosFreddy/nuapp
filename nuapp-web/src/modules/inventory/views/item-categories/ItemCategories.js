@@ -45,8 +45,10 @@ function Categories() {
 
   useDidUpdateControl(() => {
     if (saveSuccess) {
-      dispatch(getItemCategories({ page: 1 }))
+      setSearchTerm('')
+      dispatch(getItemCategories({ page }))
       setEditing(false)
+      setItemCategory(null)
       sendToast(dispatch, { message: 'Guardado exitosamente!' })
     } else sendToast(dispatch, { message: 'No se pudo guardar los datos', color: 'danger' })
   }, saving)
@@ -62,7 +64,7 @@ function Categories() {
   }
 
   const handleCancel = async () => {
-    dispatch(getItemCategories({ page: 1 }))
+    dispatch(getItemCategories({ page }))
     setEditing(false)
   }
 
@@ -152,6 +154,7 @@ function Categories() {
             {!editing && (
               <ItemCategoriesList
                 itemCategories={itemCategories}
+                page={page}
                 onEdit={handleEdit}
                 onPrevPage={handlePrevPage}
                 onNextPage={handleNextPage}

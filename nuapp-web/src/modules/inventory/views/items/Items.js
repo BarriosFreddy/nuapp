@@ -42,10 +42,11 @@ function Item() {
   useDidUpdateControl(
     () => {
       if (saveSuccess) {
-        sendToast(dispatch, { message: 'Guardado exitosamente!' })
-        handleClear()
+        setSearchTerm('')
+        dispatch(getItems({ page }))
         setEditing(false)
         setItem(null)
+        sendToast(dispatch, { message: 'Guardado exitosamente!' })
       } else {
         sendToast(dispatch, { message: 'No se pudo guardar los datos', color: 'danger' })
       }
@@ -54,16 +55,13 @@ function Item() {
     [saveSuccess],
   )
 
-  const save = (item) => {
-    if (item._id) {
-      dispatch(updateItem(item))
-      return
-    }
-    dispatch(saveItem(item))
+  const handleSave = (item) => {
+    if (item._id) dispatch(updateItem(item))
+    else dispatch(saveItem(item))
   }
 
-  const cancel = async () => {
-    dispatch(getItems({ page: 1 }))
+  const handleCancel = async () => {
+    dispatch(getItems({ page }))
     setEditing(false)
   }
 
@@ -160,12 +158,13 @@ function Item() {
                 {!editing && (
                   <ItemList
                     items={items}
+                    page={page}
                     onEdit={handleEdit}
                     onPrevPage={handlePrevPage}
                     onNextPage={handleNextPage}
                   />
                 )}
-                {editing && <ItemForm item={item} onSave={save} onCancel={cancel} />}
+                {editing && <ItemForm item={item} onSave={handleSave} onCancel={handleCancel} />}
               </CCardBody>
             </CCard>
           </CCol>
