@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 import {
   CCard,
@@ -36,6 +36,7 @@ function Categories() {
   let [itemCategory, setItemCategory] = useState(null)
   let [editing, setEditing] = useState(false)
   let [page, setPage] = useState(1)
+  const searchInputRef = useRef()
 
   useEffect(() => {
     setSearchTerm('')
@@ -101,6 +102,7 @@ function Categories() {
   const handleClear = () => {
     setSearchTerm('')
     dispatch(getItemCategories({ page: 1 }))
+    searchInputRef.current.focus()
   }
 
   return (
@@ -124,6 +126,7 @@ function Categories() {
                 <CCol lg="5">
                   <CInputGroup>
                     <CFormInput
+                      ref={searchInputRef}
                       type="text"
                       name="searchTerm"
                       placeholder="..."

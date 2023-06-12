@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 
 import {
   CCard,
@@ -32,6 +32,7 @@ function Item() {
   let [editing, setEditing] = useState(false)
   let [item, setItem] = useState(null)
   let [page, setPage] = useState(1)
+  const searchInputRef = useRef()
 
   useEffect(() => {
     setSearchTerm('')
@@ -107,6 +108,7 @@ function Item() {
   const handleClear = () => {
     setSearchTerm('')
     dispatch(getItems({ page: 1 }))
+    searchInputRef.current.focus()
   }
 
   return (
@@ -132,6 +134,7 @@ function Item() {
                     <CCol lg="5">
                       <CInputGroup>
                         <CFormInput
+                          ref={searchInputRef}
                           type="text"
                           name="searchTerm"
                           placeholder="..."
