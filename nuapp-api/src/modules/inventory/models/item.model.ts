@@ -34,6 +34,17 @@ export class Item extends TimeStamps {
   public supplierId?: Ref<Supplier>;
   @prop()
   public modifiedBy?: mongoose.Types.ObjectId;
+
+  public addStock(stock: number): void {
+    this.stock = this.stock ?? 0;
+    this.stock += +stock;
+  }
+
+  public removeStock(units: number): void {
+    this.stock = this.stock ?? 0;
+    const subtraction = this.stock - +units;
+    this.stock = subtraction <= 0 ? 0 : subtraction;
+  }
 }
 
 const ItemModel = getModelForClass(Item);

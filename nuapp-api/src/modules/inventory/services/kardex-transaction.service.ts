@@ -53,14 +53,8 @@ export class KardexTransactionService extends BaseService<KardexTransaction> {
         const { itemId, units, type, itemCost, itemPrice } = kardex;
         const item = await itemService.findOne(itemId.toString());
         if (!item || units <= 0) continue;
-        let newStock = item.stock ?? 0;
-        if (type === KardexTransactionType.IN) {
-          newStock += +units;
-        } else if (type === KardexTransactionType.OUT) {
-          const subtraction = item.stock - +units;
-          newStock = subtraction <= 0 ? 0 : subtraction;
-        }
-        item.stock = newStock;
+        if (type === KardexTransactionType.IN) item.addStock(units);
+        else if (type === KardexTransactionType.OUT) item.removeStock(units);
         if (!!itemCost) item.cost = itemCost;
         if (!!itemPrice) item.price = itemPrice;
         await itemService.update(itemId.toString(), item);
