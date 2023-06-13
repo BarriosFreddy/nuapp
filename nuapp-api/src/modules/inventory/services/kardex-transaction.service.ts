@@ -50,7 +50,7 @@ export class KardexTransactionService extends BaseService<KardexTransaction> {
   async applyKardexMovements(kardexTransactions: KardexTransaction[]) {
     try {
       for await (const kardex of kardexTransactions) {
-        const { itemId, units, type } = kardex;
+        const { itemId, units, type, itemCost, itemPrice } = kardex;
         const item = await itemService.findOne(itemId.toString());
         if (!item || units <= 0) continue;
         let newStock = item.stock ?? 0;
@@ -61,6 +61,8 @@ export class KardexTransactionService extends BaseService<KardexTransaction> {
           newStock = subtraction <= 0 ? 0 : subtraction;
         }
         item.stock = newStock;
+        if (!!itemCost) item.cost = itemCost;
+        if (!!itemPrice) item.price = itemPrice;
         await itemService.update(itemId.toString(), item);
       }
     } catch (error) {

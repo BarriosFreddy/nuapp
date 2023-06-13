@@ -99,7 +99,7 @@ export class BillingService extends BaseService<Billing> {
         try {
           const itemsMovement = saved.items.map(({ _id, code, units = 1 }) => ({
             itemId: _id,
-            code,
+            itemCode: code,
             units,
             type: KardexTransactionType.OUT,
             createdAt: saved.createdAt,

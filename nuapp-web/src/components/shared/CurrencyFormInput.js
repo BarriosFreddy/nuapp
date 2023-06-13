@@ -32,6 +32,11 @@ const CurrencyFormInput = forwardRef(function CurrencyFormInput(props, ref) {
     const {
       target: { name, value },
     } = event
+    if (typeof value === 'string' && value.length === 0) {
+      setInnerValue('')
+      props.onChange({ ...event, target: { ...event.target, name, value: '' } })
+      return
+    }
     if (!value) return
     const valueClear = `${value}`.replace(/[\s$.]/gi, '')
     if (/^[\d]{0,}$/g.test(valueClear)) {

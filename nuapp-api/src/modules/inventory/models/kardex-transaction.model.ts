@@ -1,4 +1,5 @@
 import {
+  Prop,
   Ref,
   getModelForClass,
   modelOptions,
@@ -20,7 +21,11 @@ export class KardexTransaction {
   @prop({ ref: () => Item })
   public itemId!: Ref<Item>;
   @prop()
-  public code!: string;
+  public itemCode!: string;
+  @Prop()
+  public itemCost?: number;
+  @Prop()
+  public itemPrice?: number;
   @prop()
   public units!: number;
   @prop()

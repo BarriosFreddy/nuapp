@@ -15,6 +15,8 @@ import {
   CTableFoot,
   CButton,
   CFormSelect,
+  CRow,
+  CCol,
 } from '@coreui/react'
 import { Helmet } from 'react-helmet'
 import { useDispatch, useSelector } from 'react-redux'
@@ -26,12 +28,15 @@ import CIcon from '@coreui/icons-react'
 import { sendWarningToast, sendSuccessToast } from '../../../shared/services/notification.service'
 import { saveAllKardexes } from '../../services/kardexes.service'
 import { getDateObject } from 'src/utils'
+import CurrencyFormInput from 'src/components/shared/CurrencyFormInput'
 
 const initialKardex = {
-  code: '',
+  itemCode: '',
   itemId: '',
-  name: '',
-  description: '',
+  itemName: '',
+  itemDescription: '',
+  itemCost: '',
+  itemPrice: '',
   type: 'IN',
   units: '',
 }
@@ -60,7 +65,7 @@ const Kardex = () => {
       sendSuccessToast(dispatch, {
         message: 'Guardado exitoso!',
       })
-      setKardexes([initialKardex])
+      setKardexes([{ ...initialKardex }])
       return
     } else
       sendWarningToast(dispatch, {
@@ -91,24 +96,23 @@ const Kardex = () => {
   }
 
   const onKeyUpCodeField = ({ keyCode }, kardex) => {
-    if ([ENTER_KEYCODE, TAB_KEYCODE].includes(keyCode)) searchByCode(kardex)
+    if ([ENTER_KEYCODE, TAB_KEYCODE].includes(keyCode)) searchByCode(kardex.itemCode)
   }
 
-  const searchByCode = ({ itemId, code, name }) => {
-    if (!!code) dispatch(getItems({ code: code, page: 1, size: 1 }, false))
+  const searchByCode = (code) => {
+    if (!!code) dispatch(getItems({ code, page: 1, size: 1 }, false))
   }
 
   const handleSave = () => {
     if (validForm()) {
       const kardexEntities = transformToKardexEntities(kardexes)
-      console.log(JSON.stringify(kardexes, null, 2))
       dispatch(saveAllKardexes(kardexEntities))
     }
   }
 
   function validForm() {
     let isOk = true
-    if (kardexes.some((kardex) => kardex.name.trim() === '')) {
+    if (kardexes.some((kardex) => kardex.itemName.trim() === '')) {
       sendWarningToast(dispatch, {
         message: `Hay registros no validos!`,
       })
@@ -116,7 +120,7 @@ const Kardex = () => {
     }
     if (kardexes.some((kardex) => kardex.units <= 0)) {
       sendWarningToast(dispatch, {
-        message: `Por favor ingrese las unidades`,
+        message: `Por favor ingrese las unidades faltantes`,
       })
       isOk = false
     }
@@ -125,9 +129,11 @@ const Kardex = () => {
 
   function transformToKardexEntities(kardexes) {
     if (!Array.isArray(kardexes)) return kardexes
-    return kardexes.map(({ code, itemId, type, units }) => ({
-      code,
+    return kardexes.map(({ itemCode, itemId, itemCost, itemPrice, type, units }) => ({
+      itemCode,
       itemId,
+      ...(type === 'IN' && { itemCost }),
+      ...(type === 'IN' && { itemPrice }),
       type,
       units,
       createdAt: getDateObject(),
@@ -142,21 +148,24 @@ const Kardex = () => {
 
   function fillKardexFields() {
     if (items.length > 0) {
-      const { _id, code, name, description } = items[0]
+      const { _id, code, name, description, cost, price } = items[0]
       if (kardexes.some((kardex) => kardex.itemId === _id)) {
         sendWarningToast(dispatch, {
           message: `El item "${name}" ya está agregado!`,
         })
         return
       }
+
       const kardexesClone = replaceKardex(
         {
-          code,
+          itemCode: code,
           itemId: _id,
-          name,
-          description,
+          itemName: name,
+          itemDescription: description,
           type: 'IN',
           units: '',
+          itemCost: cost,
+          itemPrice: price,
         },
         currentIndex,
       )
@@ -184,57 +193,82 @@ const Kardex = () => {
                 <CTableRow>
                   <CTableHeaderCell>Código</CTableHeaderCell>
                   <CTableHeaderCell>Nombre</CTableHeaderCell>
-                  <CTableHeaderCell>Descripción</CTableHeaderCell>
                   <CTableHeaderCell>Unidades</CTableHeaderCell>
                   <CTableHeaderCell>E/S</CTableHeaderCell>
+                  <CTableHeaderCell>Costo</CTableHeaderCell>
+                  <CTableHeaderCell>Precio</CTableHeaderCell>
                   <CTableHeaderCell>&nbsp;</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
                 {kardexes.map((kardex, index) => (
                   <CTableRow key={index}>
-                    <CTableDataCell width={300}>
-                      <CFormInput
-                        type="number"
-                        formNoValidate
-                        size="sm"
-                        required
-                        name="code"
-                        value={kardex.code}
-                        onChange={(event) => onChangeField(event, kardex, index)}
-                        onKeyUp={(event) => onKeyUpCodeField(event, kardex)}
-                      />
-                    </CTableDataCell>
-                    <CTableDataCell className="text-uppercase">{kardex.name}</CTableDataCell>
-                    <CTableDataCell className="text-uppercase">{kardex.description}</CTableDataCell>
                     <CTableDataCell width={200}>
                       <CFormInput
                         type="number"
                         formNoValidate
-                        size="sm"
+                        required
+                        name="itemCode"
+                        value={kardex.itemCode}
+                        onChange={(event) => onChangeField(event, kardex, index)}
+                        onKeyUp={(event) => onKeyUpCodeField(event, kardex)}
+                      />
+                    </CTableDataCell>
+                    <CTableDataCell className="text-uppercase">
+                      <CRow>
+                        <CCol className="text-uppercase">{kardex.itemName}</CCol>
+                      </CRow>
+                      <CRow>
+                        <CCol className="text-uppercase" style={{ fontSize: 10 }}>
+                          {kardex.itemDescription}
+                        </CCol>
+                      </CRow>
+                    </CTableDataCell>
+                    <CTableDataCell width={150}>
+                      <CFormInput
+                        type="number"
+                        formNoValidate
                         required
                         name="units"
                         value={kardex.units}
                         onChange={(event) => onChangeField(event, kardex, index)}
                       />
                     </CTableDataCell>
-                    <CTableDataCell width={200}>
+                    <CTableDataCell width={150}>
                       <CFormSelect
                         name="type"
-                        size="sm"
                         value={kardex.type}
                         required
                         feedbackInvalid="Campo obligatorio"
                         onChange={(event) => onChangeField(event, kardex, index)}
-                        options={[
-                          { label: 'ENTRADA', value: 'IN' },
-                          { label: 'SALIDA', value: 'OUT' },
-                        ]}
+                        options={[{ label: 'ENTRADA', value: 'IN' }]}
                       />
                     </CTableDataCell>
-                    <CTableDataCell>
+                    <CTableDataCell width={150}>
+                      <CurrencyFormInput
+                        type="number"
+                        formNoValidate
+                        required
+                        name="itemCost"
+                        disabled={kardex.type === 'OUT'}
+                        value={kardex.itemCost}
+                        onChange={(event) => onChangeField(event, kardex, index)}
+                      />
+                    </CTableDataCell>
+                    <CTableDataCell width={150}>
+                      <CurrencyFormInput
+                        type="number"
+                        formNoValidate
+                        required
+                        name="itemPrice"
+                        disabled={kardex.type === 'OUT'}
+                        value={kardex.itemPrice}
+                        onChange={(event) => onChangeField(event, kardex, index)}
+                      />
+                    </CTableDataCell>
+                    <CTableDataCell width={100}>
                       {kardexes.length > 1 && (
-                        <CButton size="sm" color="ligth" onClick={() => handleDelete(index)}>
+                        <CButton color="ligth" onClick={() => handleDelete(index)}>
                           <CIcon icon={cilTrash} size="sm" />
                         </CButton>
                       )}
@@ -251,7 +285,7 @@ const Kardex = () => {
               </CTableBody>
               <CTableFoot>
                 <CTableRow>
-                  <CTableHeaderCell colSpan={12}>
+                  <CTableHeaderCell colSpan={12} className="text-center">
                     <CButton color="success" onClick={handleSave}>
                       GUARDAR
                     </CButton>

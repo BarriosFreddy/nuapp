@@ -2,8 +2,10 @@ import joi, { Schema } from 'joi';
 
 const KardexBulkCreateSchema: Schema = joi.array().items(
   joi.object({
-    code: joi.string().required(),
+    itemCode: joi.string().required(),
     itemId: joi.string().required(),
+    itemCost: joi.number().required(),
+    itemPrice: joi.number().required(),
     units: joi.number().required(),
     type: joi.string().allow('IN', 'OUT'),
     createdAt: joi.object({

@@ -48,7 +48,8 @@ async function retry(request, retryAttempts = 0) {
   let response = null
   try {
     response = await request()
-    if (![200, 201].includes(response.status)) {
+    if (![200, 201, 202].includes(response.status)) {
+      console.error('ERROR ', response)
       if (retryAttempts >= MAX_RETRY_ATTEMPTS) return response
       return await retry(request, ++retryAttempts)
     }
