@@ -11,6 +11,8 @@ import {
   CInputGroup,
   CFormInput,
   CCardTitle,
+  CFormSelect,
+  CFormLabel,
 } from '@coreui/react'
 import ItemForm from './ItemForm'
 import { useDispatch, useSelector } from 'react-redux'
@@ -23,6 +25,10 @@ import ItemList from './ItemList'
 
 const { ENTER_KEYCODE, TAB_KEYCODE } = CONSTANTS
 
+const queryParamsInitial = {
+  page: 1,
+}
+
 function Item() {
   const dispatch = useDispatch()
   const items = useSelector((state) => state.items.items)
@@ -32,7 +38,8 @@ function Item() {
   const [searchTerm, setSearchTerm] = useState('')
   let [editing, setEditing] = useState(false)
   let [item, setItem] = useState(null)
-  let [page, setPage] = useState(1)
+  const [showFilterSection, setShowFilterSection] = useState(false)
+  const [queryParams, setQueryParams] = useState(queryParamsInitial)
   const searchInputRef = useRef()
 
   useEffect(() => {
@@ -40,11 +47,15 @@ function Item() {
     dispatch(getItems({ page: 1 }))
   }, [dispatch])
 
+  useEffect(() => {
+    search()
+  }, [queryParams])
+
   useDidUpdateControl(
     () => {
       if (saveSuccess) {
         setSearchTerm('')
-        dispatch(getItems({ page }))
+        setQueryParams({ page: queryParams.page })
         setEditing(false)
         setItem(null)
         sendToast(dispatch, { message: 'Guardado exitosamente!' })
@@ -62,20 +73,18 @@ function Item() {
   }
 
   const handleCancel = async () => {
-    dispatch(getItems({ page }))
+    setQueryParams({ page: queryParams.page })
     setEditing(false)
   }
 
   const handlePrevPage = async () => {
-    const newPage = page === 1 ? 1 : page - 1
-    setPage(newPage)
-    dispatch(getItems({ page: newPage }))
+    const newPage = queryParams.page === 1 ? 1 : queryParams.page - 1
+    setQueryParams({ ...queryParams, page: newPage })
   }
 
   const handleNextPage = async () => {
-    const newPage = page + 1
-    setPage(newPage)
-    dispatch(getItems({ page: newPage }))
+    const newPage = queryParams.page + 1
+    setQueryParams({ ...queryParams, page: newPage })
   }
 
   const onChangeField = ({ target: { value } }) => {
@@ -83,15 +92,17 @@ function Item() {
   }
 
   const onKeyDownCodeField = async ({ keyCode }) => {
-    if ([ENTER_KEYCODE, TAB_KEYCODE].includes(keyCode)) search()
+    if ([ENTER_KEYCODE, TAB_KEYCODE].includes(keyCode)) setQueryParams({ ...queryParams })
   }
 
   const search = async () => {
+    const params = { ...queryParams }
+
     if (!!searchTerm) {
-      dispatch(getItems({ code: searchTerm.trim(), name: searchTerm.trim(), page: 1 }))
-      return
+      params.code = searchTerm.trim()
+      params.name = searchTerm.trim()
     }
-    dispatch(getItems({ page: 1 }))
+    dispatch(getItems(params))
   }
 
   const handleEdit = (item) => {
@@ -110,6 +121,14 @@ function Item() {
     searchInputRef.current.focus()
   }
 
+  const handleFilter = () => {
+    setShowFilterSection(!showFilterSection)
+  }
+
+  const handleChangeFilters = ({ target: { name, value } }) => {
+    setQueryParams({ ...queryParams, [name]: value })
+  }
+
   return (
     <>
       <CContainer className="mt--6" fluid>
@@ -124,42 +143,73 @@ function Item() {
               </CCardHeader>
               <CCardBody>
                 {!editing && (
-                  <CRow>
-                    <CCol xs="4" lg="3">
-                      <CButton variant="outline" color="success" onClick={handleNewItem}>
-                        NUEVO ITEM
-                      </CButton>
-                    </CCol>
-                    <CCol lg="5">
-                      <CInputGroup>
-                        <CFormInput
-                          ref={searchInputRef}
-                          type="text"
-                          name="searchTerm"
-                          placeholder="..."
-                          value={searchTerm}
-                          onChange={(event) => onChangeField(event)}
-                          onKeyDown={(event) => onKeyDownCodeField(event)}
-                        />
-                        <CButton type="button" variant="outline" color="primary" onClick={search}>
-                          BUSCAR
+                  <>
+                    <CRow>
+                      <CCol xs="4" lg="3">
+                        <CButton variant="outline" color="success" onClick={handleNewItem}>
+                          NUEVO ITEM
                         </CButton>
-                        <CButton
-                          variant="outline"
-                          type="button"
-                          color="secondary"
-                          onClick={handleClear}
-                        >
-                          BORRAR
+                      </CCol>
+                      <CCol lg="5">
+                        <CInputGroup>
+                          <CFormInput
+                            ref={searchInputRef}
+                            type="text"
+                            name="searchTerm"
+                            placeholder="..."
+                            value={searchTerm}
+                            onChange={(event) => onChangeField(event)}
+                            onKeyDown={(event) => onKeyDownCodeField(event)}
+                          />
+                          <CButton type="button" variant="outline" color="primary" onClick={search}>
+                            BUSCAR
+                          </CButton>
+                          <CButton
+                            variant="outline"
+                            type="button"
+                            color="secondary"
+                            onClick={handleClear}
+                          >
+                            BORRAR
+                          </CButton>
+                        </CInputGroup>
+                      </CCol>
+                      <CCol lg="1">
+                        <CButton color="link" onClick={handleFilter}>
+                          Filtrar
                         </CButton>
-                      </CInputGroup>
-                    </CCol>
-                  </CRow>
+                      </CCol>
+                      {showFilterSection && (
+                        <>
+                          <CCol lg="1" className="text-end">
+                            <CFormLabel htmlFor="stock" className="col-form-label">
+                              Stock
+                            </CFormLabel>
+                          </CCol>
+                          <CCol lg="2">
+                            <CFormSelect
+                              id="stock"
+                              value={queryParams.stock}
+                              name="stock"
+                              size="sm"
+                              options={[
+                                { label: 'TODOS', value: '' },
+                                { label: 'DISPONIBLE', value: 'IS' },
+                                { label: 'RECOMPRA', value: 'RP' },
+                                { label: 'NO DISPONIBLE', value: 'WS' },
+                              ]}
+                              onChange={handleChangeFilters}
+                            />
+                          </CCol>
+                        </>
+                      )}
+                    </CRow>
+                  </>
                 )}
                 {!editing && (
                   <ItemList
                     items={items}
-                    page={page}
+                    page={queryParams.page}
                     fetching={fetching}
                     onEdit={handleEdit}
                     onPrevPage={handlePrevPage}

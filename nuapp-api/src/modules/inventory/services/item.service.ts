@@ -3,6 +3,9 @@ import ItemModel, { Item } from '../models/item.model';
 import { singleton } from 'tsyringe';
 import { ExistsModel } from '../../../helpers/abstracts/exists.model';
 import { ObjectId } from 'mongoose';
+import ItemQueryI from '../models/item-query.interface';
+import { QueryStrategy } from './query-strategy';
+import { ItemQueryStrategy } from './item-query.strategy';
 
 @singleton()
 export class ItemService extends BaseService<Item> {
@@ -14,38 +17,6 @@ export class ItemService extends BaseService<Item> {
   }
   async existByName(name: string): Promise<ExistsModel | null> {
     return await ItemModel.exists({ name }).exec();
-  }
-  async findAll({
-    page,
-    name,
-    code,
-    size = 10,
-  }: {
-    name?: string;
-    code?: string;
-    page?: number;
-    size?: number;
-  }): Promise<Item[]> {
-    let filters = {};
-    let conditions = [];
-    name && conditions.push({ name: new RegExp(`${name}`, 'i') });
-    code && conditions.push({ code: new RegExp(`${code}`, 'i') });
-
-    conditions.length > 0 && (filters = { ['$or']: conditions, ...filters });
-    const query = ItemModel.find(filters, {
-      code: 1,
-      name: 1,
-      description: 1,
-      price: 1,
-      cost: 1,
-      stock: 1,
-      reorderPoint: 1,
-      categoryId: 1,
-      measurementUnit: 1,
-    });
-    if (page) query.skip(size * (page - 1)).limit(size);
-    const items: Item[] = await query.exec();
-    return items;
   }
   async save(item: Item): Promise<Item> {
     try {
@@ -77,5 +48,12 @@ export class ItemService extends BaseService<Item> {
       console.log(error);
       return Promise.reject(null);
     }
+  }
+  async findAll(itemQuery: ItemQueryI): Promise<Item[]> {
+    const strategy: QueryStrategy = new ItemQueryStrategy(itemQuery);
+    const items: Item[] = await ItemModel.aggregate(
+      strategy.buildAggregate(),
+    ).exec();
+    return items;
   }
 }

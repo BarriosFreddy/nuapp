@@ -2,19 +2,13 @@ import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 import { ItemService } from '../services/item.service';
 import { Item } from '../models/item.model';
+import ItemQuery from '../models/item-query.interface';
 
 const itemsService = container.resolve(ItemService);
 
-interface RequestQuery {
-  name?: string;
-  code?: string;
-  page?: number;
-  size?: number;
-}
 class ItemsController {
-  async findAll(req: Request<{}, {}, {}, RequestQuery>, res: Response) {
-    let { page, name, code, size } = req.query;
-    const items = await itemsService.findAll({ name, code, page, size });
+  async findAll(req: Request<{}, {}, {}, ItemQuery>, res: Response) {
+    const items = await itemsService.findAll(req.query);
     res.status(200).send(items);
   }
   async findOne(req: Request, res: Response) {
