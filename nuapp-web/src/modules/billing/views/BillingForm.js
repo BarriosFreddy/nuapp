@@ -71,7 +71,7 @@ const BillingForm = (props) => {
   const search = async (term) => {
     const termToSearch = term ?? searchTerm
     if (!!termToSearch) {
-      dispatch(getItems({ code: termToSearch, name: termToSearch, page: 1 }, true))
+      dispatch(getItems({ code: termToSearch, name: termToSearch, page: 1 }, false))
     }
   }
 
