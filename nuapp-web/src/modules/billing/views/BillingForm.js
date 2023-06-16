@@ -56,7 +56,6 @@ const BillingForm = (props) => {
 
   const onChangeField = ({ target: { value } }) => {
     setSearchTerm(value)
-    search(value)
   }
 
   const onKeyDownCodeField = async ({ keyCode }) => {
