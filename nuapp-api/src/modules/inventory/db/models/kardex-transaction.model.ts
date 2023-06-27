@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { kardexTransactionSchema } from '../db/schemas/kardex-transaction.schema';
+import { kardexTransactionSchema } from '../schemas/kardex-transaction.schema';
 
 const KardexTransactionModel = mongoose.model(
   'KardexTransactions',

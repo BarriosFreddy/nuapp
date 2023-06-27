@@ -1,8 +1,8 @@
 import { BaseService } from '../../../helpers/abstracts/base.service';
-import EnumerationModel from '../models/enumeration.model';
+import EnumerationModel from '../db/models/enumeration.model';
 import { singleton } from 'tsyringe';
 import mongoose from 'mongoose';
-import { Enumeration } from '../domain/Enumeration';
+import { Enumeration } from '../entities/Enumeration';
 
 @singleton()
 export class EnumerationService extends BaseService<Enumeration> {

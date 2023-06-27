@@ -1,6 +1,6 @@
 import { singleton } from 'tsyringe';
-import SequencedCodeModel from '../models/sequenced-code.model';
-import { SequencedCode } from '../domain/SequencedCode';
+import SequencedCodeModel from '../db/models/sequenced-code.model';
+import { SequencedCode } from '../entities/SequencedCode';
 
 @singleton()
 export class SequencedCodeService {

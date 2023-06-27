@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { itemSchema } from '../db/schemas/item.schema';
+import { itemSchema } from '../schemas/item.schema';
 
 
 const ItemModel = mongoose.model('Item', itemSchema);

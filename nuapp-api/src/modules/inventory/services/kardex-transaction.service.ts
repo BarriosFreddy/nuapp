@@ -1,9 +1,9 @@
 import { BaseService } from '../../../helpers/abstracts/base.service';
-import KardexTransactionModel from '../models/kardex-transaction.model';
+import KardexTransactionModel from '../db/models/kardex-transaction.model';
 import { singleton, container } from 'tsyringe';
 import { ItemService } from './item.service';
 import { KardexTransactionType } from '../enums/kardex-transaction-type';
-import { KardexTransaction } from '../domain/kardex-transaction';
+import { KardexTransaction } from '../entities/kardex-transaction';
 
 const itemService = container.resolve(ItemService);
 

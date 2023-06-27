@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 import { KardexTransactionService } from '../services/kardex-transaction.service';
-import { KardexTransaction } from '../domain/kardex-transaction';
+import { KardexTransaction } from '../entities/kardex-transaction';
 
 const kardexTransactionService = container.resolve(KardexTransactionService);
 

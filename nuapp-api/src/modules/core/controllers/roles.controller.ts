@@ -1,7 +1,7 @@
 import { RoleService } from '../services/roles.service';
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
-import { Role } from '../domain/Role';
+import { Role } from '../entities/Role';
 
 
 const rolesService = container.resolve(RoleService);

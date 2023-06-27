@@ -3,7 +3,7 @@ import { UserAccountLogin } from '../types/user-account-login.type';
 import { UserAccountService } from './user-account.service';
 import bcrypt from 'bcryptjs';
 import jsonwebtoken from 'jsonwebtoken';
-import { UserAccount } from '../domain/UserAccount';
+import { UserAccount } from '../entities/UserAccount';
 const { SECRET_KEY } = process.env;
 
 @singleton()

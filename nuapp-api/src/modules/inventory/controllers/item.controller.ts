@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
 import { ItemService } from '../services/item.service';
-import ItemQuery from '../models/item-query.interface';
-import { Item } from '../domain/Item';
+import ItemQuery from '../db/models/item-query.interface';
+import { Item } from '../entities/Item';
 
 const itemsService = container.resolve(ItemService);
 

@@ -1,11 +1,11 @@
 import { BaseService } from '../../../helpers/abstracts/base.service';
-import ItemModel from '../models/item.model';
+import ItemModel from '../db/models/item.model';
 import { singleton } from 'tsyringe';
 import { ObjectId } from 'mongoose';
-import ItemQueryI from '../models/item-query.interface';
+import ItemQueryI from '../db/models/item-query.interface';
 import { QueryStrategy } from './query-strategy';
 import { ItemQueryStrategy } from './item-query.strategy';
-import { Item } from '../domain/Item';
+import { Item } from '../entities/Item';
 
 @singleton()
 export class ItemService extends BaseService<Item> {

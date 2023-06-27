@@ -1,4 +1,4 @@
-import BillingModel from '../models/billing.model';
+import BillingModel from '../db/models/billing.model';
 import { singleton, container } from 'tsyringe';
 import { BaseService } from '../../../helpers/abstracts/base.service';
 import { SequencedCodeService } from './sequenced-code.service';
@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { KardexTransactionService } from '../../inventory/services/kardex-transaction.service';
 import { KardexTransactionType } from '../../inventory/enums/kardex-transaction-type';
-import { Billing } from '../domain/Billing';
+import { Billing } from '../entities/Billing';
 dayjs.extend(utc);
 
 const kardexTransactionService = container.resolve(KardexTransactionService);

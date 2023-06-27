@@ -1,7 +1,7 @@
 import { BaseService } from '../../../helpers/abstracts/base.service';
-import ItemCategoryModel from '../models/item-category.model';
 import { singleton } from 'tsyringe';
-import { ItemCategory } from '../domain/ItemCategory';
+import { ItemCategory } from '../entities/ItemCategory';
+import ItemCategoryModel from '../db/models/item-category.model';
 
 @singleton()
 export class ItemCategoryService extends BaseService<ItemCategory> {

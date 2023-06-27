@@ -1,5 +1,5 @@
 import { PipelineStage } from 'mongoose';
-import ItemQueryI from '../models/item-query.interface';
+import ItemQueryI from '../db/models/item-query.interface';
 import { QueryStrategy } from './query-strategy';
 
 export class ItemQueryStrategy implements QueryStrategy {

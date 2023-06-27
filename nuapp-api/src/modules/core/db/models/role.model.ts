@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { roleSchema } from '../db/schemas/roles.schema';
+import { roleSchema } from '../schemas/roles.schema';
 
 const RoleModel = mongoose.model('Role', roleSchema);
 export default RoleModel;

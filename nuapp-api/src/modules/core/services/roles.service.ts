@@ -1,6 +1,6 @@
 import { BaseService } from '../../../helpers/abstracts/base.service';
-import { Role } from '../domain/Role';
-import RoleModel from '../models/role.model';
+import { Role } from '../entities/Role';
+import RoleModel from '../db/models/role.model';
 import { singleton } from 'tsyringe';
 
 @singleton()
