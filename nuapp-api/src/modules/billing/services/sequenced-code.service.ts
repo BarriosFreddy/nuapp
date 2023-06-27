@@ -1,8 +1,6 @@
 import { singleton } from 'tsyringe';
-import SequencedCodeModel, {
-  SequencedCode,
-} from '../models/sequenced-code.model';
-import { Types } from 'mongoose';
+import SequencedCodeModel from '../models/sequenced-code.model';
+import { SequencedCode } from '../domain/SequencedCode';
 
 @singleton()
 export class SequencedCodeService {
@@ -13,7 +11,7 @@ export class SequencedCodeService {
       .exec();
   }
 
-  async update(_id: Types.ObjectId, sequence: number): Promise<boolean | null> {
+  async update(_id: any, sequence: number): Promise<boolean | null> {
     try {
       const { modifiedCount } = await SequencedCodeModel.updateOne(
         { _id },

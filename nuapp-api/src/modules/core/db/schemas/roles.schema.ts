@@ -1,30 +1,18 @@
-import joi, { Schema } from 'joi';
+import { Schema, Types } from 'mongoose';
 
-const RoleCreateSchema: Schema = joi.object({
-  name: joi.string().required(),
-  modulesAccess: joi
-    .array()
-    .items({
-      moduleId: joi.string(),
-      canSee: joi.boolean(),
-      canCreate: joi.boolean(),
-      canUpdate: joi.boolean(),
-      canDelete: joi.boolean(),
-      canExecute: joi.boolean(),
-    })
-    .required(),
+export const roleSchema = new Schema({
+  name: { type: String, required: true },
+  modifiedBy: { type: Types.ObjectId },
+  moduleAccess: [
+    {
+      moduleId: { type: Types.ObjectId },
+      canSee: Boolean,
+      canCreate: Boolean,
+      canUpdate: Boolean,
+      canDelete: Boolean,
+      canExecute: Boolean,
+    },
+  ],
+  createdAt: Date,
+  updatedAt: Date,
 });
-
-const RoleUpdateSchema: Schema = joi.object({
-  name: joi.string(),
-  modulesAccess: joi.array().items({
-    moduleId: joi.string(),
-    canSee: joi.boolean(),
-    canCreate: joi.boolean(),
-    canUpdate: joi.boolean(),
-    canDelete: joi.boolean(),
-    canExecute: joi.boolean(),
-  }),
-});
-
-export { RoleCreateSchema, RoleUpdateSchema };

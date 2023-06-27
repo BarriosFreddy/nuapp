@@ -1,7 +1,8 @@
-import UserAccountModel, { UserAccount } from '../models/user-account.model';
+import UserAccountModel from '../models/user-account.model';
 import bcrypt from 'bcryptjs';
 import { singleton } from 'tsyringe';
 import { BaseService } from '../../../helpers/abstracts/base.service';
+import { UserAccount } from '../domain/UserAccount';
 
 @singleton()
 export class UserAccountService extends BaseService<UserAccount> {

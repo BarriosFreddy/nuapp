@@ -6,7 +6,7 @@ import { ModuleCode } from '../../core/enums/modules-codes';
 import { Privilege } from '../../core/enums/privileges';
 import kardexTransactionsController from '../controllers/kardex.controller';
 import { validateBody } from '../../../helpers/middleware/validation.middleware';
-import { KardexBulkCreateSchema } from '../db/schemas/kardex-transaction.schema';
+import { KardexBulkCreateSchema } from './validations/kardex-transaction.schema';
 
 const kardexTransactionRouter = express.Router();
 

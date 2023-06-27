@@ -1,7 +1,7 @@
 import { BillingService } from '../services/billing.service';
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
-import { Billing } from '../models/billing.model';
+import { Billing } from '../domain/Billing';
 
 const billingService = container.resolve(BillingService);
 

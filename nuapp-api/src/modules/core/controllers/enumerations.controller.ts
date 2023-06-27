@@ -1,7 +1,7 @@
 import { EnumerationService } from '../services/enumeration.service';
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
-import { Enumeration } from '../models/enumeration.model';
+import { Enumeration } from '../domain/Enumeration';
 
 const enumerationService = container.resolve(EnumerationService);
 

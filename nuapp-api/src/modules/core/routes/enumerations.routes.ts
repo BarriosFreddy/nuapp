@@ -9,7 +9,7 @@ import enumerationsController from '../controllers/enumerations.controller';
 import {
   EnumerationCreateSchema,
   EnumerationUpdateSchema,
-} from '../db/schemas/enumerations.schema';
+} from './validations/enumerations.schema';
 import { roleValidation } from '../../../helpers/middleware/role-validation.middleware';
 import { generateAuthKeyPair } from '../../../helpers/util';
 import { ModuleCode } from '../enums/modules-codes';

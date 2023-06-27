@@ -1,29 +1,5 @@
-import {
-  getModelForClass,
-  prop,
-  Severity,
-  modelOptions,
-} from '@typegoose/typegoose';
 import mongoose from 'mongoose';
-import { TimeStamps } from '../../../helpers/abstracts/timestamps.abstract';
-import { Item } from './item.model';
+import { billingSchema } from '../db/schemas/billing.schema';
 
-@modelOptions({ options: { allowMixed: Severity.ALLOW } })
-export class Billing extends TimeStamps {
-  _id!: mongoose.Types.ObjectId;
-  @prop({ required: true, unique: true })
-  public code!: string;
-  @prop()
-  public billAmount?: number;
-  @prop()
-  public receivedAmount?: number;
-  @prop()
-  public creationDate?: string;
-  @prop()
-  public items!: Item[];
-  @prop()
-  public modifiedBy?: mongoose.Types.ObjectId;
-}
-
-const BillingModel = getModelForClass(Billing);
+const BillingModel = mongoose.model('Billing', billingSchema)
 export default BillingModel;

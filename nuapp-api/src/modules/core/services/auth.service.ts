@@ -1,9 +1,9 @@
 import { singleton } from 'tsyringe';
 import { UserAccountLogin } from '../types/user-account-login.type';
-import { UserAccount } from '../models/user-account.model';
 import { UserAccountService } from './user-account.service';
 import bcrypt from 'bcryptjs';
 import jsonwebtoken from 'jsonwebtoken';
+import { UserAccount } from '../domain/UserAccount';
 const { SECRET_KEY } = process.env;
 
 @singleton()

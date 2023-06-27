@@ -1,26 +1,28 @@
-import joi, { Schema } from 'joi';
+import { Schema, Types } from 'mongoose';
 
-const BillingCreateSchema: Schema = joi.object({
-  receivedAmount: joi.number().required(),
-  billAmount: joi.number().required(),
-  items: joi
-    .array()
-    .items(
-      joi.object({
-        _id: joi.string(),
-        name: joi.string(),
-        code: joi.string(),
-        price: joi.number(),
-        units: joi.number(),
-        measurementUnit: joi.string(),
-      }),
-    )
-    .required(),
-  creationDate: joi.string().required(),
-  createdAt: joi.object({
-    date: joi.number(),
-    offset: joi.number(),
-  }),
+export const billingSchema = new Schema({
+  _id: Types.ObjectId,
+  code: String,
+  billAmount: Number,
+  receivedAmount: Number,
+  creationDate: String,
+  items: [
+    {
+      _id: Types.ObjectId,
+      code: String,
+      name: String,
+      description: String,
+      price: Number,
+      units: Number,
+      measurementUnit: String,
+      lot: String,
+      expirationDate: String,
+      laboratory: String,
+    },
+  ],
+  modifiedBy: Types.ObjectId,
+  createdAt: {
+    date: Number,
+    offset: Number,
+  },
 });
-
-export { BillingCreateSchema };

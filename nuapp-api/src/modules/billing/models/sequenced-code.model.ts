@@ -1,20 +1,5 @@
-import { getModelForClass, modelOptions, prop } from '@typegoose/typegoose';
 import mongoose from 'mongoose';
+import { sequencedCodeSchema } from '../db/schemas/sequenced-code.schema';
 
-@modelOptions({
-    options: {
-      customName: 'sequenced-codes',
-    },
-  })
-export class SequencedCode {
-  _id!: mongoose.Types.ObjectId;
-  @prop({ required: true })
-  public prefixPart1!: string;
-  @prop({ required: true })
-  public prefixPart2!: string;
-  @prop({ required: true })
-  public sequence?: number;
-}
-
-const SequencedCodeModel = getModelForClass(SequencedCode);
+const SequencedCodeModel = mongoose.model('SequencedCode', sequencedCodeSchema, 'sequenced-codes')
 export default SequencedCodeModel;

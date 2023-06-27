@@ -8,7 +8,7 @@ import {
 import {
   UserAccountCreateSchema,
   UserAccountUpdateSchema,
-} from '../db/schemas/user-accounts.schema';
+} from './validations/user-accounts.schema';
 import { idSchema } from '../../../helpers/db/schemas/id.schema';
 import { roleValidation } from '../../../helpers/middleware/role-validation.middleware';
 import { ModuleCode } from '../enums/modules-codes';

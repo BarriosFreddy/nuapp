@@ -1,17 +1,17 @@
 import { BaseService } from '../../../helpers/abstracts/base.service';
-import ItemCategoryModel, { ItemCategory } from '../models/item-category.model';
+import ItemCategoryModel from '../models/item-category.model';
 import { singleton } from 'tsyringe';
-import { ExistsModel } from '../../../helpers/abstracts/exists.model';
+import { ItemCategory } from '../domain/ItemCategory';
 
 @singleton()
 export class ItemCategoryService extends BaseService<ItemCategory> {
   async findOne(id: string): Promise<ItemCategory | null> {
     return await ItemCategoryModel.findById(id).exec();
   }
-  async existByCode(code: string): Promise<ExistsModel | null> {
+  async existByCode(code: string): Promise<any | null> {
     return await ItemCategoryModel.exists({ code }).exec();
   }
-  async existByName(name: string): Promise<ExistsModel | null> {
+  async existByName(name: string): Promise<any | null> {
     return await ItemCategoryModel.exists({ name }).exec();
   }
   async findAll({

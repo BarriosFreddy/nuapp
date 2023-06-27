@@ -1,7 +1,7 @@
 import { ItemCategoryService } from '../services/item-category.service';
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
-import { ItemCategory } from '../models/item-category.model';
+import { ItemCategory } from '../domain/ItemCategory';
 
 const categoryService = container.resolve(ItemCategoryService);
 

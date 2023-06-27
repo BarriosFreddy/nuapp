@@ -1,5 +1,6 @@
 import { BaseService } from '../../../helpers/abstracts/base.service';
-import ModuleModel, { Module } from '../models/module.model';
+import { Module } from '../domain/Module';
+import ModuleModel from '../models/module.model';
 import { singleton } from 'tsyringe';
 
 @singleton()

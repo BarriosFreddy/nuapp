@@ -1,21 +1,6 @@
-import { getModelForClass, modelOptions, prop } from '@typegoose/typegoose';
-import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 import mongoose from 'mongoose';
+import { itemCategorySchema } from '../db/schemas/item-category.schema';
 
-@modelOptions({
-  options: {
-    customName: 'item-categories',
-  },
-})
-export class ItemCategory extends TimeStamps {
-  _id!: mongoose.Types.ObjectId;
-  @prop({ required: true, unique: true })
-  public code!: string;
-  @prop({ required: true })
-  public name!: string;
-  @prop()
-  public description?: string;
-}
 
-const ItemCategoryModel = getModelForClass(ItemCategory);
+const ItemCategoryModel = mongoose.model('ItemCategories', itemCategorySchema, 'item-categories');
 export default ItemCategoryModel;

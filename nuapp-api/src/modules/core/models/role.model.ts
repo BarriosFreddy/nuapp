@@ -1,14 +1,5 @@
-import { getModelForClass, prop } from '@typegoose/typegoose';
-import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
 import mongoose from 'mongoose';
+import { roleSchema } from '../db/schemas/roles.schema';
 
-export class Role extends TimeStamps {
-  _id!: mongoose.Types.ObjectId;
-  @prop({ required: true, unique: true })
-  public name?: string;
-  @prop()
-  public modifiedBy?: mongoose.Types.ObjectId;
-}
-
-const RoleModel = getModelForClass(Role);
+const RoleModel = mongoose.model('Role', roleSchema);
 export default RoleModel;

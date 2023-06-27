@@ -9,7 +9,7 @@ import itemController from '../controllers/item.controller';
 import {
   ItemCreateSchema,
   ItemUpdateSchema,
-} from '../db/schemas/item.schema';
+} from './validations/item.schema';
 import { roleValidation } from '../../../helpers/middleware/role-validation.middleware';
 import { generateAuthKeyPair } from '../../../helpers/util';
 import { ModuleCode } from '../../core/enums/modules-codes';

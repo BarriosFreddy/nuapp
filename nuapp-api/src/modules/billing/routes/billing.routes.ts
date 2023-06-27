@@ -11,7 +11,7 @@ import { generateAuthKeyPair } from '../../../helpers/util';
 import { ModuleCode } from '../../core/enums/modules-codes';
 import { Privilege } from '../../core/enums/privileges';
 import { idSchema } from '../../../helpers/db/schemas/id.schema';
-import { BillingCreateSchema } from '../db/schemas/billing.schema';
+import { BillingCreateSchema } from './validations/billing.schema';
 const billingRouter = express.Router();
 
 billingRouter.post(

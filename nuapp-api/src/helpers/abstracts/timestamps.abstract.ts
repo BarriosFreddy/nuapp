@@ -1,15 +1,7 @@
-import { prop, modelOptions, Severity, Prop } from '@typegoose/typegoose';
-
 export class DateObject {
-  @Prop()
-  public date!: number;
-  @Prop()
-  public offset!: number;
+  constructor(public date: Number, public offset: Number) {}
 }
-@modelOptions({ options: { allowMixed: Severity.ALLOW } })
-export abstract class TimeStamps {
-  @prop()
-  createdAt?: DateObject;
-  @prop()
-  updatedAt?: DateObject;
+
+export class TimeStamps {
+  constructor(public createdAt: DateObject, public updatedAt: DateObject) {}
 }

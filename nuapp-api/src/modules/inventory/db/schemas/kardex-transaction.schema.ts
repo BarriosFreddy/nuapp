@@ -1,18 +1,17 @@
-import joi, { Schema } from 'joi';
+import { Schema, Types } from 'mongoose';
 
-const KardexBulkCreateSchema: Schema = joi.array().items(
-  joi.object({
-    itemCode: joi.string().required(),
-    itemId: joi.string().required(),
-    itemCost: joi.number().required(),
-    itemPrice: joi.number().required(),
-    units: joi.number().required(),
-    type: joi.string().allow('IN', 'OUT'),
-    createdAt: joi.object({
-      date: joi.number(),
-      offset: joi.number(),
-    }),
-  }),
-);
-
-export { KardexBulkCreateSchema };
+export const kardexTransactionSchema = new Schema({
+  _id: Types.ObjectId,
+  type: String,
+  itemId: Types.ObjectId,
+  itemCode: String,
+  itemCost: Number,
+  itemPrice: Number,
+  units: Number,
+  computed: { type: Boolean },
+  createdBy: Types.ObjectId,
+  createdAt: {
+    date: Number,
+    offset: Number,
+  },
+});

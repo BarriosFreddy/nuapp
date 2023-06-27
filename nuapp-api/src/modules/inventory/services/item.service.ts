@@ -1,27 +1,28 @@
 import { BaseService } from '../../../helpers/abstracts/base.service';
-import ItemModel, { Item } from '../models/item.model';
+import ItemModel from '../models/item.model';
 import { singleton } from 'tsyringe';
-import { ExistsModel } from '../../../helpers/abstracts/exists.model';
 import { ObjectId } from 'mongoose';
 import ItemQueryI from '../models/item-query.interface';
 import { QueryStrategy } from './query-strategy';
 import { ItemQueryStrategy } from './item-query.strategy';
+import { Item } from '../domain/Item';
 
 @singleton()
 export class ItemService extends BaseService<Item> {
   async findOne(id: string | ObjectId): Promise<Item | null> {
-    return await ItemModel.findById(id).exec();
+    const item = await ItemModel.findById(id).exec();
+    return item ? Item.of(item) : null;
   }
-  async existByCode(code: string): Promise<ExistsModel | null> {
+  async existByCode(code: string): Promise<any | null> {
     return await ItemModel.exists({ code }).exec();
   }
-  async existByName(name: string): Promise<ExistsModel | null> {
+  async existByName(name: string): Promise<any | null> {
     return await ItemModel.exists({ name }).exec();
   }
   async save(item: Item): Promise<Item> {
     try {
       item.createdAt = new Date();
-      return await ItemModel.create(item);
+      return Item.of(await ItemModel.create(item));
     } catch (error) {
       console.log(error);
       return Promise.reject(null);

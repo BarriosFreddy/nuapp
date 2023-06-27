@@ -1,10 +1,9 @@
 import { BaseService } from '../../../helpers/abstracts/base.service';
-import KardexTransactionModel, {
-  KardexTransaction,
-} from '../models/kardex-transaction.model';
+import KardexTransactionModel from '../models/kardex-transaction.model';
 import { singleton, container } from 'tsyringe';
 import { ItemService } from './item.service';
 import { KardexTransactionType } from '../enums/kardex-transaction-type';
+import { KardexTransaction } from '../domain/kardex-transaction';
 
 const itemService = container.resolve(ItemService);
 
@@ -51,6 +50,7 @@ export class KardexTransactionService extends BaseService<KardexTransaction> {
     try {
       for await (const kardex of kardexTransactions) {
         const { itemId, units, type, itemCost, itemPrice } = kardex;
+        if(!itemId || units === undefined) continue;
         const item = await itemService.findOne(itemId.toString());
         if (!item || units <= 0) continue;
         if (type === KardexTransactionType.IN) item.addStock(units);

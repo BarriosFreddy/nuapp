@@ -1,36 +1,21 @@
-import joi, { Schema } from 'joi';
+import { Schema, Types } from 'mongoose';
 
-const ItemCreateSchema: Schema = joi.object({
-  name: joi.string().required(),
-  description: joi.string(),
-  code: joi.string().required(),
-  categoryId: joi.string().required(),
-  price: joi.number().required(),
-  stock: joi.number().required(),
-  cost: joi.number(),
-  reorderPoint: joi.number(),
-  measurementUnit: joi.string().required(),
-  lot: joi.string(),
-  expirationDate: joi.string(),
-  laboratory: joi.string(),
+export const itemSchema = new Schema({
+  _id: Types.ObjectId,
+  code: String,
+  name: String,
+  description: String,
+  price: Number,
+  cost: Number,
+  stock: Number,
+  reorderPoint: Number, // lowest point to alert and reorder it
+  measurementUnit: String,
+  lot: String,
+  expirationDate: String,
+  laboratory: String,
+  categoryId: Types.ObjectId,
+  supplierId: Types.ObjectId,
+  modifiedBy: Types.ObjectId,
+  createdAt: { type: Date, default: Date.now },
+  updatedAt: { type: Date, default: Date.now },
 });
-
-const ItemUpdateSchema: Schema = joi.object({
-  name: joi.string(),
-  description: joi.string(),
-  code: joi.string(),
-  categoryId: joi.string(),
-  price: joi.number(),
-  stock: joi.number().required(),
-  cost: joi.number(),
-  reorderPoint: joi.number(),
-  measurementUnit: joi.string(),
-  lot: joi.string(),
-  expirationDate: joi.string(),
-  laboratory: joi.string(),
-  createdAt: joi.date(),
-  updatedAt: joi.date(),
-  __v: joi.number(),
-});
-
-export { ItemCreateSchema, ItemUpdateSchema };

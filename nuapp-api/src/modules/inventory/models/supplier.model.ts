@@ -1,20 +1,5 @@
-import { getModelForClass, prop } from '@typegoose/typegoose';
 import mongoose from 'mongoose';
-import { TimeStamps } from '@typegoose/typegoose/lib/defaultClasses';
+import { supplierSchema } from '../db/schemas/supplier.schema';
 
-export class Supplier extends TimeStamps {
-  _id!: mongoose.Types.ObjectId;
-  @prop({ required: true, unique: true })
-  public nit!: string;
-  @prop({ required: true })
-  public name?: string;
-  @prop()
-  public address?: string;
-  @prop()
-  public email?: string;
-  @prop()
-  public phoneNumber?: string;
-}
-
-const SupplierModel = getModelForClass(Supplier);
+const SupplierModel = mongoose.model('Supplier', supplierSchema);
 export default SupplierModel;
