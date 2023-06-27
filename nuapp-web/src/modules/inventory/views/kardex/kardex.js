@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
   CTable,
   CTableBody,
@@ -51,6 +51,7 @@ const Kardex = () => {
   const saveSuccess = useSelector((state) => state.kardexes.saveSuccess)
   const [kardexes, setKardexes] = useState([])
   const [currentIndex, setCurrentIndex] = useState([])
+  const inputNewRef = useRef()
 
   useEffect(() => {
     setKardexes([initialKardex])
@@ -87,6 +88,7 @@ const Kardex = () => {
 
   const handleNew = () => {
     setKardexes([...kardexes, initialKardex])
+    setImmediate(() => inputNewRef && inputNewRef.current.focus())
   }
 
   const handleDelete = (index) => {
@@ -205,6 +207,7 @@ const Kardex = () => {
                   <CTableRow key={index}>
                     <CTableDataCell width={200}>
                       <CFormInput
+                        ref={inputNewRef}
                         type="number"
                         formNoValidate
                         required
