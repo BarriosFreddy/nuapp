@@ -20,24 +20,22 @@ function ItemCategoriesList({ itemCategories, fetching, page, onEdit, onPrevPage
     <>
       <div className="d-lg-none">
         {itemCategories &&
-          itemCategories.map(({ _id, code, name, description }, index) => (
+          itemCategories.map((itemCategory, index) => (
             <CCard
-              key={index}
+              key={itemCategory.code}
               style={{
                 width: 'auto',
+                cursor: 'pointer',
               }}
+              className="my-2"
+              onClick={() => onEdit(itemCategory)}
             >
               <CRow className="g-0">
                 <CCol xs={12}>
                   <CCardBody>
                     <CRow>
-                      <CCol>{code}</CCol>
-                    </CRow>
-                    <CRow>
-                      <CCol>{name}</CCol>
-                    </CRow>
-                    <CRow>
-                      <CCol>{description}</CCol>
+                      <CCol>{itemCategory.code}</CCol>
+                      <CCol>{itemCategory.name}</CCol>
                     </CRow>
                   </CCardBody>
                 </CCol>

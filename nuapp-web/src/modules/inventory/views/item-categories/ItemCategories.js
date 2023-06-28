@@ -24,6 +24,8 @@ import {
   updateItemCategory,
 } from '../../../inventory/services/item-categories.service'
 import ItemCategoriesList from './ItemCategoriesList'
+import CIcon from '@coreui/icons-react'
+import { cilPlus, cilSearch, cilTrash } from '@coreui/icons'
 
 const { ENTER_KEYCODE, TAB_KEYCODE } = CONSTANTS
 
@@ -111,22 +113,27 @@ function Categories() {
   return (
     <>
       <CContainer className="mt-6" fluid>
+        <Helmet>
+          <title>CATEGORIA DE ITEMS</title>
+        </Helmet>
         <CCard className="mt-6 shadow border-10">
-          <CCardHeader>
-            <Helmet>
-              <title>CATEGORIA DE ITEMS</title>
-            </Helmet>
-            <CCardTitle>CATEGORIA DE ITEMS</CCardTitle>
-          </CCardHeader>
+          <div className="d-none d-lg-block">
+            <CCardHeader>
+              <CCardTitle>CATEGORIA DE ITEMS</CCardTitle>
+            </CCardHeader>
+          </div>
           <CCardBody>
             {!editing && (
               <CRow>
-                <CCol xs="4" lg="3">
+                <CCol xs="2" lg="3">
                   <CButton variant="outline" color="success" onClick={handleNew}>
-                    NUEVA CATEGORIA
+                    <div className="d-none d-lg-block">NUEVA CATEGORIA</div>
+                    <div className="d-lg-none">
+                      <CIcon icon={cilPlus} size="sm" />
+                    </div>
                   </CButton>
                 </CCol>
-                <CCol lg="5">
+                <CCol xs="8" lg="5">
                   <CInputGroup>
                     <CFormInput
                       ref={searchInputRef}
@@ -138,7 +145,10 @@ function Categories() {
                       onKeyDown={(event) => onKeyDownCodeField(event)}
                     />
                     <CButton type="button" variant="outline" color="primary" onClick={search}>
-                      BUSCAR
+                      <div className="d-none d-lg-block">BUSCAR</div>
+                      <div className="d-lg-none">
+                        <CIcon icon={cilSearch} size="sm" />
+                      </div>
                     </CButton>
                     <CButton
                       variant="outline"
@@ -146,7 +156,10 @@ function Categories() {
                       color="secondary"
                       onClick={handleClear}
                     >
-                      BORRAR
+                      <div className="d-none d-lg-block">BORRAR</div>
+                      <div className="d-lg-none">
+                        <CIcon icon={cilTrash} size="sm" />
+                      </div>
                     </CButton>
                   </CInputGroup>
                 </CCol>

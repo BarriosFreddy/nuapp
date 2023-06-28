@@ -123,10 +123,26 @@ function ItemForm(props) {
     <>
       <CContainer fluid>
         <CCard>
-          <CCardHeader>{props.item ? 'EDITANDO' : 'CREANDO'} ITEM</CCardHeader>
+          <div className="d-none d-lg-block">
+            <CCardHeader>{props.item ? 'EDITANDO' : 'CREANDO'} ITEM</CCardHeader>
+          </div>
+          <div className="py-1 d-lg-none">
+            <CRow className="m-1">
+              <CCol xs="3" lg={{ offset: 4, span: 4 }}>
+                <CButton variant="outline" color="secondary" onClick={() => cancel()}>
+                  CANCELAR
+                </CButton>
+              </CCol>
+              <CCol xs={{ offset: 5, span: 4 }}>
+                <CButton color="success" type="button" onClick={() => save()}>
+                  {props.item ? 'EDITAR' : 'GUARDAR'}
+                </CButton>
+              </CCol>
+            </CRow>
+          </div>
           <CCardBody>
-            <CForm className="mt-2 row g-3 needs-validation" noValidate>
-              <CRow style={{ marginTop: '40px' }}>
+            <CForm className="row g-3 needs-validation" noValidate>
+              <CRow>
                 <CCol xs="12" lg="4">
                   <FormInput
                     label="Código"
@@ -248,17 +264,19 @@ function ItemForm(props) {
             </CForm>
           </CCardBody>
           <CCardFooter className="mt-2">
-            <CRow className="mt-0">
-              <CCol className="text-center" xs="8" lg={{ offset: 4, span: 4 }}>
-                <CButton color="success" type="button" onClick={() => save()}>
-                  {props.item ? 'EDITAR' : 'GUARDAR'}
-                </CButton>
-                &nbsp; &nbsp;
-                <CButton variant="outline" color="secondary" onClick={() => cancel()}>
-                  CANCELAR
-                </CButton>
-              </CCol>
-            </CRow>
+            <div className="d-none d-lg-block">
+              <CRow className="mt-0">
+                <CCol className="text-center" xs="8" lg={{ offset: 4, span: 4 }}>
+                  <CButton color="success" type="button" onClick={() => save()}>
+                    {props.item ? 'EDITAR' : 'GUARDAR'}
+                  </CButton>
+                  &nbsp; &nbsp;
+                  <CButton variant="outline" color="secondary" onClick={() => cancel()}>
+                    CANCELAR
+                  </CButton>
+                </CCol>
+              </CRow>
+            </div>
           </CCardFooter>
         </CCard>
       </CContainer>

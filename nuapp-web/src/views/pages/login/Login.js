@@ -51,7 +51,7 @@ const Login = () => {
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <CContainer>
         <CRow className="justify-content-center">
-          <CCol md={8}>
+          <CCol md={6}>
             <CCardGroup>
               <CCard className="p-4">
                 <CCardBody>
@@ -95,34 +95,20 @@ const Login = () => {
                     <br />
                     <CRow>
                       <CCol xs={12}>
-                        <CButton
-                          size="lg"
-                          onClick={onClickLogin}
-                          color="primary"
-                          className="px-4"
-                          disabled={loading}
-                        >
-                          Acceder
-                        </CButton>
+                        <div className="d-grid">
+                          <CButton
+                            size="lg"
+                            onClick={onClickLogin}
+                            color="primary"
+                            className="px-4"
+                            disabled={loading}
+                          >
+                            ACCEDER
+                          </CButton>
+                        </div>
                       </CCol>
                     </CRow>
                   </CForm>
-                </CCardBody>
-              </CCard>
-              <CCard className="text-white bg-primary py-5" style={{ width: '44%' }}>
-                <CCardBody className="text-center">
-                  <div>
-                    <h2>Sign up</h2>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                      tempor incididunt ut labore et dolore magna aliqua.
-                    </p>
-                    <Link to="/register">
-                      <CButton color="primary" className="mt-3" active tabIndex={-1}>
-                        Register Now!
-                      </CButton>
-                    </Link>
-                  </div>
                 </CCardBody>
               </CCard>
             </CCardGroup>

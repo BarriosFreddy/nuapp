@@ -60,26 +60,6 @@ db.enumerations.insertMany([
   {
     createdAt: {
       $date: {
-        $numberLong: '1682375002638',
-      },
-    },
-    name: 'Categorias de items',
-    description: 'antibiotics',
-    values: [
-      {
-        label: 'Skincare',
-        code: 'SKINCARE',
-      },
-    ],
-    updatedAt: {
-      $date: {
-        $numberLong: '1682375839267',
-      },
-    },
-  },
-  {
-    createdAt: {
-      $date: {
         $numberLong: '1683120056733',
       },
     },

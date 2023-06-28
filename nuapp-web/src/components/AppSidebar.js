@@ -52,7 +52,7 @@ const AppSidebar = () => {
             <AppSidebarNav items={navigation} />
           </SimpleBar>
         </CSidebarNav>
-        <CSidebarFooter onClick={onClickLogout}>
+        <CSidebarFooter onClick={onClickLogout} style={{ cursor: 'pointer' }}>
           <CIcon icon={cilLockLocked} className="me-2" />
           Logout
         </CSidebarFooter>

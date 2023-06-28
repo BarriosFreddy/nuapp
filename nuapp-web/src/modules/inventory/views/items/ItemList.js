@@ -21,29 +21,27 @@ const ItemList = ({ items, fetching, page, onEdit, onPrevPage, onNextPage }) => 
   return (
     <>
       <div className="d-lg-none">
-        {items.map(({ name, code, description, price }) => (
+        {items.map((item) => (
           <CCard
-            key={code}
+            key={item.code}
             style={{
               width: 'auto',
+              cursor: 'pointer',
             }}
+            className="my-2"
+            onClick={() => onEdit(item)}
           >
             <CCardBody>
-              <CRow className="g-0" key={code}>
-                <CCol xs={12}>
+              <CRow className="g-0">
+                <CCol>
                   <CRow>
-                    <CCol>{name}</CCol>
+                    <CCol>{item.name}</CCol>
                   </CRow>
                   <CRow>
-                    <CCol>{code}</CCol>
-                  </CRow>
-                  <CRow>
-                    <CCol>{description}</CCol>
-                  </CRow>
-                  <CRow>
-                    <CCol>${price}</CCol>
+                    <CCol style={{ fontSize: 10 }}>{item.code}</CCol>
                   </CRow>
                 </CCol>
+                <CCol>{formatCurrency(item.price)}</CCol>
               </CRow>
             </CCardBody>
           </CCard>

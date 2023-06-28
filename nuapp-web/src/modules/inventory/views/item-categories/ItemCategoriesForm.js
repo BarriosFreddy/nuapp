@@ -1,6 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
-import { CButton, CRow, CContainer, CCol, CFormInput, CForm } from '@coreui/react'
+import {
+  CButton,
+  CRow,
+  CContainer,
+  CCol,
+  CForm,
+  CCard,
+  CCardHeader,
+  CCardBody,
+  CCardFooter,
+} from '@coreui/react'
 import ConfirmDialog from '../../../../components/shared/ConfirmDialog'
 import { useDispatch, useSelector } from 'react-redux'
 import { validateCodeRegistered } from '../../../inventory/services/item-categories.service'
@@ -85,62 +95,89 @@ function ItemCategoriesForm(props) {
   return (
     <>
       <CContainer fluid>
-        <CForm className="row g-3 needs-validation" noValidate>
-          <CRow className="mt-2">
-            <CCol xs="12" lg="4">
-              <FormInput
-                label="Código"
-                type="text"
-                uppercase="true"
-                name="code"
-                value={itemCategory.code}
-                feedback={
-                  isCodeRegistered ? 'El código ya se encuentra registrado' : 'Campo obligatorio'
-                }
-                invalid={isCodeRegistered || failedValidations.code}
-                required
-                onChange={(event) => onChangeField(event)}
-              />
-            </CCol>
-            <CCol xs="12" lg="4">
-              <FormInput
-                label="Nombre"
-                type="text"
-                uppercase="true"
-                name="name"
-                value={itemCategory.name}
-                feedbackInvalid="Campo obligatorio"
-                invalid={failedValidations.name}
-                required
-                onChange={(event) => onChangeField(event)}
-              />
-            </CCol>
-            <CCol xs="12" lg="4">
-              <FormInput
-                label="Descripción"
-                type="text"
-                uppercase="true"
-                name="description"
-                value={itemCategory.description}
-                feedbackInvalid="Campo obligatorio"
-                invalid={failedValidations.description}
-                required
-                onChange={(event) => onChangeField(event)}
-              />
-            </CCol>
-          </CRow>
-          <CRow className="mt-4">
-            <CCol className="text-center" xs="8" lg={{ offset: 4, span: 4 }}>
-              <CButton color="success" type="button" onClick={() => handleSave()}>
-                {props.itemCategory ? 'EDITAR' : 'GUARDAR'}
-              </CButton>
-              &nbsp; &nbsp;
-              <CButton color="light" onClick={() => handleCancel()}>
-                CANCELAR
-              </CButton>
-            </CCol>
-          </CRow>
-        </CForm>
+        <CCard>
+          <div className="d-none d-lg-block">
+            <CCardHeader>{props.itemCategory ? 'EDITANDO' : 'CREANDO'} ITEM</CCardHeader>
+          </div>
+          <div className="py-1 d-lg-none">
+            <CRow className="m-1">
+              <CCol xs="3" lg={{ offset: 4, span: 4 }}>
+                <CButton variant="outline" color="secondary" onClick={() => handleCancel()}>
+                  CANCELAR
+                </CButton>
+              </CCol>
+              <CCol xs={{ offset: 5, span: 4 }}>
+                <CButton color="success" type="button" onClick={() => handleSave()}>
+                  {props.itemCategory ? 'EDITAR' : 'GUARDAR'}
+                </CButton>
+              </CCol>
+            </CRow>
+          </div>
+          <CCardBody>
+            <CForm className="row g-3 needs-validation" noValidate>
+              <CRow className="mt-2">
+                <CCol xs="12" lg="4">
+                  <FormInput
+                    label="Código"
+                    type="text"
+                    uppercase="true"
+                    name="code"
+                    value={itemCategory.code}
+                    feedback={
+                      isCodeRegistered
+                        ? 'El código ya se encuentra registrado'
+                        : 'Campo obligatorio'
+                    }
+                    invalid={isCodeRegistered || failedValidations.code}
+                    required
+                    onChange={(event) => onChangeField(event)}
+                  />
+                </CCol>
+                <CCol xs="12" lg="4">
+                  <FormInput
+                    label="Nombre"
+                    type="text"
+                    uppercase="true"
+                    name="name"
+                    value={itemCategory.name}
+                    feedbackInvalid="Campo obligatorio"
+                    invalid={failedValidations.name}
+                    required
+                    onChange={(event) => onChangeField(event)}
+                  />
+                </CCol>
+                <CCol xs="12" lg="4">
+                  <FormInput
+                    label="Descripción"
+                    type="text"
+                    uppercase="true"
+                    name="description"
+                    value={itemCategory.description}
+                    feedbackInvalid="Campo obligatorio"
+                    invalid={failedValidations.description}
+                    required
+                    onChange={(event) => onChangeField(event)}
+                  />
+                </CCol>
+              </CRow>
+            </CForm>
+          </CCardBody>
+          <CCardFooter className="mt-2">
+            <div className="d-none d-lg-block">
+              <CRow className="mt-0">
+                <CCol className="text-center" xs="8" lg={{ offset: 4, span: 4 }}>
+                  <CButton color="success" type="button" onClick={() => handleSave()}>
+                    {props.itemCategory ? 'EDITAR' : 'GUARDAR'}
+                  </CButton>
+                  &nbsp; &nbsp;
+                  <CButton variant="outline" color="secondary" onClick={() => handleCancel()}>
+                    CANCELAR
+                  </CButton>
+                </CCol>
+              </CRow>
+            </div>
+          </CCardFooter>
+        </CCard>
       </CContainer>
       <ConfirmDialog
         ref={confirmDialogRef}
