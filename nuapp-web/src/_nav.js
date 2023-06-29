@@ -12,6 +12,7 @@ import {
   cilCloudUpload,
   cilSync,
   cilInbox,
+  cilBasket,
 } from '@coreui/icons'
 import { CNavGroup, CNavItem } from '@coreui/react'
 
@@ -89,8 +90,15 @@ let _nav = [
       {
         component: CNavItem,
         name: 'Entrada y salida',
-        to: '/kardex',
+        to: '/inventory-kardex',
         icon: <CIcon icon={cilCloudUpload} customClassName="nav-icon" />,
+        roles: ['ADMIN'],
+      },
+      {
+        component: CNavItem,
+        name: 'Ordenes de compra',
+        to: '/inventory-purchase-orders',
+        icon: <CIcon icon={cilBasket} customClassName="nav-icon" />,
         roles: ['ADMIN'],
       },
     ],

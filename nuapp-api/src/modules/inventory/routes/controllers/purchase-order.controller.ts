@@ -18,4 +18,15 @@ export default class PurchaseOrderController {
       res.status(500).send(e);
     }
   }
+
+  async findAll(req: Request, res: Response) {
+    try {
+      const { page = 1 } = req.params;
+      const purchaseOrders = await purchaseOrderService.findAll({ page });
+      res.status(200).send(purchaseOrders);
+    } catch (e) {
+      console.error(e);
+      res.status(500).send(e);
+    }
+  }
 }

@@ -5,11 +5,12 @@ const PurchaseOrderCreateSchema: Schema = joi.object({
   comments: joi.string().allow(''),
   items: joi.array().items(
     joi.object({
-        name: joi.string(),
-        units: joi.number(),
-        measurementUnit: joi.string(),
-        cost: joi.number(),
-    })
+      _id: joi.string().regex(/[a-fA-F\d]{24}/),
+      name: joi.string(),
+      units: joi.number(),
+      measurementUnit: joi.string(),
+      cost: joi.number(),
+    }),
   ),
   supplierId: joi.string().regex(/[a-fA-F\d]{24}/),
   createdAt: joi.object({
@@ -17,6 +18,5 @@ const PurchaseOrderCreateSchema: Schema = joi.object({
     offset: joi.number(),
   }),
 });
-
 
 export { PurchaseOrderCreateSchema };

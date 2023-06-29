@@ -21,4 +21,12 @@ purchaseOrderRouter.post(
   purchaseOrderController.save,
 );
 
+purchaseOrderRouter.get(
+  '/',
+  isAuthenticated,
+  roleValidation(generateAuthKeyPair(ModuleCode.BILLING, Privilege.CREATE)),
+  purchaseOrderController.findAll,
+);
+
+
 export default purchaseOrderRouter;

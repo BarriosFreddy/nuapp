@@ -14,4 +14,13 @@ export class PurchaseOrderService {
       return Promise.reject(null);
     }
   }
+
+  findAll(query: { page: string | number }): Promise<PurchaseOrder[]> {
+    try {
+      return this.purchaseOrderRepository.findAll(query);
+    } catch (error) {
+      console.log(error);
+      return Promise.reject(null);
+    }
+  }
 }
