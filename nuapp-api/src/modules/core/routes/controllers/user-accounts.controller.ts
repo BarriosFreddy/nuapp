@@ -1,7 +1,7 @@
-import { UserAccountService } from "../services/user-account.service";
+import { UserAccountService } from "../../services/user-account.service";
 import { Request, Response } from "express";
 import { container } from "tsyringe";
-import { UserAccount } from "../entities/UserAccount";
+import { UserAccount } from "../../entities/UserAccount";
 
 const userAccountService = container.resolve(UserAccountService);
 

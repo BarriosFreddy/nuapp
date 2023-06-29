@@ -5,10 +5,10 @@ import {
   validateParameters,
 } from '../../../helpers/middleware/validation.middleware';
 
-import roleController from '../controllers/roles.controller';
+import roleController from './controllers/roles.controller';
 import { generateAuthKeyPair } from '../../../helpers/util';
-import { ModuleCode } from '../enums/modules-codes';
-import { Privilege } from '../enums/privileges';
+import { ModuleCode } from '../entities/enums/modules-codes';
+import { Privilege } from '../entities/enums/privileges';
 import { roleValidation } from '../../../helpers/middleware/role-validation.middleware';
 import { idSchema } from '../../../helpers/db/schemas/id.schema';
 import { RoleCreateSchema, RoleUpdateSchema } from './validations/roles.schema';

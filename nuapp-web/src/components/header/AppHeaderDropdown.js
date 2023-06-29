@@ -8,28 +8,13 @@ import {
   CDropdownMenu,
   CDropdownToggle,
 } from '@coreui/react'
-import {
-  cilBell,
-  cilCreditCard,
-  cilCommentSquare,
-  cilEnvelopeOpen,
-  cilFile,
-  cilLockLocked,
-  cilSettings,
-  cilTask,
-  cilUser,
-} from '@coreui/icons'
+import { cilBell, cilEnvelopeOpen, cilSettings, cilUser } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
-import { useDispatch } from 'react-redux'
-import { logout } from 'src/modules/core/services/auth.service'
 
 const { REACT_APP_RENDER_GIT_COMMIT = '' } = process.env
 console.log({ REACT_APP_RENDER_GIT_COMMIT })
 
 const AppHeaderDropdown = () => {
-  const dispatch = useDispatch()
-  const onClickLogout = () => dispatch(logout())
-
   return (
     <CDropdown variant="nav-item">
       <CDropdownToggle placement="bottom-end" className="py-0" caret={false}>

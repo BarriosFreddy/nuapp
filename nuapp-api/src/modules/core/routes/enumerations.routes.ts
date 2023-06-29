@@ -5,15 +5,15 @@ import {
   validateParameters,
 } from '../../../helpers/middleware/validation.middleware';
 
-import enumerationsController from '../controllers/enumerations.controller';
+import enumerationsController from './controllers/enumerations.controller';
 import {
   EnumerationCreateSchema,
   EnumerationUpdateSchema,
 } from './validations/enumerations.schema';
 import { roleValidation } from '../../../helpers/middleware/role-validation.middleware';
 import { generateAuthKeyPair } from '../../../helpers/util';
-import { ModuleCode } from '../enums/modules-codes';
-import { Privilege } from '../enums/privileges';
+import { ModuleCode } from '../entities/enums/modules-codes';
+import { Privilege } from '../entities/enums/privileges';
 import { idSchema } from '../../../helpers/db/schemas/id.schema';
 const enumerationsRouter = express.Router();
 

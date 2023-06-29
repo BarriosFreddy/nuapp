@@ -5,7 +5,7 @@ import { SequencedCodeService } from './sequenced-code.service';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { KardexTransactionService } from '../../inventory/services/kardex-transaction.service';
-import { KardexTransactionType } from '../../inventory/enums/kardex-transaction-type';
+import { KardexTransactionType } from '../../inventory/entities/enums/kardex-transaction-type';
 import { Billing } from '../entities/Billing';
 dayjs.extend(utc);
 

@@ -1,7 +1,7 @@
-import { UserAccountLogin } from '../types/user-account-login.type';
+import { UserAccountLogin } from '../../types/user-account-login.type';
 import { Request, Response } from 'express';
 import { container } from 'tsyringe';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../../services/auth.service';
 
 const { NODE_ENV = 'development' } = process.env;
 

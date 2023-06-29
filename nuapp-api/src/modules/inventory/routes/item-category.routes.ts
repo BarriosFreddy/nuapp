@@ -5,12 +5,12 @@ import {
   validateParameters,
 } from '../../../helpers/middleware/validation.middleware';
 
-import itemCategoryController from '../controllers/item-category.controller';
+import itemCategoryController from './controllers/item-category.controller';
 
 import { roleValidation } from '../../../helpers/middleware/role-validation.middleware';
 import { generateAuthKeyPair } from '../../../helpers/util';
-import { ModuleCode } from '../../core/enums/modules-codes';
-import { Privilege } from '../../core/enums/privileges';
+import { ModuleCode } from '../../core/entities/enums/modules-codes';
+import { Privilege } from '../../core/entities/enums/privileges';
 import { idSchema } from '../../../helpers/db/schemas/id.schema';
 import { CategoryCreateSchema, CategoryUpdateSchema } from './validations/item-category.schema';
 const itemCategoryRouter = express.Router();

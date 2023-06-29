@@ -5,11 +5,11 @@ import {
   validateParameters,
 } from '../../../helpers/middleware/validation.middleware';
 
-import billingController from '../controllers/billing.controller';
+import billingController from './controllers/billing.controller';
 import { roleValidation } from '../../../helpers/middleware/role-validation.middleware';
 import { generateAuthKeyPair } from '../../../helpers/util';
-import { ModuleCode } from '../../core/enums/modules-codes';
-import { Privilege } from '../../core/enums/privileges';
+import { ModuleCode } from '../../core/entities/enums/modules-codes';
+import { Privilege } from '../../core/entities/enums/privileges';
 import { idSchema } from '../../../helpers/db/schemas/id.schema';
 import { BillingCreateSchema } from './validations/billing.schema';
 const billingRouter = express.Router();

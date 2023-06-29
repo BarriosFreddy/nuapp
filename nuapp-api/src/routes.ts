@@ -20,6 +20,8 @@ export function registerRoutes(app: Express): void {
   apiRouter.use('/items', inventoryRouter.itemRouter);
   apiRouter.use('/item-categories', inventoryRouter.itemCategoryRouter);
   apiRouter.use('/kardex', inventoryRouter.kardexTransactionRouter);
+  apiRouter.use('/purchase-orders', inventoryRouter.purchaseOrderRouter);
+
 
   app.use('/api/v1', apiRouter);
 }

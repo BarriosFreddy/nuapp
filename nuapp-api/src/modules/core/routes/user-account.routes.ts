@@ -1,5 +1,5 @@
 import express from 'express';
-import userAccountController from '../controllers/user-accounts.controller';
+import userAccountController from './controllers/user-accounts.controller';
 import isAuthenticated from './../../../helpers/middleware/authenticate.middleware';
 import {
   validateBody,
@@ -11,8 +11,8 @@ import {
 } from './validations/user-accounts.schema';
 import { idSchema } from '../../../helpers/db/schemas/id.schema';
 import { roleValidation } from '../../../helpers/middleware/role-validation.middleware';
-import { ModuleCode } from '../enums/modules-codes';
-import { Privilege } from '../enums/privileges';
+import { ModuleCode } from '../entities/enums/modules-codes';
+import { Privilege } from '../entities/enums/privileges';
 import { generateAuthKeyPair } from '../../../helpers/util/index';
 const userAccountRouter = express.Router();
 
