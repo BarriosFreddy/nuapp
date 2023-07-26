@@ -5,9 +5,19 @@ import {
   setSaving,
 } from '../reducers/purchase-orders.reducer'
 
-export const saveAll = (item) => async (dispatch, _, api) => {
+export const savePurchaseOrder = (item) => async (dispatch, _, api) => {
   dispatch(setSaving(true))
   const { status } = await api.post('/purchase-orders', item)
+  dispatch(saveSuccess(status === 201))
+  dispatch(setSaving(false))
+}
+
+export const updatePurchaseOrder = (item) => async (dispatch, _, api) => {
+  dispatch(setSaving(true))
+  const purchaseOrderToUpdate = { ...item }
+  const id = purchaseOrderToUpdate._id
+  delete purchaseOrderToUpdate._id
+  const { status } = await api.put(`/purchase-orders/${id}`, purchaseOrderToUpdate)
   dispatch(saveSuccess(status === 201))
   dispatch(setSaving(false))
 }

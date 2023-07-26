@@ -19,6 +19,18 @@ export default class PurchaseOrderController {
     }
   }
 
+  async update(req: Request, res: Response) {
+    const { id } = req.params;
+    const purchaseOrder: PurchaseOrder = req.body;
+    const purchaseOrderSaved = await purchaseOrderService.update(
+      id,
+      purchaseOrder,
+    );
+    purchaseOrderSaved
+      ? res.status(201).send(purchaseOrderSaved)
+      : res.status(400).send('Something went wrong');
+  }
+
   async findAll(req: Request, res: Response) {
     try {
       const { page = 1 } = req.params;

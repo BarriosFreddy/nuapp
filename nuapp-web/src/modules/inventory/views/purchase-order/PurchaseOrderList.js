@@ -10,7 +10,7 @@ import {
 import React from 'react'
 import { PropTypes } from 'prop-types'
 
-const PurchaseOrderList = ({ purchaseOrders }) => {
+const PurchaseOrderList = ({ purchaseOrders, onShow }) => {
   return (
     <CTable>
       <CTableHead>
@@ -26,7 +26,9 @@ const PurchaseOrderList = ({ purchaseOrders }) => {
             <CTableDataCell width={200}>{purchaseOrder.code}</CTableDataCell>
             <CTableDataCell width={150}>{purchaseOrder.items?.length}</CTableDataCell>
             <CTableDataCell width={150}>
-              <CButton color="info">VER</CButton>
+              <CButton color="info" onClick={() => onShow(purchaseOrder)}>
+                VER
+              </CButton>
             </CTableDataCell>
           </CTableRow>
         ))}
@@ -45,4 +47,5 @@ export default PurchaseOrderList
 
 PurchaseOrderList.propTypes = {
   purchaseOrders: PropTypes.array,
+  onShow: PropTypes.func,
 }

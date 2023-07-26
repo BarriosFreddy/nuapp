@@ -6,10 +6,12 @@ const PurchaseOrderCreateSchema: Schema = joi.object({
   items: joi.array().items(
     joi.object({
       _id: joi.string().regex(/[a-fA-F\d]{24}/),
+      code: joi.string(),
       name: joi.string(),
       units: joi.number(),
       measurementUnit: joi.string(),
       cost: joi.number(),
+      stock: joi.number(),
     }),
   ),
   supplierId: joi.string().regex(/[a-fA-F\d]{24}/),

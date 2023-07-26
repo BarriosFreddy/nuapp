@@ -7,10 +7,12 @@ export class PurchaseOrder {
     public items: [
       {
         _id: Types.ObjectId;
+        code: String;
         name: String;
         units: Number;
         measurementUnit: String;
         cost: Number;
+        stock: Number;
       },
     ],
     public supplierId: Types.ObjectId,

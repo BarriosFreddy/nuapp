@@ -5,10 +5,12 @@ export const purchaseOrderSchema = new Schema<PurchaseOrder>({
   code: String,
   items: [
     {
+      code: String,
       name: String,
       units: Number,
       measurementUnit: String,
       cost: Number,
+      stock: Number,
     },
   ],
   supplierId: Types.ObjectId,

@@ -15,6 +15,19 @@ export class PurchaseOrderService {
     }
   }
 
+  async update(
+    id: string,
+    purchaseOrder: PurchaseOrder,
+  ): Promise<PurchaseOrder | null> {
+    try {
+      await this.purchaseOrderRepository.update(id, purchaseOrder);
+      return this.purchaseOrderRepository.findOne(id);
+    } catch (error) {
+      console.log(error);
+      return Promise.reject(null);
+    }
+  }
+
   findAll(query: { page: string | number }): Promise<PurchaseOrder[]> {
     try {
       return this.purchaseOrderRepository.findAll(query);
