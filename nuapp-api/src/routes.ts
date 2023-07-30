@@ -21,6 +21,7 @@ export function registerRoutes(app: Express): void {
   apiRouter.use('/item-categories', inventoryRouter.itemCategoryRouter);
   apiRouter.use('/kardex', inventoryRouter.kardexTransactionRouter);
   apiRouter.use('/purchase-orders', inventoryRouter.purchaseOrderRouter);
+  apiRouter.use('/inv-enumerations', inventoryRouter.invEnumerationRouter);
 
 
   app.use('/api/v1', apiRouter);

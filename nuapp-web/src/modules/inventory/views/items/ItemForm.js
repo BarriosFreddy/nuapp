@@ -24,6 +24,7 @@ import { existByCode } from '../../services/items.service'
 import ConfirmDialog from 'src/components/shared/ConfirmDialog'
 import CurrencyFormInput from '../../../../components/shared/CurrencyFormInput'
 import FormInput from '../../../../components/shared/FormInput'
+import { getInvEnumerationByCode } from '../../services/inv-enumerations.service'
 
 const itemInitialState = {
   name: '',
@@ -40,6 +41,7 @@ const itemInitialState = {
 function ItemForm(props) {
   const dispatch = useDispatch()
   const itemCategories = useSelector((state) => state.itemCategories.itemCategories)
+  const measurementUnits = useSelector((state) => state.invEnumerations.invEnumeration)
   const codeRegistered = useSelector((state) => state.items.existsByCode)
   const [item, setItem] = useState(itemInitialState)
   const [failedValidations, setFailedValidations] = useState({
@@ -58,6 +60,7 @@ function ItemForm(props) {
   useEffect(() => {
     props.item && setItem(props.item)
     dispatch(getItemCategories({ parse: true }))
+    dispatch(getInvEnumerationByCode('UDM'))
   }, [dispatch, props.item])
 
   // INIT
@@ -118,7 +121,6 @@ function ItemForm(props) {
       setItem(itemInitialState)
     }
   }
-
   return (
     <>
       <CContainer fluid>
@@ -247,17 +249,19 @@ function ItemForm(props) {
                   />
                 </CCol>
                 <CCol xs="12" lg="4">
-                  <FormInput
-                    className="text-uppercase"
+                  <CFormSelect
                     label="Unidad de medida"
-                    type="text"
-                    uppercase="true"
                     name="measurementUnit"
                     value={item.measurementUnit}
+                    required
                     feedbackInvalid="Campo obligatorio"
                     invalid={failedValidations.measurementUnit}
-                    required
                     onChange={(event) => onChangeField(event)}
+                    aria-label="Default select example"
+                    options={[
+                      'Seleccione la unidad de medida',
+                      ...(measurementUnits?.values ?? []),
+                    ]}
                   />
                 </CCol>
               </CRow>

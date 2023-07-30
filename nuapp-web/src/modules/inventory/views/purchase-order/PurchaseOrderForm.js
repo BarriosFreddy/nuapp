@@ -123,7 +123,8 @@ export const PurchaseOrderForm = ({
     }
   }
 
-  const handleSearchItem = () => {
+  const handleSearchItem = (index) => {
+    setCurrentIndex(index)
     setSearchingByName(true)
     itemSearchDialogRef.current.show(true)
   }
@@ -252,7 +253,7 @@ export const PurchaseOrderForm = ({
                     color="secondary"
                     variant="outline"
                     id="button-addon2"
-                    onClick={handleSearchItem}
+                    onClick={(event) => handleSearchItem(index)}
                   >
                     <CIcon icon={cilSearch} size="sm" />
                   </CButton>

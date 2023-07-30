@@ -1,0 +1,1 @@
+db.inv_enumerations.createIndex({ 'code': -1 }, { name: 'code_idx' });
