@@ -4,6 +4,7 @@ import {
   CCol,
   CFormInput,
   CFormSelect,
+  CInputGroup,
   CRow,
   CTable,
   CTableBody,
@@ -16,13 +17,14 @@ import {
 import React, { useEffect, useRef, useState } from 'react'
 import CONSTANTS from 'src/constants'
 import { formatCurrency, getDateObject } from 'src/utils'
-import { cilTrash } from '@coreui/icons'
+import { cilSearch, cilTrash } from '@coreui/icons'
 import { PropTypes } from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import { getItems } from '../../services/items.service'
 import { useDidUpdateControl } from 'src/hooks/useDidUpdateControl'
 import { sendWarningToast } from 'src/modules/shared/services/notification.service'
 import { EDITING } from './PurchaseOrder'
+import ItemSearchDialog from 'src/components/shared/ItemSearchDialog'
 const { ENTER_KEYCODE, TAB_KEYCODE } = CONSTANTS
 
 const initialPurchaseOrderItems = {
@@ -49,11 +51,19 @@ export const PurchaseOrderForm = ({
   const fetching = useSelector((state) => state.items.fetching)
   const dispatch = useDispatch()
   const [purchaseOrderItems, setPurchaseOrderItems] = useState([])
+  const [searchingByName, setSearchingByName] = useState(false)
   const inputNewRef = useRef()
+  const itemSearchDialogRef = useRef()
   const code = '0000000001'
 
   useDidUpdateControl(() => {
-    fillFields()
+    if (!searchingByName) {
+      if (items && items.length > 0) fillFields(items[0])
+      else
+        sendWarningToast(dispatch, {
+          message: `Item no encontrado`,
+        })
+    }
   }, fetching)
 
   useDidUpdateControl(() => {
@@ -72,6 +82,7 @@ export const PurchaseOrderForm = ({
   // INIT
 
   const searchByCode = (code) => {
+    setSearchingByName(false)
     if (!!code) dispatch(getItems({ code, page: 1, size: 1 }, false))
   }
 
@@ -112,6 +123,15 @@ export const PurchaseOrderForm = ({
     }
   }
 
+  const handleSearchItem = () => {
+    setSearchingByName(true)
+    itemSearchDialogRef.current.show(true)
+  }
+
+  const handleSelectItem = (item) => {
+    fillFields(item)
+  }
+
   function validForm() {
     let isOk = true
     if (purchaseOrderItems.some((purchaseOrderItem) => purchaseOrderItem.itemName.trim() === '')) {
@@ -135,34 +155,29 @@ export const PurchaseOrderForm = ({
     return purchaseOrderItemsClone
   }
 
-  function fillFields() {
-    if (items && items.length > 0) {
-      const { _id, code, name, description, cost, stock } = items[0]
-      if (purchaseOrderItems.some((purchaseOrderItem) => purchaseOrderItem.itemId === _id)) {
-        sendWarningToast(dispatch, {
-          message: `El item "${name}" ya está agregado!`,
-        })
-        return
-      }
-
-      const purchaseOrderItemsClone = replaceItem(
-        {
-          itemCode: code,
-          itemId: _id,
-          itemName: name,
-          itemDescription: description,
-          units: '',
-          itemCost: cost,
-          itemStock: stock,
-        },
-        currentIndex,
-      )
-      setPurchaseOrderItems(purchaseOrderItemsClone)
+  function fillFields(item) {
+    if (!item) return
+    const { _id, code, name, description, cost, stock } = item
+    if (purchaseOrderItems.some((purchaseOrderItem) => purchaseOrderItem.itemId === _id)) {
+      sendWarningToast(dispatch, {
+        message: `El item "${name}" ya está agregado!`,
+      })
       return
     }
-    sendWarningToast(dispatch, {
-      message: `Item no encontrado`,
-    })
+
+    const purchaseOrderItemsClone = replaceItem(
+      {
+        itemCode: code,
+        itemId: _id,
+        itemName: name,
+        itemDescription: description,
+        units: '',
+        itemCost: cost,
+        itemStock: stock,
+      },
+      currentIndex,
+    )
+    setPurchaseOrderItems(purchaseOrderItemsClone)
   }
 
   function transformItems(purchaseOrders) {
@@ -221,16 +236,27 @@ export const PurchaseOrderForm = ({
           {purchaseOrderItems.map((purchaseOrder, index) => (
             <CTableRow key={index}>
               <CTableDataCell width={200}>
-                <CFormInput
-                  ref={inputNewRef}
-                  type="number"
-                  formNoValidate
-                  required
-                  name="itemCode"
-                  value={purchaseOrder.itemCode}
-                  onChange={(event) => onChangeField(event, purchaseOrder, index)}
-                  onKeyUp={(event) => onKeyUpCodeField(event, purchaseOrder)}
-                />
+                <CInputGroup>
+                  <CFormInput
+                    ref={inputNewRef}
+                    type="number"
+                    formNoValidate
+                    required
+                    name="itemCode"
+                    value={purchaseOrder.itemCode}
+                    onChange={(event) => onChangeField(event, purchaseOrder, index)}
+                    onKeyUp={(event) => onKeyUpCodeField(event, purchaseOrder)}
+                  />
+                  <CButton
+                    type="button"
+                    color="secondary"
+                    variant="outline"
+                    id="button-addon2"
+                    onClick={handleSearchItem}
+                  >
+                    <CIcon icon={cilSearch} size="sm" />
+                  </CButton>
+                </CInputGroup>
               </CTableDataCell>
               <CTableDataCell className="text-uppercase">{purchaseOrder.itemName}</CTableDataCell>
               <CTableDataCell width={150}>{purchaseOrder.itemStock}</CTableDataCell>
@@ -296,6 +322,7 @@ export const PurchaseOrderForm = ({
           </CTableRow>
         </CTableFoot>
       </CTable>
+      <ItemSearchDialog ref={itemSearchDialogRef} onSelect={handleSelectItem}></ItemSearchDialog>
     </>
   )
 }

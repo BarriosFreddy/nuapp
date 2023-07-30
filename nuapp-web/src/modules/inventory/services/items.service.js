@@ -37,16 +37,18 @@ export const existByCode = (code) => async (dispatch, _, api) => {
   if (status === 200) dispatch(setExistsByCode(data))
 }
 
-export const getItems = (queryParams, useCacheOnly) => async (dispatch, getState, api) => {
-  dispatch(setFetching(true))
-  const urlQueryParams = new URLSearchParams(queryParams).toString()
-  isonline = useCacheOnly ? false : await isOnline()
-  const { data, status } = isonline
-    ? await api.get(`/items${urlQueryParams.length > 0 ? '?' + urlQueryParams.toString() : ''}`)
-    : getLocally(getState(), queryParams)
-  if (status === 200) dispatch(setItems(data))
-  dispatch(setFetching(false))
-}
+export const getItems =
+  (queryParams, useCacheOnly = false) =>
+  async (dispatch, getState, api) => {
+    dispatch(setFetching(true))
+    const urlQueryParams = new URLSearchParams(queryParams).toString()
+    isonline = useCacheOnly ? false : await isOnline()
+    const { data, status } = isonline
+      ? await api.get(`/items${urlQueryParams.length > 0 ? '?' + urlQueryParams.toString() : ''}`)
+      : getLocally(getState(), queryParams)
+    if (status === 200) dispatch(setItems(data))
+    dispatch(setFetching(false))
+  }
 
 export const getAllItems = () => async (dispatch, state, api) => {
   const { data, status } = await api.get(`/items`)
