@@ -38,3 +38,8 @@ export const getDateAsString = (format = 'YYYY-MM-DD') => {
 export const getUUID = () => {
   return uuidv4()
 }
+
+export const getMainPrice = (pricesRatio = []) => {
+  const priceRatio = pricesRatio.find(({ main, hash }) => main === hash)
+  return priceRatio?.price
+}

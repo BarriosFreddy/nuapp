@@ -22,7 +22,7 @@ import {
   CTableDataCell,
   CBadge,
 } from '@coreui/react'
-import { formatCurrency } from 'src/utils'
+import { formatCurrency, getMainPrice } from 'src/utils'
 import { useDispatch, useSelector } from 'react-redux'
 import { setItems } from 'src/modules/inventory/reducers/items.reducer'
 import { getItems } from 'src/modules/inventory/services/items.service'
@@ -178,7 +178,7 @@ const BillingForm = (props) => {
                       </CRow>
                     </CTableDataCell>
                     <CTableDataCell className="text-break">
-                      {formatCurrency(item.price)}
+                      {formatCurrency(getMainPrice(item.pricesRatio))}
                     </CTableDataCell>
                     <CTableDataCell xs="12">
                       <CBadge

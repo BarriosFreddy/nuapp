@@ -7,6 +7,7 @@ import {
   CCol,
   CContainer,
   CFormInput,
+  CFormSelect,
   CRow,
   CTable,
   CTableBody,
@@ -16,7 +17,7 @@ import {
   CTableRow,
 } from '@coreui/react'
 import BillingForm from './BillingForm'
-import { formatCurrency, getDateAsString, getDateObject } from 'src/utils'
+import { formatCurrency, getDateAsString, getDateObject, getMainPrice } from 'src/utils'
 import CIcon from '@coreui/icons-react'
 import { cilTrash } from '@coreui/icons'
 import PaymentComp from './Payment'
@@ -41,11 +42,11 @@ function Billing() {
   const hasNotItems = items.length <= 0
 
   useEffect(() => {
-    dispatch(setShowHeader(false))
+    //dispatch(setShowHeader(false))
     dispatch(setSidebarUnfoldable(true))
-    return () => {
+    /* return () => {
       dispatch(setShowHeader(true))
-    }
+    } */
   }, [dispatch])
 
   useDidUpdateControl(
@@ -76,7 +77,7 @@ function Billing() {
     itemUnitsAdded = { ...itemUnits, ...itemUnitsAdded }
     setItemUnits(itemUnitsAdded)
     const itemsAdded = [...items]
-    if (!isAdded(item.code)) itemsAdded.unshift(item)
+    if (!isAdded(item.code)) itemsAdded.unshift({ ...item, price: getMainPrice(item.pricesRatio) })
     setItems(itemsAdded)
     calculateTotal(itemsAdded, itemUnitsAdded)
   }
@@ -101,10 +102,30 @@ function Billing() {
     calculateTotal(itemsArray, itemUnitsAddedArray)
   }
 
-  const onChangeField = ({ target: { name, value } }) => {
+  const handleChangeUnits = ({ target: { name, value } }) => {
     const itemUnitsAdded = { ...itemUnits, [name]: value }
     setItemUnits(itemUnitsAdded)
     calculateTotal(items, itemUnitsAdded)
+  }
+
+  const handleChangeMeasurement = ({ target: { value } }, code) => {
+    const itemToUpdate = items.find((item) => item.code === code)
+    const remaingItems = items.filter((item) => item.code !== code)
+
+    const { price } = itemToUpdate?.pricesRatio?.find(
+      (priceRatio) => priceRatio.measurementUnit === value,
+    )
+
+    const itemsUpdated = [
+      ...remaingItems,
+      {
+        ...itemToUpdate,
+        price,
+      },
+    ]
+
+    setItems(itemsUpdated)
+    calculateTotal(itemsUpdated, itemUnits)
   }
 
   const handleCharge = () => {
@@ -164,7 +185,7 @@ function Billing() {
                     </CTableRow>
                   </CTableHead>
                   <CTableBody>
-                    {items.map(({ code, name, price }) => (
+                    {items.map(({ code, name, price, pricesRatio, measurementUnit }) => (
                       <CTableRow key={code}>
                         <CTableDataCell xs="12">
                           <CRow>
@@ -183,7 +204,21 @@ function Billing() {
                             size="sm"
                             name={code}
                             value={itemUnits[code]}
-                            onChange={(event) => onChangeField(event)}
+                            onChange={(event) => handleChangeUnits(event)}
+                          />
+                        </CTableDataCell>
+                        <CTableDataCell colSpan={1}>
+                          <CFormSelect
+                            name="measurementUnit"
+                            value={measurementUnit}
+                            required
+                            onChange={(event) => handleChangeMeasurement(event, code)}
+                            options={[
+                              ...(pricesRatio?.map(({ measurementUnit }) => ({
+                                label: measurementUnit,
+                                value: measurementUnit,
+                              })) ?? []),
+                            ]}
                           />
                         </CTableDataCell>
                         <CTableDataCell xs="12" className="text-break">

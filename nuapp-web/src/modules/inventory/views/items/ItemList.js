@@ -14,14 +14,10 @@ import {
   CBadge,
   CTableFoot,
 } from '@coreui/react'
-import { formatCurrency } from 'src/utils'
+import { formatCurrency, getMainPrice } from 'src/utils'
 import { PropTypes } from 'prop-types'
 
 const ItemList = ({ items, fetching, page, onEdit, onPrevPage, onNextPage }) => {
-  const getMainPrice = (pricesRatio = []) => {
-    const priceRatio = pricesRatio.find(({ main, hash }) => main === hash)
-    return priceRatio?.price
-  }
   return (
     <>
       <div className="d-lg-none">

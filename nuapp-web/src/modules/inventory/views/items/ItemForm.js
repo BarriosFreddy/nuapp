@@ -87,7 +87,7 @@ function ItemForm(props) {
     failedValidationsObj.stock = !stock
     failedValidationsObj.categoryId = !categoryId
 
-    pricesRatio.forEach((priceRatio) => {
+    pricesRatio?.forEach((priceRatio) => {
       failedValidationsObj['measurementUnit' + priceRatio.hash] = !priceRatio.measurementUnit
       failedValidationsObj['price' + priceRatio.hash] = priceRatio.price <= 0
       failedValidationsObj['cost' + priceRatio.hash] = priceRatio.cost <= 0
@@ -153,7 +153,20 @@ function ItemForm(props) {
   }
 
   const handleAddPriceRatio = () => {
-    if (item.pricesRatio.length === 1) {
+    if ((item.pricesRatio ?? []).length === 0) {
+      const newItem = getNewItem()
+      setItem({
+        ...item,
+        pricesRatio: [
+          {
+            ...newItem,
+            main: newItem.hash,
+          },
+        ],
+      })
+      return
+    }
+    if (item.pricesRatio?.length === 1) {
       setItem({
         ...item,
         pricesRatio: [
@@ -168,7 +181,7 @@ function ItemForm(props) {
     }
     setItem({
       ...item,
-      pricesRatio: [...item.pricesRatio, getNewItem()],
+      pricesRatio: [...(item.pricesRatio ?? []), getNewItem()],
     })
   }
 
@@ -299,11 +312,11 @@ function ItemForm(props) {
                   Relación de precios
                 </CCol>
               </CRow>
-              {item.pricesRatio.map((priceRatio, index) => (
+              {item.pricesRatio?.map((priceRatio, index) => (
                 <CRow key={priceRatio.hash}>
                   <CCol xs="12" lg="4">
                     <CRow>
-                      {item.pricesRatio.length > 1 && (
+                      {item.pricesRatio?.length > 1 && (
                         <CCol xs="1" className="pt-4">
                           <CFormCheck
                             type="radio"
@@ -316,7 +329,7 @@ function ItemForm(props) {
                           />
                         </CCol>
                       )}
-                      <CCol xs={{ offset: 0, span: item.pricesRatio.length > 1 ? 11 : 12 }}>
+                      <CCol xs={{ offset: 0, span: item.pricesRatio?.length > 1 ? 11 : 12 }}>
                         <CFormSelect
                           label="Unidad de medida"
                           name="measurementUnit"
@@ -345,7 +358,7 @@ function ItemForm(props) {
                       onChange={(event) => handleChangePricesRatio(event, priceRatio.hash, index)}
                     />
                   </CCol>
-                  <CCol xs="12" lg={{ offset: 0, span: item.pricesRatio.length === 1 ? 4 : 3 }}>
+                  <CCol xs="12" lg={{ offset: 0, span: item.pricesRatio?.length === 1 ? 4 : 3 }}>
                     <CurrencyFormInput
                       label="Costo"
                       type="number"
@@ -356,7 +369,7 @@ function ItemForm(props) {
                       onChange={(event) => handleChangePricesRatio(event, priceRatio.hash, index)}
                     />
                   </CCol>
-                  {item.pricesRatio.length > 1 && (
+                  {item.pricesRatio?.length > 1 && (
                     <CCol xs="12" lg="1">
                       <CButton
                         color="ligth"
