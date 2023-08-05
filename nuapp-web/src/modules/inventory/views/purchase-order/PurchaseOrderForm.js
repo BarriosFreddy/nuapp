@@ -25,6 +25,7 @@ import { useDidUpdateControl } from 'src/hooks/useDidUpdateControl'
 import { sendWarningToast } from 'src/modules/shared/services/notification.service'
 import { EDITING } from './PurchaseOrder'
 import ItemSearchDialog from 'src/components/shared/ItemSearchDialog'
+import { getInvEnumerationByCode } from '../../services/inv-enumerations.service'
 const { ENTER_KEYCODE, TAB_KEYCODE } = CONSTANTS
 
 const initialPurchaseOrderItems = {
@@ -49,6 +50,7 @@ export const PurchaseOrderForm = ({
   const [currentIndex, setCurrentIndex] = useState([])
   const items = useSelector((state) => state.items.items)
   const fetching = useSelector((state) => state.items.fetching)
+  const measurementUnits = useSelector((state) => state.invEnumerations.invEnumeration)
   const dispatch = useDispatch()
   const [purchaseOrderItems, setPurchaseOrderItems] = useState([])
   const [searchingByName, setSearchingByName] = useState(false)
@@ -73,7 +75,8 @@ export const PurchaseOrderForm = ({
 
   useEffect(() => {
     setPurchaseOrderItems([initialPurchaseOrderItems])
-  }, [])
+    dispatch(getInvEnumerationByCode('UDM'))
+  }, [dispatch])
 
   useEffect(() => {
     if (purchaseOrder) setPurchaseOrderItems(transformEntitiesToItems(purchaseOrder.items))
@@ -237,29 +240,29 @@ export const PurchaseOrderForm = ({
           {purchaseOrderItems.map((purchaseOrder, index) => (
             <CTableRow key={index}>
               <CTableDataCell width={200}>
-                <CInputGroup>
-                  <CFormInput
-                    ref={inputNewRef}
-                    type="number"
-                    formNoValidate
-                    required
-                    name="itemCode"
-                    value={purchaseOrder.itemCode}
-                    onChange={(event) => onChangeField(event, purchaseOrder, index)}
-                    onKeyUp={(event) => onKeyUpCodeField(event, purchaseOrder)}
-                  />
-                  <CButton
-                    type="button"
-                    color="secondary"
-                    variant="outline"
-                    id="button-addon2"
-                    onClick={(event) => handleSearchItem(index)}
-                  >
-                    <CIcon icon={cilSearch} size="sm" />
-                  </CButton>
-                </CInputGroup>
+                <CFormInput
+                  ref={inputNewRef}
+                  type="number"
+                  formNoValidate
+                  required
+                  name="itemCode"
+                  value={purchaseOrder.itemCode}
+                  onChange={(event) => onChangeField(event, purchaseOrder, index)}
+                  onKeyUp={(event) => onKeyUpCodeField(event, purchaseOrder)}
+                />
               </CTableDataCell>
-              <CTableDataCell className="text-uppercase">{purchaseOrder.itemName}</CTableDataCell>
+              <CTableDataCell className="text-uppercase">
+                <CButton
+                  type="button"
+                  color="secondary"
+                  variant="outline"
+                  id="button-addon2"
+                  onClick={(event) => handleSearchItem(index)}
+                >
+                  <CIcon icon={cilSearch} size="sm" />
+                </CButton>{' '}
+                {purchaseOrder.itemName}
+              </CTableDataCell>
               <CTableDataCell width={150}>{purchaseOrder.itemStock}</CTableDataCell>
               <CTableDataCell width={150}>{formatCurrency(purchaseOrder.itemCost)}</CTableDataCell>
               <CTableDataCell width={150}>
@@ -279,14 +282,7 @@ export const PurchaseOrderForm = ({
                   required
                   feedbackInvalid="Campo obligatorio"
                   onChange={(event) => onChangeField(event, purchaseOrder, index)}
-                  options={[
-                    { label: 'CAJA', value: 'CAJA' },
-                    { label: 'TIRA', value: 'TIRA' },
-                    { label: 'FRASCO', value: 'FRASCO' },
-                    { label: 'AMPOLLA', value: 'AMPOLLA' },
-                    { label: 'TABLETA', value: 'TABLETA' },
-                    { label: 'BOLSA', value: 'BOLSA' },
-                  ]}
+                  options={['Seleccione...', ...(measurementUnits?.values ?? [])]}
                 />
               </CTableDataCell>
               <CTableDataCell width={100}>

@@ -47,6 +47,7 @@ export class ItemQueryStrategy implements QueryStrategy {
           reorderPoint: 1,
           categoryId: 1,
           measurementUnit: 1,
+          pricesRatio: 1,
         },
       },
       { $skip: +size * (+page - 1) },

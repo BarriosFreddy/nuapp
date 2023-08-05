@@ -1,4 +1,5 @@
 import dayjs from 'dayjs'
+import { v4 as uuidv4 } from 'uuid'
 import utc from 'dayjs/plugin/utc'
 dayjs.extend(utc)
 
@@ -32,4 +33,8 @@ export const getDateObject = () => {
 
 export const getDateAsString = (format = 'YYYY-MM-DD') => {
   return dayjs().utcOffset(-5).format(format)
+}
+
+export const getUUID = () => {
+  return uuidv4()
 }

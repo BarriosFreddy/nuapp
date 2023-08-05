@@ -18,6 +18,10 @@ import { formatCurrency } from 'src/utils'
 import { PropTypes } from 'prop-types'
 
 const ItemList = ({ items, fetching, page, onEdit, onPrevPage, onNextPage }) => {
+  const getMainPrice = (pricesRatio = []) => {
+    const priceRatio = pricesRatio.find(({ main, hash }) => main === hash)
+    return priceRatio?.price
+  }
   return (
     <>
       <div className="d-lg-none">
@@ -88,7 +92,9 @@ const ItemList = ({ items, fetching, page, onEdit, onPrevPage, onNextPage }) => 
                     {item.stock ?? 0}
                   </CBadge>
                 </CTableDataCell>
-                <CTableDataCell xs="12">{formatCurrency(item.price)}</CTableDataCell>
+                <CTableDataCell xs="12">
+                  {formatCurrency(getMainPrice(item?.pricesRatio))}
+                </CTableDataCell>
                 <CTableDataCell xs="12">
                   <CButton
                     size="sm"
