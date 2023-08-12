@@ -70,6 +70,9 @@ function Item() {
   )
 
   const handleSave = (item) => {
+    delete item.price // delete after making sure the changes
+    delete item.measurementUnit
+    delete item.cost
     if (item._id) dispatch(updateItem(item))
     else dispatch(saveItem(item))
   }
