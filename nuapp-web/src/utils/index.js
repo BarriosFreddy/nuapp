@@ -43,3 +43,8 @@ export const getMainPrice = (pricesRatio = []) => {
   const priceRatio = pricesRatio.find(({ main, hash }) => main === hash)
   return priceRatio?.price
 }
+
+export const getMainPriceRatio = (pricesRatio = []) => {
+  const priceRatio = pricesRatio.find(({ main, hash }) => main === hash)
+  return priceRatio
+}

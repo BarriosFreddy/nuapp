@@ -34,6 +34,7 @@ export const { CREATING, EDITING, LISTING, EXPORTING } = {
 
 const PurchaseOrder = () => {
   const dispatch = useDispatch()
+  const measurementUnits = useSelector((state) => state.invEnumerations.invEnumeration)
   const saving = useSelector((state) => state.purchaseOrders.saving)
   const purchaseOrders = useSelector((state) => state.purchaseOrders.purchaseOrders)
   const saveSuccess = useSelector((state) => state.purchaseOrders.saveSuccess)
@@ -121,6 +122,7 @@ const PurchaseOrder = () => {
           <CCardBody>
             {[EDITING, CREATING].includes(orderState) && (
               <PurchaseOrderForm
+                measurementUnits={measurementUnits}
                 saving={saving}
                 saveSuccess={saveSuccess}
                 orderState={orderState}

@@ -17,12 +17,18 @@ import {
   CTableRow,
 } from '@coreui/react'
 import BillingForm from './BillingForm'
-import { formatCurrency, getDateAsString, getDateObject, getMainPrice } from 'src/utils'
+import {
+  formatCurrency,
+  getDateAsString,
+  getDateObject,
+  getMainPrice,
+  getMainPriceRatio,
+} from 'src/utils'
 import CIcon from '@coreui/icons-react'
 import { cilTrash } from '@coreui/icons'
 import PaymentComp from './Payment'
 import { saveBilling } from '../../../modules/billing/services/billings.service'
-import { setShowHeader, setSidebarUnfoldable } from 'src/app.slice'
+import { setSidebarUnfoldable } from 'src/app.slice'
 import { Helmet } from 'react-helmet'
 import { sendToast } from '../../shared/services/notification.service'
 import { useDidUpdateControl } from '../../../hooks/useDidUpdateControl'
@@ -77,7 +83,12 @@ function Billing() {
     itemUnitsAdded = { ...itemUnits, ...itemUnitsAdded }
     setItemUnits(itemUnitsAdded)
     const itemsAdded = [...items]
-    if (!isAdded(item.code)) itemsAdded.unshift({ ...item, price: getMainPrice(item.pricesRatio) })
+    if (!isAdded(item.code))
+      itemsAdded.unshift({
+        ...item,
+        price: getMainPrice(item.pricesRatio),
+        measurementUnit: getMainPriceRatio(item.pricesRatio)?.measurementUnit,
+      })
     setItems(itemsAdded)
     calculateTotal(itemsAdded, itemUnitsAdded)
   }
@@ -111,19 +122,17 @@ function Billing() {
   const handleChangeMeasurement = ({ target: { value } }, code) => {
     const itemToUpdate = items.find((item) => item.code === code)
     const remaingItems = items.filter((item) => item.code !== code)
-
     const { price } = itemToUpdate?.pricesRatio?.find(
       (priceRatio) => priceRatio.measurementUnit === value,
     )
-
     const itemsUpdated = [
       ...remaingItems,
       {
         ...itemToUpdate,
         price,
+        measurementUnit: value,
       },
     ]
-
     setItems(itemsUpdated)
     calculateTotal(itemsUpdated, itemUnits)
   }
@@ -172,14 +181,15 @@ function Billing() {
           <title>FACTURACIÓN</title>
         </Helmet>
         <CRow>
-          <CCol lg="6">
-            <CCard className="shadow border-10" style={{ height: '78vh' }}>
+          <CCol lg="5">
+            <CCard className="shadow border-10" style={{ height: '72vh' }}>
               <CCardBody style={{ overflow: 'auto' }}>
                 <CTable hover>
                   <CTableHead>
                     <CTableRow>
                       <CTableHeaderCell>Producto</CTableHeaderCell>
                       <CTableHeaderCell>Cantidad</CTableHeaderCell>
+                      <CTableHeaderCell>U. de M.</CTableHeaderCell>
                       <CTableHeaderCell>Subtotal</CTableHeaderCell>
                       <CTableHeaderCell>&nbsp;</CTableHeaderCell>
                     </CTableRow>
@@ -212,6 +222,7 @@ function Billing() {
                             name="measurementUnit"
                             value={measurementUnit}
                             required
+                            size="sm"
                             onChange={(event) => handleChangeMeasurement(event, code)}
                             options={[
                               ...(pricesRatio?.map(({ measurementUnit }) => ({
@@ -236,8 +247,8 @@ function Billing() {
               </CCardBody>
             </CCard>
           </CCol>
-          <CCol lg="6">
-            <CCard className="shadow border-10" style={{ height: '78vh', overflowY: 'auto' }}>
+          <CCol lg="7">
+            <CCard className="shadow border-10" style={{ height: '72vh', overflowY: 'auto' }}>
               <CCardBody>
                 {!paying && <BillingForm addItem={addItem} />}
                 {paying && (

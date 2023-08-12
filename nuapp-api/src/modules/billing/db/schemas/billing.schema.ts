@@ -1,7 +1,6 @@
 import { Schema, Types } from 'mongoose';
 
 export const billingSchema = new Schema({
-  _id: Types.ObjectId,
   code: String,
   billAmount: Number,
   receivedAmount: Number,

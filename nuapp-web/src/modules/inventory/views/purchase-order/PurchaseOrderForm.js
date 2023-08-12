@@ -1,5 +1,6 @@
 import CIcon from '@coreui/icons-react'
 import {
+  CBadge,
   CButton,
   CCol,
   CFormInput,
@@ -40,6 +41,7 @@ const initialPurchaseOrderItems = {
 }
 
 export const PurchaseOrderForm = ({
+  measurementUnits,
   onSave,
   saving,
   saveSuccess,
@@ -47,11 +49,10 @@ export const PurchaseOrderForm = ({
   purchaseOrder,
   onExport,
 }) => {
+  const dispatch = useDispatch()
   const [currentIndex, setCurrentIndex] = useState([])
   const items = useSelector((state) => state.items.items)
   const fetching = useSelector((state) => state.items.fetching)
-  const measurementUnits = useSelector((state) => state.invEnumerations.invEnumeration)
-  const dispatch = useDispatch()
   const [purchaseOrderItems, setPurchaseOrderItems] = useState([])
   const [searchingByName, setSearchingByName] = useState(false)
   const inputNewRef = useRef()
@@ -97,6 +98,15 @@ export const PurchaseOrderForm = ({
     }
     const purchaseOrderesClone = replaceItem(purchaseOrderUpdated, index)
     setPurchaseOrderItems(purchaseOrderesClone)
+    if (name === 'itemMeasurementUnit') updateCostValue(value, purchaseOrder, index)
+  }
+
+  function updateCostValue(measurementUnit, purchaseOrder, index) {
+    debugger
+    const { cost } = purchaseOrderItems[index].itemPricesRatio.find(
+      (priceRatio) => priceRatio.measurementUnit === measurementUnit,
+    )
+    onChangeField({ target: { name: 'itemCost', value: cost } }, purchaseOrder, index)
   }
 
   const handleNew = () => {
@@ -119,7 +129,7 @@ export const PurchaseOrderForm = ({
       onSave({
         code,
         comments: '',
-        items: transformItems(purchaseOrderItems),
+        items: transformItemsToEntities(purchaseOrderItems),
         supplierId: '649b892cdfc56ae3c8d56d59',
         createdAt: getDateObject(),
       })
@@ -161,7 +171,7 @@ export const PurchaseOrderForm = ({
 
   function fillFields(item) {
     if (!item) return
-    const { _id, code, name, description, cost, stock } = item
+    const { _id, code, name, description, pricesRatio, stock } = item
     if (purchaseOrderItems.some((purchaseOrderItem) => purchaseOrderItem.itemId === _id)) {
       sendWarningToast(dispatch, {
         message: `El item "${name}" ya está agregado!`,
@@ -175,8 +185,13 @@ export const PurchaseOrderForm = ({
         itemId: _id,
         itemName: name,
         itemDescription: description,
-        units: '',
-        itemCost: cost,
+        units: 1,
+        itemCost: pricesRatio.find((priceRatio) => priceRatio.hash === priceRatio.main)?.cost,
+        itemPricesRatio: [...pricesRatio].sort((priceRatio) =>
+          priceRatio.hash === priceRatio.main ? -1 : 1,
+        ),
+        itemMeasurementUnit: pricesRatio.find((priceRatio) => priceRatio.hash === priceRatio.main)
+          ?.measurementUnit,
         itemStock: stock,
       },
       currentIndex,
@@ -184,8 +199,9 @@ export const PurchaseOrderForm = ({
     setPurchaseOrderItems(purchaseOrderItemsClone)
   }
 
-  function transformItems(purchaseOrders) {
+  function transformItemsToEntities(purchaseOrders) {
     if (!Array.isArray(purchaseOrders)) return purchaseOrders
+    debugger
     return purchaseOrders.map(
       ({ itemName, itemCode, itemId, itemCost, itemStock, itemMeasurementUnit, units }) => ({
         code: itemCode,
@@ -229,10 +245,10 @@ export const PurchaseOrderForm = ({
           <CTableRow>
             <CTableHeaderCell>Código</CTableHeaderCell>
             <CTableHeaderCell>Nombre</CTableHeaderCell>
-            <CTableHeaderCell>Stock</CTableHeaderCell>
-            <CTableHeaderCell>Costo</CTableHeaderCell>
             <CTableHeaderCell>Unidades</CTableHeaderCell>
             <CTableHeaderCell>U. de medida</CTableHeaderCell>
+            <CTableHeaderCell>Costo</CTableHeaderCell>
+            <CTableHeaderCell>Subtotal</CTableHeaderCell>
             <CTableHeaderCell>&nbsp;</CTableHeaderCell>
           </CTableRow>
         </CTableHead>
@@ -261,11 +277,12 @@ export const PurchaseOrderForm = ({
                 >
                   <CIcon icon={cilSearch} size="sm" />
                 </CButton>{' '}
-                {purchaseOrder.itemName}
+                {purchaseOrder.itemName}{' '}
+                <CBadge color="secondary" shape="rounded-pill">
+                  {purchaseOrder.itemStock ?? 0}
+                </CBadge>
               </CTableDataCell>
-              <CTableDataCell width={150}>{purchaseOrder.itemStock}</CTableDataCell>
-              <CTableDataCell width={150}>{formatCurrency(purchaseOrder.itemCost)}</CTableDataCell>
-              <CTableDataCell width={150}>
+              <CTableDataCell width={100}>
                 <CFormInput
                   type="number"
                   formNoValidate
@@ -280,10 +297,20 @@ export const PurchaseOrderForm = ({
                   name="itemMeasurementUnit"
                   value={purchaseOrder.itemMeasurementUnit}
                   required
-                  feedbackInvalid="Campo obligatorio"
+                  size="sm"
                   onChange={(event) => onChangeField(event, purchaseOrder, index)}
-                  options={['Seleccione...', ...(measurementUnits?.values ?? [])]}
+                  options={[
+                    ...(purchaseOrder.itemPricesRatio?.map(({ measurementUnit }) => ({
+                      label: measurementUnit,
+                      value: measurementUnit,
+                    })) ?? []),
+                    ...(measurementUnits.values ?? []),
+                  ]}
                 />
+              </CTableDataCell>
+              <CTableDataCell width={150}>{formatCurrency(purchaseOrder.itemCost)}</CTableDataCell>
+              <CTableDataCell width={150}>
+                {formatCurrency(purchaseOrder.itemCost * purchaseOrder.units)}
               </CTableDataCell>
               <CTableDataCell width={100}>
                 {purchaseOrderItems.length > 1 && (
@@ -327,6 +354,7 @@ export const PurchaseOrderForm = ({
 export default PurchaseOrderForm
 
 PurchaseOrderForm.propTypes = {
+  measurementUnits: PropTypes.object,
   purchaseOrder: PropTypes.object,
   saving: PropTypes.bool,
   saveSuccess: PropTypes.bool,
