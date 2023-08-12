@@ -30,6 +30,7 @@ import CIcon from '@coreui/icons-react'
 import { cilTrash } from '@coreui/icons'
 import { getUUID } from 'src/utils'
 
+const initPriceRatioUUID = getUUID()
 const itemInitialState = {
   name: '',
   code: '',
@@ -37,7 +38,15 @@ const itemInitialState = {
   categoryId: '',
   stock: '',
   reorderPoint: '',
-  pricesRatio: [{ measurementUnit: '', price: '', cost: '', hash: getUUID() }],
+  pricesRatio: [
+    {
+      measurementUnit: '',
+      price: '',
+      cost: '',
+      hash: initPriceRatioUUID,
+      main: initPriceRatioUUID,
+    },
+  ],
 }
 
 function ItemForm(props) {
