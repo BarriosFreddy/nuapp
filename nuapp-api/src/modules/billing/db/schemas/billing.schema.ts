@@ -14,6 +14,7 @@ export const billingSchema = new Schema({
       price: Number,
       units: Number,
       measurementUnit: String,
+      multiplicity: Number,
       lot: String,
       expirationDate: String,
       laboratory: String,

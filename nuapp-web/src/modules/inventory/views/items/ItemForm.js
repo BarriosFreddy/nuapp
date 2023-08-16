@@ -38,6 +38,9 @@ const itemInitialState = {
   categoryId: '',
   stock: '',
   reorderPoint: '',
+  laboratory: '',
+  lot: '',
+  expirationDate: '',
   pricesRatio: [
     {
       measurementUnit: '',
@@ -45,6 +48,7 @@ const itemInitialState = {
       cost: '',
       hash: initPriceRatioUUID,
       main: initPriceRatioUUID,
+      multiplicity: 1,
     },
   ],
 }
@@ -100,6 +104,7 @@ function ItemForm(props) {
       failedValidationsObj['measurementUnit' + priceRatio.hash] = !priceRatio.measurementUnit
       failedValidationsObj['price' + priceRatio.hash] = priceRatio.price <= 0
       failedValidationsObj['cost' + priceRatio.hash] = priceRatio.cost <= 0
+      failedValidationsObj['multiplicity' + priceRatio.hash] = priceRatio.multiplicity <= 0
     })
 
     setFailedValidations(failedValidationsObj)
@@ -208,7 +213,7 @@ function ItemForm(props) {
   }
 
   function getNewItem() {
-    return { measurementUnit: '', price: '', cost: '', hash: getUUID(), main: '' }
+    return { measurementUnit: '', price: '', cost: '', hash: getUUID(), main: '', multiplicity: 1 }
   }
 
   return (
@@ -316,6 +321,36 @@ function ItemForm(props) {
                   />
                 </CCol>
               </CRow>
+              <CRow>
+                <CCol xs="12" lg="4">
+                  <FormInput
+                    label="Laboratorio (Opcional)"
+                    type="text"
+                    uppercase="true"
+                    name="laboratory"
+                    value={item.laboratory}
+                    onChange={(event) => handleChangeField(event)}
+                  />
+                </CCol>
+                <CCol xs="12" lg="4">
+                  <CFormInput
+                    label="Lote (Opcional)"
+                    type="number"
+                    name="lot"
+                    value={item.lot}
+                    onChange={(event) => handleChangeField(event)}
+                  />
+                </CCol>
+                <CCol xs="12" lg="4">
+                  <FormInput
+                    label="Fecha de vencimiento (Opcional)"
+                    type="date"
+                    name="expirationDate"
+                    value={item.expirationDate}
+                    onChange={(event) => handleChangeField(event)}
+                  />
+                </CCol>
+              </CRow>
               <CRow className="my-2">
                 <CCol xs="12" lg="12" className="fw-semibold">
                   Relación de precios
@@ -323,7 +358,7 @@ function ItemForm(props) {
               </CRow>
               {item.pricesRatio?.map((priceRatio, index) => (
                 <CRow key={priceRatio.hash}>
-                  <CCol xs="12" lg="4">
+                  <CCol xs="12" lg="3">
                     <CRow>
                       {item.pricesRatio?.length > 1 && (
                         <CCol xs="1" className="pt-4">
@@ -375,6 +410,18 @@ function ItemForm(props) {
                       value={priceRatio.cost}
                       feedbackInvalid="Campo obligatorio"
                       invalid={failedValidations['cost' + priceRatio.hash]}
+                      onChange={(event) => handleChangePricesRatio(event, priceRatio.hash, index)}
+                    />
+                  </CCol>
+                  <CCol xs="12" lg="1">
+                    <CFormInput
+                      label="Multiplicidad"
+                      type="number"
+                      name="multiplicity"
+                      min={1}
+                      value={priceRatio.multiplicity}
+                      feedbackInvalid="Campo obligatorio"
+                      invalid={failedValidations['multiplicity' + priceRatio.hash]}
                       onChange={(event) => handleChangePricesRatio(event, priceRatio.hash, index)}
                     />
                   </CCol>

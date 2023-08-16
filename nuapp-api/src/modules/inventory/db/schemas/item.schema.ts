@@ -17,6 +17,8 @@ export const itemSchema = new Schema({
       cost: Number,
       hash: String,
       main: String,
+      multiplicity: Number,
+      organizationId: String,
     },
   ],
   categoryId: Types.ObjectId,

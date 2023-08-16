@@ -48,11 +48,7 @@ function Billing() {
   const hasNotItems = items.length <= 0
 
   useEffect(() => {
-    //dispatch(setShowHeader(false))
     dispatch(setSidebarUnfoldable(true))
-    /* return () => {
-      dispatch(setShowHeader(true))
-    } */
   }, [dispatch])
 
   useDidUpdateControl(
@@ -122,7 +118,7 @@ function Billing() {
   const handleChangeMeasurement = ({ target: { value } }, code) => {
     const itemToUpdate = items.find((item) => item.code === code)
     const remaingItems = items.filter((item) => item.code !== code)
-    const { price } = itemToUpdate?.pricesRatio?.find(
+    const { price, multiplicity } = itemToUpdate?.pricesRatio?.find(
       (priceRatio) => priceRatio.measurementUnit === value,
     )
     const itemsUpdated = [
@@ -131,6 +127,7 @@ function Billing() {
         ...itemToUpdate,
         price,
         measurementUnit: value,
+        multiplicity,
       },
     ]
     setItems(itemsUpdated)
@@ -155,20 +152,21 @@ function Billing() {
         createdAt: getDateObject(),
         receivedAmount,
         billAmount: total,
-        items: getItemsData(items),
+        items: getItemsData(),
         creationDate: getDateAsString(),
       }),
     )
   }
 
   const getItemsData = () =>
-    items.map(({ _id, name, code, price, measurementUnit }) => ({
+    items.map(({ _id, name, code, price, measurementUnit, multiplicity }) => ({
       _id,
       name,
       code,
       price,
       units: itemUnits[code],
       measurementUnit,
+      multiplicity,
     }))
 
   const hanndleReceivedAmount = (receivedAmount) => setReceivedAmount(receivedAmount)
@@ -232,10 +230,8 @@ function Billing() {
                             ]}
                           />
                         </CTableDataCell>
-                        <CTableDataCell xs="12" className="text-break">
+                        <CTableDataCell xs="12" className="text-break" colSpan={2}>
                           {formatCurrency(price * itemUnits[code])}
-                        </CTableDataCell>
-                        <CTableDataCell>
                           <CButton size="sm" color="ligth" onClick={() => deleteItem(code)}>
                             <CIcon icon={cilTrash} size="sm" />
                           </CButton>

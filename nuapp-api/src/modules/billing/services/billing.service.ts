@@ -96,25 +96,29 @@ export class BillingService extends BaseService<Billing> {
     try {
       billing.code = await generateSequencedCode();
       const saved = await BillingModel.create(billing);
-      setImmediate(async () => {
-        try {
-          const itemsMovement = saved.items.map(({ _id, code, units = 1 }) => ({
-            itemId: _id,
-            itemCode: code,
-            units,
-            type: KardexTransactionType.OUT,
-            createdAt: saved.createdAt,
-            computed: false,
-          }));
-          await kardexTransactionService.saveAll(itemsMovement);
-        } catch (error) {
-          console.error(error);
-        }
-      });
+      setImmediate(async () => await this.saveItemsMovements(saved));
       return saved;
     } catch (error) {
       console.log(error);
       return Promise.reject(null);
+    }
+  }
+
+  async saveItemsMovements(billingSaved: Billing) {
+    try {
+      const itemsMovement = billingSaved.items.map(
+        ({ _id, code, units = 1, multiplicity = 1 }) => ({
+          itemId: _id,
+          itemCode: code,
+          units: units * multiplicity,
+          type: KardexTransactionType.OUT,
+          createdAt: billingSaved.createdAt,
+          computed: false,
+        }),
+      );
+      await kardexTransactionService.saveAll(itemsMovement);
+    } catch (error) {
+      console.error(error);
     }
   }
 

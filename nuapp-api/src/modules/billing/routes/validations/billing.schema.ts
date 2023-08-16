@@ -13,6 +13,7 @@ const BillingCreateSchema: Schema = joi.object({
         price: joi.number(),
         units: joi.number(),
         measurementUnit: joi.string(),
+        multiplicity: joi.number(),
       }),
     )
     .required(),
