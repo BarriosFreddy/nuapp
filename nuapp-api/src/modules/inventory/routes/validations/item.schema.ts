@@ -16,7 +16,7 @@ const ItemCreateSchema: Schema = joi.object({
       cost: joi.number().required(),
       measurementUnit: joi.string().required(),
       hash: joi.string(),
-      main: joi.string(),
+      main: joi.string().allow(''),
     }),
   ),
 });

@@ -162,8 +162,8 @@ function ItemForm(props) {
   }
 
   const handleAddPriceRatio = () => {
+    const newItem = getNewItem()
     if ((item.pricesRatio ?? []).length === 0) {
-      const newItem = getNewItem()
       setItem({
         ...item,
         pricesRatio: [
@@ -183,14 +183,14 @@ function ItemForm(props) {
             ...item.pricesRatio[0],
             main: item.pricesRatio[0].hash,
           },
-          getNewItem(),
+          newItem,
         ],
       })
       return
     }
     setItem({
       ...item,
-      pricesRatio: [...(item.pricesRatio ?? []), getNewItem()],
+      pricesRatio: [...(item.pricesRatio ?? []), newItem],
     })
   }
 
