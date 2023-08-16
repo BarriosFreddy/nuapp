@@ -6,7 +6,7 @@ import App from './App'
 import reportWebVitals from './reportWebVitals'
 import { Provider } from 'react-redux'
 import store, { persistor } from './store'
-import { register } from './serviceWorkerRegistration'
+import { unregister } from './serviceWorkerRegistration'
 import { PersistGate } from 'redux-persist/integration/react'
 
 createRoot(document.getElementById('root')).render(
@@ -21,4 +21,4 @@ createRoot(document.getElementById('root')).render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals()
-register()
+unregister()
