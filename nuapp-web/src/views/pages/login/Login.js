@@ -31,6 +31,12 @@ const Login = () => {
     password: '',
   })
 
+  useEffect(() => {
+    if (isLoggedIn) {
+      window.location.pathname = '/home'
+    }
+  }, [isLoggedIn])
+
   useEffect(() => () => dispatch(setLoading(false)), [dispatch])
 
   const onChangeInput = ({ target }) => {
@@ -45,9 +51,7 @@ const Login = () => {
 
   const onKeyDownLogin = ({ keyCode }) => keyCode === 13 && onClickLogin()
 
-  return isLoggedIn ? (
-    <Navigate to="/home" replace />
-  ) : (
+  return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <CContainer>
         <CRow className="justify-content-center">

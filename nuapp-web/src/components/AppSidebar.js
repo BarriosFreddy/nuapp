@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   CSidebar,
@@ -25,12 +25,19 @@ import CIcon from '@coreui/icons-react'
 
 const AppSidebar = () => {
   const dispatch = useDispatch()
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
   const unfoldable = useSelector((state) => state.app.sidebarUnfoldable)
   const showToast = useSelector((state) => state.app.showToast)
   const toastConfig = useSelector((state) => state.app.toastConfig)
   const sidebarShow = useSelector((state) => state.app.sidebarShow)
 
-  const onClickLogout = () => dispatch(logout())
+  useEffect(() => {
+    if (!isLoggedIn) {
+      window.location.pathname = '/login'
+    }
+  }, [isLoggedIn])
+
+  const handleLogout = () => dispatch(logout())
 
   return (
     <>
@@ -52,7 +59,7 @@ const AppSidebar = () => {
             <AppSidebarNav items={navigation} />
           </SimpleBar>
         </CSidebarNav>
-        <CSidebarFooter onClick={onClickLogout} style={{ cursor: 'pointer' }}>
+        <CSidebarFooter onClick={handleLogout} style={{ cursor: 'pointer' }}>
           <CIcon icon={cilLockLocked} className="me-2" />
           Logout
         </CSidebarFooter>
