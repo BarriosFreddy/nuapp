@@ -6,6 +6,7 @@ import ItemQueryI from '../db/models/item-query.interface';
 import { QueryStrategy } from './query-strategy';
 import { ItemQueryStrategy } from './item-query.strategy';
 import { Item } from '../entities/Item';
+import { CostPricePipeline } from './cost-price.pipeline';
 
 @singleton()
 export class ItemService extends BaseService<Item> {
@@ -56,5 +57,10 @@ export class ItemService extends BaseService<Item> {
       strategy.buildAggregate(),
     ).exec();
     return items;
+  }
+
+  async getCostPriceStats() {
+    const costPriceStats = await ItemModel.aggregate(CostPricePipeline).exec();
+    return costPriceStats;
   }
 }

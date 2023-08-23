@@ -7,6 +7,7 @@ import utc from 'dayjs/plugin/utc';
 import { KardexTransactionService } from '../../inventory/services/kardex-transaction.service';
 import { KardexTransactionType } from '../../inventory/entities/enums/kardex-transaction-type';
 import { Billing } from '../entities/Billing';
+import { getStatsPipeline } from './stats.aggregate';
 dayjs.extend(utc);
 
 const kardexTransactionService = container.resolve(KardexTransactionService);
@@ -33,63 +34,9 @@ export class BillingService extends BaseService<Billing> {
       .utcOffset(-5)
       .toDate()
       .getTime();
-    const billings: Billing[] = await BillingModel.aggregate([
-      {
-        $match: {
-          'createdAt.date': {
-            $gte: startDate,
-          },
-        },
-      },
-      {
-        $project: {
-          createdAt: 1,
-          billAmount: 1,
-          code: 1,
-        },
-      },
-      {
-        $addFields: {
-          createdAtAsDate: {
-            $toDate: { $sum: ['$createdAt.date', '$createdAt.offset'] },
-          },
-        },
-      },
-      {
-        $addFields: {
-          createdAt: {
-            $substr: ['$createdAtAsDate', 0, 10],
-          },
-        },
-      },
-      {
-        $group: {
-          _id: '$createdAt',
-          billAmount: {
-            $sum: '$billAmount',
-          },
-        },
-      },
-      {
-        $addFields: {
-          createdAt: {
-            $toDate: '$_id',
-          },
-        },
-      },
-      {
-        $sort: {
-          createdAt: 1,
-        },
-      },
-      {
-        $project: {
-          _id: 0,
-          createdAt: '$_id',
-          billAmount: 1,
-        },
-      },
-    ]).exec();
+    const billings: Billing[] = await BillingModel.aggregate(
+      getStatsPipeline(startDate),
+    ).exec();
     return billings;
   }
   async save(billing: Billing): Promise<Billing> {
