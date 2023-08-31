@@ -79,12 +79,15 @@ function Billing() {
     itemUnitsAdded = { ...itemUnits, ...itemUnitsAdded }
     setItemUnits(itemUnitsAdded)
     const itemsAdded = [...items]
-    if (!isAdded(item.code))
+    if (!isAdded(item.code)) {
+      const mainPriceRatio = getMainPriceRatio(item.pricesRatio)
       itemsAdded.unshift({
         ...item,
         price: getMainPrice(item.pricesRatio),
-        measurementUnit: getMainPriceRatio(item.pricesRatio)?.measurementUnit,
+        measurementUnit: mainPriceRatio?.measurementUnit,
+        multiplicity: mainPriceRatio?.multiplicity,
       })
+    }
     setItems(itemsAdded)
     calculateTotal(itemsAdded, itemUnitsAdded)
   }
@@ -182,7 +185,7 @@ function Billing() {
           <CCol lg="5">
             <CCard className="shadow border-10" style={{ height: '72vh' }}>
               <CCardBody style={{ overflow: 'auto' }}>
-                <CTable hover>
+                <CTable small hover>
                   <CTableHead>
                     <CTableRow>
                       <CTableHeaderCell>Producto</CTableHeaderCell>

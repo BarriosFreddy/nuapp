@@ -44,7 +44,7 @@ function ItemCategoriesList({ itemCategories, fetching, page, onEdit, onPrevPage
           ))}
       </div>
       <div className="d-none d-lg-block">
-        <CTable>
+        <CTable small hover>
           <CTableHead>
             <CTableRow>
               <CTableHeaderCell>Código</CTableHeaderCell>

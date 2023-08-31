@@ -16,8 +16,11 @@ import {
 } from '@coreui/react'
 import { formatCurrency, getMainPrice } from 'src/utils'
 import { PropTypes } from 'prop-types'
+import dayjs from 'dayjs'
 
 const ItemList = ({ items, fetching, page, onEdit, onPrevPage, onNextPage }) => {
+  const getExpirationDates = (expirationControl) =>
+    expirationControl?.map(({ expirationDate, lotUnits }) => ({ expirationDate, lotUnits }))
   return (
     <>
       <div className="d-lg-none">
@@ -48,7 +51,7 @@ const ItemList = ({ items, fetching, page, onEdit, onPrevPage, onNextPage }) => 
         ))}
       </div>
       <div className="d-none d-lg-block">
-        <CTable>
+        <CTable small hover>
           <CTableHead>
             <CTableRow>
               <CTableHeaderCell>Nombre</CTableHeaderCell>
@@ -75,18 +78,23 @@ const ItemList = ({ items, fetching, page, onEdit, onPrevPage, onNextPage }) => 
                   {item.code}
                 </CTableDataCell>
                 <CTableDataCell xs="12">
-                  <CBadge
-                    color={
-                      item.stock
-                        ? item.stock <= item.reorderPoint
-                          ? 'warning'
-                          : 'success'
-                        : 'danger'
-                    }
-                    shape="rounded-pill"
-                  >
-                    {item.stock ?? 0}
-                  </CBadge>
+                  {getExpirationDates(item.expirationControl)
+                    ?.filter(({ lotUnits }) => lotUnits > 0)
+                    .map(({ expirationDate, lotUnits }, index) => (
+                      <CBadge
+                        key={index}
+                        color={
+                          dayjs(expirationDate).diff(dayjs(), 'days') > 90
+                            ? dayjs(expirationDate).diff(dayjs(), 'days') > 180
+                              ? 'success'
+                              : 'warning'
+                            : 'danger'
+                        }
+                        shape="rounded-pill"
+                      >
+                        {lotUnits}
+                      </CBadge>
+                    ))}
                 </CTableDataCell>
                 <CTableDataCell xs="12">
                   {formatCurrency(getMainPrice(item?.pricesRatio))}

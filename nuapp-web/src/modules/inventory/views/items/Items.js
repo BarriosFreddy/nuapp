@@ -56,11 +56,11 @@ function Item() {
   useDidUpdateControl(
     () => {
       if (saveSuccess) {
+        setEditing(false)
         setSearchTerm('')
         setQueryParams({ page: queryParams.page })
-        setEditing(false)
-        setItem(null)
         sendToast(dispatch, { message: 'Guardado exitosamente!' })
+        setItem(null)
       } else {
         sendToast(dispatch, { message: 'No se pudo guardar los datos', color: 'danger' })
       }

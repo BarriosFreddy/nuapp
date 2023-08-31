@@ -36,11 +36,9 @@ const itemInitialState = {
   code: '',
   description: '',
   categoryId: '',
-  stock: '',
+  sku: '',
   reorderPoint: '',
   laboratory: '',
-  lot: '',
-  expirationDate: '',
   pricesRatio: [
     {
       measurementUnit: '',
@@ -48,7 +46,15 @@ const itemInitialState = {
       cost: '',
       hash: initPriceRatioUUID,
       main: initPriceRatioUUID,
-      multiplicity: 1,
+      multiplicity: '',
+    },
+  ],
+  expirationControl: [
+    {
+      lotUnits: '',
+      lot: '',
+      expirationDate: '',
+      id: getUUID(),
     },
   ],
 }
@@ -58,12 +64,12 @@ function ItemForm(props) {
   const itemCategories = useSelector((state) => state.itemCategories.itemCategories)
   const measurementUnits = useSelector((state) => state.invEnumerations.invEnumeration)
   const codeRegistered = useSelector((state) => state.items.existsByCode)
+  const saving = useSelector((state) => state.items.saving)
   const [item, setItem] = useState(itemInitialState)
   const [failedValidations, setFailedValidations] = useState({
     code: false,
     description: false,
     name: false,
-    stock: false,
     reorderPoint: false,
     categoryId: false,
   })
@@ -90,21 +96,26 @@ function ItemForm(props) {
   )
 
   const isValidForm = () => {
-    const { name, code, description, stock, categoryId, pricesRatio } = {
+    const { name, code, description, stock, categoryId, pricesRatio, expirationControl } = {
       ...item,
     }
     const failedValidationsObj = { ...failedValidations }
     failedValidationsObj.code = !code || codeRegistered
     failedValidationsObj.description = !description
     failedValidationsObj.name = !name
-    failedValidationsObj.stock = !stock
     failedValidationsObj.categoryId = !categoryId
 
     pricesRatio?.forEach((priceRatio) => {
       failedValidationsObj['measurementUnit' + priceRatio.hash] = !priceRatio.measurementUnit
       failedValidationsObj['price' + priceRatio.hash] = priceRatio.price <= 0
       failedValidationsObj['cost' + priceRatio.hash] = priceRatio.cost <= 0
-      failedValidationsObj['multiplicity' + priceRatio.hash] = priceRatio.multiplicity <= 0
+      failedValidationsObj['multiplicity' + priceRatio.hash] = !priceRatio.multiplicity
+    })
+
+    expirationControl?.forEach((expControl) => {
+      failedValidationsObj['lot' + expControl.id] = !expControl.lot
+      failedValidationsObj['lotUnits' + expControl.id] = expControl.lotUnits < 0
+      failedValidationsObj['expirationDate' + expControl.id] = !expControl.expirationDate
     })
 
     setFailedValidations(failedValidationsObj)
@@ -212,8 +223,43 @@ function ItemForm(props) {
     setItem({ ...item, pricesRatio: pricesRatioNew })
   }
 
+  const handleChangeExpControl = (event, id, index) => {
+    const {
+      target: { name, value },
+    } = event
+    let expControlArray = [...item.expirationControl]
+    let expControlClone = expControlArray.find((expControl) => expControl.id === id)
+    expControlClone = {
+      ...expControlClone,
+      [name]: value,
+    }
+    expControlArray[index] = expControlClone
+    setItem({
+      ...item,
+      expirationControl: expControlArray,
+    })
+  }
+
+  const handleAddExpirationControl = () => {
+    const newExpirationControl = getNewExpirationControl()
+    setItem({
+      ...item,
+      expirationControl: [...(item.expirationControl ?? []), newExpirationControl],
+    })
+  }
+
+  const handleDeleteExpirationControl = (id) => {
+    let expirationControlClone = [...item.expirationControl]
+    const expirationControlNew = expirationControlClone.filter((priceRatio) => priceRatio.id !== id)
+    setItem({ ...item, expirationControl: expirationControlNew })
+  }
+
   function getNewItem() {
     return { measurementUnit: '', price: '', cost: '', hash: getUUID(), main: '', multiplicity: 1 }
+  }
+
+  function getNewExpirationControl() {
+    return { lotUnits: '', lot: '', expirationDate: '', id: getUUID() }
   }
 
   return (
@@ -240,7 +286,7 @@ function ItemForm(props) {
           <CCardBody>
             <CForm className="row g-3 needs-validation" noValidate>
               <CRow>
-                <CCol xs="12" lg="4">
+                <CCol xs="12" lg="3">
                   <FormInput
                     label="Código"
                     type="text"
@@ -255,7 +301,7 @@ function ItemForm(props) {
                     onChange={(event) => handleChangeField(event)}
                   />
                 </CCol>
-                <CCol xs="12" lg="4">
+                <CCol xs="12" lg="3">
                   <FormInput
                     className="text-uppercase"
                     label="Nombre"
@@ -269,7 +315,7 @@ function ItemForm(props) {
                     onChange={(event) => handleChangeField(event)}
                   />
                 </CCol>
-                <CCol xs="12" lg="4">
+                <CCol xs="12" lg="6">
                   <FormInput
                     className="text-uppercase"
                     label="Descripción"
@@ -285,29 +331,7 @@ function ItemForm(props) {
                 </CCol>
               </CRow>
               <CRow>
-                <CCol xs="12" lg="4">
-                  <CFormInput
-                    label="Stock"
-                    type="number"
-                    name="stock"
-                    value={item.stock}
-                    feedbackInvalid="Campo obligatorio"
-                    invalid={failedValidations.stock}
-                    required
-                    onChange={(event) => handleChangeField(event)}
-                  />
-                </CCol>
-                <CCol xs="12" lg="4">
-                  <CFormInput
-                    label="Punto de recompra (Opcional)"
-                    type="number"
-                    name="reorderPoint"
-                    value={item.reorderPoint}
-                    invalid={failedValidations.reorderPoint}
-                    onChange={(event) => handleChangeField(event)}
-                  />
-                </CCol>
-                <CCol xs="12" lg="4">
+                <CCol xs="12" lg="3">
                   <CFormSelect
                     label="Categoria"
                     name="categoryId"
@@ -320,9 +344,7 @@ function ItemForm(props) {
                     options={['Seleccione la categoria', ...itemCategories]}
                   />
                 </CCol>
-              </CRow>
-              <CRow>
-                <CCol xs="12" lg="4">
+                <CCol xs="12" lg="3">
                   <FormInput
                     label="Laboratorio (Opcional)"
                     type="text"
@@ -332,122 +354,213 @@ function ItemForm(props) {
                     onChange={(event) => handleChangeField(event)}
                   />
                 </CCol>
-                <CCol xs="12" lg="4">
+                <CCol xs="12" lg="3">
                   <CFormInput
-                    label="Lote (Opcional)"
+                    label="Punto de recompra"
                     type="number"
-                    name="lot"
-                    value={item.lot}
+                    min={1}
+                    name="reorderPoint"
+                    value={item.reorderPoint}
+                    invalid={failedValidations.reorderPoint}
+                    feedbackInvalid="Campo obligatorio"
                     onChange={(event) => handleChangeField(event)}
                   />
                 </CCol>
-                <CCol xs="12" lg="4">
-                  <FormInput
-                    label="Fecha de vencimiento (Opcional)"
-                    type="date"
-                    name="expirationDate"
-                    value={item.expirationDate}
+                <CCol xs="12" lg="3">
+                  <CFormInput
+                    label="SKU"
+                    type="text"
+                    name="sku"
+                    value={item.sku}
                     onChange={(event) => handleChangeField(event)}
                   />
                 </CCol>
               </CRow>
-              <CRow className="my-2">
-                <CCol xs="12" lg="12" className="fw-semibold">
-                  Relación de precios
-                </CCol>
-              </CRow>
-              {item.pricesRatio?.map((priceRatio, index) => (
-                <CRow key={priceRatio.hash}>
-                  <CCol xs="12" lg="3">
-                    <CRow>
-                      {item.pricesRatio?.length > 1 && (
-                        <CCol xs="1" className="pt-4">
-                          <CFormCheck
-                            type="radio"
-                            name="main"
-                            value={priceRatio.hash}
-                            checked={priceRatio.main === priceRatio.hash}
-                            onChange={(event) =>
-                              handleChangePricesRatio(event, priceRatio.hash, index)
-                            }
-                          />
-                        </CCol>
-                      )}
-                      <CCol xs={{ offset: 0, span: item.pricesRatio?.length > 1 ? 11 : 12 }}>
-                        <CFormSelect
-                          label="Unidad de medida"
-                          name="measurementUnit"
-                          value={priceRatio.measurementUnit}
-                          required
+              <CRow>
+                <CCol>
+                  <CRow className="my-2">
+                    <CCol xs="12" lg="12" className="fw-semibold">
+                      Relación de precios
+                    </CCol>
+                  </CRow>
+                  {item.pricesRatio?.map((priceRatio, index) => (
+                    <CRow key={priceRatio.hash}>
+                      <CCol
+                        xs="12"
+                        lg={{ offset: 0, span: item.pricesRatio?.length === 1 ? 3 : 3 }}
+                      >
+                        <CRow>
+                          {item.pricesRatio?.length > 1 && (
+                            <CCol xs="1" className="pt-4">
+                              <CFormCheck
+                                type="radio"
+                                name="main"
+                                value={priceRatio.hash}
+                                checked={priceRatio.main === priceRatio.hash}
+                                onChange={(event) =>
+                                  handleChangePricesRatio(event, priceRatio.hash, index)
+                                }
+                              />
+                            </CCol>
+                          )}
+                          <CCol xs={{ offset: 0, span: item.pricesRatio?.length > 1 ? 10 : 12 }}>
+                            <CFormSelect
+                              label="U. de medida"
+                              name="measurementUnit"
+                              value={priceRatio.measurementUnit}
+                              required
+                              feedbackInvalid="Campo obligatorio"
+                              invalid={failedValidations['measurementUnit' + priceRatio.hash]}
+                              onChange={(event) =>
+                                handleChangePricesRatio(event, priceRatio.hash, index)
+                              }
+                              aria-label="Default select example"
+                              options={['Seleccione...', ...(measurementUnits?.values ?? [])]}
+                            />
+                          </CCol>
+                        </CRow>
+                      </CCol>
+                      <CCol xs="12" lg="3">
+                        <CurrencyFormInput
+                          label="Precio"
+                          type="number"
+                          name="price"
+                          value={priceRatio.price}
                           feedbackInvalid="Campo obligatorio"
-                          invalid={failedValidations['measurementUnit' + priceRatio.hash]}
+                          invalid={failedValidations['price' + priceRatio.hash]}
+                          required
                           onChange={(event) =>
                             handleChangePricesRatio(event, priceRatio.hash, index)
                           }
-                          aria-label="Default select example"
-                          options={['Seleccione...', ...(measurementUnits?.values ?? [])]}
                         />
                       </CCol>
-                    </CRow>
-                  </CCol>
-                  <CCol xs="12" lg="4">
-                    <CurrencyFormInput
-                      label="Precio"
-                      type="number"
-                      name="price"
-                      value={priceRatio.price}
-                      feedbackInvalid="Campo obligatorio"
-                      invalid={failedValidations['price' + priceRatio.hash]}
-                      required
-                      onChange={(event) => handleChangePricesRatio(event, priceRatio.hash, index)}
-                    />
-                  </CCol>
-                  <CCol xs="12" lg={{ offset: 0, span: item.pricesRatio?.length === 1 ? 4 : 3 }}>
-                    <CurrencyFormInput
-                      label="Costo"
-                      type="number"
-                      name="cost"
-                      value={priceRatio.cost}
-                      feedbackInvalid="Campo obligatorio"
-                      invalid={failedValidations['cost' + priceRatio.hash]}
-                      onChange={(event) => handleChangePricesRatio(event, priceRatio.hash, index)}
-                    />
-                  </CCol>
-                  <CCol xs="12" lg="1">
-                    <CFormInput
-                      label="Multiplicidad"
-                      type="number"
-                      name="multiplicity"
-                      min={1}
-                      value={priceRatio.multiplicity}
-                      feedbackInvalid="Campo obligatorio"
-                      invalid={failedValidations['multiplicity' + priceRatio.hash]}
-                      onChange={(event) => handleChangePricesRatio(event, priceRatio.hash, index)}
-                    />
-                  </CCol>
-                  {item.pricesRatio?.length > 1 && (
-                    <CCol xs="12" lg="1">
-                      <CButton
-                        color="ligth"
-                        className="mt-4"
-                        onClick={() => handleDeletePriceRatio(priceRatio.hash)}
+                      <CCol xs="12" lg="3">
+                        <CurrencyFormInput
+                          label="Costo"
+                          type="number"
+                          name="cost"
+                          value={priceRatio.cost}
+                          feedbackInvalid="Campo obligatorio"
+                          invalid={failedValidations['cost' + priceRatio.hash]}
+                          onChange={(event) =>
+                            handleChangePricesRatio(event, priceRatio.hash, index)
+                          }
+                        />
+                      </CCol>
+                      <CCol
+                        xs="12"
+                        lg={{ offset: 0, span: item.pricesRatio?.length === 1 ? 3 : 2 }}
                       >
-                        <CIcon icon={cilTrash} size="sm" />
+                        <FormInput
+                          label="Multiplo"
+                          type="number"
+                          name="multiplicity"
+                          min={1}
+                          value={priceRatio.multiplicity}
+                          feedbackInvalid="Campo obligatorio"
+                          invalid={failedValidations['multiplicity' + priceRatio.hash]}
+                          onChange={(event) =>
+                            handleChangePricesRatio(event, priceRatio.hash, index)
+                          }
+                        />
+                      </CCol>
+                      {item.pricesRatio?.length > 1 && (
+                        <CCol xs="12" lg="1">
+                          <CButton
+                            color="ligth"
+                            className="mt-4"
+                            onClick={() => handleDeletePriceRatio(priceRatio.hash)}
+                          >
+                            <CIcon icon={cilTrash} size="sm" />
+                          </CButton>
+                        </CCol>
+                      )}
+                    </CRow>
+                  ))}
+                  <CRow className="my-2">
+                    <CCol xs="12" lg="4">
+                      <CButton
+                        variant="outline"
+                        color="success"
+                        type="button"
+                        onClick={handleAddPriceRatio}
+                      >
+                        AGREGAR RELACIÓN
                       </CButton>
                     </CCol>
-                  )}
-                </CRow>
-              ))}
-              <CRow className="my-2">
-                <CCol xs="12" lg="4">
-                  <CButton
-                    variant="outline"
-                    color="success"
-                    type="button"
-                    onClick={handleAddPriceRatio}
-                  >
-                    AGREGAR RELACIÓN
-                  </CButton>
+                  </CRow>
+                </CCol>
+                <CCol>
+                  <CRow className="my-2">
+                    <CCol xs="12" lg="12" className="fw-semibold">
+                      Control de vencimiento
+                    </CCol>
+                  </CRow>
+                  {item.expirationControl?.map((expControl, index) => (
+                    <CRow key={expControl.id}>
+                      <CCol
+                        xs="12"
+                        lg={{ offset: 0, span: item.expirationControl?.length === 1 ? 4 : 3 }}
+                      >
+                        <FormInput
+                          label="Stock"
+                          type="number"
+                          name="lotUnits"
+                          feedbackInvalid="Campo obligatorio"
+                          invalid={failedValidations['lotUnits' + expControl.id]}
+                          value={expControl.lotUnits}
+                          onChange={(event) => handleChangeExpControl(event, expControl.id, index)}
+                        />
+                      </CCol>
+                      <CCol xs="12" lg="4">
+                        <FormInput
+                          className="text-uppercase"
+                          label="Lote"
+                          type="text"
+                          uppercase="true"
+                          name="lot"
+                          feedbackInvalid="Campo obligatorio"
+                          invalid={failedValidations['lot' + expControl.id]}
+                          value={expControl.lot}
+                          onChange={(event) => handleChangeExpControl(event, expControl.id, index)}
+                        />
+                      </CCol>
+                      <CCol xs="12" lg="4">
+                        <FormInput
+                          label="Fecha de vencimiento"
+                          type="date"
+                          name="expirationDate"
+                          feedbackInvalid="Campo obligatorio"
+                          invalid={failedValidations['expirationDate' + expControl.id]}
+                          value={expControl.expirationDate}
+                          onChange={(event) => handleChangeExpControl(event, expControl.id, index)}
+                        />
+                      </CCol>
+                      {item.expirationControl?.length > 1 && (
+                        <CCol xs="12" lg="1">
+                          <CButton
+                            color="ligth"
+                            className="mt-4"
+                            onClick={() => handleDeleteExpirationControl(expControl.id)}
+                          >
+                            <CIcon icon={cilTrash} size="sm" />
+                          </CButton>
+                        </CCol>
+                      )}
+                    </CRow>
+                  ))}
+                  <CRow className="my-2">
+                    <CCol xs="12" lg="4">
+                      <CButton
+                        variant="outline"
+                        color="success"
+                        type="button"
+                        onClick={handleAddExpirationControl}
+                      >
+                        AGREGAR CONTROL
+                      </CButton>
+                    </CCol>
+                  </CRow>
                 </CCol>
               </CRow>
             </CForm>
@@ -456,7 +569,7 @@ function ItemForm(props) {
             <div className="d-none d-lg-block">
               <CRow className="mt-0">
                 <CCol className="text-center" xs="8" lg={{ offset: 4, span: 4 }}>
-                  <CButton color="success" type="button" onClick={() => save()}>
+                  <CButton color="success" type="button" disabled={saving} onClick={() => save()}>
                     {props.item ? 'EDITAR' : 'GUARDAR'}
                   </CButton>
                   &nbsp; &nbsp;

@@ -108,7 +108,7 @@ function BillingsHistorical() {
                         ))}
                     </div>
                     <div className="d-none d-lg-block">
-                      <CTable>
+                      <CTable small hover>
                         <CTableHead>
                           <CTableRow>
                             <CTableHeaderCell>Fecha</CTableHeaderCell>
@@ -182,7 +182,7 @@ function BillingsHistorical() {
               {detailing && (
                 <CCol>
                   <div className="d-none d-lg-block">
-                    <CTable>
+                    <CTable small hover>
                       <CTableBody>
                         <CTableRow>
                           <CTableHeaderCell lg="2">Fecha</CTableHeaderCell>

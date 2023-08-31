@@ -4,10 +4,8 @@ export const itemSchema = new Schema({
   code: String,
   name: String,
   description: String,
-  stock: Number,
+  sku: String,
   reorderPoint: Number, // lowest point to alert and reorder it
-  lot: String,
-  expirationDate: String,
   laboratory: String,
   pricesRatio: [
     {
@@ -18,6 +16,16 @@ export const itemSchema = new Schema({
       hash: String,
       main: String,
       multiplicity: Number,
+      organizationId: String,
+    },
+  ],
+  expirationControl: [
+    {
+      id: String,
+      _id: Types.ObjectId,
+      lot: String,
+      expirationDate: String,
+      lotUnits: Number,
       organizationId: String,
     },
   ],

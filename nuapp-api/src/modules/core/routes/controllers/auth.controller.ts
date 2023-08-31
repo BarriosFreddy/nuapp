@@ -21,6 +21,7 @@ class AuthController {
         httpOnly: true,
         secure: NODE_ENV === 'production',
         sameSite: NODE_ENV === 'production' ? 'none' : 'lax',
+        maxAge: 1000 * 60 * 60 * 720, // ms * m * h * M
       })
       .send(data);
   }

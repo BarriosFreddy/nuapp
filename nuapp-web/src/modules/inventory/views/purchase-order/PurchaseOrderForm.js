@@ -240,7 +240,7 @@ export const PurchaseOrderForm = ({
         </CCol>
         <CCol lg="2">Distrireal de la costa</CCol>
       </CRow>
-      <CTable>
+      <CTable small hover>
         <CTableHead>
           <CTableRow>
             <CTableHeaderCell>Código</CTableHeaderCell>

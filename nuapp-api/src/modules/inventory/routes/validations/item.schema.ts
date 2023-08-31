@@ -7,9 +7,8 @@ const ItemCreateSchema: Schema = joi.object({
   categoryId: joi.string().required(),
   stock: joi.number().required(),
   reorderPoint: joi.number(),
-  lot: joi.string().allow(''),
-  expirationDate: joi.string().allow(''),
   laboratory: joi.string().allow(''),
+  sku: joi.string().allow(''),
   pricesRatio: joi.array().items(
     joi.object({
       price: joi.number().required(),
@@ -21,6 +20,14 @@ const ItemCreateSchema: Schema = joi.object({
       organizationId: joi.string().allow(''),
     }),
   ),
+  expirationControl: joi.array().items(
+    joi.object({
+      lot: joi.string().allow(''),
+      expirationDate: joi.string().allow(''),
+      id: joi.string().allow(''),
+      lotUnits: joi.number(),
+    }),
+  ),
 });
 
 const ItemUpdateSchema: Schema = joi.object({
@@ -28,8 +35,9 @@ const ItemUpdateSchema: Schema = joi.object({
   description: joi.string(),
   code: joi.string(),
   categoryId: joi.string(),
-  stock: joi.number().required(),
   reorderPoint: joi.number(),
+  laboratory: joi.string(),
+  sku: joi.string().allow(''),
   pricesRatio: joi.array().items(
     joi.object({
       _id: joi.string(),
@@ -42,9 +50,15 @@ const ItemUpdateSchema: Schema = joi.object({
       organizationId: joi.string().allow(''),
     }),
   ),
-  lot: joi.string(),
-  expirationDate: joi.string(),
-  laboratory: joi.string(),
+  expirationControl: joi.array().items(
+    joi.object({
+      _id: joi.string(),
+      id: joi.string().allow(''),
+      lot: joi.string().allow(''),
+      expirationDate: joi.string().allow(''),
+      lotUnits: joi.number(),
+    }),
+  ),
   createdAt: joi.date(),
   updatedAt: joi.date(),
   __v: joi.number(),

@@ -12,7 +12,7 @@ import { PropTypes } from 'prop-types'
 
 const PurchaseOrderList = ({ purchaseOrders, onShow }) => {
   return (
-    <CTable>
+    <CTable small hover>
       <CTableHead>
         <CTableRow>
           <CTableHeaderCell>Código</CTableHeaderCell>

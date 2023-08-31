@@ -28,6 +28,7 @@ import { setItems } from 'src/modules/inventory/reducers/items.reducer'
 import { getItems } from 'src/modules/inventory/services/items.service'
 import CONSTANTS from './../../../constants'
 import { useDidUpdate } from 'src/hooks/useDidUpdate'
+import dayjs from 'dayjs'
 
 const { ENTER_KEYCODE, TAB_KEYCODE } = CONSTANTS
 
@@ -131,6 +132,9 @@ const BillingForm = (props) => {
     clear()
   }
 
+  const getStock = (expirationControl) =>
+    expirationControl?.map(({ lotUnits }) => lotUnits).reduce((acc, cur) => acc + cur, 0)
+
   return (
     <>
       <CContainer fluid>
@@ -160,6 +164,7 @@ const BillingForm = (props) => {
                 <CTableRow>
                   <CTableHeaderCell>Nombre</CTableHeaderCell>
                   <CTableHeaderCell>Precio</CTableHeaderCell>
+                  <CTableHeaderCell>Stock</CTableHeaderCell>
                 </CTableRow>
               </CTableHead>
               <CTableBody>
@@ -182,16 +187,10 @@ const BillingForm = (props) => {
                     </CTableDataCell>
                     <CTableDataCell xs="12">
                       <CBadge
-                        color={
-                          item.stock
-                            ? item.stock <= item.reorderPoint
-                              ? 'warning'
-                              : 'success'
-                            : 'danger'
-                        }
+                        color={getStock(item.expirationControl) > 0 ? 'success' : 'danger'}
                         shape="rounded-pill"
                       >
-                        {item.stock ?? 0}
+                        {getStock(item.expirationControl)}
                       </CBadge>
                     </CTableDataCell>
                   </CTableRow>

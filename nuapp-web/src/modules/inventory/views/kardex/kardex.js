@@ -190,7 +190,7 @@ const Kardex = () => {
             <CCardTitle>ENTRADAS Y SALIDAS</CCardTitle>
           </CCardHeader>
           <CCardBody>
-            <CTable>
+            <CTable small hover>
               <CTableHead>
                 <CTableRow>
                   <CTableHeaderCell>Código</CTableHeaderCell>
