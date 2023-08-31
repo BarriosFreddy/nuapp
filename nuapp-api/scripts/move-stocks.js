@@ -8,11 +8,13 @@ db.items.find().forEach((item) => {
       $set: {
         ...item,
         sku: '',
-        expirationControl: {
-          lotUnits: stock,
-          expirationDate: '',
-          lot: '',
-        },
+        expirationControl: [
+          {
+            lotUnits: stock,
+            expirationDate: '',
+            lot: '',
+          },
+        ],
       },
     },
   );
