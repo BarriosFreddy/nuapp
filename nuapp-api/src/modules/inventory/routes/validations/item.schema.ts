@@ -5,7 +5,6 @@ const ItemCreateSchema: Schema = joi.object({
   description: joi.string(),
   code: joi.string().required(),
   categoryId: joi.string().required(),
-  stock: joi.number().required(),
   reorderPoint: joi.number(),
   laboratory: joi.string().allow(''),
   sku: joi.string().allow(''),
