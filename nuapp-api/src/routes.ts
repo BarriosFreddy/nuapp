@@ -16,13 +16,15 @@ export function registerRoutes(app: Express): void {
   apiRouter.use('/roles', coreRouter.roleRouter);
   apiRouter.use('/auth', coreRouter.authRouter);
   apiRouter.use('/enumerations', coreRouter.enumerationsRouter);
+  apiRouter.use('/organizations', coreRouter.organizationRouter);
+  apiRouter.use('/branch-offices', coreRouter.branchOfficeRouter);
+
   apiRouter.use('/billings', billingRouter.billingRouter);
   apiRouter.use('/items', inventoryRouter.itemRouter);
   apiRouter.use('/item-categories', inventoryRouter.itemCategoryRouter);
   apiRouter.use('/kardex', inventoryRouter.kardexTransactionRouter);
   apiRouter.use('/purchase-orders', inventoryRouter.purchaseOrderRouter);
   apiRouter.use('/inv-enumerations', inventoryRouter.invEnumerationRouter);
-
 
   app.use('/api/v1', apiRouter);
 }

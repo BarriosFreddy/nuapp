@@ -1,7 +1,6 @@
 import { Schema, Types } from 'mongoose';
 
 export const moduleSchema = new Schema({
-  _id: Types.ObjectId,
   name: String,
   code: String,
   uri: String,

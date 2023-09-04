@@ -1,7 +1,6 @@
 import { Schema, Types } from 'mongoose';
 
 export const enumerationSchema = new Schema({
-  _id: Types.ObjectId,
   name: String,
   description: String,
   values: [
