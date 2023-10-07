@@ -377,7 +377,7 @@ function ItemForm(props) {
                 </CCol>
               </CRow>
               <CRow>
-                <CCol>
+                <CCol md="12">
                   <CRow className="my-2">
                     <CCol xs="12" lg="12" className="fw-semibold">
                       Relación de precios
@@ -490,7 +490,7 @@ function ItemForm(props) {
                     </CCol>
                   </CRow>
                 </CCol>
-                <CCol>
+                <CCol md="12">
                   <CRow className="my-2">
                     <CCol xs="12" lg="12" className="fw-semibold">
                       Control de vencimiento

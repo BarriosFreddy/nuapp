@@ -36,15 +36,29 @@ const ItemList = ({ items, fetching, page, onEdit, onPrevPage, onNextPage }) => 
           >
             <CCardBody>
               <CRow className="g-0">
-                <CCol>
-                  <CRow>
-                    <CCol>{item.name}</CCol>
-                  </CRow>
-                  <CRow>
-                    <CCol style={{ fontSize: 10 }}>{item.code}</CCol>
-                  </CRow>
+                <CCol xs="7">{item.name}</CCol>
+                <CCol xs="2" className="text-end">
+                  {getExpirationDates(item.expirationControl)
+                    ?.filter(({ lotUnits }) => lotUnits > 0)
+                    .map(({ expirationDate, lotUnits }, index) => (
+                      <CBadge
+                        key={index}
+                        color={
+                          dayjs(expirationDate).diff(dayjs(), 'days') > 90
+                            ? dayjs(expirationDate).diff(dayjs(), 'days') > 180
+                              ? 'success'
+                              : 'warning'
+                            : 'danger'
+                        }
+                        shape="rounded-pill"
+                      >
+                        {lotUnits}
+                      </CBadge>
+                    ))}
                 </CCol>
-                <CCol>{formatCurrency(item.price)}</CCol>
+                <CCol xs="3" className="text-end">
+                  {formatCurrency(getMainPrice(item?.pricesRatio))}
+                </CCol>
               </CRow>
             </CCardBody>
           </CCard>
@@ -64,15 +78,8 @@ const ItemList = ({ items, fetching, page, onEdit, onPrevPage, onNextPage }) => 
           <CTableBody>
             {items.map((item) => (
               <CTableRow key={item.code}>
-                <CTableDataCell xs="12" className="text-uppercase">
-                  <CRow>
-                    <CCol className="text-uppercase text-break">{item.name}</CCol>
-                  </CRow>
-                  <CRow>
-                    <CCol style={{ fontSize: 10 }} className="text-break">
-                      {item.description}
-                    </CCol>
-                  </CRow>
+                <CTableDataCell xs="12" className="text-uppercase text-break">
+                  {item.name}
                 </CTableDataCell>
                 <CTableDataCell className="fs-6" xs="12">
                   {item.code}

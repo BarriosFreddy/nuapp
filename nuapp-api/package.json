@@ -7,6 +7,8 @@
     "build": "tsc",
     "start": "node dist/index.js",
     "debug": "concurrently \"npx tsc --watch\" \"node --watch --inspect dist/index.js\"",
+    "dev:ts": "npx tsc --watch",
+    "dev:run": "node --watch dist/index.js",
     "start:dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\""
   },
   "keywords": [],
