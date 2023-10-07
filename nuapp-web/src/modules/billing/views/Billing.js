@@ -46,6 +46,7 @@ function Billing() {
   const cargeButtonRef = useRef()
   const isReceivedLTTotal = receivedAmount < total
   const hasNotItems = items.length <= 0
+  const isQuantityEditable = false
 
   useEffect(() => {
     dispatch(setSidebarUnfoldable(true))
@@ -190,7 +191,7 @@ function Billing() {
                     <CTableRow>
                       <CTableHeaderCell>Producto</CTableHeaderCell>
                       <CTableHeaderCell>Cantidad</CTableHeaderCell>
-                      <CTableHeaderCell>U. de M.</CTableHeaderCell>
+                      <CTableHeaderCell colSpan={2}>&nbsp;</CTableHeaderCell>
                       <CTableHeaderCell>Subtotal</CTableHeaderCell>
                       <CTableHeaderCell>&nbsp;</CTableHeaderCell>
                     </CTableRow>
@@ -198,40 +199,44 @@ function Billing() {
                   <CTableBody>
                     {items.map(({ code, name, price, pricesRatio, measurementUnit }) => (
                       <CTableRow key={code}>
-                        <CTableDataCell xs="12">
+                        <CTableDataCell xs="12">{name}</CTableDataCell>
+                        {!isQuantityEditable && (
+                          <CTableDataCell xs="12">{itemUnits[code]}</CTableDataCell>
+                        )}
+                        <CTableDataCell colSpan={2}>
                           <CRow>
-                            <CCol className="text-uppercase">{name}</CCol>
+                            {isQuantityEditable && (
+                              <CCol>
+                                <CFormInput
+                                  style={{ maxWidth: 60 }}
+                                  type="number"
+                                  min={1}
+                                  formNoValidate
+                                  size="sm"
+                                  name={code}
+                                  value={itemUnits[code]}
+                                  onChange={(event) => handleChangeUnits(event)}
+                                />
+                              </CCol>
+                            )}
+                            {pricesRatio.length > 1 && (
+                              <CCol>
+                                <CFormSelect
+                                  name="measurementUnit"
+                                  value={measurementUnit}
+                                  required
+                                  size="sm"
+                                  onChange={(event) => handleChangeMeasurement(event, code)}
+                                  options={[
+                                    ...(pricesRatio?.map(({ measurementUnit }) => ({
+                                      label: measurementUnit,
+                                      value: measurementUnit,
+                                    })) ?? []),
+                                  ]}
+                                />
+                              </CCol>
+                            )}
                           </CRow>
-                          <CRow>
-                            <CCol style={{ fontSize: 10 }}>{code}</CCol>
-                          </CRow>
-                        </CTableDataCell>
-                        <CTableDataCell colSpan={1}>
-                          <CFormInput
-                            style={{ maxWidth: 60 }}
-                            type="number"
-                            min={1}
-                            formNoValidate
-                            size="sm"
-                            name={code}
-                            value={itemUnits[code]}
-                            onChange={(event) => handleChangeUnits(event)}
-                          />
-                        </CTableDataCell>
-                        <CTableDataCell colSpan={1}>
-                          <CFormSelect
-                            name="measurementUnit"
-                            value={measurementUnit}
-                            required
-                            size="sm"
-                            onChange={(event) => handleChangeMeasurement(event, code)}
-                            options={[
-                              ...(pricesRatio?.map(({ measurementUnit }) => ({
-                                label: measurementUnit,
-                                value: measurementUnit,
-                              })) ?? []),
-                            ]}
-                          />
                         </CTableDataCell>
                         <CTableDataCell xs="12" className="text-break" colSpan={2}>
                           {formatCurrency(price * itemUnits[code])}

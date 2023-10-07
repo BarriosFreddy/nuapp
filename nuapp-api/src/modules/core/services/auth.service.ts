@@ -23,7 +23,7 @@ export class AuthService {
     );
     if (!isTheSame) return null;
     const data = {
-      _id: userAccount._id,
+      organizationId: userAccount.organizationId,
       roles: userAccount.roles,
     };
     const access_token = this.generateToken(data);

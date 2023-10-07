@@ -13,6 +13,7 @@ const RoleCreateSchema: Schema = joi.object({
       canExecute: joi.boolean(),
     })
     .required(),
+  organizationId: joi.string(),
 });
 
 const RoleUpdateSchema: Schema = joi.object({
@@ -25,6 +26,7 @@ const RoleUpdateSchema: Schema = joi.object({
     canDelete: joi.boolean(),
     canExecute: joi.boolean(),
   }),
+  organizationId: joi.string(),
 });
 
 export { RoleCreateSchema, RoleUpdateSchema };

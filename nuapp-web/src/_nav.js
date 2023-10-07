@@ -50,14 +50,14 @@ let _nav = [
         to: '/billings',
         icon: <CIcon icon={cilHistory} customClassName="nav-icon" />,
         roles: ['ADMIN', 'SELLER'],
-      },
+      } /* ,
       {
         component: CNavItem,
         name: 'Sincronizador',
         to: '/billing-synchronizer',
         icon: <CIcon icon={cilSync} customClassName="nav-icon" />,
         roles: ['ADMIN'],
-      },
+      }, */,
     ],
   },
   {
@@ -79,7 +79,7 @@ let _nav = [
         to: '/inventory-item-categories',
         icon: <CIcon icon={cilSitemap} customClassName="nav-icon" />,
         roles: ['ADMIN'],
-      },
+      } /* ,
       {
         component: CNavItem,
         name: 'Migrador de datos',
@@ -100,7 +100,7 @@ let _nav = [
         to: '/inventory-purchase-orders',
         icon: <CIcon icon={cilBasket} customClassName="nav-icon" />,
         roles: ['ADMIN'],
-      },
+      }, */,
     ],
   },
 ]

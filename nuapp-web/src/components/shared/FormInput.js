@@ -7,8 +7,10 @@ const FormInput = (props) => {
     const {
       target: { value },
     } = event
+    const { selectionStart, selectionEnd } = event.target
     if (props.uppercase && value) event.target.value = value.toUpperCase()
     if (props.lowercase && value) event.target.value = value.toLowerCase()
+    event.target.setSelectionRange(selectionStart, selectionEnd)
     props.onChange(event)
   }
   return <CFormInput {...props} onChange={handleChange} />

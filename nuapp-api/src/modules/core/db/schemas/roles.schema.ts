@@ -13,6 +13,7 @@ export const roleSchema = new Schema({
       canExecute: Boolean,
     },
   ],
+  organizationId: Types.ObjectId,
   createdAt: Date,
   updatedAt: Date,
 });

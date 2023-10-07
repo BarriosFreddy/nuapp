@@ -1,7 +1,6 @@
 import { Schema, Types } from 'mongoose';
 
 export const userAccountSchema = new Schema({
-  _id: Types.ObjectId,
   dniType: String,
   dni: String,
   firstName: String,
@@ -16,4 +15,5 @@ export const userAccountSchema = new Schema({
   modifiedBy: Types.ObjectId,
   createdAt: Date,
   updatedAt: Date,
+  organizationId: Types.ObjectId,
 });
