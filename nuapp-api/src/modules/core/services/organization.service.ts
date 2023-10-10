@@ -1,20 +1,24 @@
 import { BaseService } from '../../../helpers/abstracts/base.service';
 import { Organization } from '../entities/Organization';
-import OrganizationModel from '../db/models/organization.model';
 import { singleton } from 'tsyringe';
+import { organizationSchema } from '../db/schemas/organization.schema';
 
 @singleton()
 export class OrganizationService extends BaseService<Organization> {
+  getModelName = () => 'Organization';
+  getSchema = () => organizationSchema;
+  getCollectionName = () => undefined;
+
   async findOne(id: string): Promise<Organization | null> {
-    return await OrganizationModel.findById(id).exec();
+    return await this.getModel().findById(id).exec();
   }
   async findAll(): Promise<Organization[]> {
-    const organizations = await OrganizationModel.find().exec();
+    const organizations = await this.getModel().find().exec();
     return organizations;
   }
   async save(organization: Organization): Promise<Organization> {
     try {
-      return await OrganizationModel.create(organization);
+      return await this.getModel().create(organization);
     } catch (error) {
       console.log(error);
       return Promise.reject(null);
@@ -25,7 +29,7 @@ export class OrganizationService extends BaseService<Organization> {
     organization: Organization,
   ): Promise<Organization | null> {
     try {
-      await OrganizationModel.updateOne({ _id: id }, organization);
+      await this.getModel().updateOne({ _id: id }, organization);
       return this.findOne(id);
     } catch (error) {
       console.log(error);

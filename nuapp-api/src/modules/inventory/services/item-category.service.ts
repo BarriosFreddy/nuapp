@@ -1,18 +1,21 @@
 import { BaseService } from '../../../helpers/abstracts/base.service';
 import { singleton } from 'tsyringe';
 import { ItemCategory } from '../entities/ItemCategory';
-import ItemCategoryModel from '../db/models/item-category.model';
+import { itemCategorySchema } from '../db/schemas/item-category.schema';
 
 @singleton()
 export class ItemCategoryService extends BaseService<ItemCategory> {
+  getModelName = () => 'ItemCategory';
+  getSchema = () => itemCategorySchema;
+  getCollectionName = () => 'item-categories';
   async findOne(id: string): Promise<ItemCategory | null> {
-    return await ItemCategoryModel.findById(id).exec();
+    return await this.getModel().findById(id).exec();
   }
   async existByCode(code: string): Promise<any | null> {
-    return await ItemCategoryModel.exists({ code }).exec();
+    return await this.getModel().exists({ code }).exec();
   }
   async existByName(name: string): Promise<any | null> {
-    return await ItemCategoryModel.exists({ name }).exec();
+    return await this.getModel().exists({ name }).exec();
   }
   async findAll({
     page = 1,
@@ -30,7 +33,8 @@ export class ItemCategoryService extends BaseService<ItemCategory> {
 
     conditions.length > 0 && (filters = { ['$or']: conditions, ...filters });
 
-    const categories = await ItemCategoryModel.find(filters)
+    const categories = await this.getModel()
+      .find(filters)
       .skip(10 * (page - 1))
       .limit(10)
       .exec();
@@ -39,7 +43,7 @@ export class ItemCategoryService extends BaseService<ItemCategory> {
   async save(itemCategory: ItemCategory): Promise<ItemCategory> {
     try {
       itemCategory.createdAt = new Date();
-      return await ItemCategoryModel.create(itemCategory);
+      return await this.getModel().create(itemCategory);
     } catch (error) {
       console.log(error);
       return Promise.reject(null);
@@ -52,7 +56,7 @@ export class ItemCategoryService extends BaseService<ItemCategory> {
   ): Promise<ItemCategory | null> {
     try {
       itemCategory.updatedAt = new Date();
-      await ItemCategoryModel.updateOne({ _id: id }, itemCategory);
+      await this.getModel().updateOne({ _id: id }, itemCategory);
       return this.findOne(id);
     } catch (error) {
       console.log(error);

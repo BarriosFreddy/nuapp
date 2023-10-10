@@ -1,24 +1,30 @@
 import { BaseService } from '../../../helpers/abstracts/base.service';
-import EnumerationModel from '../db/models/enumeration.model';
 import { singleton } from 'tsyringe';
 import mongoose from 'mongoose';
 import { Enumeration } from '../entities/Enumeration';
+import { enumerationSchema } from '../db/schemas/enumeration.schema';
 
 @singleton()
 export class EnumerationService extends BaseService<Enumeration> {
+  getModelName = () => 'Enumerations';
+  getSchema = () => enumerationSchema;
+  getCollectionName = () => undefined;
+
   async findOne(id: string): Promise<Enumeration | null> {
-    return await EnumerationModel.findOne({
-      _id: new mongoose.Types.ObjectId(id),
-    }).exec();
+    return await this.getModel()
+      .findOne({
+        _id: new mongoose.Types.ObjectId(id),
+      })
+      .exec();
   }
   async findAll(): Promise<Enumeration[]> {
-    const enumerations = await EnumerationModel.find().exec();
+    const enumerations = await this.getModel().find().exec();
     return enumerations;
   }
   async save(enumeration: Enumeration): Promise<Enumeration> {
     try {
       enumeration.createdAt = new Date();
-      return await EnumerationModel.create(enumeration);
+      return await this.getModel().create(enumeration);
     } catch (error) {
       console.log(error);
       return Promise.reject(null);
@@ -31,7 +37,7 @@ export class EnumerationService extends BaseService<Enumeration> {
   ): Promise<Enumeration | null> {
     try {
       enumeration.updatedAt = new Date();
-      await EnumerationModel.updateOne(
+      await this.getModel().updateOne(
         { _id: new mongoose.Types.ObjectId(id) },
         enumeration,
       );

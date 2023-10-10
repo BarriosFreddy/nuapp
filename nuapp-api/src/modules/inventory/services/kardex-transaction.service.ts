@@ -1,25 +1,27 @@
 import { BaseService } from '../../../helpers/abstracts/base.service';
-import KardexTransactionModel from '../db/models/kardex-transaction.model';
 import { singleton, container } from 'tsyringe';
 import { ItemService } from './item.service';
 import { KardexTransactionType } from '../entities/enums/kardex-transaction-type';
 import { KardexTransaction } from '../entities/kardex-transaction';
+import { kardexTransactionSchema } from '../db/schemas/kardex-transaction.schema';
 
 const itemService = container.resolve(ItemService);
 
 @singleton()
 export class KardexTransactionService extends BaseService<KardexTransaction> {
+  getModelName = () => 'KardexTransaction';
+  getSchema = () => kardexTransactionSchema;
+  getCollectionName = () => 'kardex-transactions';
   async findOne(id: string): Promise<KardexTransaction | null> {
-    return await KardexTransactionModel.findById(id).exec();
+    return await this.getModel().findById(id).exec();
   }
   async findAll(): Promise<KardexTransaction[]> {
-    const bills: KardexTransaction[] =
-      await KardexTransactionModel.find().exec();
+    const bills: KardexTransaction[] = await this.getModel().find().exec();
     return bills;
   }
   async save(kardexTransaction: KardexTransaction): Promise<KardexTransaction> {
     try {
-      return await KardexTransactionModel.create(kardexTransaction);
+      return await this.getModel().create(kardexTransaction);
     } catch (error) {
       console.log(error);
       return Promise.reject(null);
@@ -29,11 +31,9 @@ export class KardexTransactionService extends BaseService<KardexTransaction> {
   async saveAll(kardexTransactions: KardexTransaction[]): Promise<any> {
     try {
       let kardexTransactionModels = kardexTransactions.map(
-        (kardex) => new KardexTransactionModel(kardex),
+        (kardex) => new (this.getModel())(kardex),
       );
-      const result = await KardexTransactionModel.bulkSave(
-        kardexTransactionModels,
-      );
+      const result = await this.getModel().bulkSave(kardexTransactionModels);
 
       setImmediate(async () => {
         await this.applyKardexMovements(kardexTransactions);
@@ -67,7 +67,7 @@ export class KardexTransactionService extends BaseService<KardexTransaction> {
     kardexTransaction: KardexTransaction,
   ): Promise<KardexTransaction | null> {
     try {
-      await KardexTransactionModel.updateOne({ _id: id }, kardexTransaction);
+      await this.getModel().updateOne({ _id: id }, kardexTransaction);
       return this.findOne(id);
     } catch (error) {
       console.log(error);

@@ -1,24 +1,28 @@
 import { BaseService } from '../../../helpers/abstracts/base.service';
 import { Module } from '../entities/Module';
-import ModuleModel from '../db/models/module.model';
 import { singleton } from 'tsyringe';
+import { moduleSchema } from '../db/schemas/module.schema';
 
 @singleton()
 export class ModuleService extends BaseService<Module> {
+  getModelName = () => 'Module';
+  getSchema = () => moduleSchema;
+  getCollectionName = () => undefined;
+
   async findOne(id: string): Promise<Module | null> {
-    return await ModuleModel.findById(id).exec();
+    return await this.getModel().findById(id).exec();
   }
   async findByCode(code: string): Promise<Module | null> {
-    return await ModuleModel.findOne({ code }).exec();
+    return await this.getModel().findOne({ code }).exec();
   }
   async findAll(): Promise<Module[]> {
-    const modules = await ModuleModel.find().exec();
+    const modules = await this.getModel().find().exec();
     return modules;
   }
 
   async save(modules: Module): Promise<Module> {
     try {
-      return await ModuleModel.create(modules);
+      return await this.getModel().create(modules);
     } catch (error) {
       console.log(error);
       return Promise.reject(null);
@@ -27,7 +31,7 @@ export class ModuleService extends BaseService<Module> {
 
   async update(id: string, modules: Module): Promise<Module | null> {
     try {
-      await ModuleModel.updateOne({ _id: id }, modules);
+      await this.getModel().updateOne({ _id: id }, modules);
       return this.findOne(id);
     } catch (error) {
       console.log(error);

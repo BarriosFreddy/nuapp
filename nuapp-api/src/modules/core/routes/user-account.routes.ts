@@ -19,7 +19,6 @@ const userAccountRouter = express.Router();
 userAccountRouter.post(
   '/',
   validateBody(UserAccountCreateSchema),
-  //isAuthenticated,
   userAccountController.save,
 );
 userAccountRouter.put(

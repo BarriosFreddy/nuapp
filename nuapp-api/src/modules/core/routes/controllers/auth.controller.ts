@@ -46,6 +46,16 @@ class AuthController {
       res.status(403).send(null);
     }
   }
+
+  async initOrg(req: Request, res: Response) {
+    const { name } = req.query;
+    let conn = null;
+    if (name && typeof name === 'string') {
+      conn = await authService.initOrg(name);
+      console.log({ conn });
+    }
+    res.send({ conn });
+  }
 }
 
 const authController = new AuthController();

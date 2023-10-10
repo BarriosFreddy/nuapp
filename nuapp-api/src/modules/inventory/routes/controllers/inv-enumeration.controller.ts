@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { container, singleton } from 'tsyringe';
 import { InvEnumerationService } from '../../services/inv-enumeration.service';
 import { InvEnumeration } from '../../entities/InvEnumeration';
+import { setTenantIdToService } from '../../../../helpers/util';
 const invEnumerationService = container.resolve(InvEnumerationService);
 
 @singleton()
@@ -11,9 +12,10 @@ export default class InvEnumerationController {
   async save(req: Request, res: Response) {
     try {
       const invEnumeration: InvEnumeration = req.body;
-      const invEnumerationSaved = await invEnumerationService.save(
-        invEnumeration,
-      );
+      const invEnumerationSaved = await setTenantIdToService(
+        res,
+        invEnumerationService,
+      ).save(invEnumeration);
       res.status(201).send(invEnumerationSaved);
     } catch (e) {
       console.error(e);
@@ -24,10 +26,10 @@ export default class InvEnumerationController {
   async update(req: Request, res: Response) {
     const { id } = req.params;
     const invEnumeration: InvEnumeration = req.body;
-    const invEnumerationSaved = await invEnumerationService.update(
-      id,
-      invEnumeration,
-    );
+    const invEnumerationSaved = await setTenantIdToService(
+      res,
+      invEnumerationService,
+    ).update(id, invEnumeration);
     invEnumerationSaved
       ? res.status(201).send(invEnumerationSaved)
       : res.status(400).send('Something went wrong');
@@ -36,7 +38,10 @@ export default class InvEnumerationController {
   async findAll(req: Request, res: Response) {
     try {
       const { page = 1 } = req.params;
-      const invEnumerations = await invEnumerationService.findAll({ page });
+      const invEnumerations = await setTenantIdToService(
+        res,
+        invEnumerationService,
+      ).findAll({ page });
       res.status(200).send(invEnumerations);
     } catch (e) {
       console.error(e);
@@ -52,7 +57,10 @@ export default class InvEnumerationController {
         return;
       }
       if (typeof code === 'string') {
-        const invEnumeration = await invEnumerationService.findByCode(code);
+        const invEnumeration = await setTenantIdToService(
+          res,
+          invEnumerationService,
+        ).findByCode(code);
         res.status(200).send(invEnumeration);
       }
     } catch (e) {

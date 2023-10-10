@@ -4,7 +4,7 @@ import { UserAccountService } from './user-account.service';
 import bcrypt from 'bcryptjs';
 import jsonwebtoken from 'jsonwebtoken';
 import { UserAccount } from '../entities/UserAccount';
-const { SECRET_KEY } = process.env;
+const { SECRET_KEY, AUTH_DATABASE = '' } = process.env;
 
 @singleton()
 export class AuthService {
@@ -13,6 +13,7 @@ export class AuthService {
   async authenticate(
     userAccountLogin: UserAccountLogin,
   ): Promise<{ access_token: string; data: object } | null> {
+    this.userAccountService.setTenantId = AUTH_DATABASE;
     const { email, password } = userAccountLogin;
     const userAccount: UserAccount | null =
       await this.userAccountService.findByEmail(email);
@@ -25,6 +26,7 @@ export class AuthService {
     const data = {
       organizationId: userAccount.organizationId,
       roles: userAccount.roles,
+      tenantId: userAccount.tenantId,
     };
     const access_token = this.generateToken(data);
     return { access_token, data };
@@ -39,5 +41,9 @@ export class AuthService {
       SECRET_KEY,
     );
     return token;
+  }
+
+  async initOrg(_dbName: string) {
+    throw new Error('Not implemented yet');
   }
 }

@@ -1,4 +1,3 @@
-import BillingModel from '../db/models/billing.model';
 import { singleton, container } from 'tsyringe';
 import { BaseService } from '../../../helpers/abstracts/base.service';
 import { SequencedCodeService } from './sequenced-code.service';
@@ -8,6 +7,7 @@ import { KardexTransactionService } from '../../inventory/services/kardex-transa
 import { KardexTransactionType } from '../../inventory/entities/enums/kardex-transaction-type';
 import { Billing } from '../entities/Billing';
 import { getStatsPipeline } from './stats.aggregate';
+import { billingSchema } from '../db/schemas/billing.schema';
 dayjs.extend(utc);
 
 const kardexTransactionService = container.resolve(KardexTransactionService);
@@ -15,11 +15,16 @@ const sequencedCodeService = container.resolve(SequencedCodeService);
 
 @singleton()
 export class BillingService extends BaseService<Billing> {
+  getModelName = () => 'Billing';
+  getSchema = () => billingSchema;
+  getCollectionName = () => undefined;
+
   async findOne(id: string): Promise<Billing | null> {
-    return await BillingModel.findById(id).exec();
+    return await this.getModel().findById(id).exec();
   }
   async findAll({ page = 1 }): Promise<Billing[]> {
-    const billings: Billing[] = await BillingModel.find()
+    const billings: Billing[] = await this.getModel()
+      .find()
       .skip(10 * (page - 1))
       .limit(10)
       .sort({ 'createdAt.date': -1 })
@@ -34,15 +39,15 @@ export class BillingService extends BaseService<Billing> {
       .utcOffset(-5)
       .toDate()
       .getTime();
-    const billings: Billing[] = await BillingModel.aggregate(
-      getStatsPipeline(startDate),
-    ).exec();
+    const billings: Billing[] = await this.getModel()
+      .aggregate(getStatsPipeline(startDate))
+      .exec();
     return billings;
   }
   async save(billing: Billing): Promise<Billing> {
     try {
       billing.code = await generateSequencedCode();
-      const saved = await BillingModel.create(billing);
+      const saved = await this.getModel().create(billing);
       setImmediate(async () => await this.saveItemsMovements(saved));
       return saved;
     } catch (error) {
@@ -74,8 +79,10 @@ export class BillingService extends BaseService<Billing> {
       for (const billing of billings) {
         billing.code = await generateSequencedCode();
       }
-      let billingModels = billings.map((billing) => new BillingModel(billing));
-      const result = await BillingModel.bulkSave(billingModels);
+      let billingModels = billings.map(
+        (billing) => new (this.getModel())(billing),
+      );
+      const result = await this.getModel().bulkSave(billingModels);
       return result;
     } catch (error) {
       console.log(error);

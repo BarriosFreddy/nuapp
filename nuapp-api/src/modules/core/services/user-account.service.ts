@@ -1,4 +1,4 @@
-import UserAccountModel from '../db/models/user-account.model';
+import { userAccountSchema } from '../db/schemas/user-account.schema';
 import bcrypt from 'bcryptjs';
 import { singleton } from 'tsyringe';
 import { BaseService } from '../../../helpers/abstracts/base.service';
@@ -6,11 +6,15 @@ import { UserAccount } from '../entities/UserAccount';
 
 @singleton()
 export class UserAccountService extends BaseService<UserAccount> {
+  getModelName = () => 'UserAccount';
+  getSchema = () => userAccountSchema;
+  getCollectionName = () => 'user-accounts';
+
   async findOne(id: string) {
-    return await UserAccountModel.findById(id).exec();
+    return await this.getModel().findById(id).exec();
   }
   async findAll() {
-    const userAccounts = await UserAccountModel.find().exec();
+    const userAccounts = await this.getModel().find().exec();
     return userAccounts;
   }
 
@@ -21,7 +25,7 @@ export class UserAccountService extends BaseService<UserAccount> {
       const hashedPassword = await bcrypt.hash(userAccount.password, salt);
       userAccount.password = hashedPassword;
       userAccount.createdAt = new Date();
-      const userAccountSaved = await UserAccountModel.create(userAccount);
+      const userAccountSaved = await this.getModel().create(userAccount);
       return userAccountSaved;
     } catch (error) {
       console.log(error);
@@ -33,7 +37,7 @@ export class UserAccountService extends BaseService<UserAccount> {
     try {
       delete userAccount.password;
       userAccount.updatedAt = new Date();
-      const { modifiedCount } = await UserAccountModel.updateOne(
+      const { modifiedCount } = await this.getModel().updateOne(
         { _id: id },
         userAccount,
       );
@@ -46,7 +50,7 @@ export class UserAccountService extends BaseService<UserAccount> {
 
   async findByEmail(email: string): Promise<UserAccount | null> {
     try {
-      return await UserAccountModel.findOne({ email });
+      return await this.getModel().findOne({ email });
     } catch (error) {
       return Promise.reject(null);
     }

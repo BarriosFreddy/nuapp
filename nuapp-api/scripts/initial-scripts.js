@@ -29,6 +29,7 @@ db.getCollection('user-accounts').insertMany([
         $numberLong: '1684283492498',
       },
     },
+    tenantId: 'multidrogas'
   },
   {
     createdAt: {
@@ -53,6 +54,7 @@ db.getCollection('user-accounts').insertMany([
         $numberLong: '1674013548795',
       },
     },
+    tenantId: 'multidrogas'
   },
 ]);
 

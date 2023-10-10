@@ -8,20 +8,13 @@ import compression from 'compression';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
 import { registerRoutes } from './src/routes';
-import { connectDB } from './src/helpers/db/mongodb';
 
-const {
-  PORT = 3000,
-  DATABASE_URI = '',
-  NODE_ENV,
-  FRONTEND_ORIGIN,
-} = process.env;
+const { PORT = 3000, NODE_ENV, FRONTEND_ORIGIN } = process.env;
 
 const app: Express = express();
 
 (async () => {
   try {
-    await connectDB(DATABASE_URI);
     app.use(helmet());
     app.use(cookieParser());
     app.use(
