@@ -96,7 +96,7 @@ function ItemForm(props) {
   )
 
   const isValidForm = () => {
-    const { name, code, description, stock, categoryId, pricesRatio, expirationControl } = {
+    const { name, code, description, categoryId, pricesRatio, expirationControl } = {
       ...item,
     }
     const failedValidationsObj = { ...failedValidations }
@@ -107,17 +107,20 @@ function ItemForm(props) {
 
     pricesRatio?.forEach((priceRatio) => {
       failedValidationsObj['measurementUnit' + priceRatio.hash] = !priceRatio.measurementUnit
-      failedValidationsObj['price' + priceRatio.hash] = priceRatio.price <= 0
-      failedValidationsObj['cost' + priceRatio.hash] = priceRatio.cost <= 0
-      failedValidationsObj['multiplicity' + priceRatio.hash] = !priceRatio.multiplicity
+      failedValidationsObj['price' + priceRatio.hash] =
+        priceRatio.price <= 0 || Number.isNaN(+priceRatio.price)
+      failedValidationsObj['cost' + priceRatio.hash] =
+        priceRatio.cost <= 0 || Number.isNaN(+priceRatio.cost)
+      failedValidationsObj['multiplicity' + priceRatio.hash] =
+        !priceRatio.multiplicity || Number.isNaN(+priceRatio.multiplicity)
     })
 
     expirationControl?.forEach((expControl) => {
       failedValidationsObj['lot' + expControl.id] = !expControl.lot
-      failedValidationsObj['lotUnits' + expControl.id] = expControl.lotUnits < 0
+      failedValidationsObj['lotUnits' + expControl.id] =
+        expControl.lotUnits < 0 || Number.isNaN(+expControl.lotUnits)
       failedValidationsObj['expirationDate' + expControl.id] = !expControl.expirationDate
     })
-
     setFailedValidations(failedValidationsObj)
     return Object.values(failedValidationsObj).every((validation) => validation === false)
   }
@@ -357,7 +360,7 @@ function ItemForm(props) {
                 <CCol xs="12" lg="3">
                   <CFormInput
                     label="Punto de recompra"
-                    type="number"
+                    type="tel"
                     min={1}
                     name="reorderPoint"
                     value={item.reorderPoint}
@@ -423,7 +426,7 @@ function ItemForm(props) {
                       <CCol xs="12" lg="3">
                         <CurrencyFormInput
                           label="Precio"
-                          type="number"
+                          type="tel"
                           name="price"
                           value={priceRatio.price}
                           feedbackInvalid="Campo obligatorio"
@@ -437,7 +440,7 @@ function ItemForm(props) {
                       <CCol xs="12" lg="3">
                         <CurrencyFormInput
                           label="Costo"
-                          type="number"
+                          type="tel"
                           name="cost"
                           value={priceRatio.cost}
                           feedbackInvalid="Campo obligatorio"
@@ -453,7 +456,7 @@ function ItemForm(props) {
                       >
                         <FormInput
                           label="Multiplo"
-                          type="number"
+                          type="tel"
                           name="multiplicity"
                           min={1}
                           value={priceRatio.multiplicity}
@@ -497,14 +500,14 @@ function ItemForm(props) {
                     </CCol>
                   </CRow>
                   {item.expirationControl?.map((expControl, index) => (
-                    <CRow key={expControl.id}>
+                    <CRow key={index}>
                       <CCol
                         xs="12"
                         lg={{ offset: 0, span: item.expirationControl?.length === 1 ? 4 : 3 }}
                       >
                         <FormInput
                           label="Stock"
-                          type="number"
+                          type="tel"
                           name="lotUnits"
                           feedbackInvalid="Campo obligatorio"
                           invalid={failedValidations['lotUnits' + expControl.id]}
@@ -526,7 +529,7 @@ function ItemForm(props) {
                         />
                       </CCol>
                       <CCol xs="12" lg="4">
-                        <FormInput
+                        <CFormInput
                           label="Fecha de vencimiento"
                           type="date"
                           name="expirationDate"
