@@ -77,7 +77,17 @@ function ItemForm(props) {
   const confirmDialogRef = useRef()
 
   useEffect(() => {
-    props.item && setItem(props.item)
+    if (props.item) {
+      let itemToSet = null
+      if (props.copying) {
+        itemToSet = {
+          ...props.item,
+          code: '',
+        }
+        delete itemToSet._id
+      } else itemToSet = props.item
+      setItem(itemToSet)
+    }
     dispatch(getItemCategories({ parse: true }))
     dispatch(getInvEnumerationByCode('UDM'))
   }, [dispatch, props.item])
@@ -573,7 +583,7 @@ function ItemForm(props) {
               <CRow className="mt-0">
                 <CCol className="text-center" xs="8" lg={{ offset: 4, span: 4 }}>
                   <CButton color="success" type="button" disabled={saving} onClick={() => save()}>
-                    {props.item ? 'EDITAR' : 'GUARDAR'}
+                    {props.item && props.item?.id ? 'EDITAR' : 'GUARDAR'}
                   </CButton>
                   &nbsp; &nbsp;
                   <CButton variant="outline" color="secondary" onClick={() => cancel()}>
@@ -613,4 +623,5 @@ ItemForm.propTypes = {
   onCancel: PropTypes.func.isRequired,
   onSave: PropTypes.func.isRequired,
   item: PropTypes.object,
+  copying: PropTypes.bool,
 }

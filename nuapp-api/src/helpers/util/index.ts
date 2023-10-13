@@ -1,4 +1,4 @@
-import { Response } from "express";
+import { Response } from 'express';
 
 export const generateAuthKeyPair = (module: string, privilege: string) =>
   module.concat(':').concat(privilege);

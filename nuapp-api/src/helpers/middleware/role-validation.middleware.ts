@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from 'express';
 import { container } from 'tsyringe';
 import { Privilege } from '../../modules/core/entities/enums/privileges';
 import { ModuleService } from '../../modules/core/services/modules.service';
+import { setTenantIdToService } from '../util';
 
 const moduleService = container.resolve(ModuleService);
 
@@ -9,9 +10,11 @@ const roleValidation = (modulePrivilege: string) => {
   return async (_req: Request, res: Response, next: NextFunction) => {
     try {
       const [moduleCode, privilege] = modulePrivilege.split(':');
-      
+
       const { infoUser } = res.locals;
-      const module = await moduleService.findByCode(moduleCode);
+      const module = await setTenantIdToService(res, moduleService).findByCode(
+        moduleCode,
+      );
       if (!module) throw new Error('module not found');
       if (!infoUser) throw new Error('infoUser not found');
       const { access } = module;

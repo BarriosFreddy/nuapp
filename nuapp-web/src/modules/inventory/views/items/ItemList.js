@@ -17,8 +17,10 @@ import {
 import { formatCurrency, getMainPrice } from 'src/utils'
 import { PropTypes } from 'prop-types'
 import dayjs from 'dayjs'
+import CIcon from '@coreui/icons-react'
+import { cilCopy, cilPencil } from '@coreui/icons'
 
-const ItemList = ({ items, fetching, page, onEdit, onPrevPage, onNextPage }) => {
+const ItemList = ({ items, fetching, page, onEdit, onCopy, onPrevPage, onNextPage }) => {
   const getExpirationDates = (expirationControl) =>
     expirationControl?.map(({ expirationDate, lotUnits }) => ({ expirationDate, lotUnits }))
   return (
@@ -68,23 +70,19 @@ const ItemList = ({ items, fetching, page, onEdit, onPrevPage, onNextPage }) => 
         <CTable small hover>
           <CTableHead>
             <CTableRow>
-              <CTableHeaderCell>Nombre</CTableHeaderCell>
-              <CTableHeaderCell>Código</CTableHeaderCell>
-              <CTableHeaderCell>En Stock</CTableHeaderCell>
-              <CTableHeaderCell>Precio</CTableHeaderCell>
-              <CTableHeaderCell>&nbsp;</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Nombre</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Código</CTableHeaderCell>
+              <CTableHeaderCell scope="col">En Stock</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Precio</CTableHeaderCell>
+              <CTableHeaderCell scope="col">Acciones</CTableHeaderCell>
             </CTableRow>
           </CTableHead>
           <CTableBody>
             {items.map((item) => (
               <CTableRow key={item.code}>
-                <CTableDataCell xs="12" className="text-uppercase text-break">
-                  {item.name}
-                </CTableDataCell>
-                <CTableDataCell className="fs-6" xs="12">
-                  {item.code}
-                </CTableDataCell>
-                <CTableDataCell xs="12">
+                <CTableDataCell className="text-uppercase text-break">{item.name}</CTableDataCell>
+                <CTableDataCell>{item.code}</CTableDataCell>
+                <CTableDataCell>
                   {getExpirationDates(item.expirationControl)
                     ?.filter(({ lotUnits }) => lotUnits > 0)
                     .map(({ expirationDate, lotUnits }, index) => (
@@ -103,10 +101,8 @@ const ItemList = ({ items, fetching, page, onEdit, onPrevPage, onNextPage }) => 
                       </CBadge>
                     ))}
                 </CTableDataCell>
-                <CTableDataCell xs="12">
-                  {formatCurrency(getMainPrice(item?.pricesRatio))}
-                </CTableDataCell>
-                <CTableDataCell xs="12">
+                <CTableDataCell>{formatCurrency(getMainPrice(item?.pricesRatio))}</CTableDataCell>
+                <CTableDataCell>
                   <CButton
                     size="sm"
                     variant="outline"
@@ -114,7 +110,18 @@ const ItemList = ({ items, fetching, page, onEdit, onPrevPage, onNextPage }) => 
                     disabled={fetching}
                     onClick={() => onEdit(item)}
                   >
-                    EDITAR
+                    <CIcon icon={cilPencil} size="sm" />
+                    &nbsp; EDITAR
+                  </CButton>
+                  <CButton
+                    size="sm"
+                    variant="outline"
+                    color="secondary"
+                    disabled={fetching}
+                    onClick={() => onCopy(item)}
+                  >
+                    <CIcon icon={cilCopy} size="sm" />
+                    &nbsp; COPIAR
                   </CButton>
                 </CTableDataCell>
               </CTableRow>
@@ -172,6 +179,7 @@ ItemList.propTypes = {
   page: PropTypes.number.isRequired,
   fetching: PropTypes.bool.isRequired,
   onEdit: PropTypes.func.isRequired,
+  onCopy: PropTypes.func.isRequired,
   onPrevPage: PropTypes.func.isRequired,
   onNextPage: PropTypes.func.isRequired,
 }

@@ -39,6 +39,7 @@ function Item() {
   const fetching = useSelector((state) => state.items.fetching)
   const [searchTerm, setSearchTerm] = useState('')
   let [editing, setEditing] = useState(false)
+  let [copying, setCopying] = useState(false)
   let [item, setItem] = useState(null)
   const [showFilterSection, setShowFilterSection] = useState(false)
   const [queryParams, setQueryParams] = useState(queryParamsInitial)
@@ -112,12 +113,20 @@ function Item() {
 
   const handleEdit = (item) => {
     setEditing(true)
+    setCopying(false)
+    setItem(item)
+  }
+
+  const handleCopy = (item) => {
+    setCopying(true)
+    setEditing(true)
     setItem(item)
   }
 
   const handleNewItem = () => {
     setItem(null)
     setEditing(true)
+    setCopying(false)
   }
 
   const handleClear = () => {
@@ -227,11 +236,14 @@ function Item() {
                 page={queryParams.page}
                 fetching={fetching}
                 onEdit={handleEdit}
+                onCopy={handleCopy}
                 onPrevPage={handlePrevPage}
                 onNextPage={handleNextPage}
               />
             )}
-            {editing && <ItemForm item={item} onSave={handleSave} onCancel={handleCancel} />}
+            {editing && (
+              <ItemForm copying={copying} item={item} onSave={handleSave} onCancel={handleCancel} />
+            )}
           </CCardBody>
         </CCard>
       </CContainer>
