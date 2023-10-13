@@ -96,9 +96,6 @@ function ItemCategoriesForm(props) {
     <>
       <CContainer fluid>
         <CCard>
-          <div className="d-none d-lg-block">
-            <CCardHeader>{props.itemCategory ? 'EDITANDO' : 'CREANDO'} ITEM</CCardHeader>
-          </div>
           <div className="py-1 d-lg-none">
             <CRow className="m-1">
               <CCol xs="3" lg={{ offset: 4, span: 4 }}>

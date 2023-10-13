@@ -152,84 +152,89 @@ function Item() {
         <CCard className="mt-6 shadow border-10">
           <div className="d-none d-lg-block">
             <CCardHeader>
-              <CCardTitle>ITEMS</CCardTitle>
+              {!editing && (
+                <>
+                  <CRow>
+                    <CCol xs="2" lg="3">
+                      ITEMS &nbsp;
+                      <CButton variant="outline" color="success" onClick={handleNewItem}>
+                        <div className="d-none d-lg-block">NUEVO</div>
+                        <div className="d-lg-none">
+                          <CIcon icon={cilPlus} size="sm" />
+                        </div>
+                      </CButton>
+                    </CCol>
+                    <CCol xs="8" lg="5">
+                      <CInputGroup>
+                        <CFormInput
+                          ref={searchInputRef}
+                          type="text"
+                          name="searchTerm"
+                          placeholder="..."
+                          value={searchTerm}
+                          onChange={(event) => onChangeField(event)}
+                          onKeyDown={(event) => onKeyDownCodeField(event)}
+                        />
+                        <CButton type="button" variant="outline" color="primary" onClick={search}>
+                          <div className="d-none d-lg-block">BUSCAR</div>
+                          <div className="d-lg-none">
+                            <CIcon icon={cilSearch} size="sm" />
+                          </div>
+                        </CButton>
+                        <CButton
+                          variant="outline"
+                          type="button"
+                          color="secondary"
+                          onClick={handleClear}
+                        >
+                          <div className="d-none d-lg-block">BORRAR</div>
+                          <div className="d-lg-none">
+                            <CIcon icon={cilTrash} size="sm" />
+                          </div>
+                        </CButton>
+                      </CInputGroup>
+                    </CCol>
+                    <CCol xs="2" lg="1">
+                      <CButton color="link" onClick={handleFilter}>
+                        Filtrar
+                      </CButton>
+                    </CCol>
+                    {showFilterSection && (
+                      <>
+                        <CCol xs="2" lg="1" className="text-end">
+                          <CFormLabel htmlFor="stock" className="col-form-label">
+                            Stock
+                          </CFormLabel>
+                        </CCol>
+                        <CCol xs="4" lg="2">
+                          <CFormSelect
+                            id="stock"
+                            className="my-1"
+                            value={queryParams.stock}
+                            name="stock"
+                            size="sm"
+                            options={[
+                              { label: 'TODOS', value: '' },
+                              { label: 'DISPONIBLE', value: 'IS' },
+                              { label: 'RECOMPRA', value: 'RP' },
+                              { label: 'NO DISPONIBLE', value: 'WS' },
+                            ]}
+                            onChange={handleChangeFilters}
+                          />
+                        </CCol>
+                      </>
+                    )}
+                  </CRow>
+                </>
+              )}
+              {editing && (
+                <div className="d-none d-lg-block">
+                  {item ? (copying ? 'COPIANDO' : 'EDITANDO') : 'CREANDO'} ITEM
+                </div>
+              )}
             </CCardHeader>
           </div>
           <CCardBody>
-            {!editing && (
-              <>
-                <CRow>
-                  <CCol xs="2" lg="3">
-                    <CButton variant="outline" color="success" onClick={handleNewItem}>
-                      <div className="d-none d-lg-block">NUEVO ITEM</div>
-                      <div className="d-lg-none">
-                        <CIcon icon={cilPlus} size="sm" />
-                      </div>
-                    </CButton>
-                  </CCol>
-                  <CCol xs="8" lg="5">
-                    <CInputGroup>
-                      <CFormInput
-                        ref={searchInputRef}
-                        type="text"
-                        name="searchTerm"
-                        placeholder="..."
-                        value={searchTerm}
-                        onChange={(event) => onChangeField(event)}
-                        onKeyDown={(event) => onKeyDownCodeField(event)}
-                      />
-                      <CButton type="button" variant="outline" color="primary" onClick={search}>
-                        <div className="d-none d-lg-block">BUSCAR</div>
-                        <div className="d-lg-none">
-                          <CIcon icon={cilSearch} size="sm" />
-                        </div>
-                      </CButton>
-                      <CButton
-                        variant="outline"
-                        type="button"
-                        color="secondary"
-                        onClick={handleClear}
-                      >
-                        <div className="d-none d-lg-block">BORRAR</div>
-                        <div className="d-lg-none">
-                          <CIcon icon={cilTrash} size="sm" />
-                        </div>
-                      </CButton>
-                    </CInputGroup>
-                  </CCol>
-                  <CCol xs="2" lg="1">
-                    <CButton color="link" onClick={handleFilter}>
-                      Filtrar
-                    </CButton>
-                  </CCol>
-                  {showFilterSection && (
-                    <>
-                      <CCol xs="2" lg="1" className="text-end">
-                        <CFormLabel htmlFor="stock" className="col-form-label">
-                          Stock
-                        </CFormLabel>
-                      </CCol>
-                      <CCol xs="4" lg="2">
-                        <CFormSelect
-                          id="stock"
-                          className="my-1"
-                          value={queryParams.stock}
-                          name="stock"
-                          size="sm"
-                          options={[
-                            { label: 'TODOS', value: '' },
-                            { label: 'DISPONIBLE', value: 'IS' },
-                            { label: 'RECOMPRA', value: 'RP' },
-                            { label: 'NO DISPONIBLE', value: 'WS' },
-                          ]}
-                          onChange={handleChangeFilters}
-                        />
-                      </CCol>
-                    </>
-                  )}
-                </CRow>
-              </>
-            )}
             {!editing && (
               <ItemList
                 items={items}

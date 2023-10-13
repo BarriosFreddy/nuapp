@@ -113,6 +113,7 @@ const ItemList = ({ items, fetching, page, onEdit, onCopy, onPrevPage, onNextPag
                     <CIcon icon={cilPencil} size="sm" />
                     &nbsp; EDITAR
                   </CButton>
+                  &nbsp;
                   <CButton
                     size="sm"
                     variant="outline"

@@ -119,52 +119,57 @@ function Categories() {
         <CCard className="mt-6 shadow border-10">
           <div className="d-none d-lg-block">
             <CCardHeader>
-              <CCardTitle>CATEGORIA DE ITEMS</CCardTitle>
+              {!editing && (
+                <CRow>
+                  <CCol xs="2" lg="3">
+                    CATEGORIAS DE ITEMS &nbsp;
+                    <CButton variant="outline" color="success" onClick={handleNew}>
+                      <div className="d-none d-lg-block">NUEVA</div>
+                      <div className="d-lg-none">
+                        <CIcon icon={cilPlus} size="sm" />
+                      </div>
+                    </CButton>
+                  </CCol>
+                  <CCol xs="8" lg="5">
+                    <CInputGroup>
+                      <CFormInput
+                        ref={searchInputRef}
+                        type="text"
+                        name="searchTerm"
+                        placeholder="..."
+                        value={searchTerm}
+                        onChange={(event) => onChangeField(event)}
+                        onKeyDown={(event) => onKeyDownCodeField(event)}
+                      />
+                      <CButton type="button" variant="outline" color="primary" onClick={search}>
+                        <div className="d-none d-lg-block">BUSCAR</div>
+                        <div className="d-lg-none">
+                          <CIcon icon={cilSearch} size="sm" />
+                        </div>
+                      </CButton>
+                      <CButton
+                        variant="outline"
+                        type="button"
+                        color="secondary"
+                        onClick={handleClear}
+                      >
+                        <div className="d-none d-lg-block">BORRAR</div>
+                        <div className="d-lg-none">
+                          <CIcon icon={cilTrash} size="sm" />
+                        </div>
+                      </CButton>
+                    </CInputGroup>
+                  </CCol>
+                </CRow>
+              )}
+              {editing && (
+                <div className="d-none d-lg-block">
+                  {itemCategory ? 'EDITANDO' : 'CREANDO'} CATEGORIA
+                </div>
+              )}
             </CCardHeader>
           </div>
           <CCardBody>
-            {!editing && (
-              <CRow>
-                <CCol xs="2" lg="3">
-                  <CButton variant="outline" color="success" onClick={handleNew}>
-                    <div className="d-none d-lg-block">NUEVA CATEGORIA</div>
-                    <div className="d-lg-none">
-                      <CIcon icon={cilPlus} size="sm" />
-                    </div>
-                  </CButton>
-                </CCol>
-                <CCol xs="8" lg="5">
-                  <CInputGroup>
-                    <CFormInput
-                      ref={searchInputRef}
-                      type="text"
-                      name="searchTerm"
-                      placeholder="..."
-                      value={searchTerm}
-                      onChange={(event) => onChangeField(event)}
-                      onKeyDown={(event) => onKeyDownCodeField(event)}
-                    />
-                    <CButton type="button" variant="outline" color="primary" onClick={search}>
-                      <div className="d-none d-lg-block">BUSCAR</div>
-                      <div className="d-lg-none">
-                        <CIcon icon={cilSearch} size="sm" />
-                      </div>
-                    </CButton>
-                    <CButton
-                      variant="outline"
-                      type="button"
-                      color="secondary"
-                      onClick={handleClear}
-                    >
-                      <div className="d-none d-lg-block">BORRAR</div>
-                      <div className="d-lg-none">
-                        <CIcon icon={cilTrash} size="sm" />
-                      </div>
-                    </CButton>
-                  </CInputGroup>
-                </CCol>
-              </CRow>
-            )}
             {!editing && (
               <ItemCategoriesList
                 itemCategories={itemCategories}
