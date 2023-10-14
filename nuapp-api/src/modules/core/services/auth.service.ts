@@ -22,11 +22,11 @@ export class AuthService {
       password,
       userAccount.password || '',
     );
+    const { organization } = userAccount;
     if (!isTheSame) return null;
     const data = {
-      organizationId: userAccount.organizationId,
       roles: userAccount.roles,
-      tenantId: userAccount.tenantId,
+      organization,
     };
     const access_token = this.generateToken(data);
     return { access_token, data };

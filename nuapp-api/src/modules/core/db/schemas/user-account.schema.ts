@@ -17,4 +17,9 @@ export const userAccountSchema = new Schema({
   updatedAt: Date,
   organizationId: Types.ObjectId,
   tenantId: String,
+  organization: {
+    id: Types.ObjectId,
+    name: String,
+    tenantId: String,
+  },
 });
