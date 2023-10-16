@@ -8,6 +8,7 @@ import { KardexTransactionType } from '../../inventory/entities/enums/kardex-tra
 import { Billing } from '../entities/Billing';
 import { getStatsPipeline } from './stats.aggregate';
 import { billingSchema } from '../db/schemas/billing.schema';
+import { SequencedCode } from '../entities/SequencedCode';
 dayjs.extend(utc);
 
 const kardexTransactionService = container.resolve(KardexTransactionService);
@@ -97,12 +98,16 @@ export class BillingService extends BaseService<Billing> {
 
 async function generateSequencedCode(): Promise<string> {
   let generatedSequencedCode = '';
-  const { _id, prefixPart1, prefixPart2, sequence } =
-    (await sequencedCodeService.findLastOne()) || {};
-  if (_id && sequence !== undefined) {
-    const newSequence = sequence + 1;
-    await sequencedCodeService.update(_id, newSequence);
-    generatedSequencedCode = `${prefixPart1}${prefixPart2}${newSequence}`;
+  const sequenceCode: SequencedCode | null =
+    await sequencedCodeService.findLastOne();
+  if (sequenceCode) {
+    const { _id, prefixPart1, prefixPart2, sequence } = sequenceCode;
+    if (_id && sequence !== undefined) {
+      const newSequence = sequence + 1;
+      sequenceCode.sequence = newSequence;
+      await sequencedCodeService.update(_id.toString(), sequenceCode);
+      generatedSequencedCode = `${prefixPart1}${prefixPart2}${newSequence}`;
+    }
   }
   return generatedSequencedCode;
 }

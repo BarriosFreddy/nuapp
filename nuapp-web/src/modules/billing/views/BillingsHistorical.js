@@ -22,14 +22,24 @@ import { formatCurrency, formatDate } from '../../../utils'
 import { getBillings } from 'src/modules/billing/services/billings.service'
 import { setBillings } from '../reducers/billings.reducer'
 import { Helmet } from 'react-helmet'
+import CIcon from '@coreui/icons-react'
+import { cilArrowLeft, cilPrint, cilZoom } from '@coreui/icons'
+import { PDFViewer } from '@react-pdf/renderer'
+import BillingTemplate from './print-templates/BillingTemplate'
+
+export const { LISTING, DETAILING, PRINTING } = {
+  LISTING: 'L',
+  DETAILING: 'D',
+  PRINTING: 'P',
+}
 
 function BillingsHistorical() {
   const dispatch = useDispatch()
   const billings = useSelector((state) => state.billing.billings)
   const billingsOffline = useSelector((state) => state.billing.offline.billings)
-  let [detailing, setDetailing] = useState(false)
   let [billing, setBilling] = useState(null)
   let [page, setPage] = useState(1)
+  let [currentAction, setCurrentAction] = useState(LISTING)
   useEffect(() => {
     dispatch(getBillings())
   }, [dispatch])
@@ -57,12 +67,17 @@ function BillingsHistorical() {
 
   const handleDetail = (billing) => {
     setBilling(billing)
-    setDetailing(true)
+    setCurrentAction(DETAILING)
+  }
+
+  const handlePrint = (billing) => {
+    setBilling(billing)
+    setCurrentAction(PRINTING)
   }
 
   const handleBack = () => {
     setBilling(null)
-    setDetailing(false)
+    setCurrentAction(LISTING)
   }
 
   return (
@@ -72,12 +87,32 @@ function BillingsHistorical() {
           <Helmet>
             <title>HISTORIAL DE FACTURAS</title>
           </Helmet>
-          <CCardTitle>HISTORIAL DE FACTURAS</CCardTitle>
+          <CRow>
+            <CCol md="4">
+              {[DETAILING, PRINTING].includes(currentAction) && (
+                <CButton variant="outline" color="info" onClick={() => handleBack()}>
+                  <CIcon icon={cilArrowLeft} size="sm" />
+                  &nbsp; Regresar
+                </CButton>
+              )}
+            </CCol>
+            <CCol md="4" className="text-center">
+              HISTORIAL DE FACTURAS
+            </CCol>
+            <CCol md="4" className="text-end">
+              {[DETAILING].includes(currentAction) && (
+                <CButton variant="outline" color="secondary" onClick={() => handlePrint(billing)}>
+                  <CIcon icon={cilPrint} size="sm" />
+                  &nbsp; Imprimir
+                </CButton>
+              )}
+            </CCol>
+          </CRow>
         </CCardHeader>
         <CCardBody>
           <CContainer className="mt--6" fluid>
             <CRow>
-              {!detailing && (
+              {currentAction === LISTING && (
                 <CCol>
                   <>
                     <div className="d-lg-none">
@@ -139,7 +174,18 @@ function BillingsHistorical() {
                                     color="info"
                                     onClick={() => handleDetail(billing)}
                                   >
-                                    Detalle
+                                    <CIcon icon={cilZoom} size="sm" />
+                                    &nbsp; Detalle
+                                  </CButton>
+                                  &nbsp;
+                                  <CButton
+                                    size="sm"
+                                    variant="outline"
+                                    color="secondary"
+                                    onClick={() => handlePrint(billing)}
+                                  >
+                                    <CIcon icon={cilPrint} size="sm" />
+                                    &nbsp; Imprimir
                                   </CButton>
                                 </CTableDataCell>
                               </CTableRow>
@@ -179,7 +225,12 @@ function BillingsHistorical() {
                   </>
                 </CCol>
               )}
-              {detailing && (
+              {currentAction === PRINTING && (
+                <PDFViewer width="100%" height="550px">
+                  <BillingTemplate billing={billing} />
+                </PDFViewer>
+              )}
+              {currentAction === DETAILING && (
                 <CCol>
                   <div className="d-none d-lg-block">
                     <CTable small hover>
@@ -215,15 +266,6 @@ function BillingsHistorical() {
                 </CCol>
               )}
             </CRow>
-            {detailing && (
-              <CRow>
-                <CCol>
-                  <CButton variant="outline" color="info" onClick={() => handleBack()}>
-                    Regresar
-                  </CButton>
-                </CCol>
-              </CRow>
-            )}
           </CContainer>
         </CCardBody>
       </CCard>
