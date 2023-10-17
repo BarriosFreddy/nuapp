@@ -10,7 +10,6 @@ import {
   CCol,
   CInputGroup,
   CFormInput,
-  CCardTitle,
   CFormSelect,
   CFormLabel,
 } from '@coreui/react'
@@ -50,10 +49,6 @@ function Item() {
     dispatch(getItems({ page: 1 }))
   }, [dispatch])
 
-  useEffect(() => {
-    search()
-  }, [queryParams])
-
   useDidUpdateControl(
     () => {
       if (saveSuccess) {
@@ -79,36 +74,37 @@ function Item() {
   }
 
   const handleCancel = async () => {
-    setQueryParams({ page: queryParams.page })
     setEditing(false)
   }
 
   const handlePrevPage = async () => {
-    const newPage = queryParams.page === 1 ? 1 : queryParams.page - 1
-    setQueryParams({ ...queryParams, page: newPage })
+    const newParams = { ...queryParams, page: queryParams.page === 1 ? 1 : queryParams.page - 1 }
+    search(newParams)
   }
 
   const handleNextPage = async () => {
-    const newPage = queryParams.page + 1
-    setQueryParams({ ...queryParams, page: newPage })
+    const newParams = { ...queryParams, page: queryParams.page + 1 }
+    search(newParams)
   }
 
-  const onChangeField = ({ target: { value } }) => {
-    setSearchTerm(value)
-  }
+  const onChangeField = ({ target: { value } }) => setSearchTerm(value)
 
   const onKeyDownCodeField = async ({ keyCode }) => {
-    if ([ENTER_KEYCODE, TAB_KEYCODE].includes(keyCode)) setQueryParams({ ...queryParams })
+    if ([ENTER_KEYCODE, TAB_KEYCODE].includes(keyCode)) handleSearch()
   }
 
-  const search = async () => {
-    const params = { ...queryParams }
-
-    if (!!searchTerm) {
-      params.code = searchTerm.trim()
-      params.name = searchTerm.trim()
-    }
+  const search = async (params = {}) => {
+    setQueryParams(params)
     dispatch(getItems(params))
+  }
+
+  const handleSearch = () => {
+    const newParams = { page: 1 }
+    if (!!searchTerm) {
+      newParams.code = searchTerm.trim()
+      newParams.name = searchTerm.trim()
+    }
+    search(newParams)
   }
 
   const handleEdit = (item) => {
@@ -131,7 +127,8 @@ function Item() {
 
   const handleClear = () => {
     setSearchTerm('')
-    dispatch(getItems({ page: 1 }))
+    const params = { page: 1 }
+    search(params)
     searchInputRef.current.focus()
   }
 
@@ -140,7 +137,8 @@ function Item() {
   }
 
   const handleChangeFilters = ({ target: { name, value } }) => {
-    setQueryParams({ ...queryParams, [name]: value })
+    const params = { ...queryParams, page: 1, [name]: value }
+    search(params)
   }
 
   return (
@@ -175,7 +173,12 @@ function Item() {
                           onChange={(event) => onChangeField(event)}
                           onKeyDown={(event) => onKeyDownCodeField(event)}
                         />
-                        <CButton type="button" variant="outline" color="primary" onClick={search}>
+                        <CButton
+                          type="button"
+                          variant="outline"
+                          color="primary"
+                          onClick={handleSearch}
+                        >
                           <div className="d-none d-lg-block">BUSCAR</div>
                           <div className="d-lg-none">
                             <CIcon icon={cilSearch} size="sm" />
