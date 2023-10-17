@@ -122,7 +122,7 @@ function Categories() {
               {!editing && (
                 <CRow>
                   <CCol xs="2" lg="3">
-                    CATEGORIAS DE ITEMS &nbsp;
+                    CATEGORIAS&nbsp;
                     <CButton variant="outline" color="success" onClick={handleNew}>
                       <div className="d-none d-lg-block">NUEVA</div>
                       <div className="d-lg-none">

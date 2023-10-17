@@ -143,11 +143,11 @@ function Item() {
 
   return (
     <>
-      <CContainer className="mt--6" fluid>
+      <CContainer fluid>
         <Helmet>
           <title>ITEMS</title>
         </Helmet>
-        <CCard className="mt-6 shadow border-10">
+        <CCard className="shadow border-10">
           <div className="d-none d-lg-block">
             <CCardHeader>
               {!editing && (

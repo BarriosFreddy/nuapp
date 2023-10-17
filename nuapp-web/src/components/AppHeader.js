@@ -14,7 +14,7 @@ const AppHeader = () => {
 
   return (
     <CHeader position="sticky" className="mb-1">
-      <CContainer fluid>
+      <CContainer>
         <CHeaderToggler className="ps-1" onClick={() => dispatch(setSidebarShow(!sidebarShow))}>
           <CIcon icon={cilMenu} size="lg" />
         </CHeaderToggler>
