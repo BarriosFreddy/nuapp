@@ -16,7 +16,6 @@ import {
   CTableHead,
   CTableHeaderCell,
   CCardHeader,
-  CCardTitle,
 } from '@coreui/react'
 import { formatCurrency, formatDate } from '../../../utils'
 import { getBillings } from 'src/modules/billing/services/billings.service'

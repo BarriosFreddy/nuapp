@@ -5,7 +5,6 @@ import {
   CCol,
   CFormInput,
   CFormSelect,
-  CInputGroup,
   CRow,
   CTable,
   CTableBody,

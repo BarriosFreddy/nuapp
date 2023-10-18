@@ -28,7 +28,6 @@ import { setItems } from 'src/modules/inventory/reducers/items.reducer'
 import { getItems } from 'src/modules/inventory/services/items.service'
 import CONSTANTS from './../../../constants'
 import { useDidUpdate } from 'src/hooks/useDidUpdate'
-import dayjs from 'dayjs'
 
 const { ENTER_KEYCODE, TAB_KEYCODE } = CONSTANTS
 

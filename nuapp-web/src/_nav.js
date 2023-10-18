@@ -9,10 +9,7 @@ import {
   cilHistory,
   cilSquare,
   cilSitemap,
-  cilCloudUpload,
-  cilSync,
   cilInbox,
-  cilBasket,
 } from '@coreui/icons'
 import { CNavGroup, CNavItem } from '@coreui/react'
 

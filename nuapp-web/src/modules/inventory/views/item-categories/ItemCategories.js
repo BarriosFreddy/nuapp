@@ -10,7 +10,6 @@ import {
   CCol,
   CInputGroup,
   CFormInput,
-  CCardTitle,
 } from '@coreui/react'
 import ItemCategoriesForm from './ItemCategoriesForm'
 import { useDispatch, useSelector } from 'react-redux'

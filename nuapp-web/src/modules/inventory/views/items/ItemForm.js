@@ -90,7 +90,7 @@ function ItemForm(props) {
     }
     dispatch(getItemCategories({ parse: true }))
     dispatch(getInvEnumerationByCode('UDM'))
-  }, [dispatch, props.item])
+  }, [dispatch, props.item, props.copying])
 
   // INIT
   const oldCode = props.item?.code
