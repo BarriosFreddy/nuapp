@@ -46,7 +46,7 @@ function Billing() {
   const cargeButtonRef = useRef()
   const isReceivedLTTotal = receivedAmount < total
   const hasNotItems = items.length <= 0
-  const isQuantityEditable = false
+  const isQuantityEditable = true
 
   useEffect(() => {
     dispatch(setSidebarUnfoldable(true))
