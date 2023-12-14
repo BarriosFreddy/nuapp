@@ -432,7 +432,9 @@ function ItemForm(props) {
                       </CCol>
                       <CCol xs="12" lg="3">
                         <CurrencyFormInput
-                          label="Precio"
+                          label={`Precio ${Math.round(
+                            ((priceRatio.price - priceRatio.cost) * 100) / priceRatio.cost,
+                          )}% ↑`}
                           type="tel"
                           name="price"
                           value={priceRatio.price}

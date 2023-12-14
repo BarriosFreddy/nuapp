@@ -32,7 +32,7 @@ const Login = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      window.location.pathname = '/home'
+      window.location.pathname = '/billing'
     }
   }, [isLoggedIn])
 
