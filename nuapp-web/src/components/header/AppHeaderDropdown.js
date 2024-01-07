@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   CBadge,
   CDropdown,
@@ -8,13 +8,26 @@ import {
   CDropdownMenu,
   CDropdownToggle,
 } from '@coreui/react'
-import { cilBell, cilEnvelopeOpen, cilSettings, cilUser } from '@coreui/icons'
+import { cilAccountLogout, cilBell, cilEnvelopeOpen, cilSettings, cilUser } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
+import { useDispatch, useSelector } from 'react-redux'
+import { logout } from 'src/modules/core/services/auth.service'
 
 const { REACT_APP_RENDER_GIT_COMMIT = '' } = process.env
 console.log({ REACT_APP_RENDER_GIT_COMMIT })
 
 const AppHeaderDropdown = () => {
+  const dispatch = useDispatch()
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      window.location.pathname = '/login'
+    }
+  }, [isLoggedIn])
+
+  const handleLogout = () => dispatch(logout())
+
   return (
     <CDropdown variant="nav-item">
       <CDropdownToggle placement="bottom-end" className="py-0" caret={false}>
@@ -47,6 +60,10 @@ const AppHeaderDropdown = () => {
           <CBadge color="info" className="ms-2">
             {REACT_APP_RENDER_GIT_COMMIT.substring(0, 6)}
           </CBadge>
+        </CDropdownItem>
+        <CDropdownItem onClick={handleLogout}>
+          <CIcon icon={cilAccountLogout} className="me-2" />
+          Cerrar sesión
         </CDropdownItem>
       </CDropdownMenu>
     </CDropdown>

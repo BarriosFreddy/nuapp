@@ -161,7 +161,7 @@ const BillingForm = (props) => {
             <CTable hover>
               <CTableHead>
                 <CTableRow>
-                  <CTableHeaderCell>Nombre</CTableHeaderCell>
+                  <CTableHeaderCell>Producto</CTableHeaderCell>
                   <CTableHeaderCell>Precio</CTableHeaderCell>
                   <CTableHeaderCell>Stock</CTableHeaderCell>
                 </CTableRow>

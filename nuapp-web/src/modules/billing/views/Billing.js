@@ -52,6 +52,12 @@ function Billing() {
     dispatch(setSidebarUnfoldable(true))
   }, [dispatch])
 
+  useEffect(() => {
+    document.addEventListener('keydown', (event) => {
+      console.log({ event })
+    })
+  }, [])
+
   useDidUpdateControl(
     () => {
       if (saveSuccess) {
@@ -176,6 +182,7 @@ function Billing() {
   const hanndleReceivedAmount = (receivedAmount) => setReceivedAmount(receivedAmount)
 
   const handleBack = () => setPaying(false)
+
   return (
     <>
       <CContainer className="mt-3" fluid>
@@ -183,30 +190,27 @@ function Billing() {
           <title>FACTURACIÓN</title>
         </Helmet>
         <CRow>
-          <CCol lg="5">
+          <CCol lg="4">
             <CCard className="shadow border-10" style={{ height: '72vh' }}>
-              <CCardBody style={{ overflow: 'auto' }}>
+              <CCardBody style={{ overflow: 'auto', fontSize: 14 }}>
                 <CTable small hover>
                   <CTableHead>
                     <CTableRow>
-                      <CTableHeaderCell>Producto</CTableHeaderCell>
-                      <CTableHeaderCell>Cantidad</CTableHeaderCell>
-                      <CTableHeaderCell colSpan={2}>&nbsp;</CTableHeaderCell>
-                      <CTableHeaderCell>Subtotal</CTableHeaderCell>
-                      <CTableHeaderCell>&nbsp;</CTableHeaderCell>
+                      <CTableHeaderCell colSpan={6}>
+                        Producto / Cantidad / Subtotal
+                      </CTableHeaderCell>
                     </CTableRow>
                   </CTableHead>
                   <CTableBody>
                     {items.map(({ code, name, price, pricesRatio, measurementUnit }) => (
                       <CTableRow key={code}>
-                        <CTableDataCell xs="12">{name}</CTableDataCell>
                         {!isQuantityEditable && (
                           <CTableDataCell xs="12">{itemUnits[code]}</CTableDataCell>
                         )}
                         <CTableDataCell colSpan={2}>
                           <CRow>
-                            {isQuantityEditable && (
-                              <CCol>
+                            <CCol style={{ display: 'flex', flexDirection: 'row' }}>
+                              {isQuantityEditable && (
                                 <CFormInput
                                   style={{ maxWidth: 60 }}
                                   type="number"
@@ -217,10 +221,8 @@ function Billing() {
                                   value={itemUnits[code]}
                                   onChange={(event) => handleChangeUnits(event)}
                                 />
-                              </CCol>
-                            )}
-                            {pricesRatio.length > 1 && (
-                              <CCol>
+                              )}
+                              {pricesRatio.length > 1 && (
                                 <CFormSelect
                                   name="measurementUnit"
                                   value={measurementUnit}
@@ -234,12 +236,15 @@ function Billing() {
                                     })) ?? []),
                                   ]}
                                 />
-                              </CCol>
-                            )}
+                              )}
+                            </CCol>
                           </CRow>
                         </CTableDataCell>
-                        <CTableDataCell xs="12" className="text-break" colSpan={2}>
+                        <CTableDataCell xs="12">{name}</CTableDataCell>
+                        <CTableDataCell xs="12" className="text-break">
                           {formatCurrency(price * itemUnits[code])}
+                        </CTableDataCell>
+                        <CTableDataCell xs="12" className="text-break text-end fw-semibold">
                           <CButton size="sm" color="ligth" onClick={() => deleteItem(code)}>
                             <CIcon icon={cilTrash} size="sm" />
                           </CButton>
@@ -251,7 +256,7 @@ function Billing() {
               </CCardBody>
             </CCard>
           </CCol>
-          <CCol lg="7">
+          <CCol lg="8">
             <CCard className="shadow border-10" style={{ height: '72vh', overflowY: 'auto' }}>
               <CCardBody>
                 {!paying && <BillingForm addItem={addItem} />}
@@ -282,7 +287,7 @@ function Billing() {
                       onClick={paying ? handleSave : handleCharge}
                       disabled={paying ? saving : hasNotItems}
                     >
-                      {paying ? 'FACTURAR' : 'COBRAR'}
+                      {paying ? 'FACTURAR (F)' : 'COBRAR (C)'}
                     </CButton>
                   </div>
                 </CCol>

@@ -21,6 +21,7 @@ import {
   cilUser,
   cilUserFemale,
   cilDollar,
+  cilInbox,
 } from '@coreui/icons'
 import { NavLink } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
@@ -56,10 +57,17 @@ const Home = () => {
         </Helmet>
         <CCardBody>
           <CHeaderNav className="d-none d-md-flex me-auto">
-            <CNavItem>
+            <CNavItem className="me-2">
               <CNavLink to="/billing" component={NavLink}>
                 <CButton variant="outline" color="info">
                   <CIcon icon={cilDollar} /> Facturación
+                </CButton>
+              </CNavLink>
+            </CNavItem>
+            <CNavItem>
+              <CNavLink to="/inventory-items" component={NavLink}>
+                <CButton variant="outline" color="info">
+                  <CIcon icon={cilInbox} /> Inventario
                 </CButton>
               </CNavLink>
             </CNavItem>
