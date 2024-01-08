@@ -7,7 +7,7 @@ export function registerRoutes(app: Express): void {
   const apiRouter = express.Router();
   apiRouter.get('/', (_req: Request, res: Response) => {
     res.send({
-      appName: 'Nuapp',
+      appName: 'Quente',
       version: '0.0.1',
       description: 'Platform to support Micro-saas',
     });

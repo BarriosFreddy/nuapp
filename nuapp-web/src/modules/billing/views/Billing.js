@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {
   CButton,
@@ -47,16 +47,25 @@ function Billing() {
   const isReceivedLTTotal = receivedAmount < total
   const hasNotItems = items.length <= 0
   const isQuantityEditable = true
+  const keyBuffer = useMemo(() => new Set(), [])
 
   useEffect(() => {
     dispatch(setSidebarUnfoldable(true))
   }, [dispatch])
-
   useEffect(() => {
-    document.addEventListener('keydown', (event) => {
-      console.log({ event })
+    document.addEventListener('keyup', ({ key }) => keyBuffer.delete(key))
+    document.addEventListener('keydown', ({ key }) => keyBuffer.add(key))
+  }, [keyBuffer])
+  useEffect(() => {
+    document.addEventListener('keydown', () => {
+      if (keyBuffer.has('Alt') && keyBuffer.has('c') && !paying && items.length > 0) handleCharge()
     })
-  }, [])
+  }, [keyBuffer, paying, items])
+  useEffect(() => {
+    document.addEventListener('keydown', () => {
+      if (keyBuffer.has('Control') && keyBuffer.has('z') && paying) handleBack()
+    })
+  }, [keyBuffer, paying])
 
   useDidUpdateControl(
     () => {
@@ -149,6 +158,7 @@ function Billing() {
   }
 
   const handleSave = async () => {
+    console.log({ isReceivedLTTotal, hasNotItems })
     if (isReceivedLTTotal) {
       sendToast(dispatch, { message: 'Revisa el monto recibido y el total', color: 'warning' })
       return
@@ -190,7 +200,7 @@ function Billing() {
           <title>FACTURACIÓN</title>
         </Helmet>
         <CRow>
-          <CCol lg="4">
+          <CCol lg="6">
             <CCard className="shadow border-10" style={{ height: '72vh' }}>
               <CCardBody style={{ overflow: 'auto', fontSize: 14 }}>
                 <CTable small hover>
@@ -256,7 +266,7 @@ function Billing() {
               </CCardBody>
             </CCard>
           </CCol>
-          <CCol lg="8">
+          <CCol lg="6">
             <CCard className="shadow border-10" style={{ height: '72vh', overflowY: 'auto' }}>
               <CCardBody>
                 {!paying && <BillingForm addItem={addItem} />}
@@ -287,7 +297,7 @@ function Billing() {
                       onClick={paying ? handleSave : handleCharge}
                       disabled={paying ? saving : hasNotItems}
                     >
-                      {paying ? 'FACTURAR (F)' : 'COBRAR (C)'}
+                      {paying ? 'FACTURAR' : 'COBRAR (Alt + C)'}
                     </CButton>
                   </div>
                 </CCol>

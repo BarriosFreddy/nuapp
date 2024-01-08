@@ -1,32 +1,28 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import {
   CContainer,
   CHeader,
   CHeaderBrand,
   CHeaderNav,
-  CHeaderToggler,
   CNavLink,
+  CToaster,
+  CToast,
+  CToastBody,
+  CToastClose,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import {
-  cilChartLine,
-  cilDollar,
-  cilHistory,
-  cilHome,
-  cilInbox,
-  cilMenu,
-  cilSitemap,
-} from '@coreui/icons'
+import { cilChartLine, cilDollar, cilHistory, cilHome, cilInbox, cilSitemap } from '@coreui/icons'
 
 import { AppHeaderDropdown } from './header/index'
-import { setSidebarShow } from './../app.slice'
-import { NavLink } from 'react-router-dom'
+import { setShowToast } from 'src/app.slice'
 
 const AppHeader = () => {
   const dispatch = useDispatch()
-  const sidebarShow = useSelector((state) => state.app.sidebarShow)
   const { organization } = useSelector((state) => state.auth.infoUser) ?? {}
+  const showToast = useSelector((state) => state.app.showToast)
+  const toastConfig = useSelector((state) => state.app.toastConfig)
 
   return (
     <CHeader position="sticky" className="mb-1">
@@ -34,7 +30,7 @@ const AppHeader = () => {
         {/* <CHeaderToggler className="ps-1" onClick={() => dispatch(setSidebarShow(!sidebarShow))}>
           <CIcon icon={cilMenu} size="lg" />
         </CHeaderToggler> */}
-        <CHeaderBrand to="/">
+        <CHeaderBrand to="/" className="text-uppercase">
           {/* <CIcon icon={logo} height={48} alt="Logo" /> */}
           {organization?.name}
         </CHeaderBrand>
@@ -66,6 +62,21 @@ const AppHeader = () => {
           <CContainer fluid>
         <AppBreadcrumb />
       </CContainer> */}
+      <CToaster placement="top-end">
+        <CToast
+          visible={showToast}
+          color={toastConfig.color ?? 'info'}
+          onClose={() => {
+            dispatch(setShowToast(false))
+          }}
+          delay={toastConfig.delay ?? 5000}
+        >
+          <div className="d-flex">
+            <CToastBody className="fs-6">{toastConfig.message ?? ''}</CToastBody>
+            <CToastClose className="me-2 m-auto" />
+          </div>
+        </CToast>
+      </CToaster>
     </CHeader>
   )
 }

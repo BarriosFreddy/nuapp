@@ -5,16 +5,11 @@ import {
   CSidebarBrand,
   CSidebarNav,
   CSidebarToggler,
-  CToaster,
-  CToast,
-  CToastBody,
-  CToastClose,
   CSidebarFooter,
 } from '@coreui/react'
 import { AppSidebarNav } from './AppSidebarNav'
 import SimpleBar from 'simplebar-react'
 import 'simplebar/dist/simplebar.min.css'
-import { setShowToast } from 'src/app.slice'
 
 // sidebar nav config
 import navigation from '../_nav'
@@ -27,8 +22,6 @@ const AppSidebar = () => {
   const dispatch = useDispatch()
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
   const unfoldable = useSelector((state) => state.app.sidebarUnfoldable)
-  const showToast = useSelector((state) => state.app.showToast)
-  const toastConfig = useSelector((state) => state.app.toastConfig)
   const sidebarShow = useSelector((state) => state.app.sidebarShow)
 
   useEffect(() => {
@@ -68,21 +61,6 @@ const AppSidebar = () => {
           onClick={() => dispatch(setSidebarUnfoldable(!unfoldable))}
         />
       </CSidebar>
-      <CToaster placement="top-end">
-        <CToast
-          visible={showToast}
-          color={toastConfig.color ?? 'info'}
-          onClose={() => {
-            dispatch(setShowToast(false))
-          }}
-          delay={toastConfig.delay ?? 5000}
-        >
-          <div className="d-flex">
-            <CToastBody className="fs-6">{toastConfig.message ?? ''}</CToastBody>
-            <CToastClose className="me-2 m-auto" />
-          </div>
-        </CToast>
-      </CToaster>
     </>
   )
 }
