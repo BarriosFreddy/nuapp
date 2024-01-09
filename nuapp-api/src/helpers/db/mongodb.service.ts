@@ -18,7 +18,6 @@ export class MongoDBService {
       this.tenantConnectionsPool[tenantId] = connection;
       return this.tenantConnectionsPool[tenantId];
     }
-    console.log('Reusing connection', { tenantId });
     return this.tenantConnectionsPool[tenantId];
   }
 }
