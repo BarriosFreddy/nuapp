@@ -3,6 +3,7 @@ import { container } from 'tsyringe';
 import { Organization } from '../../entities/Organization';
 import { OrganizationService } from '../../services/organization.service';
 import { setTenantIdToService } from '../../../../helpers/util';
+import { OrganizationStatus } from '../../entities/enums/organization-status';
 
 const organizationsService = container.resolve(OrganizationService);
 
@@ -40,6 +41,30 @@ class OrganizationsController {
       res,
       organizationsService,
     ).update(id, organization);
+    savedOrganization
+      ? res.status(201).send(savedOrganization)
+      : res.status(400).send('Something went wrong');
+  }
+  async active(req: Request, res: Response) {
+    const { id } = req.params;
+    const savedOrganization = await setTenantIdToService(
+      res,
+      organizationsService,
+    ).update(id, <Organization>{
+      status: OrganizationStatus.ACTIVE,
+    });
+    savedOrganization
+      ? res.status(201).send(savedOrganization)
+      : res.status(400).send('Something went wrong');
+  }
+  async inactive(req: Request, res: Response) {
+    const { id } = req.params;
+    const savedOrganization = await setTenantIdToService(
+      res,
+      organizationsService,
+    ).update(id, <Organization>{
+      status: OrganizationStatus.INACTIVE,
+    });
     savedOrganization
       ? res.status(201).send(savedOrganization)
       : res.status(400).send('Something went wrong');

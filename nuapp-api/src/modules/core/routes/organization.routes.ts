@@ -6,15 +6,11 @@ import {
 } from '../../../helpers/middleware/validation.middleware';
 
 import organizationController from './controllers/organizations.controller';
-import { generateAuthKeyPair } from '../../../helpers/util';
-import { ModuleCode } from '../entities/enums/modules-codes';
-import { Privilege } from '../entities/enums/privileges';
 import { idSchema } from '../../../helpers/db/schemas/id.schema';
 import {
   OrganizationCreateSchema,
   OrganizationUpdateSchema,
 } from './validations/organizations.schema';
-import { roleValidation } from '../../../helpers/middleware/role-validation.middleware';
 
 const organizationRouter = express.Router();
 
@@ -22,9 +18,6 @@ organizationRouter.post(
   '/',
   validateBody(OrganizationCreateSchema),
   isAuthenticated,
-  roleValidation(
-    generateAuthKeyPair(ModuleCode.USER_ACCOUNT, Privilege.CREATE),
-  ),
   organizationController.save,
 );
 organizationRouter.put(
@@ -32,18 +25,24 @@ organizationRouter.put(
   validateParameters(idSchema),
   validateBody(OrganizationUpdateSchema),
   isAuthenticated,
-  roleValidation(
-    generateAuthKeyPair(ModuleCode.USER_ACCOUNT, Privilege.UPDATE),
-  ),
   organizationController.update,
+);
+organizationRouter.get(
+  '/:id/active',
+  validateParameters(idSchema),
+  isAuthenticated,
+  organizationController.active,
+);
+organizationRouter.get(
+  '/:id/inactive',
+  validateParameters(idSchema),
+  isAuthenticated,
+  organizationController.inactive,
 );
 organizationRouter.get(
   '/:id',
   validateParameters(idSchema),
   isAuthenticated,
-  roleValidation(
-    generateAuthKeyPair(ModuleCode.USER_ACCOUNT, Privilege.ACCESS),
-  ),
   organizationController.findOne,
 );
 organizationRouter.get('/', isAuthenticated, organizationController.findAll);

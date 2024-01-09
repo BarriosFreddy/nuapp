@@ -2,6 +2,7 @@ import { BaseService } from '../../../helpers/abstracts/base.service';
 import { Organization } from '../entities/Organization';
 import { singleton } from 'tsyringe';
 import { organizationSchema } from '../db/schemas/organization.schema';
+import { OrganizationStatus } from '../entities/enums/organization-status';
 
 @singleton()
 export class OrganizationService extends BaseService<Organization> {
@@ -18,6 +19,7 @@ export class OrganizationService extends BaseService<Organization> {
   }
   async save(organization: Organization): Promise<Organization> {
     try {
+      organization.status = OrganizationStatus.CREATING;
       return await this.getModel().create(organization);
     } catch (error) {
       console.log(error);
