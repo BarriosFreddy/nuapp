@@ -33,7 +33,9 @@ import { Helmet } from 'react-helmet'
 import { sendToast } from '../../shared/services/notification.service'
 import { useDidUpdateControl } from '../../../hooks/useDidUpdateControl'
 import { getAllItems } from 'src/modules/inventory/services/items.service'
-
+import CurrencyFormInput from 'src/components/shared/CurrencyFormInput'
+const { REACT_APP_HELADERIA_BARCODE, REACT_APP_VARIEDAD_BARCODE } = process.env
+console.log({ REACT_APP_HELADERIA_BARCODE, REACT_APP_VARIEDAD_BARCODE })
 function Billing() {
   const saveSuccess = useSelector((state) => state.billing.saveSuccess)
   const saving = useSelector((state) => state.billing.saving)
@@ -42,11 +44,14 @@ function Billing() {
   let [receivedAmount, setReceivedAmount] = useState(0)
   let [total, setTotal] = useState(0)
   let [itemUnits, setItemUnits] = useState({})
+  let [itemPrices, setItemPrices] = useState({
+    [REACT_APP_HELADERIA_BARCODE]: '',
+    [REACT_APP_VARIEDAD_BARCODE]: '',
+  }) //This is used for special beheavior related to global items
   let [paying, setPaying] = useState(false)
   const cargeButtonRef = useRef()
   const isReceivedLTTotal = receivedAmount < total
   const hasNotItems = items.length <= 0
-  const isQuantityEditable = true
   const keyBuffer = useMemo(() => new Set(), [])
 
   useEffect(() => {
@@ -133,6 +138,23 @@ function Billing() {
     setItemUnits(itemUnitsAdded)
     calculateTotal(items, itemUnitsAdded)
   }
+  const handleChangePrice = ({ target: { value } }, code) => {
+    const itemToUpdate = items.find((item) => item.code === code)
+    const remaingItems = items.filter((item) => item.code !== code)
+    const itemsUpdated = [
+      ...remaingItems,
+      {
+        ...itemToUpdate,
+        price: value,
+      },
+    ]
+    setItems(itemsUpdated)
+    setItemPrices({
+      ...itemPrices,
+      [code]: value,
+    })
+    calculateTotal(itemsUpdated, itemUnits)
+  }
 
   const handleChangeMeasurement = ({ target: { value } }, code) => {
     const itemToUpdate = items.find((item) => item.code === code)
@@ -190,8 +212,8 @@ function Billing() {
     }))
 
   const hanndleReceivedAmount = (receivedAmount) => setReceivedAmount(receivedAmount)
-
   const handleBack = () => setPaying(false)
+  const isEqualsTo = (code, ...compareTo) => compareTo.includes(code)
 
   return (
     <>
@@ -214,13 +236,16 @@ function Billing() {
                   <CTableBody>
                     {items.map(({ code, name, price, pricesRatio, measurementUnit }) => (
                       <CTableRow key={code}>
-                        {!isQuantityEditable && (
-                          <CTableDataCell xs="12">{itemUnits[code]}</CTableDataCell>
-                        )}
                         <CTableDataCell colSpan={2}>
                           <CRow>
                             <CCol style={{ display: 'flex', flexDirection: 'row' }}>
-                              {isQuantityEditable && (
+                              {isEqualsTo(
+                                code,
+                                REACT_APP_HELADERIA_BARCODE,
+                                REACT_APP_VARIEDAD_BARCODE,
+                              ) ? (
+                                itemUnits[code]
+                              ) : (
                                 <CFormInput
                                   style={{ maxWidth: 60 }}
                                   type="number"
@@ -252,7 +277,23 @@ function Billing() {
                         </CTableDataCell>
                         <CTableDataCell xs="12">{name}</CTableDataCell>
                         <CTableDataCell xs="12" className="text-break">
-                          {formatCurrency(price * itemUnits[code])}
+                          {isEqualsTo(
+                            code,
+                            REACT_APP_HELADERIA_BARCODE,
+                            REACT_APP_VARIEDAD_BARCODE,
+                          ) ? (
+                            <CurrencyFormInput
+                              min={1}
+                              formNoValidate
+                              type="number"
+                              size="sm"
+                              name={code}
+                              value={itemPrices[code]}
+                              onChange={(event) => handleChangePrice(event, code)}
+                            />
+                          ) : (
+                            formatCurrency(price * itemUnits[code])
+                          )}
                         </CTableDataCell>
                         <CTableDataCell xs="12" className="text-break text-end fw-semibold">
                           <CButton size="sm" color="ligth" onClick={() => deleteItem(code)}>

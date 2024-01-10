@@ -18,6 +18,7 @@ export class OrganizationDeployService {
     const rolesCollection = connection.collection('roles');
     const sequenceCodesCollection = connection.collection('sequenced-codes');
     const modulesCollection = connection.collection('modules');
+    const invEnumerationsCollection = connection.collection('inv_enumerations');
     itemsCollection.createIndex(
       { code: 1, name: 1 },
       { name: 'code_name_idx', unique: true },
@@ -40,6 +41,25 @@ export class OrganizationDeployService {
       prefixPart1: 'RV',
       prefixPart2: '230000000',
       sequence: 0,
+    });
+    invEnumerationsCollection.insertOne({
+      name: 'Unidades de medida',
+      description: 'Unidades de medida',
+      values: [
+        {
+          label: 'CAJA',
+          code: 'CAJA',
+        },
+        {
+          label: 'PAQUETE',
+          code: 'PAQUETE',
+        },
+        {
+          label: 'UNIDAD',
+          code: 'UNIDAD',
+        },
+      ],
+      code: 'UDM',
     });
 
     modulesCollection.insertMany([
