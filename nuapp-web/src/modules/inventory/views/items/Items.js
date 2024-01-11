@@ -53,10 +53,9 @@ function Item() {
     () => {
       if (saveSuccess) {
         setEditing(false)
-        setSearchTerm('')
-        setQueryParams({ page: queryParams.page })
         sendToast(dispatch, { message: 'Guardado exitosamente!' })
         setItem(null)
+        handleSearch({ page: queryParams.page })
       } else {
         sendToast(dispatch, { message: 'No se pudo guardar los datos', color: 'danger' })
       }
@@ -90,7 +89,7 @@ function Item() {
   const onChangeField = ({ target: { value } }) => setSearchTerm(value)
 
   const onKeyDownCodeField = async ({ keyCode }) => {
-    if ([ENTER_KEYCODE, TAB_KEYCODE].includes(keyCode)) handleSearch()
+    if ([ENTER_KEYCODE, TAB_KEYCODE].includes(keyCode)) handleSearch({ page: 1 })
   }
 
   const search = async (params = {}) => {
@@ -98,8 +97,8 @@ function Item() {
     dispatch(getItems(params))
   }
 
-  const handleSearch = () => {
-    const newParams = { page: 1 }
+  const handleSearch = (params = {}) => {
+    const newParams = { ...params }
     if (!!searchTerm) {
       newParams.code = searchTerm.trim()
       newParams.name = searchTerm.trim()
@@ -177,7 +176,7 @@ function Item() {
                           type="button"
                           variant="outline"
                           color="primary"
-                          onClick={handleSearch}
+                          onClick={() => handleSearch({ page: 1 })}
                         >
                           <div className="d-none d-lg-block">BUSCAR</div>
                           <div className="d-lg-none">
