@@ -34,8 +34,13 @@ import { sendToast } from '../../shared/services/notification.service'
 import { useDidUpdateControl } from '../../../hooks/useDidUpdateControl'
 import { getAllItems } from 'src/modules/inventory/services/items.service'
 import CurrencyFormInput from 'src/components/shared/CurrencyFormInput'
+import CONSTANTS from 'src/constants'
 const { REACT_APP_HELADERIA_BARCODE, REACT_APP_VARIEDAD_BARCODE } = process.env
-console.log({ REACT_APP_HELADERIA_BARCODE, REACT_APP_VARIEDAD_BARCODE })
+const itemsPricesInitialState = {
+  [REACT_APP_HELADERIA_BARCODE]: '',
+  [REACT_APP_VARIEDAD_BARCODE]: '',
+}
+
 function Billing() {
   const saveSuccess = useSelector((state) => state.billing.saveSuccess)
   const saving = useSelector((state) => state.billing.saving)
@@ -44,12 +49,13 @@ function Billing() {
   let [receivedAmount, setReceivedAmount] = useState(0)
   let [total, setTotal] = useState(0)
   let [itemUnits, setItemUnits] = useState({})
-  let [itemPrices, setItemPrices] = useState({
-    [REACT_APP_HELADERIA_BARCODE]: '',
-    [REACT_APP_VARIEDAD_BARCODE]: '',
-  }) //This is used for special beheavior related to global items
+  let [itemPrices, setItemPrices] = useState(itemsPricesInitialState) //This is used for special beheavior related to global items
   let [paying, setPaying] = useState(false)
   const cargeButtonRef = useRef()
+  const itemPricesRef = {
+    [REACT_APP_HELADERIA_BARCODE]: useRef(),
+    [REACT_APP_VARIEDAD_BARCODE]: useRef(),
+  }
   const isReceivedLTTotal = receivedAmount < total
   const hasNotItems = items.length <= 0
   const keyBuffer = useMemo(() => new Set(), [])
@@ -82,6 +88,7 @@ function Billing() {
         sendToast(dispatch, { message: 'Guardado exitosamente!' })
         setPaying(false)
         dispatch(getAllItems())
+        setItemPrices(itemsPricesInitialState)
       } else {
         sendToast(dispatch, { message: 'No se pudo guardar los datos', color: 'danger' })
       }
@@ -111,6 +118,12 @@ function Billing() {
     }
     setItems(itemsAdded)
     calculateTotal(itemsAdded, itemUnitsAdded)
+    setImmediate(() => {
+      if (item.code === REACT_APP_HELADERIA_BARCODE)
+        itemPricesRef[REACT_APP_HELADERIA_BARCODE].current.focus()
+      if (item.code === REACT_APP_VARIEDAD_BARCODE)
+        itemPricesRef[REACT_APP_VARIEDAD_BARCODE].current.focus()
+    })
   }
 
   const isAdded = (itemCode) => items.some(({ code }) => code === itemCode)
@@ -175,7 +188,8 @@ function Billing() {
     calculateTotal(itemsUpdated, itemUnits)
   }
 
-  const handleCharge = () => {
+  const handleCharge = (e) => {
+    e.stopPropagation()
     setPaying(true)
   }
 
@@ -214,6 +228,10 @@ function Billing() {
   const hanndleReceivedAmount = (receivedAmount) => setReceivedAmount(receivedAmount)
   const handleBack = () => setPaying(false)
   const isEqualsTo = (code, ...compareTo) => compareTo.includes(code)
+  const handleKeydownPrice = ({ keyCode }) => {
+    if ([CONSTANTS.ENTER_KEYCODE, CONSTANTS.TAB_KEYCODE].includes(keyCode))
+      cargeButtonRef.current.focus()
+  }
 
   return (
     <>
@@ -229,7 +247,7 @@ function Billing() {
                   <CTableHead>
                     <CTableRow>
                       <CTableHeaderCell colSpan={6}>
-                        Producto / Cantidad / Subtotal
+                        Cantidad / Producto / Subtotal
                       </CTableHeaderCell>
                     </CTableRow>
                   </CTableHead>
@@ -283,6 +301,7 @@ function Billing() {
                             REACT_APP_VARIEDAD_BARCODE,
                           ) ? (
                             <CurrencyFormInput
+                              ref={itemPricesRef[code]}
                               min={1}
                               formNoValidate
                               type="number"
@@ -290,6 +309,7 @@ function Billing() {
                               name={code}
                               value={itemPrices[code]}
                               onChange={(event) => handleChangePrice(event, code)}
+                              onKeyDown={(event) => handleKeydownPrice(event)}
                             />
                           ) : (
                             formatCurrency(price * itemUnits[code])

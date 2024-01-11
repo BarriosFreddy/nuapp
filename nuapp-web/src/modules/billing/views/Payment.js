@@ -68,7 +68,7 @@ const PaymentComp = (props) => {
             MEDIO DE PAGO
           </CCol>
           <CCol lg="8">
-            <CFormSelect name="paymentMethod" size="lg" required options={['EFECTIVO']} />
+            <CFormSelect name="paymentMethod" size="lg" required options={['EFECTIVO', 'NEQUI']} />
           </CCol>
         </CRow>
         <CRow className="mt-4">
