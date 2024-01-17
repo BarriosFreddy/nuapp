@@ -40,6 +40,12 @@ billingRouter.get(
   roleValidation(generateAuthKeyPair(ModuleCode.BILLING, Privilege.ACCESS)),
   billingController.findGreaterThanDate,
 );
+billingRouter.get(
+  '/stats/top-sales/:date',
+  isAuthenticated,
+  roleValidation(generateAuthKeyPair(ModuleCode.BILLING, Privilege.ACCESS)),
+  billingController.findTopSalesItems,
+);
 billingRouter.get('/', isAuthenticated, billingController.findAll);
 
 export default billingRouter;

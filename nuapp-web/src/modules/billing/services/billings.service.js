@@ -5,6 +5,7 @@ import {
   setSaving,
   setFetching,
   setBillingsGraph,
+  setBillingTopSales,
 } from '../reducers/billings.reducer'
 import isOnline from 'is-online'
 let isonline = false
@@ -42,6 +43,13 @@ export const getBillingsGTDate = (date) => async (dispatch, _, api) => {
   dispatch(setFetching(true))
   const { data, status } = await api.get(`/billings/per/${date}`)
   if (status === 200) dispatch(setBillingsGraph(data))
+  dispatch(setFetching(false))
+}
+
+export const getBillingTopSales = (date) => async (dispatch, _, api) => {
+  dispatch(setFetching(true))
+  const { data, status } = await api.get(`/billings/stats/top-sales/${date}`)
+  if (status === 200) dispatch(setBillingTopSales(data))
   dispatch(setFetching(false))
 }
 

@@ -9,6 +9,7 @@ import { Billing } from '../entities/Billing';
 import { getStatsPipeline } from './stats.aggregate';
 import { billingSchema } from '../db/schemas/billing.schema';
 import { SequencedCode } from '../entities/SequencedCode';
+import { getTopSalesItems } from './top-sales.aggregate';
 dayjs.extend(utc);
 
 const kardexTransactionService = container.resolve(KardexTransactionService);
@@ -42,6 +43,19 @@ export class BillingService extends BaseService<Billing> {
       .getTime();
     const billings: Billing[] = await this.getModel()
       .aggregate(getStatsPipeline(startDate))
+      .exec();
+    return billings;
+  }
+  async findTopSalesItems(date: string): Promise<Billing[]> {
+    const startDate = dayjs(date)
+      .set('hours', 0)
+      .set('minutes', 0)
+      .set('seconds', 0)
+      .utcOffset(-5)
+      .toDate()
+      .getTime();
+    const billings: Billing[] = await this.getModel()
+      .aggregate(getTopSalesItems(startDate))
       .exec();
     return billings;
   }

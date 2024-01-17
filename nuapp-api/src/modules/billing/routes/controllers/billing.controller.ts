@@ -35,6 +35,16 @@ class BillingController {
     res.status(200).send(billings);
   }
 
+  async findTopSalesItems(req: Request, res: Response) {
+    const { date } = req.params;
+    await setTenantIdToService(res, sequenceCodeService);
+    const billings = await setTenantIdToService(
+      res,
+      billingService,
+    ).findTopSalesItems(date);
+    res.status(200).send(billings);
+  }
+
   async save(req: Request, res: Response) {
     const billing: Billing = req.body;
     await setTenantIdToService(res, sequenceCodeService);

@@ -7,6 +7,7 @@ const initialState = {
   saving: false,
   billings: [],
   billingsGraph: [],
+  billingTopSales: [],
   billing: null,
   offline: {
     billings: [],
@@ -25,6 +26,7 @@ export const billingSlice = createSlice({
     setLoading: (state, action) => void (state.loading = action.payload),
     setSaving: (state, action) => void (state.saving = action.payload),
     setFetching: (state, action) => void (state.fetching = action.payload),
+    setBillingTopSales: (state, action) => void (state.billingTopSales = action.payload),
   },
 })
 
@@ -37,6 +39,7 @@ export const {
   setBillingsGraph,
   setSaving,
   setFetching,
+  setBillingTopSales,
 } = billingSlice.actions
 
 export default billingSlice.reducer
