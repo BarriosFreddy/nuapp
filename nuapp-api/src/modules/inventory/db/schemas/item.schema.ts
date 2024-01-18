@@ -13,6 +13,8 @@ export const itemSchema = new Schema({
       measurementUnit: String,
       price: Number,
       cost: Number,
+      totalCost: Number,
+      quantityPerPackage: Number,
       hash: String,
       main: String,
       multiplicity: Number,

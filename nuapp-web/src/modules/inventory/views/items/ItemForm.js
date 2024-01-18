@@ -46,7 +46,9 @@ const itemInitialState = {
       cost: '',
       hash: initPriceRatioUUID,
       main: initPriceRatioUUID,
-      multiplicity: '',
+      multiplicity: '1',
+      totalCost: '',
+      quantityPerPackage: '1',
     },
   ],
   expirationControl: [
@@ -176,14 +178,20 @@ function ItemForm(props) {
         ...priceRatio,
         [name]: value,
       }))
-    } else {
-      let priceRatioClone = pricesRatioArray.find((priceRatio) => priceRatio.hash === hash)
-      priceRatioClone = {
-        ...priceRatioClone,
-        [name]: value,
-      }
-      pricesRatioArray[index] = priceRatioClone
+      setItem({
+        ...item,
+        pricesRatio: pricesRatioArray,
+      })
+      return
     }
+    let priceRatioClone = pricesRatioArray.find((priceRatio) => priceRatio.hash === hash)
+    priceRatioClone = {
+      ...priceRatioClone,
+      [name]: value,
+    }
+    pricesRatioArray[index] = priceRatioClone
+    if (name === 'totalCost' || name === 'quantityPerPackage')
+      pricesRatioArray[index].cost = getCostoPorUnidad(pricesRatioArray[index])
     setItem({
       ...item,
       pricesRatio: pricesRatioArray,
@@ -268,12 +276,28 @@ function ItemForm(props) {
   }
 
   function getNewItem() {
-    return { measurementUnit: '', price: '', cost: '', hash: getUUID(), main: '', multiplicity: 1 }
+    return {
+      measurementUnit: '',
+      price: '',
+      cost: '',
+      hash: getUUID(),
+      main: '',
+      multiplicity: 1,
+      totalCost: '',
+      quantityPerPackage: '1',
+    }
   }
 
   function getNewExpirationControl() {
     return { lotUnits: '', lot: '', expirationDate: '', id: getUUID() }
   }
+
+  const getPricePercentage = (price, cost) => {
+    const pricePercentage = Math.round(((price - cost) * 100) / cost)
+    return pricePercentage < 0 || isNaN(pricePercentage) ? 0 : pricePercentage
+  }
+
+  const getCostoPorUnidad = ({ totalCost, quantityPerPackage }) => totalCost / quantityPerPackage
 
   return (
     <>
@@ -395,10 +419,7 @@ function ItemForm(props) {
                   </CRow>
                   {item.pricesRatio?.map((priceRatio, index) => (
                     <CRow key={priceRatio.hash}>
-                      <CCol
-                        xs="12"
-                        lg={{ offset: 0, span: item.pricesRatio?.length === 1 ? 3 : 3 }}
-                      >
+                      <CCol xs="12" lg="2">
                         <CRow>
                           {item.pricesRatio?.length > 1 && (
                             <CCol xs="1" className="pt-4">
@@ -430,10 +451,11 @@ function ItemForm(props) {
                           </CCol>
                         </CRow>
                       </CCol>
-                      <CCol xs="12" lg="3">
+                      <CCol xs="12" lg="2">
                         <CurrencyFormInput
-                          label={`Precio ${Math.round(
-                            ((priceRatio.price - priceRatio.cost) * 100) / priceRatio.cost,
+                          label={`Precio ${getPricePercentage(
+                            priceRatio.price,
+                            priceRatio.cost,
                           )}% ↑`}
                           type="tel"
                           name="price"
@@ -446,14 +468,37 @@ function ItemForm(props) {
                           }
                         />
                       </CCol>
-                      <CCol xs="12" lg="3">
+                      <CCol xs="12" lg="2">
                         <CurrencyFormInput
-                          label="Costo"
+                          disabled={true}
+                          label="Costo por unidad"
                           type="tel"
                           name="cost"
-                          value={priceRatio.cost}
+                          value={getCostoPorUnidad(priceRatio) || priceRatio.cost}
+                        />
+                      </CCol>
+                      <CCol xs="12" lg="2">
+                        <CurrencyFormInput
+                          label="Costo total"
+                          type="tel"
+                          name="totalCost"
+                          value={priceRatio.totalCost}
                           feedbackInvalid="Campo obligatorio"
-                          invalid={failedValidations['cost' + priceRatio.hash]}
+                          invalid={failedValidations['totalCost' + priceRatio.hash]}
+                          onChange={(event) =>
+                            handleChangePricesRatio(event, priceRatio.hash, index)
+                          }
+                        />
+                      </CCol>
+                      <CCol xs="12" lg="2">
+                        <FormInput
+                          label="Cantidad"
+                          type="tel"
+                          name="quantityPerPackage"
+                          min={1}
+                          value={priceRatio.quantityPerPackage}
+                          feedbackInvalid="Campo obligatorio"
+                          invalid={failedValidations['quantityPerPackage' + priceRatio.hash]}
                           onChange={(event) =>
                             handleChangePricesRatio(event, priceRatio.hash, index)
                           }
@@ -461,7 +506,7 @@ function ItemForm(props) {
                       </CCol>
                       <CCol
                         xs="12"
-                        lg={{ offset: 0, span: item.pricesRatio?.length === 1 ? 3 : 2 }}
+                        lg={{ offset: 0, span: item.pricesRatio?.length === 1 ? 2 : 1 }}
                       >
                         <FormInput
                           label="Multiplo"
