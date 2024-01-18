@@ -22,12 +22,12 @@ export const getTopSalesItems = (startDate: number): PipelineStage[] => [
     },
   },
   {
-    $limit: 10,
-  },
-  {
     $sort: {
       sales: -1,
     },
+  },
+  {
+    $limit: 10,
   },
   {
     $project: {
