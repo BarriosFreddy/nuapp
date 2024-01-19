@@ -21,6 +21,7 @@ import {
 import { existByDNI } from '../../services/clients.service'
 import ConfirmDialog from 'src/components/shared/ConfirmDialog'
 import FormInput from '../../../../components/shared/FormInput'
+import { setExistsByDNI } from '../../reducers/clients.reducer'
 
 const clientInitialState = {
   name: '',
@@ -77,7 +78,7 @@ function ClientForm(props) {
       ...client,
     }
     const failedValidationsObj = { ...failedValidations }
-    failedValidationsObj.dni = !dni || dniRegistered
+    failedValidationsObj.dni = !dni
     failedValidationsObj.dniType = !dniType
     failedValidationsObj.name = !name
     setFailedValidations(failedValidationsObj)
@@ -102,6 +103,7 @@ function ClientForm(props) {
     if (sureCancel) {
       props.onCancel()
       setClient(clientInitialState)
+      dispatch(setExistsByDNI(false))
       return
     }
     confirmDialogRef.current.show(false)
@@ -153,6 +155,7 @@ function ClientForm(props) {
                 </CCol>
                 <CCol xs="12" lg="4">
                   <CFormSelect
+                    size="sm"
                     label="Tipo de identificación"
                     name="dniType"
                     value={client.dniType}
@@ -172,8 +175,8 @@ function ClientForm(props) {
                     uppercase="true"
                     name="dni"
                     value={client.dni}
-                    feedbackInvalid="Campo obligatorio"
-                    invalid={failedValidations.dni}
+                    feedback={dniRegistered ? 'Identificación ya registrada' : 'Campo obligatorio'}
+                    invalid={dniRegistered || failedValidations.dni}
                     required
                     onChange={(event) => handleChangeField(event)}
                   />
@@ -181,7 +184,7 @@ function ClientForm(props) {
               </CRow>
               <CRow>
                 <CCol xs="12" lg="4">
-                  <CFormInput
+                  <FormInput
                     label="Correo electrónico"
                     type="email"
                     uppercase="true"
@@ -191,7 +194,7 @@ function ClientForm(props) {
                   />
                 </CCol>
                 <CCol xs="12" lg="4">
-                  <CFormInput
+                  <FormInput
                     label="Celular"
                     type="tel"
                     min={1}
@@ -201,7 +204,7 @@ function ClientForm(props) {
                   />
                 </CCol>
                 <CCol xs="12" lg="4">
-                  <CFormInput
+                  <FormInput
                     label="Dirección"
                     type="text"
                     name="address"

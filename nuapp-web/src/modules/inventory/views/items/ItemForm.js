@@ -29,6 +29,7 @@ import { getInvEnumerationByCode } from '../../services/inv-enumerations.service
 import CIcon from '@coreui/icons-react'
 import { cilTrash } from '@coreui/icons'
 import { getUUID } from 'src/utils'
+import { setExistsByCode } from '../../reducers/items.reducer'
 
 const initPriceRatioUUID = getUUID()
 const itemInitialState = {
@@ -154,6 +155,7 @@ function ItemForm(props) {
     if (sureCancel) {
       props.onCancel()
       setItem(itemInitialState)
+      dispatch(setExistsByCode(false))
       return
     }
     confirmDialogRef.current.show(false)
@@ -367,6 +369,7 @@ function ItemForm(props) {
               <CRow>
                 <CCol xs="12" lg="3">
                   <CFormSelect
+                    size="sm"
                     label="Categoria"
                     name="categoryId"
                     value={item.categoryId}
@@ -389,7 +392,7 @@ function ItemForm(props) {
                   />
                 </CCol>
                 <CCol xs="12" lg="3">
-                  <CFormInput
+                  <FormInput
                     label="Punto de recompra"
                     type="tel"
                     min={1}
@@ -401,7 +404,7 @@ function ItemForm(props) {
                   />
                 </CCol>
                 <CCol xs="12" lg="3">
-                  <CFormInput
+                  <FormInput
                     label="SKU"
                     type="text"
                     name="sku"
@@ -436,6 +439,7 @@ function ItemForm(props) {
                           )}
                           <CCol xs={{ offset: 0, span: item.pricesRatio?.length > 1 ? 10 : 12 }}>
                             <CFormSelect
+                              size="sm"
                               label="U. de medida"
                               name="measurementUnit"
                               value={priceRatio.measurementUnit}
@@ -453,6 +457,7 @@ function ItemForm(props) {
                       </CCol>
                       <CCol xs="12" lg="2">
                         <CurrencyFormInput
+                          size="sm"
                           label={`Precio ${getPricePercentage(
                             priceRatio.price,
                             priceRatio.cost,
@@ -584,6 +589,7 @@ function ItemForm(props) {
                       </CCol>
                       <CCol xs="12" lg="4">
                         <CFormInput
+                          size="sm"
                           label="Fecha de vencimiento"
                           type="date"
                           name="expirationDate"

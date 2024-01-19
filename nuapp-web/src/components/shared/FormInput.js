@@ -10,15 +10,16 @@ const FormInput = (props) => {
     const { selectionStart, selectionEnd } = event.target
     if (props.uppercase && value) event.target.value = value.toUpperCase()
     if (props.lowercase && value) event.target.value = value.toLowerCase()
-    event.target.setSelectionRange(selectionStart, selectionEnd)
+    event.target.setSelectionRange && event.target.setSelectionRange(selectionStart, selectionEnd)
     props.onChange(event)
   }
-  return <CFormInput {...props} onChange={handleChange} />
+  return <CFormInput {...props} size={props.size || 'sm'} onChange={handleChange} />
 }
 
 export default FormInput
 
 FormInput.propTypes = {
+  size: PropTypes.string,
   onChange: PropTypes.func,
   uppercase: PropTypes.oneOfType([PropTypes.bool, PropTypes.node]),
   lowercase: PropTypes.oneOfType([PropTypes.bool, PropTypes.node]),

@@ -50,6 +50,7 @@ const CurrencyFormInput = forwardRef(function CurrencyFormInput(props, ref) {
     <CFormInput
       ref={inputRef}
       {...props}
+      size={props.size || 'sm'}
       name={props.name}
       value={innerValue}
       type="text"
@@ -61,6 +62,7 @@ const CurrencyFormInput = forwardRef(function CurrencyFormInput(props, ref) {
 export default CurrencyFormInput
 
 CurrencyFormInput.propTypes = {
+  size: PropTypes.string,
   onChange: PropTypes.func,
   name: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
