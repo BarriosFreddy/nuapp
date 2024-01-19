@@ -2,6 +2,7 @@ import express, { Express, Request, Response } from 'express';
 import * as coreRouter from './modules/core/routes/index';
 import * as billingRouter from './modules/billing/routes/index';
 import * as inventoryRouter from './modules/inventory/routes/index';
+import * as clientRouter from './modules/clients/routes/index';
 
 export function registerRoutes(app: Express): void {
   const apiRouter = express.Router();
@@ -25,6 +26,8 @@ export function registerRoutes(app: Express): void {
   apiRouter.use('/kardex', inventoryRouter.kardexTransactionRouter);
   apiRouter.use('/purchase-orders', inventoryRouter.purchaseOrderRouter);
   apiRouter.use('/inv-enumerations', inventoryRouter.invEnumerationRouter);
+
+  apiRouter.use('/clients', clientRouter.itemRouter);
 
   app.use('/api/v1', apiRouter);
 }

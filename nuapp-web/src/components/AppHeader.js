@@ -13,7 +13,15 @@ import {
   CToastClose,
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import { cilChartLine, cilDollar, cilHistory, cilHome, cilInbox, cilSitemap } from '@coreui/icons'
+import {
+  cilChartLine,
+  cilDollar,
+  cilHistory,
+  cilHome,
+  cilInbox,
+  cilSitemap,
+  cilUser,
+} from '@coreui/icons'
 
 import { AppHeaderDropdown } from './header/index'
 import { setShowToast } from 'src/app.slice'
@@ -52,6 +60,9 @@ const AppHeader = () => {
           </CNavLink>
           <CNavLink to="/inventory-item-categories" component={NavLink}>
             <CIcon icon={cilSitemap} /> Cat. de items
+          </CNavLink>
+          <CNavLink to="/clients" component={NavLink}>
+            <CIcon icon={cilUser} /> Clientes
           </CNavLink>
         </CHeaderNav>
         <CHeaderNav className="ms-3">

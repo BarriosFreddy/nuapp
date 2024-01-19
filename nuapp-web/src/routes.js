@@ -14,6 +14,7 @@ const ItemCategories = lazy(() =>
 const DataLoader = lazy(() => import('./modules/inventory/views/data-loader/DataLoader'))
 const Kardex = lazy(() => import('./modules/inventory/views/kardex/kardex'))
 const PurchaseOrder = lazy(() => import('./modules/inventory/views/purchase-order/PurchaseOrder'))
+const Clients = lazy(() => import('./modules/clients/views/clients/Clients'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -27,6 +28,7 @@ const routes = [
   { path: '/inventory-item-categories', name: 'Categorias de items', element: ItemCategories },
   { path: '/inventory-kardex', name: 'Kardex', element: Kardex },
   { path: '/inventory-purchase-orders', name: 'Purchase order', element: PurchaseOrder },
+  { path: '/clients', name: 'Clients', element: Clients },
 ]
 
 export default routes
