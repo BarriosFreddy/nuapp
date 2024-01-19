@@ -31,10 +31,12 @@ const clientInitialState = {
   phoneNumber: '',
   address: '',
 }
-
+const DNI_TYPES = [
+  { label: 'CÉDULA', value: 'CC' },
+  { label: 'PASAPORTE', value: 'P' },
+]
 function ClientForm(props) {
   const dispatch = useDispatch()
-  const clientCategories = [{ label: 'CEDULA', value: 'CC' }] //useSelector((state) => state.clientCategories.clientCategories)
   const dniRegistered = useSelector((state) => state.clients.existsByDNI)
   const saving = useSelector((state) => state.clients.saving)
   const [client, setClient] = useState(clientInitialState)
@@ -120,7 +122,7 @@ function ClientForm(props) {
 
   return (
     <>
-      <CContainer fluid>
+      <CContainer>
         <CCard>
           <div className="py-1 d-lg-none">
             <CRow className="m-1">
@@ -164,7 +166,7 @@ function ClientForm(props) {
                     invalid={failedValidations.dniType}
                     onChange={(event) => handleChangeField(event)}
                     aria-label="Default select example"
-                    options={['Seleccione...', ...clientCategories]}
+                    options={['Seleccione...', ...DNI_TYPES]}
                   />
                 </CCol>
                 <CCol xs="12" lg="4">
@@ -184,7 +186,8 @@ function ClientForm(props) {
               </CRow>
               <CRow>
                 <CCol xs="12" lg="4">
-                  <FormInput
+                  <CFormInput
+                    size="sm"
                     label="Correo electrónico"
                     type="email"
                     uppercase="true"

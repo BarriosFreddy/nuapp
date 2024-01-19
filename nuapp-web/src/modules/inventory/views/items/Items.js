@@ -142,7 +142,7 @@ function Item() {
 
   return (
     <>
-      <CContainer fluid>
+      <CContainer>
         <Helmet>
           <title>ITEMS</title>
         </Helmet>

@@ -138,7 +138,7 @@ function Client() {
 
   return (
     <>
-      <CContainer fluid>
+      <CContainer>
         <Helmet>
           <title>CLIENTES</title>
         </Helmet>
