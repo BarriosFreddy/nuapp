@@ -303,7 +303,7 @@ function ItemForm(props) {
 
   return (
     <>
-      <CContainer fluid>
+      <CContainer>
         <CCard>
           <div className="py-1 d-lg-none">
             <CRow className="m-1">

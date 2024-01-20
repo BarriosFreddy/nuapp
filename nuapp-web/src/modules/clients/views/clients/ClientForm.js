@@ -5,10 +5,6 @@ import PropTypes from 'prop-types'
 import {
   CButton,
   CRow,
-  CModal,
-  CModalHeader,
-  CModalBody,
-  CModalFooter,
   CContainer,
   CCol,
   CFormInput,
@@ -45,7 +41,6 @@ function ClientForm(props) {
     dniType: false,
     dni: false,
   })
-  const [modal, setModal] = useState(false)
   const confirmDialogRef = useRef()
 
   useEffect(() => {
@@ -64,16 +59,9 @@ function ClientForm(props) {
 
   // INIT
   const oldDNI = props.client?.dni
-  const toggle = () => setModal(!modal)
   const validateDNIExistence = (dni) => {
     if (oldDNI !== dni) dispatch(existByDNI(dni))
   }
-
-  const closeBtn = (
-    <button className="close" onClick={toggle}>
-      &times;
-    </button>
-  )
 
   const isValidForm = () => {
     const { name, dniType, dni } = {
@@ -87,8 +75,7 @@ function ClientForm(props) {
     return Object.values(failedValidationsObj).every((validation) => validation === false)
   }
 
-  const save = async () => {
-    console.log({ client })
+  const handleSave = async () => {
     if (isValidForm()) {
       props.onSave({
         ...client,
@@ -97,7 +84,7 @@ function ClientForm(props) {
     }
   }
 
-  const cancel = () => {
+  const handleCancel = () => {
     confirmDialogRef.current.show(true)
   }
 
@@ -122,17 +109,22 @@ function ClientForm(props) {
 
   return (
     <>
-      <CContainer>
+      <CContainer fluid>
         <CCard>
           <div className="py-1 d-lg-none">
             <CRow className="m-1">
               <CCol xs="3" lg={{ offset: 4, span: 4 }}>
-                <CButton variant="outline" color="secondary" onClick={() => cancel()}>
+                <CButton
+                  size="sm"
+                  variant="outline"
+                  color="secondary"
+                  onClick={() => handleCancel()}
+                >
                   CANCELAR
                 </CButton>
               </CCol>
               <CCol xs={{ offset: 5, span: 4 }}>
-                <CButton color="success" type="button" onClick={() => save()}>
+                <CButton size="sm" color="success" type="button" onClick={() => handleSave()}>
                   {props.client ? 'EDITAR' : 'GUARDAR'}
                 </CButton>
               </CCol>
@@ -218,21 +210,31 @@ function ClientForm(props) {
               </CRow>
             </CForm>
           </CCardBody>
-          <CCardFooter className="mt-2">
-            <div className="d-none d-lg-block">
-              <CRow className="mt-0">
-                <CCol className="text-center" xs="8" lg={{ offset: 4, span: 4 }}>
-                  <CButton color="success" type="button" disabled={saving} onClick={() => save()}>
-                    {props.client && props.client?.id ? 'EDITAR' : 'GUARDAR'}
-                  </CButton>
-                  &nbsp; &nbsp;
-                  <CButton variant="outline" color="secondary" onClick={() => cancel()}>
-                    CANCELAR
-                  </CButton>
-                </CCol>
-              </CRow>
-            </div>
-          </CCardFooter>
+          <div className="d-none d-lg-block">
+            <CRow className="m-1">
+              <CCol className="text-center" lg={{ offset: 3, span: 3 }}>
+                <CButton
+                  size="sm"
+                  color="success"
+                  type="button"
+                  disabled={saving}
+                  onClick={() => handleSave()}
+                >
+                  {props.client && props.client?.id ? 'EDITAR' : 'GUARDAR'}
+                </CButton>
+              </CCol>
+              <CCol className="text-center" lg="3">
+                <CButton
+                  size="sm"
+                  variant="outline"
+                  color="secondary"
+                  onClick={() => handleCancel()}
+                >
+                  CANCELAR
+                </CButton>
+              </CCol>
+            </CRow>
+          </div>
         </CCard>
       </CContainer>
       <ConfirmDialog
@@ -240,19 +242,6 @@ function ClientForm(props) {
         onResponse={handleResponseCancel}
         message="¿Estás seguro que quieres cancelar?"
       ></ConfirmDialog>
-      <CModal isOpen={modal} toggle={toggle}>
-        <CModalHeader toggle={toggle} close={closeBtn}>
-          Escaneando
-        </CModalHeader>
-        <CModalBody>
-          <div id="reader" width="600px" style={{ maxWidth: '750px' }}></div>
-        </CModalBody>
-        <CModalFooter>
-          <CButton color="secondary" onClick={toggle}>
-            Cancelar
-          </CButton>
-        </CModalFooter>
-      </CModal>
     </>
   )
 }
@@ -264,4 +253,5 @@ ClientForm.propTypes = {
   onSave: PropTypes.func.isRequired,
   client: PropTypes.object,
   copying: PropTypes.bool,
+  isPopup: PropTypes.bool,
 }

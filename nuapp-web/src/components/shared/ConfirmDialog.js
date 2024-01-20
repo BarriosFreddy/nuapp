@@ -23,7 +23,7 @@ const ConfirmDialog = forwardRef(function ConfirmDialog({ message, onResponse },
 
   return (
     <>
-      <CModal visible={visible} onClose={() => setVisible(false)}>
+      <CModal backdrop="static" visible={visible} onClose={() => setVisible(false)}>
         <CModalHeader onClose={() => setVisible(false)}>
           <CModalTitle>Confirmación</CModalTitle>
         </CModalHeader>

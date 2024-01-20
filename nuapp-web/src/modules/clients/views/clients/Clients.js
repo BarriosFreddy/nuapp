@@ -22,6 +22,7 @@ import { sendToast } from '../../../shared/services/notification.service'
 import { useDidUpdateControl } from '../../../../hooks/useDidUpdateControl'
 import ClientForm from './ClientForm'
 import ClientList from './ClientList'
+import { PropTypes } from 'prop-types'
 
 const { ENTER_KEYCODE, TAB_KEYCODE } = CONSTANTS
 
@@ -29,14 +30,14 @@ const queryParamsInitial = {
   page: 1,
 }
 
-function Client() {
+function Client(props) {
   const dispatch = useDispatch()
   const clients = useSelector((state) => state.clients.clients)
   const saveSuccess = useSelector((state) => state.clients.saveSuccess)
   const saving = useSelector((state) => state.clients.saving)
   const fetching = useSelector((state) => state.clients.fetching)
   const [searchTerm, setSearchTerm] = useState('')
-  let [editing, setEditing] = useState(false)
+  let [editing, setEditing] = useState(!!props.isPopup)
   let [copying, setCopying] = useState(false)
   let [client, setClient] = useState(null)
   const [showFilterSection, setShowFilterSection] = useState(false)
@@ -51,8 +52,9 @@ function Client() {
   useDidUpdateControl(
     () => {
       if (saveSuccess) {
-        setEditing(false)
         sendToast(dispatch, { message: 'Guardado exitosamente!' })
+        if (props.isPopup && props.onSave) props.onSave()
+        !props.isPopup && setEditing(false)
         setClient(null)
         handleSearch({ page: queryParams.page })
       } else {
@@ -69,6 +71,7 @@ function Client() {
   }
 
   const handleCancel = async () => {
+    if (props.isPopup && props.onCancel) props.onCancel()
     setEditing(false)
   }
 
@@ -246,6 +249,7 @@ function Client() {
             )}
             {editing && (
               <ClientForm
+                isPopup
                 copying={copying}
                 client={client}
                 onSave={handleSave}
@@ -257,6 +261,12 @@ function Client() {
       </CContainer>
     </>
   )
+}
+
+Client.propTypes = {
+  isPopup: PropTypes.bool,
+  onCancel: PropTypes.func,
+  onSave: PropTypes.func,
 }
 
 export default Client

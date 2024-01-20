@@ -7,10 +7,7 @@ import {
   CCol,
   CContainer,
   CFormInput,
-  CFormLabel,
   CFormSelect,
-  CInputGroup,
-  CInputGroupText,
   CRow,
   CTable,
   CTableBody,
@@ -28,7 +25,7 @@ import {
   getMainPriceRatio,
 } from 'src/utils'
 import CIcon from '@coreui/icons-react'
-import { cilPlus, cilTrash } from '@coreui/icons'
+import { cilTrash } from '@coreui/icons'
 import PaymentComp from './Payment'
 import { saveBilling } from '../../../modules/billing/services/billings.service'
 import { setSidebarUnfoldable } from 'src/app.slice'
@@ -241,14 +238,14 @@ function Billing() {
 
   return (
     <>
-      <CContainer className="mt-3" fluid>
+      <CContainer fluid>
         <Helmet>
           <title>FACTURACIÓN</title>
         </Helmet>
         <CRow>
-          <CCol lg="6">
-            <CCard className="shadow border-10" style={{ height: '72vh' }}>
-              <CCardBody style={{ overflow: 'auto', fontSize: 14 }}>
+          <CCol lg="6" style={{ padding: 0, margin: 0 }}>
+            <CCard style={{ height: '72vh' }}>
+              <CCardBody style={{ overflowY: 'auto', fontSize: 14 }}>
                 <ClientSearchComponent ref={clientSearchComponentRef} />
                 <CTable small hover>
                   <CTableHead>
@@ -334,8 +331,8 @@ function Billing() {
               </CCardBody>
             </CCard>
           </CCol>
-          <CCol lg="6">
-            <CCard className="shadow border-10" style={{ height: '72vh', overflowY: 'auto' }}>
+          <CCol lg="6" style={{ padding: 0, margin: 0 }}>
+            <CCard style={{ height: '72vh', overflowY: 'auto' }}>
               <CCardBody>
                 {!paying && <BillingForm addItem={addItem} />}
                 {paying && (
@@ -350,8 +347,8 @@ function Billing() {
             </CCard>
           </CCol>
         </CRow>
-        <CRow className="mt-3 align-items-end">
-          <CCard className="shadow border-10">
+        <CRow className="align-items-end">
+          <CCard>
             <CCardBody>
               <CRow className="mt-3">
                 <CCol lg="5">
