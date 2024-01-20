@@ -19,6 +19,7 @@ export class OrganizationDeployService {
     const sequenceCodesCollection = connection.collection('sequenced-codes');
     const modulesCollection = connection.collection('modules');
     const invEnumerationsCollection = connection.collection('inv_enumerations');
+    const clientsCollection = connection.collection('clients');
     itemsCollection.createIndex(
       { code: 1, name: 1 },
       { name: 'code_name_idx', unique: true },
@@ -122,5 +123,11 @@ export class OrganizationDeployService {
       },
     };
     this.userAccountService.save(adminUser);
+
+    clientsCollection.insertOne({
+      name: 'CLIENTE FINAL',
+      dni: '1111111111',
+      dniType: 'CC',
+    });
   }
 }
