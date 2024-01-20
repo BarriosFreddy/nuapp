@@ -4,6 +4,7 @@ import {
   setSaving,
   setFetching,
   setExistsByDNI,
+  setClient,
 } from '../reducers/clients.reducer'
 import isOnline from 'is-online'
 let isonline = false
@@ -40,8 +41,14 @@ export const getClients =
 
 export const existByDNI = (dni) => async (dispatch, _, api) => {
   if (!dni) return
-  const { data, status } = await api.get(`/clients/dni/${dni}`)
+  const { data, status } = await api.get(`/clients/dni/exists/${dni}`)
   if (status === 200) dispatch(setExistsByDNI(data))
+}
+
+export const getClientByDNI = (dni) => async (dispatch, _, api) => {
+  if (!dni) return
+  const { data, status } = await api.get(`/clients/dni/${dni}`)
+  if (status === 200) dispatch(setClient(data))
 }
 
 function getLocally(state, queryParams) {

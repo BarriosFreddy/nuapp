@@ -17,6 +17,10 @@ export class ClientService extends BaseService<Client> {
     const client = await this.getModel().findById(id).exec();
     return client;
   }
+  async findByDNI(dni: string): Promise<Client | null> {
+    const client = await this.getModel().findOne({ dni }).exec();
+    return client;
+  }
   async existByDNI(dni: string): Promise<any | null> {
     return await this.getModel().exists({ dni }).exec();
   }

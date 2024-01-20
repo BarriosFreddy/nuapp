@@ -44,6 +44,12 @@ clientRouter.get(
   '/dni/:dni',
   isAuthenticated,
   roleValidation(generateAuthKeyPair(ModuleCode.BILLING, Privilege.ACCESS)),
+  clientController.findByDNI,
+);
+clientRouter.get(
+  '/dni/exists/:dni',
+  isAuthenticated,
+  roleValidation(generateAuthKeyPair(ModuleCode.BILLING, Privilege.ACCESS)),
   clientController.existByDNI,
 );
 clientRouter.get(

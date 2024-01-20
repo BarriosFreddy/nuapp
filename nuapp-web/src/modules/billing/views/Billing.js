@@ -7,7 +7,10 @@ import {
   CCol,
   CContainer,
   CFormInput,
+  CFormLabel,
   CFormSelect,
+  CInputGroup,
+  CInputGroupText,
   CRow,
   CTable,
   CTableBody,
@@ -25,7 +28,7 @@ import {
   getMainPriceRatio,
 } from 'src/utils'
 import CIcon from '@coreui/icons-react'
-import { cilTrash } from '@coreui/icons'
+import { cilPlus, cilTrash } from '@coreui/icons'
 import PaymentComp from './Payment'
 import { saveBilling } from '../../../modules/billing/services/billings.service'
 import { setSidebarUnfoldable } from 'src/app.slice'
@@ -35,6 +38,7 @@ import { useDidUpdateControl } from '../../../hooks/useDidUpdateControl'
 import { getAllItems } from 'src/modules/inventory/services/items.service'
 import CurrencyFormInput from 'src/components/shared/CurrencyFormInput'
 import CONSTANTS from 'src/constants'
+import ClientSearchComponent from 'src/components/shared/client-search-component/ClientSearchComponent'
 const { REACT_APP_HELADERIA_BARCODE, REACT_APP_VARIEDAD_BARCODE } = process.env
 const itemsPricesInitialState = {
   [REACT_APP_HELADERIA_BARCODE]: '',
@@ -52,6 +56,7 @@ function Billing() {
   let [itemPrices, setItemPrices] = useState(itemsPricesInitialState) //This is used for special beheavior related to global items
   let [paying, setPaying] = useState(false)
   const cargeButtonRef = useRef()
+  const clientSearchComponentRef = useRef()
   const itemPricesRef = {
     [REACT_APP_HELADERIA_BARCODE]: useRef(),
     [REACT_APP_VARIEDAD_BARCODE]: useRef(),
@@ -194,7 +199,7 @@ function Billing() {
   }
 
   const handleSave = async () => {
-    console.log({ isReceivedLTTotal, hasNotItems })
+    console.log({ client: clientSearchComponentRef.current?.getSelected()?._id })
     if (isReceivedLTTotal) {
       sendToast(dispatch, { message: 'Revisa el monto recibido y el total', color: 'warning' })
       return
@@ -210,6 +215,7 @@ function Billing() {
         billAmount: total,
         items: getItemsData(),
         creationDate: getDateAsString(),
+        clientId: clientSearchComponentRef.current?.getSelected()?._id,
       }),
     )
   }
@@ -243,6 +249,7 @@ function Billing() {
           <CCol lg="6">
             <CCard className="shadow border-10" style={{ height: '72vh' }}>
               <CCardBody style={{ overflow: 'auto', fontSize: 14 }}>
+                <ClientSearchComponent ref={clientSearchComponentRef} />
                 <CTable small hover>
                   <CTableHead>
                     <CTableRow>

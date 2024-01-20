@@ -11,7 +11,7 @@ export class ClientQueryStrategy implements QueryStrategy {
     let { name, dni, page = 1, size = 10 } = this.clientQuery;
 
     name && conditions.push({ name: new RegExp(`${name}`, 'i') });
-    dni && conditions.push({ code: new RegExp(`${dni}`, 'i') });
+    dni && conditions.push({ dni: new RegExp(`${dni}`, 'i') });
 
     conditions.length > 0 && (filters = { ['$or']: conditions, ...filters });
 

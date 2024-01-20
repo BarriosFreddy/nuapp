@@ -19,6 +19,13 @@ class ClientsController {
     const client = await setTenantIdToService(res, clientsService).findOne(id);
     res.status(200).send(client);
   }
+  async findByDNI(req: Request, res: Response) {
+    const { dni } = req.params;
+    const client = await setTenantIdToService(res, clientsService).findByDNI(
+      dni,
+    );
+    res.status(200).send(client);
+  }
   async existByDNI(req: Request, res: Response) {
     const { dni } = req.params;
     const client = !!(await setTenantIdToService(
