@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import { useForm } from 'react-hook-form'
 import {
   CAlert,
   CButton,
@@ -22,6 +23,11 @@ import { setLoading } from 'src/modules/core/reducers/auth.reducer'
 
 const Login = () => {
   const dispatch = useDispatch()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm()
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
   const loginSuccess = useSelector((state) => state.auth.loginSuccess)
   const loading = useSelector((state) => state.auth.loading)
@@ -46,9 +52,11 @@ const Login = () => {
     })
   }
 
-  const onClickLogin = async () => dispatch(login(userAccountLogin))
+  const handleLogin = () => {
+    handleSubmit(() => dispatch(login(userAccountLogin)))()
+  }
 
-  const onKeyDownLogin = ({ keyCode }) => keyCode === 13 && onClickLogin()
+  const onKeyDownLogin = ({ keyCode }) => keyCode === 13 && handleLogin()
 
   return (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
@@ -70,6 +78,8 @@ const Login = () => {
                         onChange={onChangeInput}
                         placeholder="Email"
                         autoComplete="email"
+                        invalid={!!errors.email}
+                        {...register('email', { required: true })}
                       />
                     </CInputGroup>
                     <CInputGroup className="mb-4">
@@ -81,8 +91,9 @@ const Login = () => {
                         name="password"
                         onChange={onChangeInput}
                         placeholder="Password"
-                        autoComplete="current-password"
                         onKeyDown={onKeyDownLogin}
+                        invalid={!!errors.password}
+                        {...register('password', { required: true })}
                       />
                     </CInputGroup>
                     {!loginSuccess && (
@@ -101,7 +112,7 @@ const Login = () => {
                         <div className="d-grid">
                           <CButton
                             size="lg"
-                            onClick={onClickLogin}
+                            onClick={handleLogin}
                             color="primary"
                             className="px-4"
                             disabled={loading}
