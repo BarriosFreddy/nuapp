@@ -158,7 +158,7 @@ const ClientSearchComponent = forwardRef(function ClientSearchComponent(props, r
           )}
         </CCol>
         <CCol lg="2">
-          <CButton size="sm" color="success" onClick={handleNewClient}>
+          <CButton size="sm" variant="outline" color="success" onClick={handleNewClient}>
             <CIcon icon={cilPlus} size="sm" />
             NUEVO
           </CButton>
@@ -170,7 +170,7 @@ const ClientSearchComponent = forwardRef(function ClientSearchComponent(props, r
         visible={showClientModal}
         onClose={() => setShowClientModal(false)}
       >
-        <CModalBody>
+        <CModalBody style={{ padding: 0 }}>
           <Client isPopup onCancel={handleCancelNewClient} onSave={handleSaveNewClient} />
         </CModalBody>
       </CModal>

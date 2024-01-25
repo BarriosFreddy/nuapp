@@ -16,7 +16,6 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
-import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { login } from 'src/modules/core/services/auth.service'
 import { setLoading } from 'src/modules/core/reducers/auth.reducer'
@@ -31,10 +30,6 @@ const Login = () => {
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
   const loginSuccess = useSelector((state) => state.auth.loginSuccess)
   const loading = useSelector((state) => state.auth.loading)
-  const [userAccountLogin, setUserAccountLogin] = useState({
-    email: '',
-    password: '',
-  })
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -44,16 +39,8 @@ const Login = () => {
 
   useEffect(() => () => dispatch(setLoading(false)), [dispatch])
 
-  const onChangeInput = ({ target }) => {
-    const { name, value } = target
-    setUserAccountLogin({
-      ...userAccountLogin,
-      [name]: value,
-    })
-  }
-
   const handleLogin = () => {
-    handleSubmit(() => dispatch(login(userAccountLogin)))()
+    handleSubmit((userAccountLogin) => dispatch(login(userAccountLogin)))()
   }
 
   const onKeyDownLogin = ({ keyCode }) => keyCode === 13 && handleLogin()
@@ -74,8 +61,7 @@ const Login = () => {
                         <CIcon icon={cilUser} />
                       </CInputGroupText>
                       <CFormInput
-                        name="email"
-                        onChange={onChangeInput}
+                        type="text"
                         placeholder="Email"
                         autoComplete="email"
                         invalid={!!errors.email}
@@ -88,8 +74,6 @@ const Login = () => {
                       </CInputGroupText>
                       <CFormInput
                         type="password"
-                        name="password"
-                        onChange={onChangeInput}
                         placeholder="Password"
                         onKeyDown={onKeyDownLogin}
                         invalid={!!errors.password}
