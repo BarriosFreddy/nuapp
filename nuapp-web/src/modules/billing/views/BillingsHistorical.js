@@ -81,7 +81,7 @@ function BillingsHistorical() {
 
   return (
     <>
-      <CContainer fluid>
+      <CContainer>
         <Helmet>
           <title>HISTORIAL DE FACTURAS</title>
         </Helmet>

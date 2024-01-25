@@ -111,7 +111,7 @@ function Categories() {
 
   return (
     <>
-      <CContainer className="mt-6" fluid>
+      <CContainer className="mt-6">
         <Helmet>
           <title>CATEGORIA DE ITEMS</title>
         </Helmet>

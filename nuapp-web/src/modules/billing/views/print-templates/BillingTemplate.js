@@ -7,39 +7,53 @@ const BillingTemplate = ({ billing }) => (
   <Document title="factura" pageLayout="oneColumn">
     <Page size="A7" wrap={false} style={styles.body}>
       <View style={styles.title}>
-        <Text>Factura de venta</Text>
+        <Text>DROGUERÍA FRANCISCA</Text>
+        <Text>NIT: 12245132312</Text>
+        <Text>OLAYA H. CRA 54 CLL 37 34-143</Text>
+        <Text>CARTAGENA DE INDIAS - COLOMBIA</Text>
+        <Text>FACTURA DE VENTA</Text>
       </View>
       <View style={styles.info}>
-        <Text>Código: {billing.code}</Text>
-        <Text>Fecha: {billing.creationDate}</Text>
-        <Text>Vendedor: Vendedor principal</Text>
-        <Text>Cliente: Distrireal de la costa</Text>
+        <Text>CÓDIGO: {billing.code}</Text>
+        <Text>FECHA: {billing.creationDate}</Text>
+        <Text>VENDEDOR: ANÓNIMO</Text>
+        <Text>CLIENTE: ANÓNIMO</Text>
+      </View>
+      <View style={styles.tableRow}>
+        <Text style={{ ...styles.tableCol, width: '50%' }}>PRODUCTO</Text>
+        <Text style={{ ...styles.tableCol, width: '20%' }}>CNT</Text>
+        <Text style={{ ...styles.tableCol, width: '30%' }}>V. U.</Text>
       </View>
       <View style={styles.table}>
         {billing?.items.map(({ name, units, price }, i) => (
           <View key={i} style={styles.tableRow}>
-            <View style={[styles.tableCol, { width: '50%' }]}>
+            <View style={{ ...styles.tableCol, width: '50%' }}>
               <Text style={styles.tableCell}>{name}</Text>
             </View>
-            <View style={[styles.tableCol, { width: '20%' }]}>
+            <View style={{ ...styles.tableCol, width: '20%' }}>
               <Text style={styles.tableCell}>{units}</Text>
             </View>
-            <View style={[styles.tableCol, { width: '30%' }]}>
+            <View style={{ ...styles.tableCol, width: '30%' }}>
               <Text style={styles.tableCell}>{formatCurrency(price)}</Text>
             </View>
           </View>
         ))}
-        <View style={styles.tableRow}>
-          <View style={[styles.tableCol, { width: '50%' }]}>
+        <View style={{ ...styles.tableRow, ...styles.marginBottom10 }}>
+          <View style={{ ...styles.tableCol, width: '50%' }}>
             <Text style={styles.tableCell}>&nbsp;</Text>
           </View>
-          <View style={[styles.tableCol, { width: '20%' }]}>
+          <View style={{ ...styles.tableCol, width: '20%' }}>
             <Text style={styles.tableCell}>TOTAL</Text>
           </View>
-          <View style={[styles.tableCol, { width: '30%' }]}>
+          <View style={{ ...styles.tableCol, width: '30%' }}>
             <Text style={styles.tableCell}>{formatCurrency(billing.billAmount)}</Text>
           </View>
         </View>
+      </View>
+      <View style={{ ...styles.textCenter, ...styles.marginBottom10 }}>
+        <Text>SERVICIO A DOMICILIO</Text>
+        <Text>3012141263</Text>
+        <Text>** GRACIAS POR SU COMPRA **</Text>
       </View>
     </Page>
   </Document>
@@ -53,16 +67,15 @@ BillingTemplate.propTypes = {
 
 const styles = StyleSheet.create({
   body: {
+    fontSize: 8,
     paddingTop: 20,
     paddingBottom: 10,
     paddingHorizontal: 10,
   },
   title: {
-    fontSize: 16,
     textAlign: 'center',
   },
   info: {
-    fontSize: 12,
     margin: '10 0',
   },
   table: {
@@ -82,15 +95,12 @@ const styles = StyleSheet.create({
   tableCell: {
     textAlign: 'left',
     marginTop: 5,
-    fontSize: 11,
+    fontSize: 9,
   },
-  pageNumber: {
-    position: 'absolute',
-    fontSize: 12,
-    bottom: 30,
-    left: 0,
-    right: 0,
+  textCenter: {
     textAlign: 'center',
-    color: 'grey',
+  },
+  marginBottom10: {
+    marginBottom: 10,
   },
 })
