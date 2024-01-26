@@ -1,25 +1,17 @@
 {
-  "name": "@coreui/coreui-free-react-admin-template",
-  "version": "4.4.0",
-  "description": "Nuapp",
+  "name": "quente",
+  "version": "0.0.1",
+  "description": "Quente",
   "homepage": "./",
-  "bugs": {
-    "url": "https://github.com/coreui/coreui-free-react-admin-template/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:coreui/coreui-free-react-admin-template.git"
-  },
-  "license": "MIT",
-  "author": "The CoreUI Team (https://github.com/orgs/coreui/people)",
+  "author": "Freddy Barrios (https://freddybarrios.com)",
   "scripts": {
-    "build": "react-scripts build",
+    "build": "craco build",
+    "start": "craco start",
+    "test": "craco test",
     "start:build": "serve -s build",
     "changelog": "auto-changelog --starting-version 0.0.1 --commit-limit false --hide-credit",
     "eject": "react-scripts eject",
     "lint": "eslint \"src/**/*.js\"",
-    "start": "react-scripts start",
-    "test": "react-scripts test",
     "test:cov": "npm test -- --coverage --watchAll=false",
     "test:debug": "react-scripts --inspect-brk test --runInBand"
   },
@@ -32,7 +24,8 @@
     "@coreui/react": "^4.3.1",
     "@coreui/react-chartjs": "^2.1.0",
     "@coreui/utils": "^1.3.1",
-    "@react-pdf/renderer": "^3.1.12",
+    "@craco/craco": "^7.1.0",
+    "@react-pdf/renderer": "^3.3.4",
     "@reduxjs/toolkit": "^1.9.5",
     "axios": "^1.2.3",
     "chart.js": "^3.9.1",
