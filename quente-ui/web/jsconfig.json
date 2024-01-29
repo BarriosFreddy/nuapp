@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@quente/common/*": ["../common/*"]
+    }
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"]
+}

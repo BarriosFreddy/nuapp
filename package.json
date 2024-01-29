@@ -8,6 +8,10 @@
     "start:web": "cd nuapp-web && next start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "private": true,
+  "workspaces": [
+    "quente-ui/*"
+  ],
   "keywords": [],
   "author": "",
   "license": "ISC"
