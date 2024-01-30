@@ -5,6 +5,6 @@
       "@quente/common/*": ["../common/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "../common/modules/inventory/views/data-loader", "../common/modules/inventory/views/item-categories", "../common/modules/inventory/views/items", "../common/modules/inventory/views/kardex", "../common/modules/inventory/views/pdf-document", "../common/modules/inventory/views/purchase-order", "../common/modules/inventory/services", "../common/modules/inventory/reducers", "../common/hooks", "../common/shared/services", "../common/shared/components/ConfirmDialog.js", "../common/shared/components/CurrencyFormInput.js", "../common/shared/components/FormInput.js", "../common/shared/components/ItemSearchDialog.js", "../common/modules/billing/views/dashboard", "../common/modules/billing/views/print-templates", "../common/modules/billing/views/Billing.js", "../common/modules/billing/views/BillingForm.js", "../common/modules/billing/views/BillingsHistorical.js", "../common/modules/billing/views/Payment.js", "../common/modules/billing/views/Payment.test.jsx", "../common/modules/billing/services", "../common/modules/billing/views/reducers"],
   "exclude": ["node_modules"]
 }

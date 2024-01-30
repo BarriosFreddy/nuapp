@@ -14,10 +14,10 @@ import {
   CCard,
   CCardFooter,
 } from '@coreui/react'
-import { existByDNI } from '../../../../../web/src/modules/clients/services/clients.service'
-import ConfirmDialog from 'src/components/shared/ConfirmDialog'
-import FormInput from '../../../../../web/src/components/shared/FormInput'
-import { setExistsByDNI } from '../../../../../web/src/modules/clients/reducers/clients.reducer'
+import { existByDNI } from '../../services/clients.service'
+import FormInput from '../../../../shared/components/FormInput'
+import { setExistsByDNI } from '../../reducers/clients.reducer'
+import ConfirmDialog from './../../../../shared/components/ConfirmDialog';
 
 const clientInitialState = {
   name: '',

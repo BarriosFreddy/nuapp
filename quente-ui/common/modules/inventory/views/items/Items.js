@@ -1,8 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react'
-import { Helmet } from 'react-helmet'
-import CIcon from '@coreui/icons-react'
-import { useDispatch, useSelector } from 'react-redux'
-import { cilPlus, cilSearch, cilTrash } from '@coreui/icons'
+
 import {
   CCard,
   CCardHeader,
@@ -16,13 +13,16 @@ import {
   CFormSelect,
   CFormLabel,
 } from '@coreui/react'
-import { getClients, saveClient, updateClient } from '../../services/clients.service'
+import ItemForm from './ItemForm'
+import { useDispatch, useSelector } from 'react-redux'
+import { getItems, saveItem, updateItem } from './../../services/items.service'
 import CONSTANTS from 'src/constants'
 import { sendToast } from '../../../../shared/services/notification.service'
+import { Helmet } from 'react-helmet'
 import { useDidUpdateControl } from '../../../../hooks/useDidUpdateControl'
-import ClientForm from './ClientForm'
-import ClientList from './ClientList'
-import { PropTypes } from 'prop-types'
+import ItemList from './ItemList'
+import CIcon from '@coreui/icons-react'
+import { cilPlus, cilSearch, cilTrash } from '@coreui/icons'
 
 const { ENTER_KEYCODE, TAB_KEYCODE } = CONSTANTS
 
@@ -30,32 +30,31 @@ const queryParamsInitial = {
   page: 1,
 }
 
-function Client(props) {
+function Item() {
   const dispatch = useDispatch()
-  const clients = useSelector((state) => state.clients.clients)
-  const saveSuccess = useSelector((state) => state.clients.saveSuccess)
-  const saving = useSelector((state) => state.clients.saving)
-  const fetching = useSelector((state) => state.clients.fetching)
+  const items = useSelector((state) => state.items.items)
+  const saveSuccess = useSelector((state) => state.items.saveSuccess)
+  const saving = useSelector((state) => state.items.saving)
+  const fetching = useSelector((state) => state.items.fetching)
   const [searchTerm, setSearchTerm] = useState('')
-  let [editing, setEditing] = useState(!!props.isPopup)
+  let [editing, setEditing] = useState(false)
   let [copying, setCopying] = useState(false)
-  let [client, setClient] = useState(null)
+  let [item, setItem] = useState(null)
   const [showFilterSection, setShowFilterSection] = useState(false)
   const [queryParams, setQueryParams] = useState(queryParamsInitial)
   const searchInputRef = useRef()
 
   useEffect(() => {
     setSearchTerm('')
-    dispatch(getClients({ page: 1 }))
+    dispatch(getItems({ page: 1 }))
   }, [dispatch])
 
   useDidUpdateControl(
     () => {
       if (saveSuccess) {
+        setEditing(false)
         sendToast(dispatch, { message: 'Guardado exitosamente!' })
-        if (props.isPopup && props.onSave) props.onSave()
-        !props.isPopup && setEditing(false)
-        setClient(null)
+        setItem(null)
         handleSearch({ page: queryParams.page })
       } else {
         sendToast(dispatch, { message: 'No se pudo guardar los datos', color: 'danger' })
@@ -65,13 +64,15 @@ function Client(props) {
     [saveSuccess],
   )
 
-  const handleSave = (client) => {
-    if (client._id) dispatch(updateClient(client))
-    else dispatch(saveClient(client))
+  const handleSave = (item) => {
+    delete item.price // delete after making sure the changes
+    delete item.measurementUnit
+    delete item.cost
+    if (item._id) dispatch(updateItem(item))
+    else dispatch(saveItem(item))
   }
 
   const handleCancel = async () => {
-    if (props.isPopup && props.onCancel) props.onCancel()
     setEditing(false)
   }
 
@@ -93,7 +94,7 @@ function Client(props) {
 
   const search = async (params = {}) => {
     setQueryParams(params)
-    dispatch(getClients(params))
+    dispatch(getItems(params))
   }
 
   const handleSearch = (params = {}) => {
@@ -105,20 +106,20 @@ function Client(props) {
     search(newParams)
   }
 
-  const handleEdit = (client) => {
+  const handleEdit = (item) => {
     setEditing(true)
     setCopying(false)
-    setClient(client)
+    setItem(item)
   }
 
-  const handleCopy = (client) => {
+  const handleCopy = (item) => {
     setCopying(true)
     setEditing(true)
-    setClient(client)
+    setItem(item)
   }
 
-  const handleNewClient = () => {
-    setClient(null)
+  const handleNewItem = () => {
+    setItem(null)
     setEditing(true)
     setCopying(false)
   }
@@ -143,7 +144,7 @@ function Client(props) {
     <>
       <CContainer>
         <Helmet>
-          <title>CLIENTES</title>
+          <title>ITEMS</title>
         </Helmet>
         <CCard className="shadow border-10">
           <div className="d-none d-lg-block">
@@ -152,8 +153,8 @@ function Client(props) {
                 <>
                   <CRow>
                     <CCol xs="2" lg="3">
-                      CLIENTES &nbsp;
-                      <CButton variant="outline" color="success" onClick={handleNewClient}>
+                      ITEMS &nbsp;
+                      <CButton variant="outline" color="success" onClick={handleNewItem}>
                         <div className="d-none d-lg-block">NUEVO</div>
                         <div className="d-lg-none">
                           <CIcon icon={cilPlus} size="sm" />
@@ -230,15 +231,15 @@ function Client(props) {
               )}
               {editing && (
                 <div className="d-none d-lg-block">
-                  {client ? (copying ? 'COPIANDO' : 'EDITANDO') : 'CREANDO'} CLIENTE
+                  {item ? (copying ? 'COPIANDO' : 'EDITANDO') : 'CREANDO'} ITEM
                 </div>
               )}
             </CCardHeader>
           </div>
           <CCardBody>
             {!editing && (
-              <ClientList
-                clients={clients}
+              <ItemList
+                items={items}
                 page={queryParams.page}
                 fetching={fetching}
                 onEdit={handleEdit}
@@ -248,13 +249,7 @@ function Client(props) {
               />
             )}
             {editing && (
-              <ClientForm
-                isPopup
-                copying={copying}
-                client={client}
-                onSave={handleSave}
-                onCancel={handleCancel}
-              />
+              <ItemForm copying={copying} item={item} onSave={handleSave} onCancel={handleCancel} />
             )}
           </CCardBody>
         </CCard>
@@ -263,10 +258,4 @@ function Client(props) {
   )
 }
 
-Client.propTypes = {
-  isPopup: PropTypes.bool,
-  onCancel: PropTypes.func,
-  onSave: PropTypes.func,
-}
-
-export default Client
+export default Item

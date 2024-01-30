@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react'
-import { useForm } from 'react-hook-form'
 import {
   CAlert,
   CButton,
@@ -16,36 +15,39 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
+import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { login } from '@quente/common/modules/core/services/auth.service'
 import { setLoading } from '@quente/common/modules/core/reducers/auth.reducer'
+import { Navigate } from 'react-router-dom'
 
 const Login = () => {
   const dispatch = useDispatch()
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm()
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
   const loginSuccess = useSelector((state) => state.auth.loginSuccess)
   const loading = useSelector((state) => state.auth.loading)
-
-  useEffect(() => {
-    if (isLoggedIn) {
-      window.location.pathname = '/billing'
-    }
-  }, [isLoggedIn])
+  const [userAccountLogin, setUserAccountLogin] = useState({
+    email: '',
+    password: '',
+  })
 
   useEffect(() => () => dispatch(setLoading(false)), [dispatch])
 
-  const handleLogin = () => {
-    handleSubmit((userAccountLogin) => dispatch(login(userAccountLogin)))()
+  const onChangeInput = ({ target }) => {
+    const { name, value } = target
+    setUserAccountLogin({
+      ...userAccountLogin,
+      [name]: value,
+    })
   }
 
-  const onKeyDownLogin = ({ keyCode }) => keyCode === 13 && handleLogin()
+  const onClickLogin = async () => dispatch(login(userAccountLogin))
 
-  return (
+  const onKeyDownLogin = ({ keyCode }) => keyCode === 13 && onClickLogin()
+
+  return isLoggedIn ? (
+    <Navigate to={'/billing'} />
+  ) : (
     <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
       <CContainer>
         <CRow className="justify-content-center">
@@ -61,11 +63,10 @@ const Login = () => {
                         <CIcon icon={cilUser} />
                       </CInputGroupText>
                       <CFormInput
-                        type="text"
+                        name="email"
+                        onChange={onChangeInput}
                         placeholder="Email"
                         autoComplete="email"
-                        invalid={!!errors.email}
-                        {...register('email', { required: true })}
                       />
                     </CInputGroup>
                     <CInputGroup className="mb-4">
@@ -74,10 +75,11 @@ const Login = () => {
                       </CInputGroupText>
                       <CFormInput
                         type="password"
+                        name="password"
+                        onChange={onChangeInput}
                         placeholder="Password"
+                        autoComplete="current-password"
                         onKeyDown={onKeyDownLogin}
-                        invalid={!!errors.password}
-                        {...register('password', { required: true })}
                       />
                     </CInputGroup>
                     {!loginSuccess && (
@@ -96,7 +98,7 @@ const Login = () => {
                         <div className="d-grid">
                           <CButton
                             size="lg"
-                            onClick={handleLogin}
+                            onClick={onClickLogin}
                             color="primary"
                             className="px-4"
                             disabled={loading}

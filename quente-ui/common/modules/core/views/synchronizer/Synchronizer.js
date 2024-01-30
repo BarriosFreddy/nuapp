@@ -11,9 +11,9 @@ import {
   CRow,
 } from '@coreui/react'
 import { Helmet } from 'react-helmet'
-import { saveBillingBulk } from 'src/modules/billing/services/billings.service'
-import { saveBillingLocally } from 'src/modules/billing/reducers/billings.reducer'
-import { useDidUpdateControl } from '../../../../../web/src/hooks/useDidUpdateControl'
+import { useDidUpdateControl } from './../../../../hooks/useDidUpdateControl'
+import { saveBillingBulk } from './../../../billing/services/billings.service';
+import { saveBillingLocally } from '../../../billing/reducers/billings.reducer'
 
 function Billing() {
   const billingsOffiline = useSelector((state) => state.billing.offline.billings)

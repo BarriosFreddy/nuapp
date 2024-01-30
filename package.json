@@ -1,11 +1,11 @@
 {
-  "name": "nuapp",
+  "name": "quente",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:api": "cd nuapp-api",
-    "start:web": "cd nuapp-web && next start",
+    "dev:api": "cd nuapp-api && npm run start:dev",
+    "dev:web": "cd quente-ui/web && npm start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "private": true,

@@ -2,7 +2,7 @@ import React from 'react'
 import { useDispatch } from 'react-redux'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import './scss/style.scss'
-import { getInfoUser } from './modules/core/services/auth.service'
+import { getInfoUser } from '@quente/common/modules/core/services/auth.service'
 
 const loading = (
   <div className="pt-3 text-center">
