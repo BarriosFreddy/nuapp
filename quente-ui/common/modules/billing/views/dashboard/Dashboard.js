@@ -22,7 +22,7 @@ import CIcon from '@coreui/icons-react'
 import { cilCloudDownload } from '@coreui/icons'
 import dayjs from 'dayjs'
 import { getBillingsGTDate, getBillingTopSales } from '../../services/billings.service'
-import { formatCurrency } from 'src/utils'
+import { formatCurrency } from '@quente/common/utils'
 import { Helmet } from 'react-helmet'
 
 const SALES_DAYS = [

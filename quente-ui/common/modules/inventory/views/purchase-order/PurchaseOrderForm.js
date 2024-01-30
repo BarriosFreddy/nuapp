@@ -16,7 +16,7 @@ import {
 } from '@coreui/react'
 import React, { useEffect, useRef, useState } from 'react'
 import CONSTANTS from 'src/constants'
-import { formatCurrency, getDateObject } from 'src/utils'
+import { formatCurrency, getDateObject } from '@quente/common/utils'
 import { cilSearch, cilTrash } from '@coreui/icons'
 import { PropTypes } from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'

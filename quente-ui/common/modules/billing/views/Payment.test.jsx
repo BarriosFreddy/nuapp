@@ -2,7 +2,7 @@ import React from 'react'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Payment from './Payment'
-import * as utils from '../../../../web/src/utils'
+import * as utils from '@quente/common/utils'
 
 jest.spyOn(utils, 'formatCurrency')
 

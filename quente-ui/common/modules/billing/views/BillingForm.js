@@ -22,7 +22,7 @@ import {
   CTableDataCell,
   CBadge,
 } from '@coreui/react'
-import { formatCurrency, getMainPrice } from 'src/utils'
+import { formatCurrency, getMainPrice } from '@quente/common/utils'
 import { useDispatch, useSelector } from 'react-redux'
 import { setItems } from './../../inventory/reducers/items.reducer'
 import { getItems } from './../../inventory/services/items.service'

@@ -17,7 +17,7 @@ import {
   CTableHeaderCell,
   CCardHeader,
 } from '@coreui/react'
-import { formatCurrency, formatDate } from '../../../../web/src/utils'
+import { formatCurrency, formatDate } from '@quente/common/utils'
 import { getBillings } from './../../../modules/billing/services/billings.service'
 import { setBillings } from './../../../modules/billing/reducers/billings.reducer'
 import { Helmet } from 'react-helmet'

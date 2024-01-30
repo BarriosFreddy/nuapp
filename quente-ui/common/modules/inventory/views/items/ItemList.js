@@ -14,7 +14,7 @@ import {
   CBadge,
   CTableFoot,
 } from '@coreui/react'
-import { formatCurrency, getMainPrice } from 'src/utils'
+import { formatCurrency, getMainPrice } from '@quente/common/utils'
 import { PropTypes } from 'prop-types'
 import dayjs from 'dayjs'
 import CIcon from '@coreui/icons-react'

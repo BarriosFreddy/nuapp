@@ -18,14 +18,6 @@ console.log({ REACT_APP_RENDER_GIT_COMMIT })
 
 const AppHeaderDropdown = () => {
   const dispatch = useDispatch()
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
-
-  useEffect(() => {
-    if (!isLoggedIn) {
-      redirect('/login')
-     // window.location.pathname = '/login'
-    }
-  }, [isLoggedIn])
 
   const handleLogout = () => dispatch(logout())
 

@@ -23,7 +23,7 @@ import {
   getDateObject,
   getMainPrice,
   getMainPriceRatio,
-} from 'src/utils'
+} from '@quente/common/utils'
 import CIcon from '@coreui/icons-react'
 import { cilTrash } from '@coreui/icons'
 import PaymentComp from './Payment'

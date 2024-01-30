@@ -27,7 +27,7 @@ import { cilTrash } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'
 import { sendWarningToast, sendSuccessToast } from '../../../../shared/services/notification.service'
 import { saveAllKardexes } from '../../services/kardexes.service'
-import { getDateObject } from 'src/utils'
+import { getDateObject } from '@quente/common/utils'
 import CurrencyFormInput from './../../../../shared/components/CurrencyFormInput';
 
 const initialKardex = {

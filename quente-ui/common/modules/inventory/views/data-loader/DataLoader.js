@@ -21,7 +21,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux'
 import { saveItemCategoriesBulk } from '../..//services/items.service'
 import { setSaveSuccess } from './../../../billing/reducers/billings.reducer'
-import { formatCurrency } from 'src/utils'
+import { formatCurrency } from '@quente/common/utils'
 import { Helmet } from 'react-helmet'
 import { sendToast } from '../../../../shared/services/notification.service'
 import { useDidUpdate } from './../../../../hooks/useDidUpdate';

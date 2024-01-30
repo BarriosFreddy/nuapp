@@ -20,15 +20,8 @@ import CIcon from '@coreui/icons-react'
 
 const AppSidebar = () => {
   const dispatch = useDispatch()
-  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn)
   const unfoldable = useSelector((state) => state.app.sidebarUnfoldable)
   const sidebarShow = useSelector((state) => state.app.sidebarShow)
-
-  useEffect(() => {
-    if (!isLoggedIn) {
-      window.location.pathname = '/login'
-    }
-  }, [isLoggedIn])
 
   const handleLogout = () => dispatch(logout())
 

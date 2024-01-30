@@ -27,7 +27,7 @@ import FormInput from '../../../../shared/components/FormInput'
 import { getInvEnumerationByCode } from '../../services/inv-enumerations.service'
 import CIcon from '@coreui/icons-react'
 import { cilTrash } from '@coreui/icons'
-import { getUUID } from 'src/utils'
+import { getUUID } from '@quente/common/utils'
 import { setExistsByCode } from '../../reducers/items.reducer'
 import ConfirmDialog from './../../../../shared/components/ConfirmDialog';
 

@@ -1,7 +1,7 @@
 import { CFormInput } from '@coreui/react'
 import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
 import { PropTypes } from 'prop-types'
-import { formatCurrency } from '../../../web/src/utils/index'
+import { formatCurrency } from '@quente/common/utils/index'
 
 const CurrencyFormInput = forwardRef(function CurrencyFormInput(props, ref) {
   const [innerValue, setInnerValue] = useState('')

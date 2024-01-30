@@ -11,13 +11,13 @@ const loading = (
 )
 
 // Containers
-const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
+const DefaultLayout = React.lazy(() => import('src/layout/DefaultLayout'))
 
 // Pages
-const Login = React.lazy(() => import('./views/pages/login/Login'))
-const Register = React.lazy(() => import('./views/pages/register/Register'))
-//const Page404 = React.lazy(() => import('./views/pages/page404/Page404'))
-const Page500 = React.lazy(() => import('./views/pages/page500/Page500'))
+const Login = React.lazy(() => import('@quente/common/pages/login/Login'))
+const Register = React.lazy(() => import('@quente/common/pages/register/Register'))
+//const Page404 = React.lazy(() => import('@quente/common/pages/page404/Page404'))
+const Page500 = React.lazy(() => import('@quente/common/pages/page500/Page500'))
 
 const App = () => {
   const dispatch = useDispatch()

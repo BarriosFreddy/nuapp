@@ -1,7 +1,7 @@
 import React from 'react'
 import { Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer'
 import { PropTypes } from 'prop-types'
-import { formatCurrency } from 'src/utils'
+import { formatCurrency } from '@quente/common/utils'
 
 const BillingTemplate = ({ billing }) => (
   <Document title="factura" pageLayout="oneColumn">

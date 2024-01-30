@@ -1,6 +1,6 @@
 import React, { lazy, useEffect } from 'react'
-import { AppContent, AppSidebar } from '../components/index'
-import { AppHeader } from '@quente/common/components/index'
+import { AppContent } from '../components/index'
+import { AppHeader, AppSidebar } from '@quente/common/components/index'
 
 import { useSelector } from 'react-redux'
 //import { getAllItems } from '@quente/common/modules/inventory/services/items.service'
