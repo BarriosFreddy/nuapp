@@ -62,7 +62,7 @@ module.exports = {
 
         // finalize the PDF and end the stream
         doc.end()
-        let sumatraPDFURI = pathNode.join(__dirname, '/SumatraPDF-3.4.6-32.exe')
+        let sumatraPDFURI = pathNode.join(__dirname, '/SumatraPDF-3.5.2-32.exe')
         sumatraPDFURI = sumatraPDFURI.replace('app.asar', 'app.asar.unpacked')
         const command = `"${sumatraPDFURI}" -print-to-default -silent -print-settings noscale,paper=A6 ${filePath}`
         exec(command, (error, stdout, stderr) => {
