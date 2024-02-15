@@ -19,6 +19,14 @@ const BillingCreateSchema: Schema = joi.object({
     )
     .required(),
   creationDate: joi.string().required(),
+  client: joi.object({
+    id: joi.string(),
+    name: joi.string(),
+  }),
+  createdBy: joi.object({
+    id: joi.string(),
+    name: joi.string(),
+  }),
   createdAt: joi.object({
     date: joi.number(),
     offset: joi.number(),

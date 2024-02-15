@@ -1,3 +1,4 @@
 import AppContent from './AppContent'
+import AppHeader from './AppHeader'
 
-export { AppContent }
+export { AppContent, AppHeader }

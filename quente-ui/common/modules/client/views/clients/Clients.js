@@ -17,7 +17,7 @@ import {
   CFormLabel,
 } from '@coreui/react'
 import { getClients, saveClient, updateClient } from '../../services/clients.service'
-import CONSTANTS from 'src/constants'
+import CONSTANTS from '../../../../constants'
 import { sendToast } from '../../../../shared/services/notification.service'
 import { useDidUpdateControl } from '../../../../hooks/useDidUpdateControl'
 import ClientForm from './ClientForm'

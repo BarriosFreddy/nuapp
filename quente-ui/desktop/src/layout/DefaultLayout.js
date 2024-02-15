@@ -15,7 +15,7 @@ const DefaultLayout = (props) => {
   return (
     <div>
       <ErrorBoundary fallback={<h1>Algo salió mal!</h1>}>
-        <AppSidebar />
+        {/* <AppSidebar /> */}
         <div className="wrapper d-flex flex-column min-vh-100 bg-light">
           {showHeader && <AppHeader />}
           <div className="body flex-grow-1">

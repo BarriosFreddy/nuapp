@@ -25,6 +25,7 @@ import {
 } from '@coreui/icons'
 import { NavLink } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
+import BillTemplate from '../../../billing/views/print-templates/BillTemplate'
 
 const progressGroupExample1 = [
   { title: 'Monday', value1: 34, value2: 78 },
@@ -74,7 +75,6 @@ const Home = () => {
           </CHeaderNav>
         </CCardBody>
       </CCard>
-
       <CRow>
         <CCol xs>
           <CCard className="mb-4">

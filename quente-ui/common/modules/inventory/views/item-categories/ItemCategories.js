@@ -14,7 +14,7 @@ import {
 import ItemCategoriesForm from './ItemCategoriesForm'
 import { useDispatch, useSelector } from 'react-redux'
 import { getItemCategories } from '../..//services/item-categories.service'
-import CONSTANTS from 'src/constants'
+import CONSTANTS from '../../../../constants'
 import { Helmet } from 'react-helmet'
 import { sendToast } from '../../../../shared/services/notification.service'
 import {

@@ -21,7 +21,7 @@ import {
 import { Helmet } from 'react-helmet'
 import { useDispatch, useSelector } from 'react-redux'
 import { getItems } from '../../services/items.service'
-import CONSTANTS from 'src/constants'
+import CONSTANTS from '../../../../constants'
 import { useDidUpdateControl } from '../../../../hooks/useDidUpdateControl'
 import { cilTrash } from '@coreui/icons'
 import CIcon from '@coreui/icons-react'

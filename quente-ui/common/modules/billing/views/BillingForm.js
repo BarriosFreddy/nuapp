@@ -26,7 +26,7 @@ import { formatCurrency, getMainPrice } from '@quente/common/utils'
 import { useDispatch, useSelector } from 'react-redux'
 import { setItems } from './../../inventory/reducers/items.reducer'
 import { getItems } from './../../inventory/services/items.service'
-import CONSTANTS from '../../../../web/src/constants'
+import CONSTANTS from '../../../constants'
 import { useDidUpdate } from './../../..//hooks/useDidUpdate';
 
 const { ENTER_KEYCODE, TAB_KEYCODE } = CONSTANTS

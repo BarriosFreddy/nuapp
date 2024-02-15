@@ -94,7 +94,7 @@ export class BillingService extends BaseService<Billing> {
       for (const billing of billings) {
         billing.code = await generateSequencedCode();
       }
-      let billingModels = billings.map(
+      const billingModels = billings.map(
         (billing) => new (this.getModel())(billing),
       );
       const result = await this.getModel().bulkSave(billingModels);

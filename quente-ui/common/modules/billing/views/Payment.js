@@ -3,7 +3,7 @@ import { PropTypes } from 'prop-types'
 
 import { CRow, CCol, CContainer, CFormSelect, CButton } from '@coreui/react'
 import { formatCurrency } from '@quente/common/utils'
-import CONSTANTS from '../../../../web/src/constants'
+import CONSTANTS from '../../../constants'
 import CurrencyFormInput from '@quente/common/shared/components/CurrencyFormInput'
 
 const { ENTER_KEYCODE, TAB_KEYCODE } = CONSTANTS

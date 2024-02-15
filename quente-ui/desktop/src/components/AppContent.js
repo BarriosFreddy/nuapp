@@ -29,7 +29,7 @@ const AppContent = () => {
             )
           )
         })}
-        <Route render path="/" element={<Navigate to="home" replace />} />
+        <Route render path="/" element={<Navigate to="billing" replace />} />
       </Routes>
     </Suspense>
   )

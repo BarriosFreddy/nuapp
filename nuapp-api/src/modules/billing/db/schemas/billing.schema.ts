@@ -22,6 +22,14 @@ export const billingSchema = new Schema({
     },
   ],
   modifiedBy: Types.ObjectId,
+  client: {
+    id: Types.ObjectId,
+    name: String,
+  },
+  createdBy: {
+    id: Types.ObjectId,
+    name: String,
+  },
   createdAt: {
     date: Number,
     offset: Number,

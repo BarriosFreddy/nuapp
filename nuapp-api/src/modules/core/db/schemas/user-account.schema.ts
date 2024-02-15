@@ -1,6 +1,7 @@
 import { Schema, Types } from 'mongoose';
 
 export const userAccountSchema = new Schema({
+  _id: Types.ObjectId,
   dniType: String,
   dni: String,
   firstName: String,

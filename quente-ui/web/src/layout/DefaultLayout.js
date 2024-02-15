@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react'
-import { AppContent } from '../components/index'
-import { AppHeader } from '@quente/common/components/index'
+import { AppContent, AppHeader } from '../components/index'
 import { useDispatch, useSelector } from 'react-redux'
 import { getAllItems } from '@quente/common/modules/inventory/services/items.service'
 import { ErrorBoundary } from 'react-error-boundary'

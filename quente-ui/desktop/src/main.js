@@ -1,10 +1,19 @@
 /* eslint-disable prettier/prettier */
+const { updateElectronApp, UpdateSourceType } = require('update-electron-app')
 const { app, BrowserWindow, ipcMain } = require('electron')
+const path = require('node:path')
+const { renderPDF } = require('./RenderPDF')
+updateElectronApp({
+  updateSource: {
+    type: UpdateSourceType.ElectronPublicUpdateService,
+    repo: 'BarriosFreddy/nuapp'
+  },
+  updateInterval: '1 hour',
+  logger: require('electron-log')
+})
+if (require('electron-squirrel-startup')) app.quit();
 const env = process.env.NODE_ENV || 'development'
 
-// include the Node.js 'path' module
-const path = require('node:path')
-const { print } = require('pdf-to-printer')
 let fileData = null
 
 const createWindow = () => {
@@ -18,7 +27,8 @@ const createWindow = () => {
     },
   })
   win.loadFile('build/index.html')
-  win.webContents.openDevTools()
+  win.maximize()
+  // win.webContents.openDevTools()
 }
 
 app.whenReady().then(() => {
@@ -49,30 +59,5 @@ function setData(e, data) {
 
 async function printSilently() {
   if (fileData === null) return
-  /*  let printWin = new BrowserWindow({ title: 'FACTURA', width: 300, minHeight: 350, show: true })
-  let file = 'data:text/html;charset=UTF-8, ' + fileData
-  printWin.loadURL(file)
-  printWin.webContents.on('did-finish-load', () => {
-    printWin.webContents.print(
-      {
-        scaleFactor: 0.5,
-        silent: true,
-      },
-      (success, err) => {
-        if (success) {
-          printWin.close()
-          printWin = null
-          return
-        }
-        console.error(err)
-      },
-    )
-  }) */
-  const uri = __dirname + '/assets/FACTURA1.pdf'
-  print(uri, {
-    paperSize: 'A6',
-    scale: 'fit',
-  })
-    .then(console.log)
-    .catch(console.error)
+  renderPDF(fileData)
 }
