@@ -63,7 +63,7 @@ export const getItems =
   }
 
 export const getAllItems = () => async (dispatch, state, api) => {
-  const { data, status } = await api.get(`/items`)
+  const { data, status } = await api.get(`/items?size=500`)
   if (status === 200) await indexDBService.bulkPutItems(data)
 }
 

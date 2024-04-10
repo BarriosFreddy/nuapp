@@ -94,7 +94,7 @@ function Item() {
 
   const search = async (params = {}) => {
     setQueryParams(params)
-    dispatch(getAllItems());
+    //dispatch(getAllItems());
     dispatch(getItems(params))
   }
 

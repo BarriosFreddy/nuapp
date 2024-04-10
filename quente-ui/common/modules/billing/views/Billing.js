@@ -76,6 +76,10 @@ function Billing() {
   const keyBuffer = useMemo(() => new Set(), []);
 
   useEffect(() => {
+    dispatch(getAllItems())
+  }, [])
+
+  useEffect(() => {
     dispatch(setSidebarUnfoldable(true));
   }, [dispatch]);
   useEffect(() => {
