@@ -15,7 +15,7 @@ import {
 } from '@coreui/react'
 import ItemForm from './ItemForm'
 import { useDispatch, useSelector } from 'react-redux'
-import { getItems, saveItem, updateItem } from './../../services/items.service'
+import { getItems, getAllItems, saveItem, updateItem } from './../../services/items.service'
 import CONSTANTS from '../../../../constants'
 import { sendToast } from '../../../../shared/services/notification.service'
 import { Helmet } from 'react-helmet'
@@ -94,6 +94,7 @@ function Item() {
 
   const search = async (params = {}) => {
     setQueryParams(params)
+    dispatch(getAllItems());
     dispatch(getItems(params))
   }
 

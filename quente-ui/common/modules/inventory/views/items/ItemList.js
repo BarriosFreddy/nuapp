@@ -26,7 +26,7 @@ const ItemList = ({ items, fetching, page, onEdit, onCopy, onPrevPage, onNextPag
   return (
     <>
       <div className="d-lg-none">
-        {items.map((item) => (
+        {items?.map((item) => (
           <CCard
             key={item.code}
             style={{
@@ -78,7 +78,7 @@ const ItemList = ({ items, fetching, page, onEdit, onCopy, onPrevPage, onNextPag
             </CTableRow>
           </CTableHead>
           <CTableBody>
-            {items.map((item) => (
+            {items?.map((item) => (
               <CTableRow key={item.code}>
                 <CTableDataCell className="text-uppercase text-break">{item.name}</CTableDataCell>
                 <CTableDataCell>{item.code}</CTableDataCell>

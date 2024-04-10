@@ -1,3 +1,6 @@
+import { quenteDB } from '../../../shared/db/indexDB'
+import indexDBService from "../../../shared/services/indexDB.service";
+
 import {
   saveSuccess,
   setItems,
@@ -41,18 +44,27 @@ export const getItems =
   (queryParams, useCacheOnly = false) =>
   async (dispatch, getState, api) => {
     dispatch(setFetching(true))
-    const urlQueryParams = new URLSearchParams(queryParams).toString()
+/*     const urlQueryParams = new URLSearchParams(queryParams).toString()
     isonline = useCacheOnly ? false : await isOnline()
     const { data, status } = isonline
       ? await api.get(`/items${urlQueryParams.length > 0 ? '?' + urlQueryParams.toString() : ''}`)
-      : getLocally(getState(), queryParams)
+      : getLocally(getState(), queryParams) */
+      const status = 200
+      const data = await quenteDB.items
+        .where("name")
+        .startsWithIgnoreCase(queryParams.name || '')
+        .or('code')
+        .equals(queryParams.code || '')
+        .offset(((queryParams.page || 1)-1) * 10)
+        .limit(10)
+        .toArray();
     if (status === 200) dispatch(setItems(data))
     dispatch(setFetching(false))
   }
 
 export const getAllItems = () => async (dispatch, state, api) => {
   const { data, status } = await api.get(`/items`)
-  if (status === 200) dispatch(setItemsLocally(data))
+  if (status === 200) await indexDBService.bulkPutItems(data)
 }
 
 function getLocally(state, queryParams) {
