@@ -113,7 +113,6 @@ function Billing() {
         setItemUnits({});
         sendToast(dispatch, { message: "Guardado exitosamente!" });
         setPaying(false);
-        dispatch(getAllItems());
         setItemPrices(itemsPricesInitialState);
         !!REACT_APP_UI && (await window.electronAPI.printFile());
       } else {

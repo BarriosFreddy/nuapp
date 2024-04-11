@@ -1,3 +1,4 @@
+import indexDBService from '../../../shared/services/indexDB.service'
 import {
   setSaveSuccess,
   setBillings,
@@ -11,12 +12,13 @@ import isOnline from 'is-online'
 let isonline = false
 
 export const saveBilling = (billing) => async (dispatch, getState, api) => {
-  isonline = await isOnline()
   dispatch(setSaving(true))
-  const { status } = isonline
+/*   const { status } = isonline
     ? await api.post('/billings', billing)
-    : saveLocally(dispatch, getState(), billing)
-  dispatch(setSaveSuccess(isonline ? status === 201 : true))
+    : saveLocally(dispatch, getState(), billing) 
+  dispatch(setSaveSuccess(isonline ? status === 201 : true))*/
+  await indexDBService.saveBilling(billing)
+  dispatch(setSaveSuccess(true))
   dispatch(setSaving(false))
 }
 
