@@ -27,7 +27,7 @@ const exportBillings = async () => {
       const localBillingId = localBilling.id
       console.log('Processing object with id: ', localBillingId)
       delete localBilling.id
-      localBilling.clientId = '65ac390a0276b80f5712a96c'
+      localBilling.clientId = '65ac390a0276b80f5712a96c' // default client id
       const response = await retry(() =>
         axiosInstance({
           url: SAVE_BILLING_ENDPOINT,
