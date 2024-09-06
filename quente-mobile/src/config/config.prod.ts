@@ -6,5 +6,5 @@
  * https://reactnative.dev/docs/security#storing-sensitive-info
  */
 export default {
-  API_URL: "https://nuapp-api.onrender.com/",
+  API_URL: "https://nuapp-api.onrender.com/api/v1/",
 }
