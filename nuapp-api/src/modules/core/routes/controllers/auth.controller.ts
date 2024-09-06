@@ -11,7 +11,10 @@ class AuthController {
   async authenticate(req: Request, res: Response) {
     const userAccountLogin: UserAccountLogin = req.body;
     const data =
-      (await authService.authenticate(userAccountLogin)) ?? {};
+      (await authService.authenticate(userAccountLogin)) ??
+      ({} as {
+        access_token: string;
+      });
     if (!data.access_token)
       return res.status(403).send({ message: 'credentials invalid' });
 

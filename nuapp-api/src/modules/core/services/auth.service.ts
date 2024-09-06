@@ -12,7 +12,7 @@ export class AuthService {
 
   async authenticate(
     userAccountLogin: UserAccountLogin,
-  ): Promise<{ access_token: string; data: object } | null> {
+  ){
     this.userAccountService.setTenantId = AUTH_DATABASE;
     const { email, password } = userAccountLogin;
     const userAccount: UserAccount | null =
