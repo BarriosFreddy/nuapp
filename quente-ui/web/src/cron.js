@@ -46,7 +46,7 @@ const exportBillings = async () => {
 export const executeTasks = () => {
   setInterval(async () => {
     await exportBillings()
-    console.log('Running every minute')
+    console.log('Running every hour')
   }, INTERVAL_TIME)
 }
 

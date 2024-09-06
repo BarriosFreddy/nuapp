@@ -1,0 +1,7 @@
+{
+  "name": "teikme",
+  "displayName": "Teik",
+  "plugins": [
+    "expo-localization"
+  ]
+}

@@ -31,7 +31,7 @@ export class AuthService {
       name: `${firstName} ${lastName}`,
     };
     const access_token = this.generateToken(data);
-    return { access_token, data };
+    return {...data, access_token};
   }
 
   private generateToken(data: {}): string {

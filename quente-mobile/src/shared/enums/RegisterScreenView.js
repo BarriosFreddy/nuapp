@@ -1,0 +1,5 @@
+export default {
+	INITIAL: 'I',
+	REGISTERING_CLIENT: 'RC',
+	REGISTERING_DRIVER: 'RD',
+  }

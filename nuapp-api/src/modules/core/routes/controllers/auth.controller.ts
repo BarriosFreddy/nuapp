@@ -10,14 +10,14 @@ const authService = container.resolve(AuthService);
 class AuthController {
   async authenticate(req: Request, res: Response) {
     const userAccountLogin: UserAccountLogin = req.body;
-    const { access_token = null, data } =
+    const data =
       (await authService.authenticate(userAccountLogin)) ?? {};
-    if (!access_token)
+    if (!data.access_token)
       return res.status(403).send({ message: 'credentials invalid' });
 
     return res
       .status(200)
-      .cookie('access_token', access_token, {
+      .cookie('access_token', data.access_token, {
         httpOnly: true,
         secure: NODE_ENV === 'production',
         sameSite: NODE_ENV === 'production' ? 'none' : 'lax',

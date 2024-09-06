@@ -1,6 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import Quagga from "quagga";
 import { PropTypes } from "prop-types";
+import { useZxing } from "react-zxing";
+import { useMediaDevices } from "react-media-devices";
 
 import {
   CModal,
@@ -40,6 +42,28 @@ const BillingForm = (props) => {
   const [modal, setModal] = useState(false);
   const toggle = () => setModal(!modal);
   const searchTermInput = useRef();
+  const [result, setResult] = useState("");
+  const { devices } = useMediaDevices({
+    constraints: {
+      video: true, //{ facingMode: "environment" },
+      audio: false,
+    },
+  });
+  const deviceId = devices?.filter(({ kind }) => kind === "videoinput")[0]
+    ?.deviceId;
+  /*   const {
+    ref: videoRef,
+    torch: { on, off, isOn, isAvailable },
+  } = useZxing({
+    paused: !deviceId,
+    deviceId,
+    onDecodeResult(result) {
+      console.log({ result });
+      setResult(result.getText());
+    },
+    onDecodeError: (e) => console.log({ e }),
+    onError: (e) => console.log({ e }),
+  }); */
 
   const clear = useCallback(() => {
     dispatch(setItems([]));
@@ -54,6 +78,8 @@ const BillingForm = (props) => {
   useDidUpdate(() => {
     if (items.length === 1) addItem(items[0]);
   }, [fetching]);
+
+  // INIT
 
   const onChangeField = ({ target: { value } }) => {
     setSearchTerm(value);
@@ -71,40 +97,80 @@ const BillingForm = (props) => {
   const search = async (term) => {
     const termToSearch = term ?? searchTerm;
     if (!!termToSearch) {
-      dispatch(getItems({ code: termToSearch, name: termToSearch, page: 1 }, false))
+      dispatch(
+        getItems({ code: termToSearch, name: termToSearch, page: 1 }, false)
+      );
     }
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // eslinvideoReft-disable-next-line react-hooks/exhaustive-deps
 
   // eslint-disable-next-line no-unused-vars
   const scanItem = () => {
     toggle();
-    setTimeout(() => {
+setTimeout(() => {
       Quagga.init(
         {
           inputStream: {
             name: "Live",
-            type: "LiveStream",
+            type: "LiveStream", //LiveStream
             constraints: {
               width: 320,
               height: 380,
               facingMode: "environment",
             },
             target: document.querySelector("#reader"), // Or '#yourElement' (optional)
+            area: {
+              // defines rectangle of the detection/localization area
+              top: "10%", // top offset
+              right: "10%", // right offset
+              left: "10%", // left offset
+              bottom: "10%", // bottom offset
+            },
+            singleChannel: true
           },
           decoder: {
             readers: [
               "ean_reader",
-              /* {
-                format: 'ean_reader',
-                config: {
-                  supplements: ['ean_13_reader'],
-                }, 
-              }, */
               "code_128_reader",
+              "ean_reader",
+              "ean_8_reader",
+              "code_39_reader",
+              "code_39_vin_reader",
+              "codabar_reader",
+              "upc_reader",
+              "upc_e_reader",
+              "i2of5_reader",
+              "2of5_reader",
+              "code_93_reader",
             ],
+            multiple: false,
+           /*  debug: {
+              drawBoundingBox: true,
+              showFrequency: true,
+              drawScanline: true,
+              showPattern: true,
+            }, */
           },
+          /* locate: true,
+          locator: {
+            halfSample: true,
+            patchSize: "medium", // x-small, small, medium, large, x-large
+            debug: {
+              showCanvas: false,
+              showPatches: false,
+              showFoundPatches: false,
+              showSkeleton: false,
+              showLabels: false,
+              showPatchLabels: false,
+              showRemainingPatchLabels: false,
+              boxFromPatches: {
+                showTransformed: false,
+                showTransformedBox: false,
+                showBB: false,
+              },
+            },
+          }, */
         },
         function (err) {
           if (err) {
@@ -121,8 +187,7 @@ const BillingForm = (props) => {
         Quagga.stop();
       });
       Quagga.onProcessed((result) => {
-        /* const drawingCanvas = Quagga.canvas.dom.overlay
-        drawingCanvas.style.display = 'none' */
+        console.log(result);
       });
     }, 300);
   };
@@ -143,6 +208,14 @@ const BillingForm = (props) => {
         <CRow>
           <CCol>
             <CInputGroup>
+              <CButton
+                variant="outline"
+                type="button"
+                color="secondary"
+                onClick={scanItem}
+              >
+                SCAN
+              </CButton>
               <CFormInput
                 ref={searchTermInput}
                 type="text"
@@ -217,9 +290,15 @@ const BillingForm = (props) => {
         </CModalHeader>
         <CModalBody>
           <div id="reader" width="600px" style={{ maxWidth: "750px" }}></div>
+          {/* <video
+            autoPlay
+            style={{ height: 200, border: "1px solid" }}
+            ref={videoRef}
+          />
+          <span>Result: {result}</span> */}
         </CModalBody>
         <CModalFooter>
-          <CButton Ccolor="secondary" onClick={() => setModal(false)}>
+          <CButton color="secondary" onClick={() => setModal(false)}>
             Close
           </CButton>
         </CModalFooter>
