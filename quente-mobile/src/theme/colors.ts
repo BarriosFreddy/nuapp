@@ -38,10 +38,12 @@ const palette = {
   black: "#000",
   white: "#FFF",
 
-  gray400: "#EEEEEE",
+  gray400: "#E6E6E6",
   gray500: "#dddddd",
-  primary: "#3457D5",//"#5887ff",
-  secondary: "#41476E",
+  primary: "#163172",
+  primary10: "#1e439d",
+  primary20: "#2756c7",
+  secondary: "#0e1f47",
 
   transparentBlack700: 'rgba(0,0,0,0.7)',
 

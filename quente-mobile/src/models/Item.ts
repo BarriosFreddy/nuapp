@@ -31,7 +31,6 @@ export const ItemModel = types
     pricesRatio: types.array(PricesRatioModel),
     expirationControl: types.array(ExpirationControlModel),
     sku: "",
-    categories: types.array(types.string),
   })
   .actions(withSetPropAction)
   .views((episode) => ({}));

@@ -58,6 +58,11 @@ const es = {
     subheading: 'Registrate ya!',
     dniLabel: 'Cédula de ciudadanía'
   },
+  itemsScreen: {
+    codeLabel: 'Código',
+    nameLabel: "Nombre",
+    descriptionLabel: 'Descripción',
+  },
   demoNavigator: {
     componentsTab: 'Components',
     debugTab: 'Debug',

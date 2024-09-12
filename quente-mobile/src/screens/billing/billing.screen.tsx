@@ -242,7 +242,7 @@ const BillingScreen: FC<{ navigation: any; route: any }> = observer(
 
               <Button style={{}} onPress={() => setIsScanning(true)}>
                 <Icon
-                  size={50}
+                  size={30}
                   name="barcode-scan"
                   type="material-community"
                 ></Icon>
@@ -266,6 +266,7 @@ const BillingScreen: FC<{ navigation: any; route: any }> = observer(
                   >
                     <ListItem.Content>
                       <ListItem.Title>{item.name}</ListItem.Title>
+                      <ListItem.Subtitle>{item.code}</ListItem.Subtitle>
                     </ListItem.Content>
                     <View>
                       <Text h4>$ {getMainPrice(item)}</Text>
@@ -280,9 +281,10 @@ const BillingScreen: FC<{ navigation: any; route: any }> = observer(
                 {addedItemsList?.map((item: Item, index) => (
                   <ListItem key={index}>
                     <ListItem.Content>
-                      <ListItem.Title>
-                        {itemUnits[item.code]} x {item.name}
-                      </ListItem.Title>
+                      <ListItem.Title>{itemUnits[item.code]} x {item.name}</ListItem.Title>
+                      <ListItem.Subtitle>
+                        {item.code}
+                      </ListItem.Subtitle>
                     </ListItem.Content>
                     <Row>
                       <Text h4 style={{ marginRight: spacing.sm }}>

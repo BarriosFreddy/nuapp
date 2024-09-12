@@ -15,6 +15,11 @@ const MENU_ITEMS = [
     screen: 'BillingScreen',
   },
   {
+    label: 'Items',
+    iconName: 'card',
+    screen: 'ItemsScreen',
+  },
+  {
     label: 'Ajustes',
     iconName: 'cog-outline',
     screen: 'BillingScreen',
