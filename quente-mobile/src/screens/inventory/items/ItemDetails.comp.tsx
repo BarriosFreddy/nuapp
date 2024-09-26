@@ -1,13 +1,18 @@
 import React from "react";
 import { Item } from "../../../models/Item";
 import { View } from "react-native";
-import { Text } from "@rneui/themed";
-import { Button } from "../../../components";
-import { colors } from "../../../theme";
+import { Chip, Icon, ListItem, Skeleton } from "@rneui/themed";
+import { Button, Text } from "../../../components";
+import { colors, spacing } from "../../../theme";
+import { Row } from "../../../components/Row";
+import { getExpirationDates } from "../../../utils";
+import ItemFormSection from "../../../shared/enums/ItemFormSection";
+import { ScrollView } from "react-native-gesture-handler";
+import IconNames from "../../../shared/enums/IconNames";
 
 interface ItemDetailsProps {
   selectedItem: Item | null;
-  onEdit: () => void;
+  onEdit: (section: ItemFormSection) => void;
   onCancel: () => void;
 }
 
@@ -16,8 +21,8 @@ const ItemDetails: React.FC<ItemDetailsProps> = ({
   onEdit,
   onCancel,
 }) => {
-  const handleEditItem = () => {
-    onEdit && onEdit();
+  const handleEditItem = (section: ItemFormSection) => {
+    onEdit && onEdit(section);
   };
 
   const handleCancel = () => {
@@ -32,18 +37,69 @@ const ItemDetails: React.FC<ItemDetailsProps> = ({
     );
 
   return (
-    <View>
-      <Text h2>{selectedItem.name}</Text>
-      <Text h4>Código: {selectedItem.code}</Text>
-      <Text h4>Description: {selectedItem.description}</Text>
-
-      <Button
-        preset="reversed"
-        style={{ marginTop: 20, backgroundColor: colors.palette.primary }}
-        textStyle={{ fontWeight: "bold" }}
-        text="EDITAR"
-        onPress={handleEditItem}
-      />
+    <ScrollView>
+      <View
+        style={{
+          marginTop: spacing.lg,
+          alignSelf: "center",
+          backgroundColor: colors.palette.gray400,
+          width: "70%",
+          height: 170,
+        }}
+      >
+        <Text
+          style={{
+            alignSelf: "center",
+            marginTop: spacing.xxxl,
+            fontWeight: "bold",
+            fontSize: spacing.md,
+          }}
+        >
+          No Image
+        </Text>
+      </View>
+      <Row style={{ justifyContent: "flex-end" }}>
+        <Icon
+          size={35}
+          name="pencil"
+          type="material-community"
+          color="grey"
+          onPress={() => handleEditItem(ItemFormSection.MAIN)}
+        ></Icon>
+      </Row>
+      <Text size="xl">{selectedItem.name}</Text>
+      <Text size="md">Código: {selectedItem.code}</Text>
+      <Text size="md">Description: {selectedItem.description}</Text>
+      <Row>
+        <Text size="md">En stock</Text>
+        {getExpirationDates(selectedItem).map(
+          ({ expirationDate, lotUnits }, index) => (
+            <Chip
+              key={index}
+              title={lotUnits + ""}
+              type="outline"
+              titleStyle={{ color: colors.palette.primary, fontWeight: "bold" }}
+              buttonStyle={{ borderColor: colors.palette.primary }}
+              containerStyle={{ marginHorizontal: 15 }}
+            />
+          )
+        )}
+      </Row>
+      <Text preset="subheading"></Text>
+      <ListItem onPress={() => handleEditItem(ItemFormSection.PRICING)}>
+        <Icon name={IconNames.CASH} type="material-community" color="grey" />
+        <ListItem.Content>
+          <ListItem.Title>Precios</ListItem.Title>
+          <ListItem.Subtitle>Configuración de esquema de precios</ListItem.Subtitle>
+        </ListItem.Content>
+      </ListItem>
+      <ListItem onPress={() => handleEditItem(ItemFormSection.PRICING)}>
+        <Icon name={IconNames.CUBE_OUTLINE} type="material-community" color="grey" />
+        <ListItem.Content>
+          <ListItem.Title>Existencias</ListItem.Title>
+          <ListItem.Subtitle>Configuración de existencias</ListItem.Subtitle>
+        </ListItem.Content>
+      </ListItem>
       <Button
         text={"CANCELAR"}
         style={{ marginTop: 20 }}
@@ -51,7 +107,7 @@ const ItemDetails: React.FC<ItemDetailsProps> = ({
         preset="filled"
         onPress={handleCancel}
       />
-    </View>
+    </ScrollView>
   );
 };
 

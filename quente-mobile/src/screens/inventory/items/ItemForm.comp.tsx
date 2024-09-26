@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Item } from "../../../models/Item";
 import { Button, TextField } from "../../../components";
-import { KeyboardTypeOptions, StyleSheet, View } from "react-native";
+import { KeyboardTypeOptions, StyleSheet, View, ViewStyle } from "react-native";
 import { colors, spacing } from "../../../theme";
 import { Icon, Text } from "@rneui/themed";
 import { TxKeyPath } from "../../../i18n";
@@ -18,17 +18,28 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Dimensions } from "react-native";
 import { ActivityIndicator } from "react-native";
 import { Row } from "../../../components/Row";
+import ItemFormSection from "../../../shared/enums/ItemFormSection";
+import ItemFormPricing from "./ItemFormPricing.comp";
+import ItemFormStock from "./ItemFormStock.comp";
+import { ScrollView } from "react-native-gesture-handler";
+import { InvEnumeration } from "../../../models/inventory/inv-enumeration/InvEnumeration";
 
 type ItemFormProps = {
   onCancel: () => void;
   onSave: (item: Item) => void;
   selectedItem: Item | null;
+  section: ItemFormSection;
+  style: ViewStyle;
+  measurementUnits?: InvEnumeration;
 };
 
 const ItemForm: React.FC<ItemFormProps> = ({
   onCancel,
   onSave,
   selectedItem,
+  section,
+  style,
+  measurementUnits
 }: ItemFormProps) => {
   const insets = useSafeAreaInsets();
   const windowHeight = Dimensions.get("window").height;
@@ -83,7 +94,7 @@ const ItemForm: React.FC<ItemFormProps> = ({
     );
 
   return (
-    <View>
+    <ScrollView style={style && { ...style }}>
       <If condition={isScanning}>
         <Camera
           style={[styles.camera, { height: windowHeight - insets.top - 150 }]}
@@ -103,44 +114,80 @@ const ItemForm: React.FC<ItemFormProps> = ({
         </View>
       </If>
       <If condition={!isScanning}>
-        <Row>
-          <Text h4>{selectedItem ? "Editando" : "Creando"} item</Text>
-          <Button
-            style={{ width: 40, marginLeft: spacing.sm, backgroundColor: colors.primary }}
-            onPress={() => setIsScanning(true)}
-          >
-            <Icon
-              iconStyle={{ color: colors.white }}
-              name="barcode-scan"
-              type="material-community"
-            ></Icon>
-          </Button>
-        </Row>
-        {FIELDS.map(({ name, rules, keyboardType, labelTx }) => (
-          <Controller
-            key={name}
-            control={control}
-            rules={rules}
-            render={({ field: { onChange, onBlur, value } }) => (
-              <TextField
-                onBlur={onBlur}
-                onChangeText={onChange}
-                value={value}
-                containerStyle={styles.textfield}
-                autoCorrect={false}
-                keyboardType={keyboardType as KeyboardTypeOptions}
-                labelTx={labelTx as TxKeyPath}
-                status={errors[name as keyof Item] ? "error" : undefined}
-                helper={
-                  errors[name as keyof Item]?.message
-                    ? errors[name as keyof Item]?.message
-                    : ""
-                }
-              />
-            )}
-            name={name as keyof Item}
-          />
-        ))}
+        <Text h4>{selectedItem ? "Editando" : "Creando"} item</Text>
+        <If condition={section === ItemFormSection.MAIN}>
+          <Row>
+            <Controller
+              control={control}
+              rules={{
+                required: {
+                  message: "Campo obligatorio",
+                  value: true,
+                },
+              }}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextField
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  containerStyle={[styles.textfield, { width: "85%" }]}
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  keyboardType="default"
+                  labelTx="itemsScreen.codeLabel"
+                  status={errors.code ? "error" : undefined}
+                  helper={errors.code?.message ? errors.code?.message : ""}
+                />
+              )}
+              name="code"
+            />
+            <Button
+              style={{
+                width: 40,
+                marginLeft: spacing.sm,
+                backgroundColor: colors.primary,
+              }}
+              onPress={() => setIsScanning(true)}
+            >
+              <Icon
+                iconStyle={{ color: colors.white }}
+                name="barcode-scan"
+                type="material-community"
+              ></Icon>
+            </Button>
+          </Row>
+          {FIELDS.map(({ name, rules, keyboardType, labelTx }) => (
+            <Controller
+              key={name}
+              control={control}
+              rules={rules}
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextField
+                  onBlur={onBlur}
+                  onChangeText={onChange}
+                  value={value}
+                  containerStyle={styles.textfield}
+                  autoCorrect={false}
+                  keyboardType="default"
+                  labelTx={labelTx as TxKeyPath}
+                  status={errors[name as keyof Item] ? "error" : undefined}
+                  helper={
+                    errors[name as keyof Item]?.message
+                      ? errors[name as keyof Item]?.message
+                      : ""
+                  }
+                />
+              )}
+              name={name as keyof Item}
+            />
+          ))}
+        </If>
+        <If condition={section === ItemFormSection.PRICING}>
+          <ItemFormPricing measurementUnits={measurementUnits} control={control} errors={errors} />
+        </If>
+        <If condition={section === ItemFormSection.STOCK}>
+          <ItemFormStock control={control} errors={errors} />
+        </If>
         <Button
           text={selectedItem ? "ACTUALIZAR" : "GUARDAR"}
           style={[
@@ -157,24 +204,13 @@ const ItemForm: React.FC<ItemFormProps> = ({
           onPress={handleCancel}
         />
       </If>
-    </View>
+    </ScrollView>
   );
 };
 
 export default ItemForm;
 
 const FIELDS = [
-  {
-    name: "code",
-    rules: {
-      required: {
-        message: "Campo obligatorio",
-        value: true,
-      },
-    },
-    keyboardType: "default",
-    labelTx: "itemsScreen.codeLabel",
-  },
   {
     name: "name",
     rules: {

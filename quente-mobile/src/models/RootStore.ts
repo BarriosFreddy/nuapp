@@ -7,6 +7,7 @@ import { GlobalStateModel } from './GlobalStateStore';
 import { UserAccountModel } from './UserAccontStore';
 import { ItemStoreModel } from './ItemStore';
 import { BillingStoreModel } from './BillingStore';
+import { MeasurementUnitStoreModel } from './inventory/inv-enumeration/MeasurementUnitStore';
 
 
 /**
@@ -20,6 +21,7 @@ export const RootStoreModel = types.model('RootStore').props({
   userAccountStore: types.optional(UserAccountModel, {}),
   itemStore: types.optional(ItemStoreModel, {}),
   billingStore: types.optional(BillingStoreModel, {}),
+  measurementUnitStore: types.optional(MeasurementUnitStoreModel, {}),
 });
 
 /**

@@ -1,10 +1,5 @@
 import React, { FC, useEffect, useState } from "react";
-import {
-  StyleSheet,
-  View,
-  Dimensions,
-  ActivityIndicator,
-} from "react-native";
+import { StyleSheet, View, Dimensions, ActivityIndicator } from "react-native";
 import Toast from "react-native-toast-message";
 import {
   Camera,
@@ -27,6 +22,7 @@ import ItemForm from "./ItemForm.comp";
 import ItemsList from "./itemsList.comp";
 import { ApiResponse } from "apisauce";
 import ItemDetails from "./ItemDetails.comp";
+import ItemFormSection from "../../../shared/enums/ItemFormSection";
 
 const ModuleState = {
   CREATING: "CREATING",
@@ -44,9 +40,11 @@ const ItemsScreen: FC<{ navigation: any; route: any }> = observer(
     const [searchTerm, setSearchTerm] = useState("");
     const [moduleState, setModuleState] = useState(ModuleState.LISTING);
     const [selectedItem, setSelectedItem] = useState<Item | null>(null);
+    const [formSection, setFormSection] = useState(ItemFormSection.MAIN);
 
     const {
       itemStore: { items, getItems, fetching, setItems, saveItem, updateItem },
+      measurementUnitStore: { measurementUnits, findAll },
     } = useStores();
     const device = useCameraDevice("back");
     const { hasPermission, requestPermission } = useCameraPermission();
@@ -75,6 +73,12 @@ const ItemsScreen: FC<{ navigation: any; route: any }> = observer(
         handleSelectedItem(items[0]);
       }
     }, [fetching]);
+
+    useEffect(() => {
+      (async () => {
+        await findAll();
+      })();
+    }, []);
 
     //////////////////////////////////////////////////
 
@@ -119,8 +123,9 @@ const ItemsScreen: FC<{ navigation: any; route: any }> = observer(
       setSelectedItem(null);
     };
 
-    const handleEdit = () => {
+    const handleEdit = (section: ItemFormSection) => {
       setModuleState(ModuleState.EDITING);
+      setFormSection(section);
     };
 
     if (!device)
@@ -132,7 +137,10 @@ const ItemsScreen: FC<{ navigation: any; route: any }> = observer(
       );
 
     return (
-      <Screen style={styles.screen}>
+      <Screen
+        contentContainerStyle={{ justifyContent: "flex-start" }}
+        style={styles.screen}
+      >
         <If condition={moduleState === ModuleState.LISTING}>
           <If condition={isScanning}>
             <Camera
@@ -207,13 +215,23 @@ const ItemsScreen: FC<{ navigation: any; route: any }> = observer(
           )}
         >
           <ItemForm
+            style={{
+              marginTop: spacing.sm,
+              height: "95%",
+            }}
+            measurementUnits={measurementUnits}
+            section={formSection}
             selectedItem={selectedItem}
             onCancel={handleCancel}
             onSave={handleSave}
           />
         </If>
         <If condition={moduleState === ModuleState.SHOWING}>
-          <ItemDetails selectedItem={selectedItem} onEdit={handleEdit} onCancel={handleCancel} />
+          <ItemDetails
+            selectedItem={selectedItem}
+            onEdit={handleEdit}
+            onCancel={handleCancel}
+          />
         </If>
       </Screen>
     );
@@ -225,10 +243,9 @@ export default ItemsScreen;
 const styles = StyleSheet.create({
   screen: {
     display: "flex",
-    justifyContent: "flex-start",
     alignContent: "stretch",
     padding: spacing.sm,
-    height: "100%",
+    height: "90%",
   },
   scrollviewContainer: {
     zIndex: 2,

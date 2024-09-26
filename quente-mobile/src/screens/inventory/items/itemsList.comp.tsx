@@ -1,9 +1,10 @@
 import React, { FC } from "react";
 import { Item } from "../../../models/Item";
 import { ScrollView } from "react-native-gesture-handler";
-import { ListItem, Text } from "@rneui/themed";
-import { getMainPrice } from "../../../utils";
+import { Badge, ListItem, Text } from "@rneui/themed";
+import { getExpirationDates, getMainPrice } from "../../../utils";
 import { View, ViewStyle } from "react-native";
+import dayjs from "dayjs";
 
 interface ItemsListProps {
   items: Item[];
@@ -20,6 +21,21 @@ const ItemsList: FC<ItemsListProps> = ({ items, onSelect, style }) => {
     <ScrollView style={style && { ...style }}>
       {items?.map((item: Item, index) => (
         <ListItem key={index} onPress={() => handleSelectedItem(item)}>
+          {getExpirationDates(item).map(
+            ({ expirationDate, lotUnits }, index) => (
+              <Badge
+                key={index}
+                status={
+                  dayjs(expirationDate).diff(dayjs(), "days") > 90
+                    ? dayjs(expirationDate).diff(dayjs(), "days") > 180
+                      ? "success"
+                      : "warning"
+                    : "error"
+                }
+                value={lotUnits}
+              />
+            )
+          )}
           <ListItem.Content>
             <ListItem.Title>{item.name}</ListItem.Title>
             <ListItem.Subtitle>{item.code}</ListItem.Subtitle>

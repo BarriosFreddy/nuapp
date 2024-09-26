@@ -1,43 +1,44 @@
-import React from 'react';
-import {useStores} from '../models';
-import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
-import ViewMode from '../shared/enums/ViewMode';
-import {StyleSheet, View} from 'react-native';
-import {colors, spacing} from '../theme';
-import {Avatar, Button, Icon, Text} from '@rneui/themed';
-import {Row} from './Row';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import React from "react";
+import { useStores } from "../models";
+import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
+import ViewMode from "../shared/enums/ViewMode";
+import { StyleSheet, View } from "react-native";
+import { colors, spacing } from "../theme";
+import { Avatar, Button, Icon, Text } from "@rneui/themed";
+import { Row } from "./Row";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+import IconNames from "../shared/enums/IconNames";
 
 const MENU_ITEMS = [
   {
-    label: 'Facturación',
-    iconName: 'car-outline',
-    screen: 'BillingScreen',
+    label: "Facturación",
+    iconName: IconNames.CASH_REGISTER,
+    screen: "BillingScreen",
   },
   {
-    label: 'Items',
-    iconName: 'card',
-    screen: 'ItemsScreen',
+    label: "Items",
+    iconName: IconNames.CUBE_OUTLINE,
+    screen: "ItemsScreen",
   },
   {
-    label: 'Ajustes',
-    iconName: 'cog-outline',
-    screen: 'BillingScreen',
+    label: "Ajustes",
+    iconName: IconNames.COG_OUTLINE,
+    screen: "BillingScreen",
   },
   {
-    label: 'Ayuda',
-    iconName: 'help',
-    screen: 'BillingScreen',
+    label: "Ayuda",
+    iconName: IconNames.HELP,
+    screen: "BillingScreen",
   },
 ];
 
 export function CustomDrawerContent(props: any) {
   const insets = useSafeAreaInsets();
   const {
-    authenticationStore: {userAccount, logout},
+    authenticationStore: { userAccount, logout },
   } = useStores();
 
-  const {roles} = userAccount || {};
+  const { roles } = userAccount || {};
 
   const handlePressLogout = () => {
     logout();
@@ -55,17 +56,16 @@ export function CustomDrawerContent(props: any) {
           {
             paddingTop: insets.top + spacing.sm,
           },
-        ]}>
+        ]}
+      >
         <Row>
-          <Avatar
+          <Icon
             size={50}
-            rounded
-            icon={{name: 'user-o', type: 'font-awesome'}}
-            containerStyle={{backgroundColor: colors.primary}}
+            name="thumb-up"
           />
-          <View style={{marginLeft: spacing.sm}}>
+          <View style={{ marginLeft: spacing.sm }}>
             <Text style={styles.usernameText}>
-              {userAccount?.firstName || ''}
+              {userAccount?.firstName || ""}
             </Text>
             <Text>
               <Icon name="star" color={colors.gold} />
@@ -74,8 +74,9 @@ export function CustomDrawerContent(props: any) {
         </Row>
       </View>
       <DrawerContentScrollView {...props}>
-        {MENU_ITEMS.map(({label, iconName, screen}, i) => (
-          <DrawerItem key={i}
+        {MENU_ITEMS.map(({ label, iconName, screen }, i) => (
+          <DrawerItem
+            key={i}
             icon={() => <Icon name={iconName} type="material-community" />}
             label={label}
             onPress={() => (screen ? handleNavigation(screen) : () => {})}
@@ -87,11 +88,13 @@ export function CustomDrawerContent(props: any) {
           onPress={handlePressLogout}
         />
       </DrawerContentScrollView>
-      <View  style={[
+      <View
+        style={[
           {
             paddingBottom: insets.bottom + spacing.sm,
           },
-        ]}>
+        ]}
+      >
         <Text>Version 0.0.1</Text>
       </View>
     </View>
@@ -103,18 +106,18 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    width: '100%',
+    width: "100%",
     padding: spacing.sm,
     borderColor: colors.secondary,
   },
   footer: {
-    width: '100%',
+    width: "100%",
     padding: spacing.sm,
     borderColor: colors.secondary,
   },
   usernameText: {
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   starIcon: {
     fontSize: 12,
