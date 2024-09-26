@@ -61,7 +61,8 @@ export function CustomDrawerContent(props: any) {
         <Row>
           <Icon
             size={50}
-            name="thumb-up"
+            name={IconNames.ACCOUNT}
+            type={"material-community"}
           />
           <View style={{ marginLeft: spacing.sm }}>
             <Text style={styles.usernameText}>

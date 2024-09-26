@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Item } from "../../../models/Item";
-import { Button, TextField } from "../../../components";
-import { KeyboardTypeOptions, StyleSheet, View, ViewStyle } from "react-native";
+import { Button, Text, TextField } from "../../../components";
+import { StyleSheet, View, ViewStyle } from "react-native";
 import { colors, spacing } from "../../../theme";
-import { Icon, Text } from "@rneui/themed";
-import { TxKeyPath } from "../../../i18n";
+import { Icon } from "@rneui/themed";
 import {
   Camera,
   Code,
@@ -23,6 +22,7 @@ import ItemFormPricing from "./ItemFormPricing.comp";
 import ItemFormStock from "./ItemFormStock.comp";
 import { ScrollView } from "react-native-gesture-handler";
 import { InvEnumeration } from "../../../models/inventory/inv-enumeration/InvEnumeration";
+import IconNames from "../../../shared/enums/IconNames";
 
 type ItemFormProps = {
   onCancel: () => void;
@@ -39,7 +39,7 @@ const ItemForm: React.FC<ItemFormProps> = ({
   selectedItem,
   section,
   style,
-  measurementUnits
+  measurementUnits,
 }: ItemFormProps) => {
   const insets = useSafeAreaInsets();
   const windowHeight = Dimensions.get("window").height;
@@ -114,8 +114,28 @@ const ItemForm: React.FC<ItemFormProps> = ({
         </View>
       </If>
       <If condition={!isScanning}>
-        <Text h4>{selectedItem ? "Editando" : "Creando"} item</Text>
+        <Text preset="heading">{selectedItem ? "Editando" : "Creando"} item</Text>
         <If condition={section === ItemFormSection.MAIN}>
+          <View
+            style={{
+              marginTop: spacing.lg,
+              alignSelf: "center",
+              backgroundColor: colors.palette.gray400,
+              width: "70%",
+              height: 170,
+            }}
+          >
+            <Text
+              style={{
+                alignSelf: "center",
+                marginTop: spacing.xxxl,
+                fontWeight: "bold",
+                fontSize: spacing.md,
+              }}
+            >
+              No Image
+            </Text>
+          </View>
           <Row>
             <Controller
               control={control}
@@ -130,7 +150,7 @@ const ItemForm: React.FC<ItemFormProps> = ({
                   onBlur={onBlur}
                   onChangeText={onChange}
                   value={value}
-                  containerStyle={[styles.textfield, { width: "85%" }]}
+                  containerStyle={[styles.textfield, { width: "90%" }]}
                   autoCapitalize="none"
                   autoCorrect={false}
                   keyboardType="default"
@@ -144,46 +164,72 @@ const ItemForm: React.FC<ItemFormProps> = ({
             <Button
               style={{
                 width: 40,
-                marginLeft: spacing.sm,
+                height: 40,
+                marginTop: spacing.lg,
                 backgroundColor: colors.primary,
               }}
               onPress={() => setIsScanning(true)}
             >
               <Icon
                 iconStyle={{ color: colors.white }}
-                name="barcode-scan"
+                name={IconNames.BARCODE_SCAN}
                 type="material-community"
               ></Icon>
             </Button>
           </Row>
-          {FIELDS.map(({ name, rules, keyboardType, labelTx }) => (
-            <Controller
-              key={name}
-              control={control}
-              rules={rules}
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextField
-                  onBlur={onBlur}
-                  onChangeText={onChange}
-                  value={value}
-                  containerStyle={styles.textfield}
-                  autoCorrect={false}
-                  keyboardType="default"
-                  labelTx={labelTx as TxKeyPath}
-                  status={errors[name as keyof Item] ? "error" : undefined}
-                  helper={
-                    errors[name as keyof Item]?.message
-                      ? errors[name as keyof Item]?.message
-                      : ""
-                  }
-                />
-              )}
-              name={name as keyof Item}
-            />
-          ))}
+          <Controller
+            control={control}
+            rules={{
+              required: {
+                message: "Campo obligatorio",
+                value: true,
+              },
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextField
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                containerStyle={styles.textfield}
+                autoCorrect={false}
+                keyboardType="default"
+                labelTx="itemsScreen.nameLabel"
+                status={errors.name ? "error" : undefined}
+                helper={errors.name?.message ? errors.name?.message : ""}
+              />
+            )}
+            name="name"
+          />
+          <Controller
+            control={control}
+            rules={{
+              required: {
+                message: "Campo obligatorio",
+                value: true,
+              },
+            }}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <TextField
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                containerStyle={styles.textfield}
+                autoCorrect={false}
+                keyboardType="default"
+                labelTx="itemsScreen.descriptionLabel"
+                status={errors.name ? "error" : undefined}
+                helper={errors.name?.message ? errors.name?.message : ""}
+              />
+            )}
+            name="description"
+          />
         </If>
         <If condition={section === ItemFormSection.PRICING}>
-          <ItemFormPricing measurementUnits={measurementUnits} control={control} errors={errors} />
+          <ItemFormPricing
+            measurementUnits={measurementUnits}
+            control={control}
+            errors={errors}
+          />
         </If>
         <If condition={section === ItemFormSection.STOCK}>
           <ItemFormStock control={control} errors={errors} />
@@ -212,18 +258,7 @@ export default ItemForm;
 
 const FIELDS = [
   {
-    name: "name",
-    rules: {
-      required: {
-        message: "Campo obligatorio",
-        value: true,
-      },
-    },
-    keyboardType: "default",
-    labelTx: "itemsScreen.nameLabel",
-  },
-  {
-    name: "description",
+    name: "",
     rules: {
       required: {
         message: "Campo obligatorio",

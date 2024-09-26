@@ -1,26 +1,59 @@
-import React, { FC, useEffect, useState } from "react";
-import { useStores } from "../models";
-import PassengerNavigator from "./PassengerNavigator";
-import ViewMode from "../shared/enums/ViewMode";
+import React, { FC, useCallback } from "react";
+import BillingScreen from "../screens/billing/billing.screen";
 import { observer } from "mobx-react-lite";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import {
+  createDrawerNavigator,
+  DrawerNavigationOptions,
+} from "@react-navigation/drawer";
+import { useStores } from "../models";
+import { StyleSheet } from "react-native";
+import { spacing } from "../theme";
+import { CustomDrawerContent } from "../components/CustomDrawerContent";
+import ItemsScreen from "../screens/inventory/items/items.screen";
+import { Icon } from "@rneui/themed";
+import IconNames from "../shared/enums/IconNames";
 
-const Stack = createNativeStackNavigator();
+const DrawerStack = createDrawerNavigator();
 
 const MainNavigator: FC = observer(function MainNavigator() {
   const {
     preferencesStore: { mode },
   } = useStores();
 
+  const getScreenOptions = useCallback(() => {
+    const screenOptions: DrawerNavigationOptions = {
+      title: "Quente",
+      headerTitleAlign: "center",
+    };
+    return screenOptions;
+  }, []);
+
   return (
-    <Stack.Navigator
-      screenOptions={{
-        headerShown: false,
-      }}
+    <DrawerStack.Navigator
+      screenOptions={getScreenOptions()}
+      drawerContent={(props) => <CustomDrawerContent mode={mode} {...props} />}
     >
-      <Stack.Screen name="PassengerNavigator" component={PassengerNavigator} />
-    </Stack.Navigator>
+      <DrawerStack.Screen
+        options={{
+
+        }}
+        name="ItemsScreen"
+        component={ItemsScreen}
+      />
+      <DrawerStack.Screen
+        options={{}}
+        name="BillingScreen"
+        component={BillingScreen}
+      />
+    </DrawerStack.Navigator>
   );
 });
 
 export default MainNavigator;
+
+const styles = StyleSheet.create({
+  cancelButton: {
+    marginHorizontal: spacing.sm,
+    fontSize: spacing.md,
+  },
+});

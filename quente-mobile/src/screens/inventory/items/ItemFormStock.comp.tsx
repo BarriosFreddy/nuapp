@@ -11,7 +11,10 @@ interface ItemFormStockProps {
   errors: any;
 }
 
-const ItemFormStock: React.FC<ItemFormStockProps> = ({ control, errors }) => {
+const ItemFormStock: React.FC<ItemFormStockProps> = ({
+  control,
+  errors: { expirationControl },
+}) => {
   const [expanded, setExpanded] = useState({} as { [k: string]: boolean });
   const [addedNew, setAddedNew] = useState(false);
   const { fields, append, remove } = useFieldArray({
@@ -43,7 +46,7 @@ const ItemFormStock: React.FC<ItemFormStockProps> = ({ control, errors }) => {
 
   return (
     <View>
-      <Text style={{ fontSize: 20, marginBottom: spacing.sm }}>
+      <Text preset="subheading">
         Existencias
       </Text>
       {fields.map((field, index) => (
@@ -81,11 +84,14 @@ const ItemFormStock: React.FC<ItemFormStockProps> = ({ control, errors }) => {
                     keyboardType="number-pad"
                     labelTx="itemsScreen.stock.lotUnitsLabel"
                     status={
-                      errors.fieldArray?.root.lotUnits ? "error" : undefined
+                      expirationControl && expirationControl[index]?.lotUnits
+                        ? "error"
+                        : undefined
                     }
                     helper={
-                      errors.fieldArray?.root.lotUnits?.message
-                        ? errors.fieldArray?.root.lotUnits?.message
+                      expirationControl &&
+                      expirationControl[index]?.lotUnits?.message
+                        ? expirationControl[index]?.lotUnits?.message
                         : ""
                     }
                   />
@@ -108,10 +114,15 @@ const ItemFormStock: React.FC<ItemFormStockProps> = ({ control, errors }) => {
                     autoCapitalize="none"
                     keyboardType="number-pad"
                     labelTx="itemsScreen.stock.lotLabel"
-                    status={errors.fieldArray?.root.lot ? "error" : undefined}
+                    status={
+                      expirationControl && expirationControl[index]?.lot
+                        ? "error"
+                        : undefined
+                    }
                     helper={
-                      errors.fieldArray?.root.lot?.message
-                        ? errors.fieldArray?.root.lot?.message
+                      expirationControl &&
+                      expirationControl[index]?.lot?.message
+                        ? expirationControl[index]?.lot?.message
                         : ""
                     }
                   />
@@ -136,13 +147,15 @@ const ItemFormStock: React.FC<ItemFormStockProps> = ({ control, errors }) => {
                     keyboardType="default"
                     labelTx="itemsScreen.stock.expirationDateLabel"
                     status={
-                      errors.fieldArray?.root.expirationDate
+                      expirationControl &&
+                      expirationControl[index]?.expirationDate
                         ? "error"
                         : undefined
                     }
                     helper={
-                      errors.fieldArray?.root.expirationDate?.message
-                        ? errors.fieldArray?.root.expirationDate?.message
+                      expirationControl &&
+                      expirationControl[index]?.expirationDate?.message
+                        ? expirationControl[index]?.expirationDate?.message
                         : ""
                     }
                   />
@@ -156,7 +169,7 @@ const ItemFormStock: React.FC<ItemFormStockProps> = ({ control, errors }) => {
       <Button
         type="outline"
         buttonStyle={{ marginVertical: spacing.sm }}
-        title="AGREGAR"
+        title="AGREGAR EXISTENCIA"
         onPress={handleAdd}
       ></Button>
     </View>

@@ -16,7 +16,7 @@ interface ItemFormPricingProps {
 
 const ItemFormPricing: React.FC<ItemFormPricingProps> = ({
   control,
-  errors,
+  errors: { pricesRatio },
   measurementUnits
 }) => {
   const [expanded, setExpanded] = React.useState(
@@ -29,14 +29,8 @@ const ItemFormPricing: React.FC<ItemFormPricingProps> = ({
     }
   );
 
-  const UDMValues = [
-    { title: "FRASCO", value: "FRASCO" },
-    { title: "UNIDAD", value: "UNIDAD" },
-    { title: "TABLETA", value: "TABLETA" },
-  ];
   const measurementUnitsFormatted =  measurementUnits ? measurementUnits.values?.map(({ label, code }) => ({ title: label, value: code})) : []  
 
-  console.log({ measurementUnitsFormatted })
   // INIT
 
   const handleAdd = () => {
@@ -45,7 +39,7 @@ const ItemFormPricing: React.FC<ItemFormPricingProps> = ({
 
   return (
     <View>
-      <Text style={{ fontSize: 20, marginBottom: spacing.sm }}>
+      <Text preset="subheading">
         Relación de precios
       </Text>
       {fields.map((field, index) => (
@@ -80,13 +74,13 @@ const ItemFormPricing: React.FC<ItemFormPricingProps> = ({
                     value={value}
                     labelTx="itemsScreen.pricing.measurementUnitLabel"
                     status={
-                      errors.fieldArray?.root.measurementUnit
+                      pricesRatio && pricesRatio[index]?.measurementUnit
                         ? "error"
                         : undefined
                     }
                     helper={
-                      errors.fieldArray?.root.measurementUnit?.message
-                        ? errors.fieldArray?.root.measurementUnit?.message
+                      pricesRatio && pricesRatio[index]?.measurementUnit
+                        ? pricesRatio[index]?.measurementUnit?.message
                         : ""
                     }
                   />
@@ -109,10 +103,10 @@ const ItemFormPricing: React.FC<ItemFormPricingProps> = ({
                     autoCapitalize="none"
                     keyboardType="number-pad"
                     labelTx="itemsScreen.pricing.costLabel"
-                    status={errors.fieldArray?.root.cost ? "error" : undefined}
+                    status={pricesRatio && pricesRatio[index]?.cost ? "error" : undefined}
                     helper={
-                      errors.fieldArray?.root.cost?.message
-                        ? errors.fieldArray?.root.cost?.message
+                      pricesRatio && pricesRatio[index]?.cost?.message
+                        ? pricesRatio[index]?.cost?.message
                         : ""
                     }
                   />
@@ -136,10 +130,10 @@ const ItemFormPricing: React.FC<ItemFormPricingProps> = ({
                     autoCapitalize="none"
                     keyboardType="number-pad"
                     labelTx="itemsScreen.pricing.priceLabel"
-                    status={errors.fieldArray?.root.price ? "error" : undefined}
+                    status={pricesRatio && pricesRatio[index]?.price ? "error" : undefined}
                     helper={
-                      errors.fieldArray?.root.price?.message
-                        ? errors.fieldArray?.root.price?.message
+                      pricesRatio && pricesRatio[index]?.price?.message
+                        ? pricesRatio[index]?.price?.message
                         : ""
                     }
                   />
@@ -164,11 +158,11 @@ const ItemFormPricing: React.FC<ItemFormPricingProps> = ({
                     keyboardType="number-pad"
                     labelTx="itemsScreen.pricing.multipleLabel"
                     status={
-                      errors.fieldArray?.root.multiplicity ? "error" : undefined
+                      pricesRatio && pricesRatio[index]?.multiplicity ? "error" : undefined
                     }
                     helper={
-                      errors.fieldArray?.root.multiplicity?.message
-                        ? errors.fieldArray?.root.multiplicity?.message
+                      pricesRatio && pricesRatio[index]?.multiplicity?.message
+                        ? pricesRatio[index]?.multiplicity?.message
                         : ""
                     }
                   />
@@ -182,7 +176,7 @@ const ItemFormPricing: React.FC<ItemFormPricingProps> = ({
       <Button
         type="outline"
         buttonStyle={{ marginVertical: spacing.sm }}
-        title="AGREGAR"
+        title="AGREGAR RELACIÓN"
         onPress={handleAdd}
       ></Button>
     </View>

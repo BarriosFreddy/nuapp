@@ -90,18 +90,18 @@ const ItemDetails: React.FC<ItemDetailsProps> = ({
         <Icon name={IconNames.CASH} type="material-community" color="grey" />
         <ListItem.Content>
           <ListItem.Title>Precios</ListItem.Title>
-          <ListItem.Subtitle>Configuración de esquema de precios</ListItem.Subtitle>
+          <ListItem.Subtitle>Configuración de precios</ListItem.Subtitle>
         </ListItem.Content>
       </ListItem>
-      <ListItem onPress={() => handleEditItem(ItemFormSection.PRICING)}>
+      <ListItem onPress={() => handleEditItem(ItemFormSection.STOCK)}>
         <Icon name={IconNames.CUBE_OUTLINE} type="material-community" color="grey" />
         <ListItem.Content>
           <ListItem.Title>Existencias</ListItem.Title>
-          <ListItem.Subtitle>Configuración de existencias</ListItem.Subtitle>
+          <ListItem.Subtitle>Configuración de existencias y control de vencimiento</ListItem.Subtitle>
         </ListItem.Content>
       </ListItem>
       <Button
-        text={"CANCELAR"}
+        text={"REGRESAR"}
         style={{ marginTop: 20 }}
         textStyle={{ fontWeight: "bold" }}
         preset="filled"

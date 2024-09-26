@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useEffect, useRef, useState } from "react";
 import { StyleSheet, View, Dimensions, ActivityIndicator } from "react-native";
 import Toast from "react-native-toast-message";
 import {
@@ -23,6 +23,8 @@ import ItemsList from "./itemsList.comp";
 import { ApiResponse } from "apisauce";
 import ItemDetails from "./ItemDetails.comp";
 import ItemFormSection from "../../../shared/enums/ItemFormSection";
+import IconNames from "../../../shared/enums/IconNames";
+import SearchBar from "../../../components/SearchBar";
 
 const ModuleState = {
   CREATING: "CREATING",
@@ -41,6 +43,7 @@ const ItemsScreen: FC<{ navigation: any; route: any }> = observer(
     const [moduleState, setModuleState] = useState(ModuleState.LISTING);
     const [selectedItem, setSelectedItem] = useState<Item | null>(null);
     const [formSection, setFormSection] = useState(ItemFormSection.MAIN);
+    let searchRef = useRef(null);
 
     const {
       itemStore: { items, getItems, fetching, setItems, saveItem, updateItem },
@@ -48,6 +51,21 @@ const ItemsScreen: FC<{ navigation: any; route: any }> = observer(
     } = useStores();
     const device = useCameraDevice("back");
     const { hasPermission, requestPermission } = useCameraPermission();
+    useEffect(() => {
+      // Use `setOptions` to update the button that we previously specified
+      // Now the button includes an `onPress` handler to update the count
+      navigation.setOptions({
+        /* headerRight: () =>
+          moduleState === ModuleState.EDITING ? (
+            <Icon
+              style={{ marginHorizontal: spacing.md }}
+              name={IconNames.CHECK}
+              type="material-community"
+            />
+          ) : null, */
+      });
+    }, [navigation, moduleState]);
+
     if (!hasPermission) requestPermission();
 
     const codeScanner = useCodeScanner({
@@ -58,7 +76,6 @@ const ItemsScreen: FC<{ navigation: any; route: any }> = observer(
           getItems(value);
           setSearchTerm(value);
         }
-        setIsScanning(false);
       },
     });
 
@@ -69,9 +86,10 @@ const ItemsScreen: FC<{ navigation: any; route: any }> = observer(
     }, []);
 
     useDidUpdate(() => {
-      if (items.length === 1) {
+      if (isScanning && items.length === 1) {
         handleSelectedItem(items[0]);
       }
+      setIsScanning(false);
     }, [fetching]);
 
     useEffect(() => {
@@ -88,6 +106,10 @@ const ItemsScreen: FC<{ navigation: any; route: any }> = observer(
       setSearchTerm(value);
       !!value ? getItems(value) : setItems([]);
     };
+
+    const handleClearSearch = async () => {
+      await getItems("");
+    }
 
     const handleSave = async (itemData: Item) => {
       itemData.categoryId = "647feeb93e88cd392af5dc23";
@@ -171,24 +193,29 @@ const ItemsScreen: FC<{ navigation: any; route: any }> = observer(
               Items
             </Text>
             <Row>
-              <TextField
-                containerStyle={{ width: "87%" }}
+              <SearchBar
+                ref={searchRef}
+                placeholder="Buscar..."
+                value={searchTerm}
+                lightTheme
+                containerStyle={{ width: "87%", height: spacing.xxl, backgroundColor: colors.white }}
+                inputContainerStyle={{ height: spacing.xl, backgroundColor: colors.white}}
                 onFocus={() => setIsSearching(true)}
                 onChangeText={handleSearchTermChange}
-                value={searchTerm}
-                autoCapitalize="none"
-                autoCorrect={false}
-                keyboardType="default"
-                placeholder="Buscar..."
+                onClear={handleClearSearch}
               />
 
               <Button
-                style={{ width: 50, backgroundColor: colors.primary }}
+                style={{
+                  width: 50,
+                  height: 40,
+                  backgroundColor: colors.primary,
+                }}
                 onPress={() => setIsScanning(true)}
               >
                 <Icon
                   iconStyle={{ color: colors.white }}
-                  name="barcode-scan"
+                  name={IconNames.BARCODE_SCAN}
                   type="material-community"
                 ></Icon>
               </Button>
