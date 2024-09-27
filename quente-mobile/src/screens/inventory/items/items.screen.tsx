@@ -43,7 +43,6 @@ const ItemsScreen: FC<{ navigation: any; route: any }> = observer(
     const [moduleState, setModuleState] = useState(ModuleState.LISTING);
     const [selectedItem, setSelectedItem] = useState<Item | null>(null);
     const [formSection, setFormSection] = useState(ItemFormSection.MAIN);
-    let searchRef = useRef(null);
 
     const {
       itemStore: { items, getItems, fetching, setItems, saveItem, updateItem },
@@ -194,7 +193,6 @@ const ItemsScreen: FC<{ navigation: any; route: any }> = observer(
             </Text>
             <Row>
               <SearchBar
-                ref={searchRef}
                 placeholder="Buscar..."
                 value={searchTerm}
                 lightTheme

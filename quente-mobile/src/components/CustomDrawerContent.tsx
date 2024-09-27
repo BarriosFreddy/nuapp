@@ -64,12 +64,9 @@ export function CustomDrawerContent(props: any) {
             name={IconNames.ACCOUNT}
             type={"material-community"}
           />
-          <View style={{ marginLeft: spacing.sm }}>
+          <View style={{ marginLeft: spacing.sm, marginTop: spacing.md, }}>
             <Text style={styles.usernameText}>
               {userAccount?.firstName || ""}
-            </Text>
-            <Text>
-              <Icon name="star" color={colors.gold} />
             </Text>
           </View>
         </Row>

@@ -34,16 +34,14 @@ const MainNavigator: FC = observer(function MainNavigator() {
       drawerContent={(props) => <CustomDrawerContent mode={mode} {...props} />}
     >
       <DrawerStack.Screen
-        options={{
-
-        }}
-        name="ItemsScreen"
-        component={ItemsScreen}
-      />
-      <DrawerStack.Screen
         options={{}}
         name="BillingScreen"
         component={BillingScreen}
+      />
+      <DrawerStack.Screen
+        options={{}}
+        name="ItemsScreen"
+        component={ItemsScreen}
       />
     </DrawerStack.Navigator>
   );

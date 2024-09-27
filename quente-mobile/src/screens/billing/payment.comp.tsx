@@ -1,9 +1,9 @@
 import React, { FC, useEffect, useRef, useState } from "react";
 import { View } from "react-native";
 import { Row } from "../../components/Row";
-import { Button, Text } from "@rneui/themed";
+import { Button } from "@rneui/themed";
 import { observer } from "mobx-react-lite";
-import { TextField } from "../../components";
+import { Text, TextField } from "../../components";
 import { spacing } from "../../theme";
 
 type PaymentCompProps = {
@@ -47,7 +47,7 @@ const PaymentComp: FC<PaymentCompProps> = observer(
             REGRESAR
           </Button>
         </Row>
-        <Text h4 style={{ marginVertical: spacing.md }}>
+        <Text size="lg" style={{ marginVertical: spacing.md }}>
           EFECTIVO
         </Text>
         <TextField
@@ -59,10 +59,10 @@ const PaymentComp: FC<PaymentCompProps> = observer(
           keyboardType="numeric"
           placeholder="Recibido"
         />
-        <Text h4 style={{ marginVertical: spacing.md }}>
+        <Text size="lg" style={{ marginVertical: spacing.md }}>
           CAMBIO
         </Text>
-        <Text h4>${changeAmount}</Text>
+        <Text size="xl">${changeAmount}</Text>
       </View>
     );
   }

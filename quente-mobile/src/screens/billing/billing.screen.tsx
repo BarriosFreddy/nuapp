@@ -4,9 +4,6 @@ import {
   View,
   Dimensions,
   ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
-  Keyboard,
 } from "react-native";
 import Toast from "react-native-toast-message";
 import {
@@ -17,17 +14,15 @@ import {
   useCodeScanner,
 } from "react-native-vision-camera";
 import { observer } from "mobx-react-lite";
-import { Controller, useForm } from "react-hook-form";
 import {
   ScrollView,
-  TouchableWithoutFeedback,
 } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useStores } from "../../models";
-import { Button, Icon, ListItem, Text } from "@rneui/themed";
-import { Screen, TextField } from "../../components";
+import { Icon, ListItem, Text } from "@rneui/themed";
+import { Button, Screen, TextField } from "../../components";
 import { Row } from "../../components/Row";
-import { spacing } from "../../theme";
+import { colors, spacing } from "../../theme";
 import If from "../../components/If";
 import {
   getMainPrice,
@@ -40,6 +35,8 @@ import { Item } from "../../models/Item";
 import { useDidUpdate } from "../../hooks/useDidUpdate";
 import PaymentComp from "./payment.comp";
 import { Billing } from "../../models/Billing";
+import SearchBar from "../../components/SearchBar";
+import IconNames from "../../shared/enums/IconNames";
 
 const BillingScreen: FC<{ navigation: any; route: any }> = observer(
   function BillingScreen({
@@ -211,6 +208,10 @@ const BillingScreen: FC<{ navigation: any; route: any }> = observer(
       setAddedItemsList([]);
       setTotal(0);
     };
+    
+    const handleClearSearch = () => {
+     // setIsSearching(true);
+    }
 
     return (
       <Screen style={styles.screen}>
@@ -229,21 +230,25 @@ const BillingScreen: FC<{ navigation: any; route: any }> = observer(
           </If>
           <If condition={!isScanning}>
             <Row>
-              <TextField
+              <SearchBar
                 containerStyle={{ width: "80%" }}
                 onFocus={() => setIsSearching(true)}
                 onChangeText={handleSearchTermChange}
+                onClear={handleClearSearch}
                 value={searchTerm}
                 autoCapitalize="none"
                 autoCorrect={false}
                 keyboardType="default"
                 placeholder="Buscar..."
               />
-
-              <Button style={{}} onPress={() => setIsScanning(true)}>
+              <Button style={{
+                  width: 50,
+                  height: 40,
+                  backgroundColor: colors.primary,
+                }}  onPress={() => setIsScanning(true)}>
                 <Icon
-                  size={30}
-                  name="barcode-scan"
+                  iconStyle={{ color: colors.white }}
+                  name={IconNames.BARCODE_SCAN}
                   type="material-community"
                 ></Icon>
               </Button>
@@ -318,7 +323,7 @@ const BillingScreen: FC<{ navigation: any; route: any }> = observer(
               <Text h4>$ {total}</Text>
             </Row>
             <Button
-              title={isPaying ? "FACTURAR" : "COBRAR"}
+              text={isPaying ? "FACTURAR" : "COBRAR"}
               onPress={isPaying ? handleSave : handleCharge}
             ></Button>
           </View>
