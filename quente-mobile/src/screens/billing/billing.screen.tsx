@@ -1,10 +1,5 @@
 import React, { FC, useEffect, useRef, useState } from "react";
-import {
-  StyleSheet,
-  View,
-  Dimensions,
-  ActivityIndicator,
-} from "react-native";
+import { StyleSheet, View, Dimensions, ActivityIndicator } from "react-native";
 import Toast from "react-native-toast-message";
 import {
   Camera,
@@ -14,9 +9,7 @@ import {
   useCodeScanner,
 } from "react-native-vision-camera";
 import { observer } from "mobx-react-lite";
-import {
-  ScrollView,
-} from "react-native-gesture-handler";
+import { ScrollView } from "react-native-gesture-handler";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useStores } from "../../models";
 import { Icon, ListItem, Text } from "@rneui/themed";
@@ -208,10 +201,10 @@ const BillingScreen: FC<{ navigation: any; route: any }> = observer(
       setAddedItemsList([]);
       setTotal(0);
     };
-    
+
     const handleClearSearch = () => {
-     // setIsSearching(true);
-    }
+      // setIsSearching(true);
+    };
 
     return (
       <Screen style={styles.screen}>
@@ -241,11 +234,14 @@ const BillingScreen: FC<{ navigation: any; route: any }> = observer(
                 keyboardType="default"
                 placeholder="Buscar..."
               />
-              <Button style={{
+              <Button
+                style={{
                   width: 50,
                   height: 40,
                   backgroundColor: colors.primary,
-                }}  onPress={() => setIsScanning(true)}>
+                }}
+                onPress={() => setIsScanning(true)}
+              >
                 <Icon
                   iconStyle={{ color: colors.white }}
                   name={IconNames.BARCODE_SCAN}
@@ -286,10 +282,10 @@ const BillingScreen: FC<{ navigation: any; route: any }> = observer(
                 {addedItemsList?.map((item: Item, index) => (
                   <ListItem key={index}>
                     <ListItem.Content>
-                      <ListItem.Title>{itemUnits[item.code]} x {item.name}</ListItem.Title>
-                      <ListItem.Subtitle>
-                        {item.code}
-                      </ListItem.Subtitle>
+                      <ListItem.Title>
+                        {itemUnits[item.code]} x {item.name}
+                      </ListItem.Title>
+                      <ListItem.Subtitle>{item.code}</ListItem.Subtitle>
                     </ListItem.Content>
                     <Row>
                       <Text h4 style={{ marginRight: spacing.sm }}>
@@ -323,6 +319,7 @@ const BillingScreen: FC<{ navigation: any; route: any }> = observer(
               <Text h4>$ {total}</Text>
             </Row>
             <Button
+              disabled={addedItemsList.length === 0}
               text={isPaying ? "FACTURAR" : "COBRAR"}
               onPress={isPaying ? handleSave : handleCharge}
             ></Button>
@@ -337,7 +334,7 @@ const BillingScreen: FC<{ navigation: any; route: any }> = observer(
             }}
           >
             <Button
-              title="DETENER SCANNER"
+              text="DETENER SCANNER"
               onPress={() => setIsScanning(false)}
             />
           </View>

@@ -124,7 +124,7 @@ export function Button(props: ButtonProps) {
       $viewPresets[preset],
       $viewStyleOverride,
       !!pressed && [$pressedViewPresets[preset], $pressedViewStyleOverride],
-      !!disabled && $disabledViewStyleOverride,
+      !!disabled && [$disabledViewStyleDefault, $disabledViewStyleOverride],
     ]
   }
   /**
@@ -137,7 +137,7 @@ export function Button(props: ButtonProps) {
       $textPresets[preset],
       $textStyleOverride,
       !!pressed && [$pressedTextPresets[preset], $pressedTextStyleOverride],
-      !!disabled && $disabledTextStyleOverride,
+      !!disabled && [$disabledTextStyleDefault, $disabledTextStyleOverride],
     ]
   }
 
@@ -191,7 +191,8 @@ const $baseTextStyle: TextStyle = {
   flexShrink: 1,
   flexGrow: 0,
   zIndex: 2,
-  color: colors.white
+  color: colors.white,
+  fontWeight: 'bold'
 }
 
 const $rightAccessoryStyle: ViewStyle = { marginStart: spacing.xs, zIndex: 1 }
@@ -231,4 +232,11 @@ const $pressedTextPresets: Record<Presets, StyleProp<TextStyle>> = {
   default: { opacity: 0.9 },
   filled: { opacity: 0.9 },
   reversed: { opacity: 0.9 },
+}
+
+const $disabledTextStyleDefault: StyleProp<TextStyle> = {
+}
+
+const $disabledViewStyleDefault:  StyleProp<ViewStyle> = {
+  backgroundColor: colors.palette.primary20
 }
