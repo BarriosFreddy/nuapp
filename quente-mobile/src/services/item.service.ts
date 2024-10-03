@@ -1,6 +1,7 @@
 import { ApiResponse } from "apisauce";
 import { api } from "./api";
 import { Item } from "../models/Item";
+import sqliteService from "./sqlite.service";
 
 class ItemService {
   async update(item: Item) {
@@ -20,14 +21,26 @@ class ItemService {
 
   async getAllItems() {
     const response: ApiResponse<any> = await api.apisauce.get(`items`);
-    return response;
+    let resultSet;
+    if (response.ok) {
+      const dataArray = response.data
+      await sqliteService.insertBulk(
+        dataArray
+      );
+      resultSet = await sqliteService.query("items");
+    }
+    return { ok: !!resultSet, data: resultSet };
   }
   async getItems(searchTerm: string) {
-    const response: ApiResponse<any> = await api.apisauce.get(`items`, {
+    const resultSet = await sqliteService.query("items", {
       name: searchTerm,
       code: searchTerm,
     });
-    return response;
+   /* const response: ApiResponse<any> = await api.apisauce.get(`items`, {
+      name: searchTerm,
+      code: searchTerm,
+    }); */
+    return { ok: !!resultSet, data: resultSet };
   }
 }
 

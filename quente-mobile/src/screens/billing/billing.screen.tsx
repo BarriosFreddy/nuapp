@@ -24,12 +24,13 @@ import {
   getDateObject,
   getDateAsString,
 } from "../../utils";
-import { Item } from "../../models/Item";
+import { Item, ItemDTO } from "../../models/Item";
 import { useDidUpdate } from "../../hooks/useDidUpdate";
 import PaymentComp from "./payment.comp";
 import { Billing } from "../../models/Billing";
 import SearchBar from "../../components/SearchBar";
 import IconNames from "../../shared/enums/IconNames";
+import sqliteService from "../../services/sqlite.service";
 
 const BillingScreen: FC<{ navigation: any; route: any }> = observer(
   function BillingScreen({
@@ -56,6 +57,8 @@ const BillingScreen: FC<{ navigation: any; route: any }> = observer(
     } = useStores();
     const device = useCameraDevice("back");
     const { hasPermission, requestPermission } = useCameraPermission();
+    const isReceivedLTTotal = receivedAmount < total;
+    
 
     const codeScanner = useCodeScanner({
       codeTypes: ["qr", "ean-13"],
@@ -100,9 +103,8 @@ const BillingScreen: FC<{ navigation: any; route: any }> = observer(
       !!value ? getItems(value) : setItems([]);
     };
 
-    const handleSelectedItem = (item: Item) => {
-      const itemClone = JSON.parse(JSON.stringify(item));
-
+    const handleSelectedItem = (item: ItemDTO) => {
+      const itemClone: Item = JSON.parse(item.data);
       let addedItemUnits = {} as { [key: string]: number };
       isAdded(item.code)
         ? (addedItemUnits[itemClone.code] = itemUnits[itemClone.code] + 1)
@@ -111,10 +113,10 @@ const BillingScreen: FC<{ navigation: any; route: any }> = observer(
       setItemUnits(addedItemUnits);
       const addedItems = [...addedItemsList];
       if (!isAdded(item.code)) {
-        const mainPriceRatio = getMainPriceRatio(item);
+        const mainPriceRatio = getMainPriceRatio(itemClone);
         addedItems.unshift({
           ...itemClone,
-          price: getMainPrice(item),
+          price: getMainPrice(itemClone),
           measurementUnit: mainPriceRatio?.measurementUnit,
           multiplicity: mainPriceRatio?.multiplicity,
         });
@@ -154,13 +156,13 @@ const BillingScreen: FC<{ navigation: any; route: any }> = observer(
     };
 
     const handleSave = async () => {
-      /* if (isReceivedLTTotal) {
-        sendToast(dispatch, {
-          message: "Revisa el monto recibido y el total",
-          color: "warning",
+      if (isReceivedLTTotal) {
+        Toast.show({
+          type: "error",
+          text1: "El dinero recibido no puede ser menor al total de la compra",
         });
         return;
-      } */
+      }
 
       const billingData: Billing = {
         createdAt: getDateObject(),
@@ -260,7 +262,7 @@ const BillingScreen: FC<{ navigation: any; route: any }> = observer(
               }}
             >
               <If condition={isSearching}>
-                {items?.map((item: Item, index) => (
+                {items?.map((item, index) => (
                   <ListItem
                     key={index}
                     onPress={() => handleSelectedItem(item)}
@@ -270,7 +272,7 @@ const BillingScreen: FC<{ navigation: any; route: any }> = observer(
                       <ListItem.Subtitle>{item.code}</ListItem.Subtitle>
                     </ListItem.Content>
                     <View>
-                      <Text h4>$ {getMainPrice(item)}</Text>
+                      <Text h4>{formatCurrency(item.price)}</Text>
                     </View>
                   </ListItem>
                 ))}
@@ -289,11 +291,11 @@ const BillingScreen: FC<{ navigation: any; route: any }> = observer(
                     </ListItem.Content>
                     <Row>
                       <Text h4 style={{ marginRight: spacing.sm }}>
-                        $ {getMainPrice(item)}
+                         {formatCurrency(getMainPrice(item))}
                       </Text>
                       <Icon
                         size={30}
-                        name="trash-can-outline"
+                        name={IconNames.TRASH_CAN_OUTLINE}
                         type="material-community"
                         onPress={() => removeItem(item)}
                       />
@@ -316,7 +318,7 @@ const BillingScreen: FC<{ navigation: any; route: any }> = observer(
           >
             <Row style={{ marginBottom: spacing.sm }}>
               <Text h4>Total </Text>
-              <Text h4>$ {total}</Text>
+              <Text h4>{formatCurrency(total)}</Text>
             </Row>
             <Button
               disabled={addedItemsList.length === 0}

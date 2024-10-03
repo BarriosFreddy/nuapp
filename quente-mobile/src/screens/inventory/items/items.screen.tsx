@@ -137,6 +137,8 @@ const ItemsScreen: FC<{ navigation: any; route: any }> = observer(
 
     const handleNewItem = () => {
       setModuleState(ModuleState.CREATING);
+      setFormSection(ItemFormSection.MAIN);
+      setSelectedItem(null);
     };
 
     const handleCancel = () => {

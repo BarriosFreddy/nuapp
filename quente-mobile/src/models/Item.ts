@@ -33,8 +33,20 @@ export const ItemModel = types
     sku: "",
   })
   .actions(withSetPropAction)
-  .views((episode) => ({}));
+  .views((_) => ({}));
+
+  export const ItemDTOModel = types
+  .model("Item")
+  .props({
+    code: "",
+    name: "",
+    price: "",
+    data: "",
+  })
+  .actions(withSetPropAction)
+  .views((_) => ({}));
 
 export interface Item extends Instance<typeof ItemModel> {}
+export interface ItemDTO extends Instance<typeof ItemDTOModel> {}
 export interface ItemSnapshotOut extends SnapshotOut<typeof ItemModel> {}
 export interface ItemSnapshotIn extends SnapshotIn<typeof ItemModel> {}

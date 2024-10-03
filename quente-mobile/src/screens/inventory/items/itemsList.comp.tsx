@@ -2,7 +2,7 @@ import React, { FC } from "react";
 import { Item } from "../../../models/Item";
 import { ScrollView } from "react-native-gesture-handler";
 import { Badge, ListItem, Text } from "@rneui/themed";
-import { getExpirationDates, getMainPrice } from "../../../utils";
+import { formatCurrency, getExpirationDates, getMainPrice } from "../../../utils";
 import { View, ViewStyle } from "react-native";
 import dayjs from "dayjs";
 
@@ -29,6 +29,7 @@ const ItemsList: FC<ItemsListProps> = ({ items, onSelect, style }) => {
                 ({ expirationDate, lotUnits }, index) => (
                   <Badge
                     key={index}
+                    containerStyle={{ marginLeft: 5 }}
                     status={
                       dayjs(expirationDate).diff(dayjs(), "days") > 90
                         ? dayjs(expirationDate).diff(dayjs(), "days") > 180
@@ -43,7 +44,7 @@ const ItemsList: FC<ItemsListProps> = ({ items, onSelect, style }) => {
             </ListItem.Subtitle>
           </ListItem.Content>
           <View>
-            <Text h4>$ {getMainPrice(item)}</Text>
+            <Text h4>{formatCurrency(getMainPrice(item))}</Text>
           </View>
         </ListItem>
       ))}

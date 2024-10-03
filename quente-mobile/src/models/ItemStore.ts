@@ -1,5 +1,5 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree";
-import { Item, ItemModel } from "./Item";
+import { Item, ItemDTOModel, ItemModel } from "./Item";
 import { withSetPropAction } from "./helpers/withSetPropAction";
 import itemService from "../services/item.service";
 
@@ -10,7 +10,7 @@ export const ItemStoreModel = types
     saving: false,
     updating: false,
     item: types.maybe(ItemModel),
-    items: types.array(ItemModel),
+    items: types.array(ItemDTOModel),
   })
   .actions(withSetPropAction)
   .actions((store) => ({

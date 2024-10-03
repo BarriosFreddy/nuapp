@@ -45,11 +45,14 @@ const palette = {
   primary20: "#2756c7",
   secondary: "#0e1f47",
 
-  transparentBlack700: 'rgba(0,0,0,0.7)',
+  transparentBlack700: "rgba(0,0,0,0.7)",
 
-  gold500: '#FFD700'
+  gold500: "#FFD700",
 
-} as const
+  warning: "#FFDB00",
+  success: "#6EC207",
+  error: "#FF0000",
+} as const;
 
 export const colors = {
   /**
@@ -89,7 +92,15 @@ export const colors = {
   /**
    * Error messages.
    */
-  error: palette.angry500,
+  error: palette.error,
+  /**
+   * Error messages.
+   */
+  warning: palette.warning,
+  /**
+   * Error messages.
+   */
+  success: palette.success,
   /**
    * Error Background.
    *
@@ -100,6 +111,5 @@ export const colors = {
   white: palette.white,
   primary: palette.primary,
   secondary: palette.secondary,
-  gold: palette.gold500
-
-}
+  gold: palette.gold500,
+};

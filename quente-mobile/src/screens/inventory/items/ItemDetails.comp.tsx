@@ -9,6 +9,7 @@ import { getExpirationDates } from "../../../utils";
 import ItemFormSection from "../../../shared/enums/ItemFormSection";
 import { ScrollView } from "react-native-gesture-handler";
 import IconNames from "../../../shared/enums/IconNames";
+import dayjs from "dayjs";
 
 interface ItemDetailsProps {
   selectedItem: Item | null;
@@ -77,10 +78,16 @@ const ItemDetails: React.FC<ItemDetailsProps> = ({
             <Chip
               key={index}
               title={lotUnits + ""}
-              type="outline"
-              titleStyle={{ color: colors.palette.primary, fontWeight: "bold" }}
-              buttonStyle={{ borderColor: colors.palette.primary }}
-              containerStyle={{ marginHorizontal: 15 }}
+              titleStyle={{ fontWeight: "bold" }}
+              buttonStyle={{
+                backgroundColor:
+                  dayjs(expirationDate).diff(dayjs(), "days") > 90
+                    ? dayjs(expirationDate).diff(dayjs(), "days") > 180
+                      ? colors.success
+                      : colors.warning
+                    : colors.error,
+              }}
+              containerStyle={{ marginHorizontal: spacing.xs }}
             />
           )
         )}
@@ -94,10 +101,16 @@ const ItemDetails: React.FC<ItemDetailsProps> = ({
         </ListItem.Content>
       </ListItem>
       <ListItem onPress={() => handleEditItem(ItemFormSection.STOCK)}>
-        <Icon name={IconNames.CUBE_OUTLINE} type="material-community" color="grey" />
+        <Icon
+          name={IconNames.CUBE_OUTLINE}
+          type="material-community"
+          color="grey"
+        />
         <ListItem.Content>
           <ListItem.Title>Existencias</ListItem.Title>
-          <ListItem.Subtitle>Configuración de existencias y control de vencimiento</ListItem.Subtitle>
+          <ListItem.Subtitle>
+            Configuración de existencias y control de vencimiento
+          </ListItem.Subtitle>
         </ListItem.Content>
       </ListItem>
       <Button

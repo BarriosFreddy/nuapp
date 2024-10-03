@@ -5,6 +5,7 @@ import { Button } from "@rneui/themed";
 import { observer } from "mobx-react-lite";
 import { Text, TextField } from "../../components";
 import { spacing } from "../../theme";
+import { formatCurrency } from "../../utils";
 
 type PaymentCompProps = {
   setReceivedAmount: (value: number) => void;
@@ -33,7 +34,7 @@ const PaymentComp: FC<PaymentCompProps> = observer(
     const calculateAmountChange = (received?: string) => {
       const receivedMoney = received ?? receivedAmount;
       setReceivedAmountInvalid(+receivedMoney < props.total);
-      if(+receivedMoney > 0)setChangeAmount(+receivedMoney - props.total);
+      if (+receivedMoney > 0) setChangeAmount(+receivedMoney - props.total);
     };
 
     const handleBack = () => {
@@ -47,22 +48,28 @@ const PaymentComp: FC<PaymentCompProps> = observer(
             REGRESAR
           </Button>
         </Row>
-        <Text size="lg" style={{ marginVertical: spacing.md }}>
+        <Text size="xl" weight="bold" style={{ marginVertical: spacing.md }}>
           EFECTIVO
         </Text>
         <TextField
+          style={{
+            fontSize: 24,
+            height: 32,
+          }}
           containerStyle={{ width: "95%" }}
           onChangeText={handleReceivedAmount}
           value={receivedAmount}
           autoCapitalize="none"
           autoCorrect={false}
           keyboardType="numeric"
-          placeholder="Recibido"
+          placeholder="Dinero recibido"
         />
-        <Text size="lg" style={{ marginVertical: spacing.md }}>
+        <Text size="xl" weight="bold" style={{ marginVertical: spacing.md }}>
           CAMBIO
         </Text>
-        <Text size="xl">${changeAmount}</Text>
+        <Text size="xxl" weight="bold">
+          {formatCurrency(changeAmount)}
+        </Text>
       </View>
     );
   }

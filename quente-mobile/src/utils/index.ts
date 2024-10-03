@@ -15,20 +15,6 @@ export const getMainPriceRatio = (item: Item) => {
   return priceRatio;
 };
 
-export const formatCurrency = (amount: number) => {
-  let formattedCurrency;
-  try {
-    formattedCurrency = new Intl.NumberFormat("es-CO", {
-      style: "currency",
-      currency: "COP",
-      maximumFractionDigits: 0,
-    }).format(+amount);
-  } catch (e) {
-    console.error(e);
-  }
-  return formattedCurrency;
-};
-
 export const getDateObject = () => {
   return {
     date: dayjs().utc().valueOf(),
@@ -54,3 +40,8 @@ export const cloneObject = (object: any) => {
   if (!object) return;
   return JSON.parse(JSON.stringify(object));
 };
+
+
+export function formatCurrency(amount: number = 0) {
+  return '$' + (+amount).toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+}
