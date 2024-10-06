@@ -21,6 +21,7 @@ export const ItemStoreModel = types
       } else {
         console.error(`Error fetching items: ${JSON.stringify(response)}`);
       }
+      return response;
     },
     async getItems(searchTerm: string) {
       store.setProp("fetching", true);
@@ -31,6 +32,7 @@ export const ItemStoreModel = types
         console.error(`Error fetching items: ${JSON.stringify(response)}`);
       }
       store.setProp("fetching", false);
+      return response;
     },
     setItems(items: Item[]) {
       store.setProp("items", items);

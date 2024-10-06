@@ -19,7 +19,7 @@ const ItemsList: FC<ItemsListProps> = ({ items, onSelect, style }) => {
 
   return (
     <ScrollView style={style && { ...style }}>
-      {items?.map((item: Item, index) => (
+      {items?.map(item => (JSON.parse(item.data))).map((item: Item, index) => (
         <ListItem key={index} onPress={() => handleSelectedItem(item)}>
           <ListItem.Content>
             <ListItem.Title>{item.name}</ListItem.Title>
