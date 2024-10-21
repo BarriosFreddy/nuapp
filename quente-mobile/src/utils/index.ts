@@ -43,5 +43,5 @@ export const cloneObject = (object: any) => {
 
 
 export function formatCurrency(amount: number = 0) {
-  return '$' + (+amount).toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+  return '$ ' + (+amount).toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
 }

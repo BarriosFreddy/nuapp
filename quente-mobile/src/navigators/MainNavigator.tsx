@@ -12,6 +12,8 @@ import { CustomDrawerContent } from "../components/CustomDrawerContent";
 import ItemsScreen from "../screens/inventory/items/items.screen";
 import { Icon } from "@rneui/themed";
 import IconNames from "../shared/enums/IconNames";
+import SalesSummaryScreen from "../screens/billing/salesSummary.screen";
+import HistoricalBillingsScreen from "../screens/billing/historicalBillings.screen";
 
 const DrawerStack = createDrawerNavigator();
 
@@ -37,6 +39,16 @@ const MainNavigator: FC = observer(function MainNavigator() {
         options={{}}
         name="BillingScreen"
         component={BillingScreen}
+      />
+      <DrawerStack.Screen
+        options={{}}
+        name="SalesSummaryScreen"
+        component={SalesSummaryScreen}
+      />
+      <DrawerStack.Screen
+        options={{}}
+        name="HistoricalBillingsScreen"
+        component={HistoricalBillingsScreen}
       />
       <DrawerStack.Screen
         options={{}}

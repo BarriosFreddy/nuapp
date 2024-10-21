@@ -16,6 +16,16 @@ const MENU_ITEMS = [
     screen: "BillingScreen",
   },
   {
+    label: "Ventas por día",
+    iconName: IconNames.SALE,
+    screen: "SalesSummaryScreen",
+  },
+  {
+    label: "Historial",
+    iconName: IconNames.HISTORY,
+    screen: "HistoricalBillingsScreen",
+  },
+  {
     label: "Items",
     iconName: IconNames.CUBE_OUTLINE,
     screen: "ItemsScreen",
