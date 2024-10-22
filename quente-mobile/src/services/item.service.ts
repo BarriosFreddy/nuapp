@@ -20,7 +20,7 @@ class ItemService {
   constructor() {}
 
   async getAllItems() {
-    const response: ApiResponse<any> = await api.apisauce.get(`items`);
+    const response: ApiResponse<any> = await api.apisauce.get(`items?size=1000`);
     let resultSet;
     if (response.ok) {
       const dataArray = response.data

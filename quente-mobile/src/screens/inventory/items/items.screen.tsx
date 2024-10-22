@@ -197,14 +197,10 @@ const ItemsScreen: FC<{ navigation: any; route: any }> = observer(
               <SearchBar
                 placeholder="Buscar..."
                 value={searchTerm}
-                lightTheme
-                containerStyle={{ width: "87%", height: spacing.xxl, backgroundColor: colors.white }}
-                inputContainerStyle={{ height: spacing.xl, backgroundColor: colors.white}}
                 onFocus={() => setIsSearching(true)}
                 onChangeText={handleSearchTermChange}
                 onClear={handleClearSearch}
               />
-
               <Button
                 style={{
                   width: 50,
