@@ -4,6 +4,8 @@ import { Item } from "../models/Item";
 import sqliteService from "./sqlite.service";
 
 class ItemService {
+  constructor() {}
+  
   async update(item: Item) {
     const itemId = item._id;
     const { _id, ...itemToUpdate } = item;
@@ -17,11 +19,10 @@ class ItemService {
     const response: ApiResponse<any> = await api.apisauce.post(`items`, item);
     return response;
   }
-  constructor() {}
 
   async getAllItems() {
     const response: ApiResponse<any> = await api.apisauce.get(`items?size=1000`);
-    let resultSet;
+    let resultSet = [];
     if (response.ok) {
       const dataArray = response.data
       await sqliteService.insertBulk(
