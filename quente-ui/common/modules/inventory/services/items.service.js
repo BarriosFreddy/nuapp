@@ -29,7 +29,7 @@ export const updateItem = (item) => async (dispatch, _, api) => {
   const itemToUpdate = { ...item };
   const id = itemToUpdate._id;
   delete itemToUpdate._id;
-  //await api.put(`/items/${id}`, itemToUpdate)
+  await api.put(`/items/${id}`, itemToUpdate)
   const wasUpdated = await quenteDB.items.update(id, itemToUpdate);
   dispatch(saveSuccess(wasUpdated));
   dispatch(setSaving(false));
