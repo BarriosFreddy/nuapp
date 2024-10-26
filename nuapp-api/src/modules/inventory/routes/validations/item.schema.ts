@@ -1,6 +1,7 @@
 import joi, { Schema } from 'joi';
 
 const ItemCreateSchema: Schema = joi.object({
+  _id: joi.string(),
   name: joi.string().required(),
   description: joi.string(),
   code: joi.string().required(),

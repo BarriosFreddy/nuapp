@@ -9,15 +9,13 @@ import {
   setSaving,
   setFetching,
 } from "../reducers/items.reducer";
-import isOnline from "is-online";
-let isonline = false;
 const OBJECT_ID_LENGTH = 24;
 
 export const saveItem = (item) => async (dispatch, _, api) => {
   dispatch(setSaving(true));
   const _id = hexoid(OBJECT_ID_LENGTH)();
   item._id = _id;
-  //const { status } = await api.post('/items', item)
+  await api.post('/items', item)
   const id = await quenteDB.items.add(item);
   console.log({ id });
   dispatch(saveSuccess(!!id));
