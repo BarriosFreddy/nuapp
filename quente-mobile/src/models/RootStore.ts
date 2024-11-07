@@ -1,6 +1,5 @@
 import {Instance, SnapshotOut, types} from 'mobx-state-tree';
 import {AuthenticationStoreModel} from './AuthenticationStore';
-import {EpisodeStoreModel} from './EpisodeStore';
 import {PreferencesStoreModel} from './PreferencesStore';
 import ViewMode from '../shared/enums/ViewMode';
 import { GlobalStateModel } from './GlobalStateStore';
@@ -15,7 +14,6 @@ import { MeasurementUnitStoreModel } from './inventory/inv-enumeration/Measureme
  */
 export const RootStoreModel = types.model('RootStore').props({
   authenticationStore: types.optional(AuthenticationStoreModel, {}),
-  episodeStore: types.optional(EpisodeStoreModel, {}),
   preferencesStore: types.optional(PreferencesStoreModel, { mode: ViewMode.PASSENGER}),
   globalState: types.optional(GlobalStateModel, {}),
   userAccountStore: types.optional(UserAccountModel, {}),
