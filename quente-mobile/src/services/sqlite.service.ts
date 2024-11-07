@@ -21,14 +21,15 @@ class SqliteService {
       name: DATABASE_NAME,
       location: "default",
     });
-    const query = `CREATE TABLE IF NOT EXISTS items(
-        code TEXT NOT NULL PRIMARY KEY,
+
+    const statement = `CREATE TABLE IF NOT EXISTS items(
+        _id TEXT NOT NULL PRIMARY KEY,
+        code TEXT NOT NULL,
         name TEXT NOT NULL,
         price TEXT NOT NULL,
         data TEXT NOT NULL
     );`;
-
-    this.dbConnection.executeSql(query);
+    this.dbConnection.executeSql(statement);
     return this.dbConnection;
   }
 
@@ -41,7 +42,6 @@ class SqliteService {
   public async insert(tableName: string, data: any): Promise<number> {
     const keys = Object.keys(data);
     const values = Object.values(data);
-
     const resultSet = await (
       await this.getConnection()
     ).executeSql(
@@ -52,49 +52,65 @@ class SqliteService {
     `,
       values
     );
-    return resultSet[0].insertId;
+    const findByIdObjc = await this.findById(tableName, data._id);
+    return findByIdObjc;
   }
 
-  public async insertBulk(data: any[]) {
-    try {
-      const dataClone = data.map((dataItem) => ({
-        code: dataItem.code,
-        name: dataItem.name,
-        price: getMainPrice(dataItem),
-        data: JSON.stringify(dataItem),
-      }));
-      (await this.getConnection()).transaction((tx) => {
-        dataClone.forEach((item) => {
-          tx.executeSql(
-            `INSERT OR REPLACE INTO items (code, name, price, data) VALUES (?, ?, ?, ?)`,
-            Object.values(item),
-            () => {},
-            (tx, error) => console.error("Error inserting row", error)
-          );
-        });
+  /**
+   *
+   * @param tableName
+   * @param data
+   * @returns
+   */
+  public async update(tableName: string, id: string, data: any) {
+    const values = Object.values(data);
+    const columns = Object.keys(data).map((key) => `${key} = ? `);
+    const sql = `UPDATE ${tableName} SET ${columns.join()} WHERE _id = ?`;
+    const resultSet = await (
+      await this.getConnection()
+    ).executeSql(sql, [...values, id]);
+    const findByIdObjc = await this.findById(tableName, id);
+    return findByIdObjc;
+  }
+
+  /**
+   *
+   * @param data
+   */
+  public async insertBulk(tableName: string, data: any[]) {
+    const columns = Object.keys(data);
+    (await this.getConnection()).transaction((tx) => {
+      data.forEach((item) => {
+        tx.executeSql(
+          `INSERT OR REPLACE INTO ${tableName} (${columns.join()}) VALUES (${[
+            ...columns,
+          ]
+            .map((_) => " ? ")
+            .join()})`,
+          Object.values(item),
+          () => {},
+          (tx, error) => console.error("Error inserting row", error)
+        );
       });
-    } catch (e) {
-      console.error(e);
-    }
+    });
   }
 
   public async query(
     tableName: string,
-    params: { [key: string]: string } = {}
+    params: { [key: string]: string } = {},
+    select: string = " * ",
+    limit: number = 10
   ) {
     let results: any[] = [];
     const paramsEntries = Object.entries(params);
-
     const clauses = paramsEntries
       .map(([key, value]) => `UPPER(${key}) like "%${value.toUpperCase()}%"`)
       .join(" OR ");
 
-    let query = `SELECT code, name, price, data FROM ${tableName} ${
+    let query = `SELECT ${select} FROM ${tableName} ${
       paramsEntries.length > 0 ? `WHERE ${clauses}` : ""
-    } LIMIT 10`;
-
+    } LIMIT ${limit}`;
     const resultSet = await (await this.getConnection()).executeSql(query);
-
     resultSet.forEach((result) => {
       for (let index = 0; index < result.rows.length; index++) {
         results.push(result.rows.item(index));
@@ -103,6 +119,15 @@ class SqliteService {
 
     return results;
   }
+
+  public async findById(tableName: string, id: string, select = ' * ') {
+    let query = `SELECT ${select} FROM ${tableName} WHERE _id = ?`;
+    const resultSet = await (
+      await this.getConnection()
+    ).executeSql(query, [id]);
+    return resultSet.length > 0 ? resultSet[0].rows.item(0) : null;
+  }
+
   public async delete(tableName: string) {
     const resultSet = await (
       await this.getConnection()

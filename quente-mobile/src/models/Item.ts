@@ -38,6 +38,7 @@ export const ItemModel = types
   export const ItemDTOModel = types
   .model("Item")
   .props({
+    _id: "",
     code: "",
     name: "",
     price: "",
@@ -47,6 +48,7 @@ export const ItemModel = types
   .views((_) => ({}));
 
 export interface Item extends Instance<typeof ItemModel> {}
+export interface PricesRatio extends Instance<typeof PricesRatioModel> {}
 export interface ItemDTO extends Instance<typeof ItemDTOModel> {}
 export interface ItemSnapshotOut extends SnapshotOut<typeof ItemModel> {}
 export interface ItemSnapshotIn extends SnapshotIn<typeof ItemModel> {}

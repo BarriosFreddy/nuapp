@@ -25,6 +25,7 @@ import ItemDetails from "./ItemDetails.comp";
 import ItemFormSection from "../../../shared/enums/ItemFormSection";
 import IconNames from "../../../shared/enums/IconNames";
 import SearchBar from "../../../components/SearchBar";
+import ApiFeedbackResponse from "../../../services/apiFeedbackResponse";
 
 const ModuleState = {
   CREATING: "CREATING",
@@ -112,7 +113,7 @@ const ItemsScreen: FC<{ navigation: any; route: any }> = observer(
 
     const handleSave = async (itemData: Item) => {
       itemData.categoryId = "647feeb93e88cd392af5dc23";
-      let response: ApiResponse<any>;
+      let response: ApiFeedbackResponse;
       if (itemData._id) response = await updateItem(itemData);
       else response = await saveItem(itemData);
       if (response.ok) {

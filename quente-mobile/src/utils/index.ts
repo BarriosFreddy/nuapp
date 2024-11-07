@@ -6,12 +6,12 @@ import utc from "dayjs/plugin/utc";
 dayjs.extend(utc);
 
 export const getMainPrice = (item: Item) => {
-  const priceRatio = item.pricesRatio.find(({ main, hash }) => main === hash);
+  const priceRatio = item.pricesRatio?.find(({ main, hash }) => main === hash);
   return priceRatio?.price;
 };
 
 export const getMainPriceRatio = (item: Item) => {
-  const priceRatio = item.pricesRatio.find(({ main, hash }) => main === hash);
+  const priceRatio = item.pricesRatio?.find(({ main, hash }) => main === hash);
   return priceRatio;
 };
 
@@ -30,7 +30,7 @@ export const getExpirationDates = ({ expirationControl }: Item) =>
   expirationControl?.map(({ expirationDate, lotUnits }) => ({
     expirationDate,
     lotUnits,
-  }));
+  })) || [];
 
 export const getUUID = () => {
   return uuidv4();
