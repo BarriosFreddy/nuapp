@@ -189,11 +189,14 @@ const $screenContentContainer: ViewStyle = {
 };
 
 const $signIn: TextStyle = {
-  marginBottom: spacing.sm,
+  marginTop: spacing.sm,
+  textAlign: 'center'
 };
 
 const $enterDetails: TextStyle = {
-  marginBottom: spacing.lg,
+  marginTop: spacing.xxl,
+  marginBottom: spacing.xxxl,
+  textAlign: 'center'
 };
 
 const $hint: TextStyle = {

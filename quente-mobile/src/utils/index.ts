@@ -3,7 +3,9 @@ import { v4 as uuidv4 } from "uuid";
 import { Item } from "../models/Item";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
+import { hexoid } from "hexoid";
 dayjs.extend(utc);
+const OBJECT_ID_LENGTH = 24;
 
 export const getMainPrice = (item: Item) => {
   const priceRatio = item.pricesRatio?.find(({ main, hash }) => main === hash);
@@ -45,3 +47,5 @@ export const cloneObject = (object: any) => {
 export function formatCurrency(amount: number = 0) {
   return '$ ' + (+amount).toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
 }
+
+export const generateId = hexoid(OBJECT_ID_LENGTH)
