@@ -3,7 +3,6 @@ import {
   openDatabase,
   SQLiteDatabase,
 } from "react-native-sqlite-storage";
-import { getMainPrice } from "../utils";
 
 const DATABASE_NAME = "quente.db";
 
@@ -21,15 +20,8 @@ class SqliteService {
       name: DATABASE_NAME,
       location: "default",
     });
-
-    const statement = `CREATE TABLE IF NOT EXISTS items(
-        _id TEXT NOT NULL PRIMARY KEY,
-        code TEXT NOT NULL,
-        name TEXT NOT NULL,
-        price TEXT NOT NULL,
-        data TEXT NOT NULL
-    );`;
-    this.dbConnection.executeSql(statement);
+    this.dbConnection.executeSql(ITEM_TABLE_DDL);
+    this.dbConnection.executeSql(BILLING_TABLE_DDL);
     return this.dbConnection;
   }
 
@@ -39,7 +31,7 @@ class SqliteService {
    * @param data
    * @returns
    */
-  public async insert(tableName: string, data: any): Promise<number> {
+  public async insert(tableName: string, data: any): Promise<Object> {
     const keys = Object.keys(data);
     const values = Object.values(data);
     const resultSet = await (
@@ -78,7 +70,7 @@ class SqliteService {
    * @param data
    */
   public async insertBulk(tableName: string, data: any[]) {
-    const columns = Object.keys(data);
+    const columns = Object.keys(data[0]); 
     (await this.getConnection()).transaction((tx) => {
       data.forEach((item) => {
         tx.executeSql(
@@ -146,3 +138,20 @@ class SqliteService {
 const sqliteService = new SqliteService();
 
 export default sqliteService;
+
+
+const ITEM_TABLE_DDL = `CREATE TABLE IF NOT EXISTS items(
+  _id TEXT NOT NULL PRIMARY KEY,
+  code TEXT NOT NULL,
+  name TEXT NOT NULL,
+  price TEXT NOT NULL,
+  data TEXT NOT NULL
+);`;
+
+const BILLING_TABLE_DDL = `CREATE TABLE IF NOT EXISTS billings(
+  _id VARCHAR(24) NOT NULL PRIMARY KEY,
+  code VARCHAR(24) default '' NOT NULL,
+  creationDate VARCHAR(12) NOT NULL,
+  billAmount DOUBLE NOT NULL,
+  data TEXT NOT NULL
+);`;

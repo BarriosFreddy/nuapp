@@ -1,6 +1,6 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree";
 import { api } from "../services/api";
-import { Billing, BillingModel } from "./Billing";
+import { Billing, BillingDTOModel, BillingModel } from "./Billing";
 import { withSetPropAction } from "./helpers/withSetPropAction";
 import billingService from "../services/billing.service";
 
@@ -12,7 +12,7 @@ const billingsByDateModel = types.model("BillingsPerDay").props({
 export const BillingStoreModel = types
   .model("BillingStore")
   .props({
-    billings: types.array(BillingModel),
+    billings: types.array(BillingDTOModel),
     billing: types.maybe(BillingModel),
     fetching: false,
     saving: false,

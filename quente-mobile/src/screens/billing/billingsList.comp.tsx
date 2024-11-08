@@ -1,29 +1,28 @@
 import React, { FC } from "react";
 import { ScrollView } from "react-native-gesture-handler";
-import { Badge, ListItem } from "@rneui/themed";
-import { formatCurrency, getExpirationDates, getMainPrice } from "../../utils";
+import { ListItem } from "@rneui/themed";
+import { formatCurrency } from "../../utils";
 import { View, ViewStyle } from "react-native";
-import dayjs from "dayjs";
-import { Billing } from "../../models/Billing";
+import { BillingDTO } from "../../models/Billing";
 import { Text } from "../../components";
 
 interface BillingsListProps {
-  billings: Billing[];
-  onSelect: (billing: Billing) => void;
+  billings: BillingDTO[];
+  onSelect: (billing: BillingDTO) => void;
   style?: ViewStyle;
 }
 
 const BillingsList: FC<BillingsListProps> = ({ billings, onSelect, style }) => {
-  const handleSelectedItem = (billing: Billing) => {
+  const handleSelectedItem = (billing: BillingDTO) => {
     onSelect && onSelect(billing);
   };
 
   return (
     <ScrollView style={style && { ...style }}>
-      {billings?.map((billing: Billing, index) => (
+      {billings?.map((billing: BillingDTO, index) => (
         <ListItem key={index} onPress={() => handleSelectedItem(billing)}>
           <ListItem.Content>
-            <ListItem.Title>{billing.code}</ListItem.Title>
+            <ListItem.Title>{billing.code || '-'}</ListItem.Title>
             <ListItem.Subtitle>{billing.creationDate}</ListItem.Subtitle>
           </ListItem.Content>
           <View>

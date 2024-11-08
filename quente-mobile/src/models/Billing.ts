@@ -29,6 +29,20 @@ export const BillingModel = types
   .actions(withSetPropAction)
   .views((_) => ({}));
 
+
+  export const BillingDTOModel = types
+  .model("BillingDTO")
+  .props({
+    _id: "",
+    code: "",
+    billAmount: 0,
+    creationDate: "",
+    data: "",
+  })
+  .actions(withSetPropAction)
+  .views((_) => ({}));
+
 export interface Billing extends Instance<typeof BillingModel> {}
+export interface BillingDTO extends Instance<typeof BillingDTOModel> {}
 export interface BillingSnapshotOut extends SnapshotOut<typeof BillingModel> {}
 export interface BillingSnapshotIn extends SnapshotIn<typeof BillingModel> {}

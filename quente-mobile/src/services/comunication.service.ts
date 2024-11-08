@@ -2,16 +2,9 @@ import {io} from 'socket.io-client';
 import appConfig from '../config';
 
 export const EVENTS = {
-  TO_NEW_RIDE: 'to_new_trip',
-  FROM_NEW_RIDE: 'from_new_trip',
-  TO_REMOVED_RIDE: 'to_removed_trip',
-  FROM_REMOVED_RIDE: 'from_removed_trip',
-  DRIVERS_ONLINE: 'driversOnline',
   CREATE_ROOM: 'create_room',
   LEAVE_ROOM: 'leave_room',
   TO_ROOM: 'to_room',
-  TO_UPDATE_POSITION_MARKER: 'to_update_position_marker',
-  FROM_UPDATE_POSITION_MARKER: 'from_update_position_marker',
 };
 
 class ComunicationService {

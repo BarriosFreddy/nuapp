@@ -22,7 +22,8 @@ import IconNames from "../../shared/enums/IconNames";
 import SearchBar from "../../components/SearchBar";
 import BillingDetails from "./billingDetails.comp";
 import BillingsList from "./billingsList.comp";
-import { Billing } from "../../models/Billing";
+import { Billing, BillingDTO } from "../../models/Billing";
+import { useFocusEffect } from "@react-navigation/native";
 
 const ModuleState = {
   CREATING: "CREATING",
@@ -46,11 +47,11 @@ const HistoricalBillingsScreen: FC<{ navigation: any; route: any }> = observer(
       billingStore: { billings, getBillings },
     } = useStores();
 
-    useEffect(() => {
+    useFocusEffect(() => {
       (async () => {
         await getBillings();
       })();
-    }, []);
+    });
 
     //////////////////////////////////////////////////
 
@@ -60,8 +61,8 @@ const HistoricalBillingsScreen: FC<{ navigation: any; route: any }> = observer(
       setModuleState(ModuleState.LISTING);
     };
 
-    const handleSelectedItem = (billing: Billing) => {
-      const billingClone = JSON.parse(JSON.stringify(billing));
+    const handleSelectedItem = (billing: BillingDTO) => {
+      const billingClone = JSON.parse(billing.data);
       setSelectedItem(billingClone);
       setModuleState(ModuleState.SHOWING);
     };
