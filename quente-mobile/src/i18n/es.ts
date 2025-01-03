@@ -26,7 +26,7 @@ const es = {
   loginScreen: {
     signIn: 'Inicio de sesión',
     enterDetails:
-      'Ingresa tu número de célular y clave para comenzar a tener la mejor experiencia en tu viaje',
+      'Ingresa tus datos para comenzar a gestionar de una manera inteligente tu inventario y facturación diaria',
     phoneNumberPlaceholder: 'Ingresa tu número de teléfono',
     tapToSignIn: 'INICIAR SESIÓN!',
     signInLoading: 'INICIANDO...',
