@@ -40,3 +40,10 @@ const app: Express = express();
     console.log(error);
   }
 })();
+
+process.on('uncaughtExceptionMonitor', (error, origin) => {
+  console.log('\nuncaughtExceptionMonitor handler: {')
+  console.log(`ERROR: ${error}`)
+  console.log(`ORIGIN: ${origin}`)
+  console.log('}\n')
+})
