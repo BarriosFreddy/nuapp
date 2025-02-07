@@ -3,7 +3,7 @@ import { setInfoUser, setIsLoggedIn, setLoading, setLoginSuccess } from '../redu
 
 export const login = (userAccountLogin) => async (dispatch, _, api) => {
   dispatch(setLoading(true))
-  const { status, data } = await api.post('/auth/authenticate', userAccountLogin)
+  const { status, data } = await api.post('/auth/authenticate', userAccountLogin) || {}
   if (status === 200) {
     dispatch(setIsLoggedIn(true))
     dispatch(setInfoUser(data))
@@ -19,7 +19,7 @@ export const login = (userAccountLogin) => async (dispatch, _, api) => {
 }
 
 export const logout = () => async (dispatch, _, api) => {
-  const { status } = await api.get('/auth/logout')
+  const { status } = await api.get('/auth/logout') || {}
   if (status === 200) {
     dispatch(setIsLoggedIn(false))
     dispatch(setInfoUser(null))

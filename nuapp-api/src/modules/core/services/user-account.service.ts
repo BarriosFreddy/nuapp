@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs';
 import { singleton } from 'tsyringe';
 import { BaseService } from '../../../helpers/abstracts/base.service';
 import { UserAccount } from '../entities/UserAccount';
+const ROUNDS_NUMBER = 12;
 
 @singleton()
 export class UserAccountService extends BaseService<UserAccount> {
@@ -21,7 +22,7 @@ export class UserAccountService extends BaseService<UserAccount> {
   async save(userAccount: UserAccount): Promise<UserAccount> {
     try {
       if (!userAccount.password) return Promise.reject(null);
-      const salt = await bcrypt.genSalt(10); // hash the password
+      const salt = await bcrypt.genSalt(ROUNDS_NUMBER); // hash the password
       const hashedPassword = await bcrypt.hash(userAccount.password, salt);
       userAccount.password = hashedPassword;
       userAccount.createdAt = new Date();

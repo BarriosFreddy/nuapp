@@ -10,16 +10,16 @@ const { SECRET_KEY, AUTH_DATABASE = '' } = process.env;
 export class AuthService {
   constructor(public userAccountService: UserAccountService) {}
 
-  async authenticate(
-    userAccountLogin: UserAccountLogin,
-  ){
+  async authenticate(userAccountLogin: UserAccountLogin) {
     this.userAccountService.setTenantId = AUTH_DATABASE;
     const { email, password } = userAccountLogin;
+    const passwordBuffer = Buffer.from(password, 'base64');
     const userAccount: UserAccount | null =
       await this.userAccountService.findByEmail(email);
     if (!userAccount) return null;
+    const decodedPassword = passwordBuffer.toString('utf-8');
     const isTheSame = await bcrypt.compare(
-      password,
+      decodedPassword,
       userAccount.password || '',
     );
     const { organization, _id, firstName, lastName } = userAccount;
@@ -31,7 +31,7 @@ export class AuthService {
       name: `${firstName} ${lastName}`,
     };
     const access_token = this.generateToken(data);
-    return {...data, access_token};
+    return { ...data, access_token };
   }
 
   private generateToken(data: {}): string {

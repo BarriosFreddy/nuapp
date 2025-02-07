@@ -208,14 +208,6 @@ setTimeout(() => {
         <CRow>
           <CCol>
             <CInputGroup>
-              <CButton
-                variant="outline"
-                type="button"
-                color="secondary"
-                onClick={scanItem}
-              >
-                SCAN
-              </CButton>
               <CFormInput
                 ref={searchTermInput}
                 type="text"
