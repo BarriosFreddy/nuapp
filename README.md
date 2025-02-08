@@ -1,10 +1,10 @@
-# NuApp
+# Quente
 
 # nuapp-api
 #### Deployment
 
 _Command_
-git subtree push --prefix nuapp-api heroku master
+git push origin main
 
 # nuapp-web
 #### Deployment
@@ -12,5 +12,3 @@ git subtree push --prefix nuapp-api heroku master
 ### command
 git push origin main
 
-_vercel CLI_
-vercel
