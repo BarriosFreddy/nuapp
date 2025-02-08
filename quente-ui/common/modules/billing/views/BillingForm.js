@@ -1,8 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import Quagga from "quagga";
 import { PropTypes } from "prop-types";
-import { useZxing } from "react-zxing";
-import { useMediaDevices } from "react-media-devices";
 
 import {
   CModal,
@@ -43,27 +40,6 @@ const BillingForm = (props) => {
   const toggle = () => setModal(!modal);
   const searchTermInput = useRef();
   const [result, setResult] = useState("");
-  const { devices } = useMediaDevices({
-    constraints: {
-      video: true, //{ facingMode: "environment" },
-      audio: false,
-    },
-  });
-  const deviceId = devices?.filter(({ kind }) => kind === "videoinput")[0]
-    ?.deviceId;
-  /*   const {
-    ref: videoRef,
-    torch: { on, off, isOn, isAvailable },
-  } = useZxing({
-    paused: !deviceId,
-    deviceId,
-    onDecodeResult(result) {
-      console.log({ result });
-      setResult(result.getText());
-    },
-    onDecodeError: (e) => console.log({ e }),
-    onError: (e) => console.log({ e }),
-  }); */
 
   const clear = useCallback(() => {
     dispatch(setItems([]));
@@ -104,93 +80,6 @@ const BillingForm = (props) => {
   };
 
   // eslinvideoReft-disable-next-line react-hooks/exhaustive-deps
-
-  // eslint-disable-next-line no-unused-vars
-  const scanItem = () => {
-    toggle();
-setTimeout(() => {
-      Quagga.init(
-        {
-          inputStream: {
-            name: "Live",
-            type: "LiveStream", //LiveStream
-            constraints: {
-              width: 320,
-              height: 380,
-              facingMode: "environment",
-            },
-            target: document.querySelector("#reader"), // Or '#yourElement' (optional)
-            area: {
-              // defines rectangle of the detection/localization area
-              top: "10%", // top offset
-              right: "10%", // right offset
-              left: "10%", // left offset
-              bottom: "10%", // bottom offset
-            },
-            singleChannel: true
-          },
-          decoder: {
-            readers: [
-              "ean_reader",
-              "code_128_reader",
-              "ean_reader",
-              "ean_8_reader",
-              "code_39_reader",
-              "code_39_vin_reader",
-              "codabar_reader",
-              "upc_reader",
-              "upc_e_reader",
-              "i2of5_reader",
-              "2of5_reader",
-              "code_93_reader",
-            ],
-            multiple: false,
-           /*  debug: {
-              drawBoundingBox: true,
-              showFrequency: true,
-              drawScanline: true,
-              showPattern: true,
-            }, */
-          },
-          /* locate: true,
-          locator: {
-            halfSample: true,
-            patchSize: "medium", // x-small, small, medium, large, x-large
-            debug: {
-              showCanvas: false,
-              showPatches: false,
-              showFoundPatches: false,
-              showSkeleton: false,
-              showLabels: false,
-              showPatchLabels: false,
-              showRemainingPatchLabels: false,
-              boxFromPatches: {
-                showTransformed: false,
-                showTransformedBox: false,
-                showBB: false,
-              },
-            },
-          }, */
-        },
-        function (err) {
-          if (err) {
-            console.log(err);
-            return;
-          }
-          console.log("Ready to start");
-          Quagga.start();
-        }
-      );
-      Quagga.onDetected(({ codeResult: { code } }) => {
-        console.log({ code });
-        setModal(false);
-        Quagga.stop();
-      });
-      Quagga.onProcessed((result) => {
-        console.log(result);
-      });
-    }, 300);
-  };
 
   const addItem = (item) => {
     props.addItem(item);

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getAllItems } from '@quente/common/modules/inventory/services/items.service'
 import { ErrorBoundary } from 'react-error-boundary'
 import { executeTasks } from '../cron'
+import AppSidebar from '@quente/common/components/AppSidebar'
 
 executeTasks()
 
@@ -16,7 +17,7 @@ const DefaultLayout = (props) => {
   return (
     <div>
       <ErrorBoundary fallback={<h1>Algo salió mal!</h1>}>
-        {/* <AppSidebar /> */}
+        <AppSidebar />
         <div className="wrapper d-flex flex-column min-vh-100 bg-light">
           {showHeader && <AppHeader />}
           <div className="body flex-grow-1">
